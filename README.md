@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/stevespringett/dependency-check-sonar-plugin.svg?branch=master)](https://travis-ci.org/stevespringett/dependency-check-sonar-plugin)
+
 Dependency-Check Plugin for SonarQube
 ================================
 
@@ -14,3 +16,19 @@ http://marc.info/?l=sonar-dev&m=142107878432267&w=2
 Please vote to have binary files indexed to make plugins like Dependency-Check possible:
 
 https://jira.codehaus.org/browse/SONAR-5077
+
+Usage
+-
+
+> $ mvn clean package
+
+Finally, deploy the resulting jar to your SonarQube extensions->plugins directory
+
+Copyright & License
+-
+
+Dependency-Check Sonar Plugin is Copyright (c) Steve Springett. All Rights Reserved.
+
+Permission to modify and redistribute is granted under the terms of the [LGPLv3] license.
+
+  [LGPLv3]: http://www.gnu.org/licenses/lgpl.txt
