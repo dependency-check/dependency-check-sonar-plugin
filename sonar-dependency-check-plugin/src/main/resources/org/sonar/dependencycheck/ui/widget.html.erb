@@ -1,0 +1,22 @@
+<%
+   security_rating = measure('common-vulnerability-scoring-system')
+   if security_rating
+%>
+
+  <table width="100%">
+    <tr>
+      <td valign="top" width="48%" nowrap>
+        <div class="dashbox">
+          <h3><%= message('dependency-check.widget.securityRating') -%></h3>
+
+          <p>
+            <span class="big"><%= format_measure(security_rating) -%> / 5</span>
+            <%= dashboard_configuration.selected_period? ? format_variation(security_rating) : trend_icon(security_rating) -%>
+          </p>
+
+        </div>
+      </td>
+
+    </tr>
+  </table>
+<% end %>

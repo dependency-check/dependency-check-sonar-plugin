@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.codehaus.sonar-plugins</groupId>
+        <artifactId>parent</artifactId>
+        <version>18</version>
+    </parent>
+    <artifactId>sonar-dependency-check</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Dependency-Check for SonarQube</name>
+    <description>Integrates Dependency-Check reports into SonarQube</description>
+    <inceptionYear>2015</inceptionYear>
+
+    <properties>
+        <license.owner>Steve Springett</license.owner>
+        <license.mailto>steve.springett@owasp.org</license.mailto>
+    </properties>
+
+    <organization>
+        <name>OWASP</name>
+        <url>http://www.owasp.org</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>GNU LGPL 3</name>
+            <url>http://www.gnu.org/licenses/lgpl.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Steve Springett</name>
+            <email>steve.springett@owasp.org</email>
+            <url>http://www.stevespringett.com</url>
+        </developer>
+    </developers>
+
+    <scm>
+      <connection>scm:git:https://github.com/stevespringett/dependency-check-sonar-plugin</connection>
+      <developerConnection>scm:git:https://github.com/stevespringett/dependency-check-sonar-plugin</developerConnection>
+      <url>https://github.com/stevespringett/dependency-check-sonar-plugin</url>
+      <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+      <system>GitHub</system>
+      <url>https://github.com/stevespringett/dependency-check-sonar-plugin/issues</url>
+    </issueManagement>
+
+    <ciManagement>
+      <system>Travis CI</system>
+      <url>https://travis-ci.org/stevespringett/dependency-check-sonar-plugin</url>
+    </ciManagement>
+
+    <modules>
+        <module>sonar-dependency-check-plugin</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.4</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>2.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.11</version>
+            </dependency>
+            <dependency>
+                <groupId>org.easytesting</groupId>
+                <artifactId>fest-assert</artifactId>
+                <version>1.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>1.9.5</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>
