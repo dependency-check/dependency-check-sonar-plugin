@@ -19,8 +19,6 @@
  */
 package org.sonar.dependencycheck.parser;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
@@ -28,7 +26,9 @@ import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
-import org.sonar.api.resources.*;
+import org.sonar.api.resources.File;
+import org.sonar.api.resources.Project;
+import org.sonar.api.resources.Resource;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.Severity;
 import org.sonar.api.utils.SonarException;
@@ -45,7 +45,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class DependencyCheckSensor implements Sensor {
-    private static final Logger LOG = LoggerFactory.getLogger(DependencyCheckSensor.class);
 
     private final ResourcePerspectives resourcePerspectives;
     private final XmlReportFile report;
