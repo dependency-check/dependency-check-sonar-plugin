@@ -14,7 +14,7 @@
     <url>https://www.owasp.org/index.php/OWASP_Dependency_Check</url>
 
     <properties>
-        <sonar.version>4.3</sonar.version>
+        <sonar.version>5.1-RC1</sonar.version>
     </properties>
 
     <dependencies>
