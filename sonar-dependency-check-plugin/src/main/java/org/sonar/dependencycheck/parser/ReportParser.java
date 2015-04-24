@@ -36,7 +36,7 @@ import java.util.Collection;
 
 public class ReportParser {
 
-    Analysis parse(InputStream inputStream) throws ParserConfigurationException, SAXException, IOException {
+    public Analysis parse(InputStream inputStream) throws ParserConfigurationException, SAXException, IOException {
 
         SMInputFactory inputFactory = DependencyCheckUtils.newStaxParser();
         try {

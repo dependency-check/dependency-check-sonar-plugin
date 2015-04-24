@@ -22,6 +22,7 @@ package org.sonar.dependencycheck.parser;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.utils.MessageException;
+import org.sonar.dependencycheck.DependencyCheckSensorConfiguration;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
 import javax.annotation.CheckForNull;
@@ -30,11 +31,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-class XmlReportFile {
+public class XmlReportFile {
     private final DependencyCheckSensorConfiguration configuration;
     private final FileSystem fileSystem;
 
-    XmlReportFile(DependencyCheckSensorConfiguration configuration, FileSystem fileSystem) {
+    private File report;
+
+    public XmlReportFile(DependencyCheckSensorConfiguration configuration, FileSystem fileSystem) {
         this.configuration = configuration;
         this.fileSystem = fileSystem;
     }
@@ -48,7 +51,7 @@ class XmlReportFile {
     private File getReportFromProperty() {
         String path = this.configuration.getReportPath();
         if (StringUtils.isNotBlank(path)) {
-            File report = new File(path);
+            this.report = new File(path);
             if (!report.isAbsolute()) {
                 report = new File(this.fileSystem.baseDir(), path);
             }
@@ -61,15 +64,22 @@ class XmlReportFile {
         return null;
     }
 
+    public File getFile() {
+        if (report == null) {
+            report = getReportFromProperty();
+        }
+        return report;
+    }
+
     public InputStream getInputStream() throws FileNotFoundException {
-        File reportFile = getReportFromProperty();
+        File reportFile = getFile();
         if (reportFile == null) {
             throw new FileNotFoundException("Dependency-Check report does not exist.");
         }
         return new FileInputStream(reportFile);
     }
 
-    boolean exist() {
+    public boolean exist() {
         File reportFile = getReportFromProperty();
         return reportFile != null;
     }
