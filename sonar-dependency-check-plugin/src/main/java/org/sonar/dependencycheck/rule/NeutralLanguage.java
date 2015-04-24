@@ -33,7 +33,7 @@ import org.sonar.dependencycheck.DependencyCheckPlugin;
 public class NeutralLanguage extends AbstractLanguage {
 
     public NeutralLanguage() {
-        super(DependencyCheckPlugin.LANGUAGE_KEY, "neutral");
+        super(DependencyCheckPlugin.LANGUAGE_KEY, "Neutral");
     }
 
     public String[] getFileSuffixes() {
