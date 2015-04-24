@@ -17,8 +17,9 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.dependencycheck.parser;
+package org.sonar.dependencycheck;
 
+import org.apache.commons.lang.StringUtils;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.config.Settings;
 import org.sonar.api.profiles.RulesProfile;
@@ -36,8 +37,11 @@ public class DependencyCheckSensorConfiguration implements BatchExtension {
     }
 
     public String getReportPath() {
-        System.out.println("Constant: " + DependencyCheckConstants.REPORT_PATH_PROPERTY);
-        System.out.println("Returning: " + this.settings.getString(DependencyCheckConstants.REPORT_PATH_PROPERTY));
-        return this.settings.getString(DependencyCheckConstants.REPORT_PATH_PROPERTY);
+        String reportPath = this.settings.getString(DependencyCheckConstants.REPORT_PATH_PROPERTY);
+        if (StringUtils.isBlank(reportPath)) {
+            reportPath = "dependency-check-report.xml"; // Setting not specified. Use default filename.
+        }
+        return reportPath;
     }
+
 }
