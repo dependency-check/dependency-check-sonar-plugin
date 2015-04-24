@@ -25,7 +25,7 @@ import org.sonar.dependencycheck.DependencyCheckPlugin;
 /**
  * In order for a rule repository to work properly, the rules created in the repository
  * must be associated with a language. This is a workaround so that rules that apply to
- * third-party components where the language is not known (or relevant) can be used to
+ * third-party components where the language is not known (or irrelevant) can be used to
  * flag those components as vulnerable.
  *
  * This class simply creates a new 'language' called neutral.
