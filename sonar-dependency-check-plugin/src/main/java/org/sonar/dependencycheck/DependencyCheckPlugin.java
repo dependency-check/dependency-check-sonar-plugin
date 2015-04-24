@@ -21,9 +21,8 @@ package org.sonar.dependencycheck;
 
 import org.sonar.api.SonarPlugin;
 import org.sonar.dependencycheck.base.NistMetrics;
-import org.sonar.dependencycheck.parser.DependencyCheckSensor;
-import org.sonar.dependencycheck.parser.DependencyCheckSensorConfiguration;
 import org.sonar.dependencycheck.rule.KnownCveRuleDefinition;
+import org.sonar.dependencycheck.rule.NeutralLanguage;
 import org.sonar.dependencycheck.ui.DependencyCheckWidget;
 
 import java.util.Arrays;
@@ -31,8 +30,8 @@ import java.util.List;
 
 public final class DependencyCheckPlugin extends SonarPlugin {
 
-    public static final String REPOSITORY_KEY = "known-cve";
-    public static final String LANGUAGE_KEY = "all";
+    public static final String REPOSITORY_KEY = "OWASP";
+    public static final String LANGUAGE_KEY = "neutral";
     public static final String RULE_KEY = "UsingComponentWithKnownVulnerability";
 
     @Override
@@ -41,6 +40,7 @@ public final class DependencyCheckPlugin extends SonarPlugin {
                 DependencyCheckSensor.class,
                 DependencyCheckSensorConfiguration.class,
                 NistMetrics.class,
+                NeutralLanguage.class,
                 KnownCveRuleDefinition.class,
                 DependencyCheckWidget.class);
     }
