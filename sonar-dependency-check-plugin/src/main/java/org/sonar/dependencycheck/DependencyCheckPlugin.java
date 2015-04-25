@@ -23,6 +23,7 @@ import org.sonar.api.SonarPlugin;
 import org.sonar.dependencycheck.base.NistMetrics;
 import org.sonar.dependencycheck.rule.KnownCveRuleDefinition;
 import org.sonar.dependencycheck.rule.NeutralLanguage;
+import org.sonar.dependencycheck.rule.NeutralProfile;
 import org.sonar.dependencycheck.ui.DependencyCheckWidget;
 
 import java.util.Arrays;
@@ -40,6 +41,7 @@ public final class DependencyCheckPlugin extends SonarPlugin {
                 DependencyCheckSensor.class,
                 DependencyCheckSensorConfiguration.class,
                 NistMetrics.class,
+                NeutralProfile.class,
                 NeutralLanguage.class,
                 KnownCveRuleDefinition.class,
                 DependencyCheckWidget.class);

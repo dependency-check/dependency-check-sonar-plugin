@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<profile>
+    <language>neutral</language>
+    <name>Neutral</name>
+    <rules>
+        <rule>
+            <repositoryKey>OWASP</repositoryKey>
+            <key>UsingComponentWithKnownVulnerability</key>
+        </rule>
+    </rules>
+</profile>
