@@ -17,24 +17,26 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.dependencycheck.parser;
+package org.sonar.dependencycheck;
 
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
-import org.sonar.api.resources.File;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.Severity;
-import org.sonar.api.utils.SonarException;
-import org.sonar.api.utils.TimeProfiler;
-import org.sonar.dependencycheck.DependencyCheckPlugin;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
+import org.sonar.api.utils.log.Profiler;
+import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.base.NistMetrics;
+import org.sonar.dependencycheck.parser.ReportParser;
+import org.sonar.dependencycheck.parser.XmlReportFile;
 import org.sonar.dependencycheck.parser.element.Analysis;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
@@ -46,7 +48,18 @@ import java.io.InputStream;
 
 public class DependencyCheckSensor implements Sensor {
 
+    private static final Logger LOGGER = Loggers.get(DependencyCheckSensor.class);
+
+    private static final double BLOCKER_SECURITY_RATING_LEVEL = 1.0;
+    private static final double CRITICAL_SECURITY_RATING_LEVEL = 2.0;
+    private static final double MAJOR_SECURITY_RATING_LEVEL = 3.0;
+    private static final double MINOR_SECURITY_RATING_LEVEL = 4.0;
+    private static final double DEFAULT_SECURITY_RATING_LEVEL = 5.0;
+
+    private final DependencyCheckSensorConfiguration configuration;
     private final ResourcePerspectives resourcePerspectives;
+    private final FileSystem fileSystem;
+    private final ActiveRules activeRules;
     private final XmlReportFile report;
 
     private int criticalIssuesCount;   // CVSS 7.0 - 10
@@ -58,7 +71,10 @@ public class DependencyCheckSensor implements Sensor {
             ResourcePerspectives resourcePerspectives,
             FileSystem fileSystem,
             ActiveRules activeRules) {
+        this.configuration = configuration;
         this.resourcePerspectives = resourcePerspectives;
+        this.fileSystem = fileSystem;
+        this.activeRules = activeRules;
         this.report = new XmlReportFile(configuration, fileSystem);
     }
 
@@ -67,18 +83,17 @@ public class DependencyCheckSensor implements Sensor {
         return this.report.exist();
     }
 
-    private void addIssue(SensorContext context, Resource resource, Analysis analysis, Vulnerability vulnerability) {
-        //context.index(resource);
-
-
-        Issuable issuable = this.resourcePerspectives.as(Issuable.class, resource);
+    private void addIssue(InputFile inputFile, Analysis analysis, Dependency dependency, Vulnerability vulnerability) {
+        Issuable issuable = this.resourcePerspectives.as(Issuable.class, inputFile);
         if (issuable != null) {
-            String severity = vulnerability.getCvssScore();
+            String severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore());
             Issue issue = issuable.newIssueBuilder()
                     .ruleKey(RuleKey.of(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY))
                     .message(vulnerability.getDescription())
                     .severity(severity)
                     .attribute("cve", vulnerability.getName())
+                    .attribute("file", dependency.getFileName())
+                    .line(null)
                     .build();
             if (issuable.addIssue(issue)) {
                 incrementCount(vulnerability, severity);
@@ -86,13 +101,18 @@ public class DependencyCheckSensor implements Sensor {
         }
     }
 
+
     private void incrementCount(Vulnerability vulnerability, String severity) {
-        if (Severity.CRITICAL.equals(severity)) {
-            this.criticalIssuesCount++;
-        } else if (Severity.MAJOR.equals(severity)) {
-            this.majorIssuesCount++;
-        } else if (Severity.MINOR.equals(severity)) {
-            this.minorIssuesCount++;
+        switch (severity) {
+            case Severity.CRITICAL:
+                this.criticalIssuesCount++;
+                break;
+            case Severity.MAJOR:
+                this.majorIssuesCount++;
+                break;
+            case Severity.MINOR:
+                this.minorIssuesCount++;
+                break;
         }
     }
 
@@ -102,40 +122,29 @@ public class DependencyCheckSensor implements Sensor {
         }
         for (Dependency dependency : analysis.getDependencies()) {
             for (Vulnerability vulnerability : dependency.getVulnerabilities()) {
-                Resource resource =  createResource(context, dependency, project);
-                addIssue(context, resource, analysis, vulnerability);
+                InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().is(report.getFile()));
+                addIssue(inputFile, analysis, dependency, vulnerability);
             }
         }
     }
 
-    private Resource createResource(SensorContext context, Dependency dependency, Project project) {
-        String filePath = dependency.getFilePath();
-        File resource = File.fromIOFile(new java.io.File(filePath), project);
-        context.index(resource);
-        // Reload resource to have it fully initialized
-        resource = context.getResource(resource);
-        return resource;
-    }
-
     private Analysis parseAnalysis() throws IOException, ParserConfigurationException, SAXException {
-        InputStream stream = this.report.getInputStream();
-        try {
+        try (InputStream stream = this.report.getInputStream()) {
             return new ReportParser().parse(stream);
-        } finally {
-            stream.close();
         }
     }
 
     @Override
     public void analyse(Project project, SensorContext context) {
-        TimeProfiler profiler = new TimeProfiler().start("Process Dependency-Check report");
+        Profiler profiler = Profiler.create(LOGGER);
+        profiler.startInfo("Process Dependency-Check report");
         try {
             Analysis analysis = parseAnalysis();
             addIssues(context, project, analysis);
         } catch (Exception e) {
-            throw new SonarException("Can not process Dependency-Check report", e);
+            throw new RuntimeException("Can not process Dependency-Check report", e);
         } finally {
-            profiler.stop();
+            profiler.stopInfo();
         }
         saveMeasures(context);
     }
@@ -144,10 +153,19 @@ public class DependencyCheckSensor implements Sensor {
         context.saveMeasure(NistMetrics.CVSS_HIGH, (double) criticalIssuesCount);
         context.saveMeasure(NistMetrics.CVSS_MEDIUM, (double) majorIssuesCount);
         context.saveMeasure(NistMetrics.CVSS_LOW, (double) minorIssuesCount);
+        if (this.criticalIssuesCount > 0) {
+            context.saveMeasure(NistMetrics.SECURITY_RATING, DependencyCheckSensor.CRITICAL_SECURITY_RATING_LEVEL);
+        } else if (this.majorIssuesCount > 0) {
+            context.saveMeasure(NistMetrics.SECURITY_RATING, DependencyCheckSensor.MAJOR_SECURITY_RATING_LEVEL);
+        } else if (this.minorIssuesCount > 0) {
+            context.saveMeasure(NistMetrics.SECURITY_RATING, DependencyCheckSensor.MINOR_SECURITY_RATING_LEVEL);
+        } else {
+            context.saveMeasure(NistMetrics.SECURITY_RATING, DependencyCheckSensor.DEFAULT_SECURITY_RATING_LEVEL);
+        }
     }
 
     @Override
     public String toString() {
-        return "Dependency-Check sensor";
+        return "OWASP Dependency-Check";
     }
 }
