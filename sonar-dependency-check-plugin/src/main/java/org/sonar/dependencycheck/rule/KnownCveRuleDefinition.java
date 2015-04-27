@@ -58,6 +58,4 @@ public class KnownCveRuleDefinition implements RulesDefinition {
         repo.done();
     }
 
-
-
 }
