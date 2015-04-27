@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.config.Settings;
 import org.sonar.api.profiles.RulesProfile;
+import org.sonar.dependencycheck.DependencyCheckSensorConfiguration;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
 import static org.fest.assertions.Assertions.assertThat;

@@ -27,6 +27,8 @@ import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable.IssueBuilder;
 import org.sonar.api.issue.Issue;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.dependencycheck.DependencyCheckSensor;
+import org.sonar.dependencycheck.DependencyCheckSensorConfiguration;
 
 import java.net.URISyntaxException;
 
@@ -56,7 +58,7 @@ public class DependencyCheckSensorTest {
 
     @Test
     public void toStringTest() {
-        assertThat(this.sensor.toString()).isEqualTo("Dependency-Check sensor");
+        assertThat(this.sensor.toString()).isEqualTo("OWASP Dependency-Check");
     }
 
     @Test

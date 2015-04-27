@@ -26,6 +26,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.utils.MessageException;
+import org.sonar.dependencycheck.DependencyCheckSensorConfiguration;
 
 import java.io.File;
 import java.io.FileNotFoundException;
