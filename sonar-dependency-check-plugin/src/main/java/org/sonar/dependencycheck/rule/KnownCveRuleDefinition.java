@@ -24,9 +24,12 @@ import org.sonar.api.rule.Severity;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.dependencycheck.DependencyCheckPlugin;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 public class KnownCveRuleDefinition implements RulesDefinition {
 
 
+    @ParametersAreNonnullByDefault
     public void define(Context context) {
         NewRepository repo = context.createRepository(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.LANGUAGE_KEY);
         repo.setName("OWASP");
