@@ -19,7 +19,11 @@
  */
 package org.sonar.dependencycheck.ui;
 
-import org.sonar.api.web.*;
+import org.sonar.api.web.AbstractRubyTemplate;
+import org.sonar.api.web.RubyRailsWidget;
+import org.sonar.api.web.WidgetProperties;
+import org.sonar.api.web.WidgetProperty;
+import org.sonar.api.web.WidgetPropertyType;
 
 @WidgetProperties({
         @WidgetProperty(key = "enableReportLink", type = WidgetPropertyType.BOOLEAN, defaultValue = "true")
@@ -28,12 +32,12 @@ public class DependencyCheckWidget extends AbstractRubyTemplate implements RubyR
 
     @Override
     public String getId() {
-        return "dependency-check";
+        return "dependencycheck";
     }
 
     @Override
     public String getTitle() {
-        return "Dependency-Check";
+        return "Known Vulnerabilities in Dependencies";
     }
 
     @Override

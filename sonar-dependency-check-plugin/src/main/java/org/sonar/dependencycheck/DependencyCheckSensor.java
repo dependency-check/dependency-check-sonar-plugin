@@ -34,7 +34,7 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.api.utils.log.Profiler;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
-import org.sonar.dependencycheck.base.NistMetrics;
+import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 import org.sonar.dependencycheck.parser.ReportParser;
 import org.sonar.dependencycheck.parser.XmlReportFile;
 import org.sonar.dependencycheck.parser.element.Analysis;
@@ -50,21 +50,18 @@ public class DependencyCheckSensor implements Sensor {
 
     private static final Logger LOGGER = Loggers.get(DependencyCheckSensor.class);
 
-    private static final double BLOCKER_SECURITY_RATING_LEVEL = 1.0;
-    private static final double CRITICAL_SECURITY_RATING_LEVEL = 2.0;
-    private static final double MAJOR_SECURITY_RATING_LEVEL = 3.0;
-    private static final double MINOR_SECURITY_RATING_LEVEL = 4.0;
-    private static final double DEFAULT_SECURITY_RATING_LEVEL = 5.0;
-
     private final DependencyCheckSensorConfiguration configuration;
     private final ResourcePerspectives resourcePerspectives;
     private final FileSystem fileSystem;
     private final ActiveRules activeRules;
     private final XmlReportFile report;
 
-    private int criticalIssuesCount;   // CVSS 7.0 - 10
-    private int majorIssuesCount;      // CVSS 4.0 - 6.9
-    private int minorIssuesCount;      // CVSS 0 - 3.9
+    private int totalDependencies;
+    private int vulnerableDependencies;
+    private int vulnerabilityCount;
+    private int criticalIssuesCount;
+    private int majorIssuesCount;
+    private int minorIssuesCount;
 
     public DependencyCheckSensor(
             DependencyCheckSensorConfiguration configuration,
@@ -121,9 +118,13 @@ public class DependencyCheckSensor implements Sensor {
             return;
         }
         for (Dependency dependency : analysis.getDependencies()) {
+            if (dependency.getVulnerabilities().size() > 0) {
+                vulnerableDependencies++;
+            }
             for (Vulnerability vulnerability : dependency.getVulnerabilities()) {
                 InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().is(report.getFile()));
                 addIssue(inputFile, analysis, dependency, vulnerability);
+                vulnerabilityCount++;
             }
         }
     }
@@ -140,6 +141,7 @@ public class DependencyCheckSensor implements Sensor {
         profiler.startInfo("Process Dependency-Check report");
         try {
             Analysis analysis = parseAnalysis();
+            totalDependencies = analysis.getDependencies().size();
             addIssues(context, project, analysis);
         } catch (Exception e) {
             throw new RuntimeException("Can not process Dependency-Check report", e);
@@ -150,18 +152,15 @@ public class DependencyCheckSensor implements Sensor {
     }
 
     private void saveMeasures(SensorContext context) {
-        context.saveMeasure(NistMetrics.CVSS_HIGH, (double) criticalIssuesCount);
-        context.saveMeasure(NistMetrics.CVSS_MEDIUM, (double) majorIssuesCount);
-        context.saveMeasure(NistMetrics.CVSS_LOW, (double) minorIssuesCount);
-        if (this.criticalIssuesCount > 0) {
-            context.saveMeasure(NistMetrics.SECURITY_RATING, DependencyCheckSensor.CRITICAL_SECURITY_RATING_LEVEL);
-        } else if (this.majorIssuesCount > 0) {
-            context.saveMeasure(NistMetrics.SECURITY_RATING, DependencyCheckSensor.MAJOR_SECURITY_RATING_LEVEL);
-        } else if (this.minorIssuesCount > 0) {
-            context.saveMeasure(NistMetrics.SECURITY_RATING, DependencyCheckSensor.MINOR_SECURITY_RATING_LEVEL);
-        } else {
-            context.saveMeasure(NistMetrics.SECURITY_RATING, DependencyCheckSensor.DEFAULT_SECURITY_RATING_LEVEL);
-        }
+        context.saveMeasure(DependencyCheckMetrics.HIGH_SEVERITY_VULNS, (double) criticalIssuesCount);
+        context.saveMeasure(DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS, (double) majorIssuesCount);
+        context.saveMeasure(DependencyCheckMetrics.LOW_SEVERITY_VULNS, (double) minorIssuesCount);
+        context.saveMeasure(DependencyCheckMetrics.TOTAL_DEPENDENCIES, (double) totalDependencies);
+        context.saveMeasure(DependencyCheckMetrics.VULNERABLE_DEPENDENCIES, (double) vulnerableDependencies);
+        context.saveMeasure(DependencyCheckMetrics.TOTAL_VULNERABILITIES, (double) vulnerabilityCount);
+
+        context.saveMeasure(DependencyCheckMetrics.INHERITED_RISK_SCORE, DependencyCheckMetrics.inheritedRiskScore(criticalIssuesCount, majorIssuesCount, minorIssuesCount));
+        context.saveMeasure(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO, DependencyCheckMetrics.vulnerableComponentRatio(vulnerabilityCount, vulnerableDependencies));
     }
 
     @Override
