@@ -3,18 +3,7 @@
 Dependency-Check Plugin for SonarQube
 ================================
 
-Integrates Dependency-Check reports into SonarQube. This is a work-in-progress,
-but unfortunately, cannot be completed due to strict design decisions made in
-SonarQube 4.2.
-
-It is not currently possible to index third-party components if those components
-are not source files (i.e. DLL's, JAR's, etc). Because third-party components cannot
-be indexed, it is not currently possible to complete this plugin.
-
-Changes have been made in the upcoming SonarQube 5.1 release to allow for this 
-functionality. Work on the plugin will continue when an RC is available.
-
-https://jira.codehaus.org/browse/SONAR-5077
+Integrates Dependency-Check reports into SonarQube v5.1 or higher. If components being analyzed by Dependency-Check are non-source files (jar, dll, etc), then the value of sonar.import_unknown_files needs to be set to True in the SonarQube configuration.
 
 Usage
 -
