@@ -8,7 +8,7 @@
         <version>19</version>
     </parent>
     <artifactId>sonar-dependency-check</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Dependency-Check for SonarQube</name>
     <description>Integrates Dependency-Check reports into SonarQube</description>
