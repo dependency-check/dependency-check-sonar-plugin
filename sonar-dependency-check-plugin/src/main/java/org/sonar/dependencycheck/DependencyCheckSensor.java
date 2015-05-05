@@ -27,6 +27,8 @@ import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
+import org.sonar.api.measures.Measure;
+import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.Severity;
@@ -43,6 +45,7 @@ import org.sonar.dependencycheck.parser.element.Vulnerability;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -118,14 +121,28 @@ public class DependencyCheckSensor implements Sensor {
             return;
         }
         for (Dependency dependency : analysis.getDependencies()) {
-            if (dependency.getVulnerabilities().size() > 0) {
+            InputFile testFile = fileSystem.inputFile(fileSystem.predicates().is(new File(dependency.getFilePath())));
+
+            int depVulnCount = dependency.getVulnerabilities().size();
+
+            if (depVulnCount > 0) {
                 vulnerableDependencies++;
+                saveMetricOnFile(context, testFile, DependencyCheckMetrics.VULNERABLE_DEPENDENCIES, (double) depVulnCount);
             }
+            saveMetricOnFile(context, testFile, DependencyCheckMetrics.TOTAL_VULNERABILITIES, (double) depVulnCount);
+            saveMetricOnFile(context, testFile, DependencyCheckMetrics.TOTAL_DEPENDENCIES, (double) depVulnCount);
+
             for (Vulnerability vulnerability : dependency.getVulnerabilities()) {
                 InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().is(report.getFile()));
                 addIssue(inputFile, analysis, dependency, vulnerability);
                 vulnerabilityCount++;
             }
+        }
+    }
+
+    private void saveMetricOnFile(SensorContext context, InputFile inputFile, Metric metric, double value) {
+        if (inputFile != null) {
+            context.saveMeasure(inputFile, new Measure(metric, value));
         }
     }
 
