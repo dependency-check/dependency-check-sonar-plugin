@@ -3,7 +3,9 @@
 Dependency-Check Plugin for SonarQube
 ================================
 
-Integrates Dependency-Check reports into SonarQube v5.1 or higher. If components being analyzed by Dependency-Check are non-source files (jar, dll, etc), then the value of sonar.import_unknown_files needs to be set to True in the SonarQube configuration.
+Integrates Dependency-Check reports into SonarQube v5.1 or higher. If components being 
+analyzed by Dependency-Check are non-source files (jar, dll, etc), then the value of 
+sonar.import_unknown_files needs to be set to True in the SonarQube configuration.
 
 Usage
 -
