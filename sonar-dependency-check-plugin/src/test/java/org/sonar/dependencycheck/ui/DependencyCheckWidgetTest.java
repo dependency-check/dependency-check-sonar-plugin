@@ -40,41 +40,4 @@ public class DependencyCheckWidgetTest {
         assertThat(widget.getTitle()).contains("Known Vulnerabilities");
     }
 
-    public static void main(String args[]) {
-        double high = 4;
-        double med = 21;
-        double low = 1;
-        double total = high + med + low;
-        double vulndeps = 8;
-        double totaldeps = 100; // dont think this is useful in calculation
-
-
-
-        double nvs = (((high * 5) + (med * 3) + (low * 1)));
-
-
-        //double nvs = (((high * 5) + (med * 3) + (low * 1)) * (vulndeps / totaldeps));
-        //double nvs = ((high * 1) + (med * .5) + (low * .1)) / total;
-        //double nvs = (5 - ((high * 1) + (med * .5) + (low * .1)) * ((vulndeps / totaldeps) / total) * 5);
-        double worst_possible_score = (total * 1);
-
-        //double risk_ratio = ((total * 5) / nvs) - 1.0;
-
-
-        double risk_ratio = ( (total / nvs) );
-
-
-        double test = ((high + med) / total);
-
-
-
-
-        System.out.println("NVS: " + nvs);
-        System.out.println("WPS: " + worst_possible_score);
-        System.out.println("Risk Ratio: " + risk_ratio);
-
-        System.out.println("Test: " + test);
-
-    }
-
 }
