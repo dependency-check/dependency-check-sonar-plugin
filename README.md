@@ -3,7 +3,7 @@
 Dependency-Check Plugin for SonarQube
 =====================================
 
-Integrates OWASP Dependency-Check reports into SonarQube v5.1 or higher. If components 
+Integrates [OWASP Dependency-Check] reports into SonarQube v5.1 or higher. If components 
 being analyzed by Dependency-Check are non-source files (jar, dll, etc), then the value 
 of sonar.import_unknown_files needs to be set to True in the SonarQube configuration.
 
@@ -60,3 +60,4 @@ Permission to modify and redistribute is granted under the terms of the [LGPLv3]
 
   [LGPLv3]: http://www.gnu.org/licenses/lgpl.txt
   [bintray]: https://bintray.com/stevespringett/owasp/dependency-check-sonar/
+  [OWASP Dependency-Check]: https://www.owasp.org/index.php/OWASP_Dependency_Check
