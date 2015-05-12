@@ -42,7 +42,7 @@
 
     <scm>
       <connection>scm:git:https://github.com/stevespringett/dependency-check-sonar-plugin</connection>
-      <developerConnection>scm:git:https://github.com/stevespringett/dependency-check-sonar-plugin</developerConnection>
+      <developerConnection>scm:git:https://github.com/stevespringett/dependency-check-sonar-plugin.git</developerConnection>
       <url>https://github.com/stevespringett/dependency-check-sonar-plugin</url>
       <tag>HEAD</tag>
     </scm>
@@ -56,6 +56,13 @@
       <system>Travis CI</system>
       <url>https://travis-ci.org/stevespringett/dependency-check-sonar-plugin</url>
     </ciManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>bintray</id>
+            <url>https://api.bintray.com/maven/stevespringett/owasp/dependency-check-sonar</url>
+        </repository>
+    </distributionManagement>
 
     <modules>
         <module>sonar-dependency-check-plugin</module>
@@ -90,5 +97,19 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${version.release.plugin}</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
