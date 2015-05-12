@@ -12,7 +12,9 @@ Usage
 
 > $ mvn clean package
 
-Finally, deploy the resulting jar to your SonarQube extensions->plugins directory
+Distribution
+-
+Ready to use binaries are available from [bintray]. To install, shutdown Sonar and copy the jar to your SonarQube extensions->plugins directory. Then, start Sonar. 
 
 Copyright & License
 -
@@ -22,3 +24,4 @@ Dependency-Check Sonar Plugin is Copyright (c) Steve Springett. All Rights Reser
 Permission to modify and redistribute is granted under the terms of the [LGPLv3] license.
 
   [LGPLv3]: http://www.gnu.org/licenses/lgpl.txt
+  [bintray]: https://bintray.com/stevespringett/owasp/dependency-check-sonar/
