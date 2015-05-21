@@ -161,7 +161,7 @@ public class DependencyCheckSensor implements Sensor {
             totalDependencies = analysis.getDependencies().size();
             addIssues(context, project, analysis);
         } catch (Exception e) {
-            throw new RuntimeException("Can not process Dependency-Check report", e);
+            throw new RuntimeException("Can not process Dependency-Check report. Ensure the report and all dependencies being analyzed are located within the project workspace and that sonar.sources is set to reflect these paths (or set sonar.sources=.)", e);
         } finally {
             profiler.stopInfo();
         }
