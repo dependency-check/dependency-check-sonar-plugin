@@ -47,7 +47,10 @@
                         <%= message('dependencycheck.widget.securityRating') -%>
                     </span>
                     <span class="nowrap">
-                        <%= format_measure(inherited_risk_score, :url => url_for_drilldown(inherited_risk_score)) %>
+                        <a href="<%= url_for_drilldown('inherited_risk_score') -%>" class="widget-link"
+                           title="<%= tooltip -%>" data-toggle="tooltip" data-placement="bottom">
+                            <%= format_measure(inherited_risk_score) -%>
+                        </a>
                         <%= dashboard_configuration.selected_period? ? format_variation(inherited_risk_score) : trend_icon(inherited_risk_score) -%>
                     </span>
                 </p>
@@ -55,7 +58,10 @@
                     <tr>
                         <td class="thin nowrap"><%= message('dependencycheck.widget.dependencies') -%></td>
                         <td class="thin right nowrap">
-                            <%= format_measure(total_dependencies, :url => url_for_drilldown(total_dependencies)) %>
+                            <a href="<%= url_for_drilldown('total_dependencies') -%>" class="widget-link"
+                               title="<%= tooltip -%>" data-toggle="tooltip" data-placement="bottom">
+                                <%= format_measure(total_dependencies) -%>
+                            </a>
                         </td>
                         <td class="thin nowrap">
                             <%= dashboard_configuration.selected_period? ? format_variation(total_dependencies) : trend_icon(total_dependencies, :empty => true) -%>
@@ -64,7 +70,10 @@
                     <tr>
                         <td class="thin nowrap"><%= message('dependencycheck.widget.vulnerabilities') -%></td>
                         <td class="thin right nowrap">
-                            <%= format_measure(total_vulnerabilities, :url => url_for_drilldown(total_vulnerabilities)) %>
+                            <a href="<%= url_for_drilldown('total_vulnerabilities') -%>" class="widget-link"
+                               title="<%= tooltip -%>" data-toggle="tooltip" data-placement="bottom">
+                                <%= format_measure(total_vulnerabilities) -%>
+                            </a>
                         </td>
                         <td class="thin nowrap">
                             <%= dashboard_configuration.selected_period? ? format_variation(total_vulnerabilities) : trend_icon(total_vulnerabilities, :empty => true) -%>
@@ -73,7 +82,10 @@
                     <tr>
                         <td class="thin nowrap"><%= message('dependencycheck.widget.vulnerable.dependencies') -%></td>
                         <td class="thin right nowrap">
-                            <%= format_measure(vulnerable_dependencies, :url => url_for_drilldown(vulnerable_dependencies)) %>
+                            <a href="<%= url_for_drilldown('vulnerable_dependencies') -%>" class="widget-link"
+                               title="<%= tooltip -%>" data-toggle="tooltip" data-placement="bottom">
+                                <%= format_measure(vulnerable_dependencies) -%>
+                            </a>
                         </td>
                         <td class="thin nowrap">
                             <%= dashboard_configuration.selected_period? ? format_variation(vulnerable_dependencies) : trend_icon(vulnerable_dependencies, :empty => true) -%>
@@ -90,7 +102,10 @@
                         <%= message('dependencycheck.widget.securityRatio') -%>
                     </span>
                     <span class="nowrap">
-                        <%= format_measure(vulnerable_component_ratio, :url => url_for_drilldown(vulnerable_component_ratio)) %>
+                        <a href="<%= url_for_drilldown('vulnerable_component_ratio') -%>" class="widget-link"
+                           title="<%= tooltip -%>" data-toggle="tooltip" data-placement="bottom">
+                            <%= format_measure(vulnerable_component_ratio) -%>
+                        </a>
                         <%= dashboard_configuration.selected_period? ? format_variation(vulnerable_component_ratio) : trend_icon(vulnerable_component_ratio) -%>
                     </span>
                 </p>
