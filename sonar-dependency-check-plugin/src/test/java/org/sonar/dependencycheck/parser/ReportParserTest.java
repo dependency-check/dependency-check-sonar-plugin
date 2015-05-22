@@ -63,11 +63,20 @@ public class ReportParserTest {
 
         Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
         assertThat(vulnerabilities.size()).isEqualTo(2);
-        Vulnerability vulnerability = vulnerabilities.iterator().next();
+        Iterator vulnIterator = vulnerabilities.iterator();
+        Vulnerability vulnerability = (Vulnerability) vulnIterator.next();
         assertThat(vulnerability.getName()).isEqualTo("CVE-2014-3596");
         assertThat(vulnerability.getCvssScore()).isEqualTo("5.8");
         assertThat(vulnerability.getSeverity()).isEqualTo("Medium");
+        assertThat(vulnerability.getCwe() == null);
         assertThat(vulnerability.getDescription()).isEqualTo("The getCN function in Apache Axis 1.4 and earlier does not properly verify that the server hostname matches a domain name in the subject's Common Name (CN) or subjectAltName field of the X.509 certificate, which allows man-in-the-middle attackers to spoof SSL servers via a certificate with a subject that specifies a common name in a field that is not the CN field.  NOTE: this issue exists because of an incomplete fix for CVE-2012-5784.");
+
+        vulnerability = (Vulnerability) vulnIterator.next();
+        assertThat(vulnerability.getName()).isEqualTo("CVE-2012-5784");
+        assertThat(vulnerability.getCvssScore()).isEqualTo("5.8");
+        assertThat(vulnerability.getSeverity()).isEqualTo("Medium");
+        assertThat(vulnerability.getCwe().equals("CWE-20 Improper Input Validation"));
+        assertThat(vulnerability.getDescription()).isEqualTo("Apache Axis 1.4 and earlier, as used in PayPal Payments Pro, PayPal Mass Pay, PayPal Transactional Information SOAP, the Java Message Service implementation in Apache ActiveMQ, and other products, does not verify that the server hostname matches a domain name in the subject's Common Name (CN) or subjectAltName field of the X.509 certificate, which allows man-in-the-middle attackers to spoof SSL servers via an arbitrary valid certificate.");
 
         dependency = (Dependency) iterator.next();
         assertThat(dependency.getEvidenceCollected().size()).isEqualTo(13);

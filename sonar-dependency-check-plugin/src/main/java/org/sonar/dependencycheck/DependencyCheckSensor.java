@@ -19,6 +19,7 @@
  */
 package org.sonar.dependencycheck;
 
+import org.apache.commons.lang.StringUtils;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
@@ -89,7 +90,7 @@ public class DependencyCheckSensor implements Sensor {
             String severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore());
             Issue issue = issuable.newIssueBuilder()
                     .ruleKey(RuleKey.of(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY))
-                    .message(vulnerability.getDescription())
+                    .message(formatDescription(dependency, vulnerability))
                     .severity(severity)
                     .attribute("cve", vulnerability.getName())
                     .attribute("file", dependency.getFileName())
@@ -101,6 +102,21 @@ public class DependencyCheckSensor implements Sensor {
         }
     }
 
+    /**
+     *      todo: Add Markdown formatting if and when Sonar supports it
+     *      https://jira.codehaus.org/browse/SONAR-4161
+     */
+    private String formatDescription(Dependency dependency, Vulnerability vulnerability) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
+        sb.append("Reference: " ).append(vulnerability.getName()).append(" | ");
+        sb.append("CVSS Score: " ).append(vulnerability.getCvssScore()).append(" | ");
+        if (StringUtils.isNotBlank(vulnerability.getCwe())) {
+            sb.append("Category: " ).append(vulnerability.getCwe()).append(" | ");
+        }
+        sb.append(vulnerability.getDescription());
+        return sb.toString();
+    }
 
     private void incrementCount(Vulnerability vulnerability, String severity) {
         switch (severity) {

@@ -117,6 +117,8 @@ public class ReportParser {
                 vulnerability.setCvssScore(StringUtils.trim(childCursor.collectDescendantText(false)));
             } else if ("severity".equals(nodeName)) {
                 vulnerability.setSeverity(StringUtils.trim(childCursor.collectDescendantText(false)));
+            } else if ("cwe".equals(nodeName)) {
+                vulnerability.setCwe(StringUtils.trim(childCursor.collectDescendantText(false)));
             } else if ("description".equals(nodeName)) {
                 vulnerability.setDescription(StringUtils.trim(childCursor.collectDescendantText(false)));
             }
