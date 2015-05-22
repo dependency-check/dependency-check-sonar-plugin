@@ -5,6 +5,12 @@ Dependency-Check Plugin for SonarQube
 
 Integrates [OWASP Dependency-Check] reports into SonarQube v5.1 or higher. If components being analyzed by Dependency-Check are non-source files (jar, dll, etc), then the value of sonar.import_unknown_files needs to be set to True in the SonarQube configuration.
 
+About Dependency-Check
+-------------------
+Dependency-Check is a utility that attempts to detect publicly disclosed vulnerabilities contained within project dependencies. It does this by determining if there is a Common Platform Enumeration (CPE) identifier for a given dependency. If found, it will generate a report linking to the associated CVE entries.
+
+Dependency-Check supports the identification of project dependencies in a number of different languages including Java, .NET, and Python.
+
 Screenshots
 -------------------
 
@@ -49,10 +55,25 @@ Distribution
 -------------------
 Ready to use binaries are available from [bintray]. To install, shutdown Sonar and copy the jar to your SonarQube extensions->plugins directory. Then, start Sonar. 
 
+Ecosystem
+-------------------
+
+Dependency-Check is available as a:
+* Command-line utility
+* Ant Task
+* Gradle Plugin
+* Jenkins Plugin
+* Maven Plugin
+* SonarQube Plugin
+
+NOTE: The Sonar plugin does not generate reports, it reads existing reports. Use one of the other available methods to scan project dependencies and generate the necessary XML report.
+
 Copyright & License
 -------------------
 
 OWASP Dependency-Check Sonar Plugin is Copyright (c) Steve Springett. All Rights Reserved.
+
+OWASP Dependency-Check is Copyright (c) Jeremy Long. All Rights Reserved.
 
 Permission to modify and redistribute is granted under the terms of the [LGPLv3] license.
 
