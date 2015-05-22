@@ -56,7 +56,6 @@
                         <td class="thin nowrap"><%= message('dependencycheck.widget.dependencies') -%></td>
                         <td class="thin right nowrap">
                             <%= format_measure(total_dependencies, :url => url_for_drilldown(total_dependencies)) %>
-                            <%= dashboard_configuration.selected_period? ? format_variation(total_dependencies) : trend_icon(total_dependencies) -%>
                         </td>
                         <td class="thin nowrap">
                             <%= dashboard_configuration.selected_period? ? format_variation(total_dependencies) : trend_icon(total_dependencies, :empty => true) -%>
@@ -66,7 +65,6 @@
                         <td class="thin nowrap"><%= message('dependencycheck.widget.vulnerabilities') -%></td>
                         <td class="thin right nowrap">
                             <%= format_measure(total_vulnerabilities, :url => url_for_drilldown(total_vulnerabilities)) %>
-                            <%= dashboard_configuration.selected_period? ? format_variation(total_vulnerabilities) : trend_icon(total_vulnerabilities) -%>
                         </td>
                         <td class="thin nowrap">
                             <%= dashboard_configuration.selected_period? ? format_variation(total_vulnerabilities) : trend_icon(total_vulnerabilities, :empty => true) -%>
@@ -76,7 +74,6 @@
                         <td class="thin nowrap"><%= message('dependencycheck.widget.vulnerable.dependencies') -%></td>
                         <td class="thin right nowrap">
                             <%= format_measure(vulnerable_dependencies, :url => url_for_drilldown(vulnerable_dependencies)) %>
-                            <%= dashboard_configuration.selected_period? ? format_variation(vulnerable_dependencies) : trend_icon(vulnerable_dependencies) -%>
                         </td>
                         <td class="thin nowrap">
                             <%= dashboard_configuration.selected_period? ? format_variation(vulnerable_dependencies) : trend_icon(vulnerable_dependencies, :empty => true) -%>
