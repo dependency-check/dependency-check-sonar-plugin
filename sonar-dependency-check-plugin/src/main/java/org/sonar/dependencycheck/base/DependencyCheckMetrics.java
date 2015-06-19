@@ -45,7 +45,11 @@ public final class DependencyCheckMetrics implements Metrics {
     }
 
     public static double vulnerableComponentRatio(int vulnerabilities, int vulnerableComponents) {
-        return (double) vulnerabilities / vulnerableComponents;
+        double ratio = 0.0;
+        if(vulnerableComponents > 0) {
+            ratio = (double) vulnerabilities / vulnerableComponents;
+        }
+        return ratio;
     }
 
     public static final Metric INHERITED_RISK_SCORE = new Metric.Builder(DependencyCheckMetrics.INHERITED_RISK_SCORE_KEY, "Inherited Risk Score", Metric.ValueType.INT)
