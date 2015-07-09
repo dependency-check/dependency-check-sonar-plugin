@@ -21,6 +21,7 @@ package org.sonar.dependencycheck.base;
 
 import org.sonar.api.measures.Metric;
 import org.sonar.api.measures.Metrics;
+import org.sonar.api.measures.SumChildValuesFormula;
 
 import java.util.Arrays;
 import java.util.List;
@@ -57,6 +58,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setDirection(Metric.DIRECTION_BETTER)
             .setQualitative(true)
             .setDomain(DependencyCheckMetrics.DOMAIN)
+            .setFormula(new SumChildValuesFormula(false))
             .setBestValue(0.0)
             .create();
 
@@ -65,6 +67,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setDirection(Metric.DIRECTION_BETTER)
             .setQualitative(true)
             .setDomain(DependencyCheckMetrics.DOMAIN)
+            .setFormula(new SumChildValuesFormula(false))
             .setBestValue(0.0)
             .create();
 
@@ -73,6 +76,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
             .setDomain(DependencyCheckMetrics.DOMAIN)
+            .setFormula(new SumChildValuesFormula(false))
             .setBestValue(0.0)
             .setHidden(false)
             .create();
@@ -82,6 +86,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
             .setDomain(DependencyCheckMetrics.DOMAIN)
+            .setFormula(new SumChildValuesFormula(false))
             .setBestValue(0.0)
             .setHidden(false)
             .create();
@@ -91,6 +96,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
             .setDomain(DependencyCheckMetrics.DOMAIN)
+            .setFormula(new SumChildValuesFormula(false))
             .setBestValue(0.0)
             .setHidden(false)
             .create();
@@ -100,6 +106,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
             .setDomain(DependencyCheckMetrics.DOMAIN)
+            .setFormula(new SumChildValuesFormula(false))
             .setHidden(false)
             .create();
 
@@ -108,6 +115,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
             .setDomain(DependencyCheckMetrics.DOMAIN)
+            .setFormula(new SumChildValuesFormula(false))
             .setBestValue(0.0)
             .setHidden(false)
             .create();
@@ -117,6 +125,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
             .setDomain(DependencyCheckMetrics.DOMAIN)
+            .setFormula(new SumChildValuesFormula(false))
             .setBestValue(0.0)
             .setHidden(false)
             .create();
