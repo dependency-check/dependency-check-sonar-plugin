@@ -53,7 +53,11 @@ Compiling
 
 Distribution
 -------------------
-Ready to use binaries are available from [bintray]. To install, shutdown Sonar and copy the jar to your SonarQube extensions->plugins directory. Then, start Sonar. 
+Ready to use binaries are available from [bintray] as well as [GitHub].
+
+Installation
+-------------------
+Copy the plugin (jar file) to $SONAR_INSTALL_DIR/extensions/plugins and restart SonarQube.
 
 Plugin Configuration
 -------------------
@@ -94,4 +98,5 @@ Permission to modify and redistribute is granted under the terms of the [LGPLv3]
 
   [LGPLv3]: http://www.gnu.org/licenses/lgpl.txt
   [bintray]: https://bintray.com/stevespringett/owasp/dependency-check-sonar/
+  [GitHub]: https://github.com/stevespringett/dependency-check-sonar-plugin/releases
   [OWASP Dependency-Check]: https://www.owasp.org/index.php/OWASP_Dependency_Check
