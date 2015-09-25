@@ -67,7 +67,7 @@ Dependency-Check will output a file named 'dependency-check-report.xml' when ask
 
 A typical SonarQube configuraiton will have the following parameters. This example assumes the use of a Jenkins workspace, but can easily be altered for other CI/CD systems.
 
-```
+```ini
 sonar.sources=.
 sonar.dependencyCheck.reportPath=${WORKSPACE}/dependency-check-report.xml
 ```
