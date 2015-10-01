@@ -31,6 +31,7 @@ import org.sonar.api.issue.Issue;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.resources.Project;
+import org.sonar.api.resources.Resource;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.Severity;
 import org.sonar.api.utils.log.Logger;
@@ -84,8 +85,8 @@ public class DependencyCheckSensor implements Sensor {
         return this.report.exist();
     }
 
-    private void addIssue(InputFile inputFile, Analysis analysis, Dependency dependency, Vulnerability vulnerability) {
-        Issuable issuable = this.resourcePerspectives.as(Issuable.class, inputFile);
+    private void addIssue(Project project, Analysis analysis, Dependency dependency, Vulnerability vulnerability) {
+        Issuable issuable = this.resourcePerspectives.as(Issuable.class, (Resource)project);
         if (issuable != null) {
             String severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore());
             Issue issue = issuable.newIssueBuilder()
@@ -149,8 +150,7 @@ public class DependencyCheckSensor implements Sensor {
             saveMetricOnFile(context, testFile, DependencyCheckMetrics.TOTAL_DEPENDENCIES, (double) depVulnCount);
 
             for (Vulnerability vulnerability : dependency.getVulnerabilities()) {
-                InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().is(report.getFile()));
-                addIssue(inputFile, analysis, dependency, vulnerability);
+                addIssue(project, analysis, dependency, vulnerability);
                 vulnerabilityCount++;
             }
         }

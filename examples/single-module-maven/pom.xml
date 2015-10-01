@@ -19,7 +19,7 @@
         <dependency.check.report.dir>${project.build.directory}/dependency-check</dependency.check.report.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sonar.host.url>http://localhost:9000/</sonar.host.url>
-        <sonar.sources>src/main/java,${dependency.check.report.dir}</sonar.sources>
+        <sonar.sources>src/main/java</sonar.sources>
         <sonar.dependencyCheck.reportPath>${dependency.check.report.dir}/dependency-check-report.xml</sonar.dependencyCheck.reportPath>
     </properties>
 
