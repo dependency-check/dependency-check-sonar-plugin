@@ -78,12 +78,7 @@ public class XmlReportFileTest {
 
         XmlReportFile xmlReportFile = new XmlReportFile(configuration, this.fs);
 
-        try {
-            xmlReportFile.exist();
-            fail("An exception is expected!");
-        } catch (MessageException e) {
-            // expected
-        }
+        assertFalse(xmlReportFile.exist());
     }
 
     @Test
@@ -93,12 +88,7 @@ public class XmlReportFileTest {
 
         XmlReportFile xmlReportFile = new XmlReportFile(configuration, this.fs);
 
-        try {
-            xmlReportFile.exist();
-            fail("An exception is expected!");
-        } catch (MessageException e) {
-            // expected
-        }
+        assertFalse(xmlReportFile.exist());
     }
 
     @Test

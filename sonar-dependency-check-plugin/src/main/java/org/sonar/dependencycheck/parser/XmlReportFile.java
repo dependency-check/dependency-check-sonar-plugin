@@ -21,7 +21,8 @@ package org.sonar.dependencycheck.parser;
 
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.utils.MessageException;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.DependencyCheckSensorConfiguration;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
@@ -32,6 +33,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class XmlReportFile {
+    private static final Logger LOGGER = Loggers.get(XmlReportFile.class);
+
     private final DependencyCheckSensorConfiguration configuration;
     private final FileSystem fileSystem;
 
@@ -58,7 +61,7 @@ public class XmlReportFile {
             if (report.exists() && report.isFile()) {
                 return report;
             }
-            throw MessageException.of("Dependency-Check report does not exist. Please check property " +
+            LOGGER.warn("Dependency-Check report does not exist. SKIPPING. Please check property " +
                     DependencyCheckConstants.REPORT_PATH_PROPERTY + ": " + path);
         }
         return null;
