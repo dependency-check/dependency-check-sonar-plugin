@@ -93,9 +93,9 @@ public class DependencyCheckSensor implements Sensor {
                     .ruleKey(RuleKey.of(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY))
                     .message(formatDescription(dependency, vulnerability))
                     .severity(severity)
-                    .attribute("cve", vulnerability.getName())
-                    .attribute("file", dependency.getFileName())
-                    .line(null)
+                    // NOTE: attributes no longer supported in Sensors as of SonarQube 5.2
+                    //.attribute("cve", vulnerability.getName())
+                    //.attribute("file", dependency.getFileName())
                     .build();
             if (issuable.addIssue(issue)) {
                 incrementCount(vulnerability, severity);
