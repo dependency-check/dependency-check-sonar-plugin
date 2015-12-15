@@ -24,7 +24,6 @@ import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
@@ -34,6 +33,7 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rule.Severity;
+import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.api.utils.log.Profiler;
@@ -55,10 +55,8 @@ public class DependencyCheckSensor implements Sensor {
 
     private static final Logger LOGGER = Loggers.get(DependencyCheckSensor.class);
 
-    private final DependencyCheckSensorConfiguration configuration;
     private final ResourcePerspectives resourcePerspectives;
     private final FileSystem fileSystem;
-    private final ActiveRules activeRules;
     private final XmlReportFile report;
 
     private int totalDependencies;
@@ -72,12 +70,10 @@ public class DependencyCheckSensor implements Sensor {
             DependencyCheckSensorConfiguration configuration,
             ResourcePerspectives resourcePerspectives,
             FileSystem fileSystem,
-            ActiveRules activeRules) {
-        this.configuration = configuration;
+            PathResolver pathResolver) {
         this.resourcePerspectives = resourcePerspectives;
         this.fileSystem = fileSystem;
-        this.activeRules = activeRules;
-        this.report = new XmlReportFile(configuration, fileSystem);
+        this.report = new XmlReportFile(configuration, fileSystem, pathResolver);
     }
 
     @Override
@@ -85,7 +81,7 @@ public class DependencyCheckSensor implements Sensor {
         return this.report.exist();
     }
 
-    private void addIssue(Project project, Analysis analysis, Dependency dependency, Vulnerability vulnerability) {
+    private void addIssue(Project project, Dependency dependency, Vulnerability vulnerability) {
         Issuable issuable = this.resourcePerspectives.as(Issuable.class, (Resource)project);
         if (issuable != null) {
             String severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore());
@@ -93,12 +89,9 @@ public class DependencyCheckSensor implements Sensor {
                     .ruleKey(RuleKey.of(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY))
                     .message(formatDescription(dependency, vulnerability))
                     .severity(severity)
-                    // NOTE: attributes no longer supported in Sensors as of SonarQube 5.2
-                    //.attribute("cve", vulnerability.getName())
-                    //.attribute("file", dependency.getFileName())
                     .build();
             if (issuable.addIssue(issue)) {
-                incrementCount(vulnerability, severity);
+                incrementCount(severity);
             }
         }
     }
@@ -119,7 +112,7 @@ public class DependencyCheckSensor implements Sensor {
         return sb.toString();
     }
 
-    private void incrementCount(Vulnerability vulnerability, String severity) {
+    private void incrementCount(String severity) {
         switch (severity) {
             case Severity.CRITICAL:
                 this.criticalIssuesCount++;
@@ -150,7 +143,7 @@ public class DependencyCheckSensor implements Sensor {
             saveMetricOnFile(context, testFile, DependencyCheckMetrics.TOTAL_DEPENDENCIES, (double) depVulnCount);
 
             for (Vulnerability vulnerability : dependency.getVulnerabilities()) {
-                addIssue(project, analysis, dependency, vulnerability);
+                addIssue(project, dependency, vulnerability);
                 vulnerabilityCount++;
             }
         }

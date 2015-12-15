@@ -19,8 +19,8 @@
  */
 package org.sonar.dependencycheck.parser;
 
-import org.apache.commons.lang.StringUtils;
 import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.DependencyCheckSensorConfiguration;
@@ -37,12 +37,14 @@ public class XmlReportFile {
 
     private final DependencyCheckSensorConfiguration configuration;
     private final FileSystem fileSystem;
+    private final PathResolver pathResolver;
 
     private File report;
 
-    public XmlReportFile(DependencyCheckSensorConfiguration configuration, FileSystem fileSystem) {
+    public XmlReportFile(DependencyCheckSensorConfiguration configuration, FileSystem fileSystem, PathResolver pathResolver) {
         this.configuration = configuration;
         this.fileSystem = fileSystem;
+        this.pathResolver = pathResolver;
     }
 
     /**
@@ -52,19 +54,19 @@ public class XmlReportFile {
      */
     @CheckForNull
     private File getReportFromProperty() {
-        String path = this.configuration.getReportPath();
-        if (StringUtils.isNotBlank(path)) {
-            this.report = new File(path);
-            if (!report.isAbsolute()) {
-                report = new File(this.fileSystem.baseDir(), path);
-            }
-            if (report.exists() && report.isFile()) {
-                return report;
-            }
+        String path = configuration.getReportPath();
+        if (path == null) {
+            return null;
+        }
+
+        this.report = pathResolver.relativeFile(fileSystem.baseDir(), path);
+
+        if (report != null && !report.isFile()) {
             LOGGER.warn("Dependency-Check report does not exist. SKIPPING. Please check property " +
                     DependencyCheckConstants.REPORT_PATH_PROPERTY + ": " + path);
+            return null;
         }
-        return null;
+        return report;
     }
 
     public File getFile() {

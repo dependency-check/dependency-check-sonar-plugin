@@ -22,11 +22,11 @@ package org.sonar.dependencycheck.parser;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.issue.Issuable.IssueBuilder;
 import org.sonar.api.issue.Issue;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.dependencycheck.DependencyCheckSensor;
 import org.sonar.dependencycheck.DependencyCheckSensorConfiguration;
 
@@ -39,7 +39,7 @@ public class DependencyCheckSensorTest {
     private DependencyCheckSensorConfiguration configuration;
     private ResourcePerspectives resourcePerspectives;
     private FileSystem fileSystem;
-    private ActiveRules activeRules;
+    private PathResolver pathResolver;
     private DependencyCheckSensor sensor;
 
     @Before
@@ -47,8 +47,8 @@ public class DependencyCheckSensorTest {
         this.configuration = mock(DependencyCheckSensorConfiguration.class);
         this.resourcePerspectives = mock(ResourcePerspectives.class);
         this.fileSystem = mock(FileSystem.class);
-        this.activeRules = mock(ActiveRules.class);
-        this.sensor = new DependencyCheckSensor(this.configuration, this.resourcePerspectives, this.fileSystem, this.activeRules);
+        this.pathResolver = mock(PathResolver.class);
+        this.sensor = new DependencyCheckSensor(this.configuration, this.resourcePerspectives, this.fileSystem, this.pathResolver);
     }
 
     @Test

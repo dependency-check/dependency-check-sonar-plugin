@@ -3,7 +3,7 @@
 Dependency-Check Plugin for SonarQube
 =====================================
 
-Integrates [OWASP Dependency-Check] reports into SonarQube v5.1 or higher. If components being analyzed by Dependency-Check are non-source files (jar, dll, etc), then the value of sonar.import_unknown_files needs to be set to True in the SonarQube configuration.
+Integrates [OWASP Dependency-Check] reports into SonarQube v5.1 or higher.
 
 About Dependency-Check
 -------------------
@@ -61,18 +61,13 @@ Copy the plugin (jar file) to $SONAR_INSTALL_DIR/extensions/plugins and restart 
 
 Plugin Configuration
 -------------------
-Dependency-Check will output a file named 'dependency-check-report.xml' when asked to output XML. By default, SonarQube does not inspect XML files. Therefore, the first step in configuring the plugin is to configure SonarQube to analyze XML. This can be accomplished one of two ways:
-* Installing the XML plugin from the Update Center (recommended approach)
-* Set sonar.import_unknown_files = true. This option is under the menu Settings -> Exclusions -> Files
+Dependency-Check will output a file named 'dependency-check-report.xml' when asked to output XML. The Dependency-Check SonarQube plugin reads an existing Dependency-Check XML report.
 
-A typical SonarQube configuraiton will have the following parameters. This example assumes the use of a Jenkins workspace, but can easily be altered for other CI/CD systems.
+A typical SonarQube configuraiton will have the following parameter. This example assumes the use of a Jenkins workspace, but can easily be altered for other CI/CD systems.
 
 ```ini
-sonar.sources=.
 sonar.dependencyCheck.reportPath=${WORKSPACE}/dependency-check-report.xml
 ```
-
-This example may be less than ideal as the source directory generally will not be the root of the project workspace, but rather a dedicated 'src' directory. It is important to note that from SonarQubes perspective, dependency-check-report.xml is a source file and will need to be included in sonar.sources. Multiple source directories can be specified by this properly. It's also important to note that when using the Dependency-Check Maven plugin, the report will be created in the ./target directory. It may be advisable to move the report elsewhere or include the target directory in sonar.sources. 
 
 Ecosystem
 -------------------
