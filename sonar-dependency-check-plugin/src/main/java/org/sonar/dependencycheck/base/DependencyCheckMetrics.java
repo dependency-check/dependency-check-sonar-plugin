@@ -41,8 +41,8 @@ public final class DependencyCheckMetrics implements Metrics {
     private static final String LOW_SEVERITY_VULNS_KEY = "low_severity_vulns";
 
 
-    public static double inheritedRiskScore(int high, int medium, int low) {
-        return (double) ((high * 5) + (medium * 3) + (low));
+    public static int inheritedRiskScore(int high, int medium, int low) {
+        return (high * 5) + (medium * 3) + (low);
     }
 
     public static double vulnerableComponentRatio(int vulnerabilities, int vulnerableComponents) {
