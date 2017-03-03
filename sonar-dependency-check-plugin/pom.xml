@@ -13,7 +13,7 @@
     <url>https://www.owasp.org/index.php/OWASP_Dependency_Check</url>
 
     <properties>
-        <sonar.version>5.1</sonar.version>
+        <sonar.version>6.2.1</sonar.version>
         <!-- Configuration for sonar-packaging-maven-plugin -->
         <sonar.pluginClass>org.sonar.dependencycheck.DependencyCheckPlugin</sonar.pluginClass>
         <sonar.pluginName>Dependency-Check</sonar.pluginName>
@@ -21,7 +21,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.codehaus.sonar</groupId>
+            <groupId>org.sonarsource.sonarqube</groupId>
             <artifactId>sonar-plugin-api</artifactId>
             <version>${sonar.version}</version>
             <scope>provided</scope>
