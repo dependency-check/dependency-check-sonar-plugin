@@ -20,10 +20,10 @@
 package org.sonar.dependencycheck.parser;
 
 import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.config.Settings;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.dependencycheck.DependencyCheckSensorConfiguration;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
 import javax.annotation.CheckForNull;
@@ -35,14 +35,14 @@ import java.io.InputStream;
 public class XmlReportFile {
     private static final Logger LOGGER = Loggers.get(XmlReportFile.class);
 
-    private final DependencyCheckSensorConfiguration configuration;
+    private final Settings settings;
     private final FileSystem fileSystem;
     private final PathResolver pathResolver;
 
     private File report;
 
-    public XmlReportFile(DependencyCheckSensorConfiguration configuration, FileSystem fileSystem, PathResolver pathResolver) {
-        this.configuration = configuration;
+    public XmlReportFile(Settings settings, FileSystem fileSystem, PathResolver pathResolver) {
+        this.settings = settings;
         this.fileSystem = fileSystem;
         this.pathResolver = pathResolver;
     }
@@ -54,7 +54,7 @@ public class XmlReportFile {
      */
     @CheckForNull
     private File getReportFromProperty() {
-        String path = configuration.getReportPath();
+        String path = settings.getString(DependencyCheckConstants.REPORT_PATH_PROPERTY);
         if (path == null) {
             return null;
         }

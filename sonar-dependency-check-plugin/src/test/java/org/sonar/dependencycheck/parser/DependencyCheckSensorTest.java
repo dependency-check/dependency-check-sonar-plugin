@@ -22,35 +22,24 @@ package org.sonar.dependencycheck.parser;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.sensor.issue.NewIssueLocation;
-import org.sonar.api.batch.sensor.issue.internal.DefaultIssueLocation;
-import org.sonar.api.component.ResourcePerspectives;
-import org.sonar.api.issue.Issuable.IssueBuilder;
-import org.sonar.api.issue.Issue;
-import org.sonar.api.rule.RuleKey;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.dependencycheck.DependencyCheckSensor;
-import org.sonar.dependencycheck.DependencyCheckSensorConfiguration;
 
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class DependencyCheckSensorTest {
-    private DependencyCheckSensorConfiguration configuration;
     private FileSystem fileSystem;
     private PathResolver pathResolver;
     private DependencyCheckSensor sensor;
 
     @Before
     public void init() {
-        this.configuration = mock(DependencyCheckSensorConfiguration.class);
         this.fileSystem = mock(FileSystem.class);
         this.pathResolver = mock(PathResolver.class);
-        this.sensor = new DependencyCheckSensor(this.configuration, this.fileSystem, this.pathResolver);
+        this.sensor = new DependencyCheckSensor(this.fileSystem, this.pathResolver);
     }
 
     @Test

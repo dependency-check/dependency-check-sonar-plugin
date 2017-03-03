@@ -24,6 +24,7 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.Sensor;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.internal.DefaultIssueLocation;
 import org.sonar.api.measures.Metric;
@@ -53,7 +54,7 @@ public class DependencyCheckSensor implements Sensor {
     private static final String SENSOR_NAME = "OWASP Dependency-Check";
 
     private final FileSystem fileSystem;
-    private final XmlReportFile report;
+    private final PathResolver pathResolver;
 
     private int totalDependencies;
     private int vulnerableDependencies;
@@ -62,15 +63,12 @@ public class DependencyCheckSensor implements Sensor {
     private int majorIssuesCount;
     private int minorIssuesCount;
 
-    public DependencyCheckSensor(
-            DependencyCheckSensorConfiguration configuration,
-            FileSystem fileSystem,
-            PathResolver pathResolver) {
+    public DependencyCheckSensor(FileSystem fileSystem, PathResolver pathResolver) {
         this.fileSystem = fileSystem;
-        this.report = new XmlReportFile(configuration, fileSystem, pathResolver);
+        this.pathResolver = pathResolver;
     }
 
-    private void addIssue(org.sonar.api.batch.sensor.SensorContext context, Dependency dependency, Vulnerability vulnerability) {
+    private void addIssue(SensorContext context, Dependency dependency, Vulnerability vulnerability) {
         Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore());
         context.newIssue()
                 .forRule(RuleKey.of(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY))
@@ -114,7 +112,7 @@ public class DependencyCheckSensor implements Sensor {
         }
     }
 
-    private void addIssues(org.sonar.api.batch.sensor.SensorContext context, Analysis analysis) {
+    private void addIssues(SensorContext context, Analysis analysis) {
         if (analysis.getDependencies() == null) {
             return;
         }
@@ -137,17 +135,19 @@ public class DependencyCheckSensor implements Sensor {
         }
     }
 
-    private void saveMetricOnFile(org.sonar.api.batch.sensor.SensorContext context, InputFile inputFile, Metric<Serializable> metric, double value) {
+    private void saveMetricOnFile(SensorContext context, InputFile inputFile, Metric<Serializable> metric, double value) {
         context.newMeasure().on(inputFile).forMetric(metric).withValue(value);
     }
 
-    private Analysis parseAnalysis() throws IOException, ParserConfigurationException, SAXException {
-        try (InputStream stream = this.report.getInputStream()) {
+    private Analysis parseAnalysis(SensorContext context) throws IOException, ParserConfigurationException, SAXException {
+        XmlReportFile report = new XmlReportFile(context.settings(), fileSystem, this.pathResolver);
+
+        try (InputStream stream = report.getInputStream()) {
             return new ReportParser().parse(stream);
         }
     }
 
-    private void saveMeasures(org.sonar.api.batch.sensor.SensorContext context) {
+    private void saveMeasures(SensorContext context) {
         context.newMeasure().forMetric(DependencyCheckMetrics.HIGH_SEVERITY_VULNS).withValue(criticalIssuesCount).save();
         context.newMeasure().forMetric(DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS).withValue(majorIssuesCount).save();
         context.newMeasure().forMetric(DependencyCheckMetrics.LOW_SEVERITY_VULNS).withValue(minorIssuesCount).save();
@@ -170,11 +170,11 @@ public class DependencyCheckSensor implements Sensor {
     }
 
     @Override
-    public void execute(org.sonar.api.batch.sensor.SensorContext sensorContext) {
+    public void execute(SensorContext sensorContext) {
         Profiler profiler = Profiler.create(LOGGER);
         profiler.startInfo("Process Dependency-Check report");
         try {
-            Analysis analysis = parseAnalysis();
+            Analysis analysis = parseAnalysis(sensorContext);
             totalDependencies = analysis.getDependencies().size();
             addIssues(sensorContext, analysis);
         } catch (Exception e) {

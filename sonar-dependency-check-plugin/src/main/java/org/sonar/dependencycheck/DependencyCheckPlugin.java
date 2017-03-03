@@ -20,6 +20,8 @@
 package org.sonar.dependencycheck;
 
 import org.sonar.api.Plugin;
+import org.sonar.api.config.PropertyDefinition;
+import org.sonar.dependencycheck.base.DependencyCheckConstants;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 import org.sonar.dependencycheck.rule.KnownCveRuleDefinition;
 import org.sonar.dependencycheck.rule.NeutralLanguage;
@@ -34,12 +36,20 @@ public final class DependencyCheckPlugin implements Plugin {
 
     @Override
     public void define(Context context) {
-        context.addExtensions(DependencyCheckSensor.class,
-                DependencyCheckSensorConfiguration.class,
+        context.addExtensions(
+                DependencyCheckSensor.class,
                 DependencyCheckMetrics.class,
                 NeutralProfile.class,
                 NeutralLanguage.class,
                 KnownCveRuleDefinition.class,
                 DependencyCheckWidget.class);
+
+        context.addExtension(
+                PropertyDefinition.builder(DependencyCheckConstants.REPORT_PATH_PROPERTY)
+                        .name("Dependency-Check report path")
+                        .description("path to the 'dependency-check-report.xml' file")
+                        .defaultValue("${WORKSPACE}/dependency-check-report.xml")
+                        .build()
+        );
     }
 }
