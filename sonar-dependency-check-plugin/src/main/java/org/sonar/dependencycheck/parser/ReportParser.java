@@ -19,24 +19,21 @@
  */
 package org.sonar.dependencycheck.parser;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.staxmate.SMInputFactory;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
 import org.codehaus.staxmate.in.SMInputCursor;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.parser.element.*;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLStreamException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class ReportParser {
 
-    public Analysis parse(InputStream inputStream) throws ParserConfigurationException, SAXException, IOException {
+    public Analysis parse(InputStream inputStream) {
 
         SMInputFactory inputFactory = DependencyCheckUtils.newStaxParser();
         try {
@@ -66,7 +63,7 @@ public class ReportParser {
     }
 
     private Collection<Dependency> processDependencies(SMInputCursor depC) throws XMLStreamException {
-        Collection<Dependency> dependencies = new ArrayList<Dependency>();
+        Collection<Dependency> dependencies = new ArrayList<>();
         SMInputCursor cursor = depC.childElementCursor("dependency");
         while (cursor.getNext() != null) {
             dependencies.add(processDependency(cursor));
@@ -98,7 +95,7 @@ public class ReportParser {
     }
 
     private Collection<Vulnerability> processVulnerabilities(SMInputCursor vulnC) throws XMLStreamException {
-        Collection<Vulnerability> vulnerabilities = new ArrayList<Vulnerability>();
+        Collection<Vulnerability> vulnerabilities = new ArrayList<>();
         SMInputCursor cursor = vulnC.childElementCursor("vulnerability");
         while (cursor.getNext() != null) {
             vulnerabilities.add(processVulnerability(cursor));
@@ -127,7 +124,7 @@ public class ReportParser {
     }
 
     private Collection<Evidence> processEvidenceCollected(SMInputCursor ecC) throws XMLStreamException {
-        Collection<Evidence> evidenceCollection = new ArrayList<Evidence>();
+        Collection<Evidence> evidenceCollection = new ArrayList<>();
         SMInputCursor cursor = ecC.childElementCursor("evidence");
         while (cursor.getNext() != null) {
             evidenceCollection.add(processEvidence(cursor));

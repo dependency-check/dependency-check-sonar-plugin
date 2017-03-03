@@ -20,14 +20,16 @@
 package org.sonar.dependencycheck;
 
 import org.junit.Test;
+import org.sonar.api.Plugin;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class DependencyCheckPluginTest {
 
     @Test
     public void test_extensions() {
-        assertThat(new DependencyCheckPlugin().getExtensions()).isNotEmpty();
+        final Plugin.Context context = mock(Plugin.Context.class);
+        new DependencyCheckPlugin().define(context);
     }
 
 }

@@ -25,7 +25,7 @@ import java.util.Collection;
 public class ScanInfo {
 
     private String engineVersion;
-    private Collection<DataSource> dataSources = new ArrayList<DataSource>();
+    private Collection<DataSource> dataSources = new ArrayList<>();
 
 
     public String getEngineVersion() {

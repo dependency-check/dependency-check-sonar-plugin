@@ -19,19 +19,17 @@
  */
 package org.sonar.dependencycheck;
 
-import org.sonar.api.BatchExtension;
+import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.config.Settings;
-import org.sonar.api.profiles.RulesProfile;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
 
-public class DependencyCheckSensorConfiguration implements BatchExtension {
+@ScannerSide
+public class DependencyCheckSensorConfiguration {
 
-    private final RulesProfile profile;
     private final Settings settings;
 
-    public DependencyCheckSensorConfiguration(RulesProfile profile, Settings settings) {
-        this.profile = profile;
+    public DependencyCheckSensorConfiguration( Settings settings) {
         this.settings = settings;
     }
 

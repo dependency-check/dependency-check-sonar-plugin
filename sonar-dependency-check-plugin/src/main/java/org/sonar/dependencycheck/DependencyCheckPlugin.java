@@ -19,26 +19,22 @@
  */
 package org.sonar.dependencycheck;
 
-import org.sonar.api.SonarPlugin;
+import org.sonar.api.Plugin;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 import org.sonar.dependencycheck.rule.KnownCveRuleDefinition;
 import org.sonar.dependencycheck.rule.NeutralLanguage;
 import org.sonar.dependencycheck.rule.NeutralProfile;
 import org.sonar.dependencycheck.ui.DependencyCheckWidget;
 
-import java.util.Arrays;
-import java.util.List;
-
-public final class DependencyCheckPlugin extends SonarPlugin {
+public final class DependencyCheckPlugin implements Plugin {
 
     public static final String REPOSITORY_KEY = "OWASP";
     public static final String LANGUAGE_KEY = "neutral";
     public static final String RULE_KEY = "UsingComponentWithKnownVulnerability";
 
     @Override
-    public List getExtensions() {
-        return Arrays.asList(
-                DependencyCheckSensor.class,
+    public void define(Context context) {
+        context.addExtensions(DependencyCheckSensor.class,
                 DependencyCheckSensorConfiguration.class,
                 DependencyCheckMetrics.class,
                 NeutralProfile.class,

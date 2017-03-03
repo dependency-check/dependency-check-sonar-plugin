@@ -31,15 +31,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class DependencyCheckSensorConfigurationTest {
-    private RulesProfile profile;
     private Settings settings;
     private DependencyCheckSensorConfiguration sensorConfiguration;
 
     @Before
     public void init() {
-        this.profile = mock(RulesProfile.class);
         this.settings = mock(Settings.class);
-        this.sensorConfiguration = new DependencyCheckSensorConfiguration(this.profile, this.settings);
+        this.sensorConfiguration = new DependencyCheckSensorConfiguration( this.settings);
     }
 
     @Test

@@ -20,7 +20,7 @@
 package org.sonar.dependencycheck.base;
 
 import org.codehaus.staxmate.SMInputFactory;
-import org.sonar.api.rule.Severity;
+import org.sonar.api.batch.rule.Severity;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
@@ -39,7 +39,7 @@ public final class DependencyCheckUtils {
         return new SMInputFactory(xmlFactory);
     }
 
-    public static String cvssToSonarQubeSeverity(String cvssScore) {
+    public static Severity cvssToSonarQubeSeverity(String cvssScore) {
         double score = Double.parseDouble(cvssScore);
         if (score >= 7.0) {
             return Severity.CRITICAL;

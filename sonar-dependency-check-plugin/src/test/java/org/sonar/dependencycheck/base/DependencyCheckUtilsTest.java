@@ -22,7 +22,7 @@ package org.sonar.dependencycheck.base;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.sonar.api.rule.Severity;
+import org.sonar.api.batch.rule.Severity;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,9 +33,9 @@ import static org.fest.assertions.Assertions.assertThat;
 public class DependencyCheckUtilsTest {
 
     private final String cvssSeverity;
-    private final String expectedSeverity;
+    private final Severity expectedSeverity;
 
-    public DependencyCheckUtilsTest(String cvssSeverity, String expectedSeverity) {
+    public DependencyCheckUtilsTest(String cvssSeverity, Severity expectedSeverity) {
         this.cvssSeverity = cvssSeverity;
         this.expectedSeverity = expectedSeverity;
     }
