@@ -1,6 +1,6 @@
 /*
  * Dependency-Check Plugin for SonarQube
- * Copyright (C) 2015 Steve Springett
+ * Copyright (C) 2015-2017 Steve Springett
  * steve.springett@owasp.org
  *
  * This program is free software; you can redistribute it and/or
@@ -13,14 +13,14 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.dependencycheck.base;
 
 import org.codehaus.staxmate.SMInputFactory;
-import org.sonar.api.rule.Severity;
+import org.sonar.api.batch.rule.Severity;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
@@ -39,7 +39,7 @@ public final class DependencyCheckUtils {
         return new SMInputFactory(xmlFactory);
     }
 
-    public static String cvssToSonarQubeSeverity(String cvssScore) {
+    public static Severity cvssToSonarQubeSeverity(String cvssScore) {
         double score = Double.parseDouble(cvssScore);
         if (score >= 7.0) {
             return Severity.CRITICAL;
