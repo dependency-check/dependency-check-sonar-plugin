@@ -2,7 +2,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/412eb95dd49d47bca70d53b685fb247a)](https://www.codacy.com/app/stevespringett/dependency-check-sonar-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=stevespringett/dependency-check-sonar-plugin&amp;utm_campaign=Badge_Grade)
 [ ![Download](https://api.bintray.com/packages/stevespringett/owasp/dependency-check-sonar/images/download.svg) ](https://bintray.com/stevespringett/owasp/dependency-check-sonar/_latestVersion)
 
-Dependency-Check Plugin for SonarQube
+Dependency-Check Plugin for SonarQube 5.x
 =====================================
 
 Integrates [OWASP Dependency-Check] reports into SonarQube v5.1 - v5.6.
