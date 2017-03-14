@@ -5,7 +5,9 @@
 Dependency-Check Plugin for SonarQube
 =====================================
 
-Integrates [OWASP Dependency-Check] reports into SonarQube v5.1 or higher.
+Integrates [OWASP Dependency-Check] reports into SonarQube v5.1 - v5.6.
+
+This branch is not compatible with SonarQube 6.x
 
 About Dependency-Check
 -------------------
