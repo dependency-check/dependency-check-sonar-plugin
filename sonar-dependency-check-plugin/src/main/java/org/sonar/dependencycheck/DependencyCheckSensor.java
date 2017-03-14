@@ -1,6 +1,6 @@
 /*
  * Dependency-Check Plugin for SonarQube
- * Copyright (C) 2015 Steve Springett
+ * Copyright (C) 2015-2017 Steve Springett
  * steve.springett@owasp.org
  *
  * This program is free software; you can redistribute it and/or
@@ -13,32 +13,28 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.dependencycheck;
 
-import org.apache.commons.lang.StringUtils;
-import org.sonar.api.batch.Sensor;
-import org.sonar.api.batch.SensorContext;
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.component.ResourcePerspectives;
-import org.sonar.api.issue.Issuable;
-import org.sonar.api.issue.Issue;
-import org.sonar.api.measures.Measure;
+import org.sonar.api.batch.rule.Severity;
+import org.sonar.api.batch.sensor.Sensor;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.batch.sensor.issue.internal.DefaultIssueLocation;
 import org.sonar.api.measures.Metric;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.api.rule.Severity;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.api.utils.log.Profiler;
-import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
+import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.parser.ReportParser;
 import org.sonar.dependencycheck.parser.XmlReportFile;
 import org.sonar.dependencycheck.parser.element.Analysis;
@@ -50,14 +46,15 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 
 public class DependencyCheckSensor implements Sensor {
 
     private static final Logger LOGGER = Loggers.get(DependencyCheckSensor.class);
+    private static final String SENSOR_NAME = "OWASP Dependency-Check";
 
-    private final ResourcePerspectives resourcePerspectives;
     private final FileSystem fileSystem;
-    private final XmlReportFile report;
+    private final PathResolver pathResolver;
 
     private int totalDependencies;
     private int vulnerableDependencies;
@@ -66,67 +63,56 @@ public class DependencyCheckSensor implements Sensor {
     private int majorIssuesCount;
     private int minorIssuesCount;
 
-    public DependencyCheckSensor(
-            DependencyCheckSensorConfiguration configuration,
-            ResourcePerspectives resourcePerspectives,
-            FileSystem fileSystem,
-            PathResolver pathResolver) {
-        this.resourcePerspectives = resourcePerspectives;
+    public DependencyCheckSensor(FileSystem fileSystem, PathResolver pathResolver) {
         this.fileSystem = fileSystem;
-        this.report = new XmlReportFile(configuration, fileSystem, pathResolver);
+        this.pathResolver = pathResolver;
     }
 
-    @Override
-    public boolean shouldExecuteOnProject(Project project) {
-        return this.report.exist();
-    }
+    private void addIssue(SensorContext context, Dependency dependency, Vulnerability vulnerability) {
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore());
+        context.newIssue()
+                .forRule(RuleKey.of(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY))
+                .at(new DefaultIssueLocation()
+                        .on(context.module())
+                        .message(formatDescription(dependency, vulnerability))
+                )
+                .overrideSeverity(severity)
+                .save();
 
-    private void addIssue(Project project, Dependency dependency, Vulnerability vulnerability) {
-        Issuable issuable = this.resourcePerspectives.as(Issuable.class, (Resource)project);
-        if (issuable != null) {
-            String severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore());
-            Issue issue = issuable.newIssueBuilder()
-                    .ruleKey(RuleKey.of(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY))
-                    .message(formatDescription(dependency, vulnerability))
-                    .severity(severity)
-                    .build();
-            if (issuable.addIssue(issue)) {
-                incrementCount(severity);
-            }
-        }
+        incrementCount(severity);
     }
 
     /**
-     *      todo: Add Markdown formatting if and when Sonar supports it
-     *      https://jira.codehaus.org/browse/SONAR-4161
+     * todo: Add Markdown formatting if and when Sonar supports it
+     * https://jira.codehaus.org/browse/SONAR-4161
      */
     private String formatDescription(Dependency dependency, Vulnerability vulnerability) {
         StringBuilder sb = new StringBuilder();
         sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
-        sb.append("Reference: " ).append(vulnerability.getName()).append(" | ");
-        sb.append("CVSS Score: " ).append(vulnerability.getCvssScore()).append(" | ");
+        sb.append("Reference: ").append(vulnerability.getName()).append(" | ");
+        sb.append("CVSS Score: ").append(vulnerability.getCvssScore()).append(" | ");
         if (StringUtils.isNotBlank(vulnerability.getCwe())) {
-            sb.append("Category: " ).append(vulnerability.getCwe()).append(" | ");
+            sb.append("Category: ").append(vulnerability.getCwe()).append(" | ");
         }
         sb.append(vulnerability.getDescription());
         return sb.toString();
     }
 
-    private void incrementCount(String severity) {
+    private void incrementCount(Severity severity) {
         switch (severity) {
-            case Severity.CRITICAL:
+            case CRITICAL:
                 this.criticalIssuesCount++;
                 break;
-            case Severity.MAJOR:
+            case MAJOR:
                 this.majorIssuesCount++;
                 break;
-            case Severity.MINOR:
+            case MINOR:
                 this.minorIssuesCount++;
                 break;
         }
     }
 
-    private void addIssues(SensorContext context, Project project, Analysis analysis) {
+    private void addIssues(SensorContext context, Analysis analysis) {
         if (analysis.getDependencies() == null) {
             return;
         }
@@ -143,54 +129,61 @@ public class DependencyCheckSensor implements Sensor {
             saveMetricOnFile(context, testFile, DependencyCheckMetrics.TOTAL_DEPENDENCIES, (double) depVulnCount);
 
             for (Vulnerability vulnerability : dependency.getVulnerabilities()) {
-                addIssue(project, dependency, vulnerability);
+                addIssue(context, dependency, vulnerability);
                 vulnerabilityCount++;
             }
         }
     }
 
-    private void saveMetricOnFile(SensorContext context, InputFile inputFile, Metric metric, double value) {
+    private void saveMetricOnFile(SensorContext context, InputFile inputFile, Metric<Serializable> metric, double value) {
         if (inputFile != null) {
-            context.saveMeasure(inputFile, new Measure(metric, value));
+            context.newMeasure().on(inputFile).forMetric(metric).withValue(value);
         }
     }
 
-    private Analysis parseAnalysis() throws IOException, ParserConfigurationException, SAXException {
-        try (InputStream stream = this.report.getInputStream()) {
+    private Analysis parseAnalysis(SensorContext context) throws IOException, ParserConfigurationException, SAXException {
+        XmlReportFile report = new XmlReportFile(context.settings(), fileSystem, this.pathResolver);
+
+        try (InputStream stream = report.getInputStream()) {
             return new ReportParser().parse(stream);
         }
     }
 
+    private void saveMeasures(SensorContext context) {
+        context.newMeasure().forMetric(DependencyCheckMetrics.HIGH_SEVERITY_VULNS).on(context.module()).withValue(criticalIssuesCount).save();
+        context.newMeasure().forMetric(DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS).on(context.module()).withValue(majorIssuesCount).save();
+        context.newMeasure().forMetric(DependencyCheckMetrics.LOW_SEVERITY_VULNS).on(context.module()).withValue(minorIssuesCount).save();
+        context.newMeasure().forMetric(DependencyCheckMetrics.TOTAL_DEPENDENCIES).on(context.module()).withValue(totalDependencies).save();
+        context.newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_DEPENDENCIES).on(context.module()).withValue(vulnerableDependencies).save();
+        context.newMeasure().forMetric(DependencyCheckMetrics.TOTAL_VULNERABILITIES).on(context.module()).withValue(vulnerabilityCount).save();
+
+        context.newMeasure().forMetric(DependencyCheckMetrics.INHERITED_RISK_SCORE).on(context.module()).withValue(DependencyCheckMetrics.inheritedRiskScore(criticalIssuesCount, majorIssuesCount, minorIssuesCount)).save();
+        context.newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO).on(context.module()).withValue(DependencyCheckMetrics.vulnerableComponentRatio(vulnerabilityCount, vulnerableDependencies)).save();
+    }
+
     @Override
-    public void analyse(Project project, SensorContext context) {
+    public String toString() {
+        return SENSOR_NAME;
+    }
+
+    @Override
+    public void describe(SensorDescriptor sensorDescriptor) {
+        sensorDescriptor.name(SENSOR_NAME);
+    }
+
+    @Override
+    public void execute(SensorContext sensorContext) {
         Profiler profiler = Profiler.create(LOGGER);
         profiler.startInfo("Process Dependency-Check report");
         try {
-            Analysis analysis = parseAnalysis();
+            Analysis analysis = parseAnalysis(sensorContext);
             totalDependencies = analysis.getDependencies().size();
-            addIssues(context, project, analysis);
+            addIssues(sensorContext, analysis);
         } catch (Exception e) {
             throw new RuntimeException("Can not process Dependency-Check report.", e);
         } finally {
             profiler.stopInfo();
         }
-        saveMeasures(context);
-    }
-
-    private void saveMeasures(SensorContext context) {
-        context.saveMeasure(DependencyCheckMetrics.HIGH_SEVERITY_VULNS, (double) criticalIssuesCount);
-        context.saveMeasure(DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS, (double) majorIssuesCount);
-        context.saveMeasure(DependencyCheckMetrics.LOW_SEVERITY_VULNS, (double) minorIssuesCount);
-        context.saveMeasure(DependencyCheckMetrics.TOTAL_DEPENDENCIES, (double) totalDependencies);
-        context.saveMeasure(DependencyCheckMetrics.VULNERABLE_DEPENDENCIES, (double) vulnerableDependencies);
-        context.saveMeasure(DependencyCheckMetrics.TOTAL_VULNERABILITIES, (double) vulnerabilityCount);
-
-        context.saveMeasure(DependencyCheckMetrics.INHERITED_RISK_SCORE, DependencyCheckMetrics.inheritedRiskScore(criticalIssuesCount, majorIssuesCount, minorIssuesCount));
-        context.saveMeasure(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO, DependencyCheckMetrics.vulnerableComponentRatio(vulnerabilityCount, vulnerableDependencies));
-    }
-
-    @Override
-    public String toString() {
-        return "OWASP Dependency-Check";
+        saveMeasures(sensorContext);
     }
 }

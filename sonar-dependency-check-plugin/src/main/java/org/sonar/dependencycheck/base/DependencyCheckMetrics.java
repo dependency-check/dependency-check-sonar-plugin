@@ -1,6 +1,6 @@
 /*
  * Dependency-Check Plugin for SonarQube
- * Copyright (C) 2015 Steve Springett
+ * Copyright (C) 2015-2017 Steve Springett
  * steve.springett@owasp.org
  *
  * This program is free software; you can redistribute it and/or
@@ -13,16 +13,16 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.dependencycheck.base;
 
 import org.sonar.api.measures.Metric;
 import org.sonar.api.measures.Metrics;
-import org.sonar.api.measures.SumChildValuesFormula;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,19 +30,19 @@ public final class DependencyCheckMetrics implements Metrics {
 
     public static final String DOMAIN = "OWASP-Dependency-Check";
 
-    public static final String INHERITED_RISK_SCORE_KEY = "inherited_risk_score";
-    public static final String VULNERABLE_COMPONENT_RATIO_KEY = "vulnerable_component_ratio";
+    private static final String INHERITED_RISK_SCORE_KEY = "inherited_risk_score";
+    private static final String VULNERABLE_COMPONENT_RATIO_KEY = "vulnerable_component_ratio";
 
-    public static final String TOTAL_DEPENDENCIES_KEY = "total_dependencies";
-    public static final String VULNERABLE_DEPENDENCIES_KEY = "vulnerable_dependencies";
-    public static final String TOTAL_VULNERABILITIES_KEY = "total_vulnerabilities";
-    public static final String HIGH_SEVERITY_VULNS_KEY = "high_severity_vulns";
-    public static final String MEDIUM_SEVERITY_VULNS_KEY = "medium_severity_vulns";
-    public static final String LOW_SEVERITY_VULNS_KEY = "low_severity_vulns";
+    private static final String TOTAL_DEPENDENCIES_KEY = "total_dependencies";
+    private static final String VULNERABLE_DEPENDENCIES_KEY = "vulnerable_dependencies";
+    private static final String TOTAL_VULNERABILITIES_KEY = "total_vulnerabilities";
+    private static final String HIGH_SEVERITY_VULNS_KEY = "high_severity_vulns";
+    private static final String MEDIUM_SEVERITY_VULNS_KEY = "medium_severity_vulns";
+    private static final String LOW_SEVERITY_VULNS_KEY = "low_severity_vulns";
 
 
-    public static double inheritedRiskScore(int high, int medium, int low) {
-        return (double) ((high * 5) + (medium * 3) + (low * 1));
+    public static int inheritedRiskScore(int high, int medium, int low) {
+        return (high * 5) + (medium * 3) + (low);
     }
 
     public static double vulnerableComponentRatio(int vulnerabilities, int vulnerableComponents) {
@@ -53,79 +53,71 @@ public final class DependencyCheckMetrics implements Metrics {
         return ratio;
     }
 
-    public static final Metric INHERITED_RISK_SCORE = new Metric.Builder(DependencyCheckMetrics.INHERITED_RISK_SCORE_KEY, "Inherited Risk Score", Metric.ValueType.INT)
+    public static final Metric<Serializable> INHERITED_RISK_SCORE = new Metric.Builder(DependencyCheckMetrics.INHERITED_RISK_SCORE_KEY, "Inherited Risk Score", Metric.ValueType.INT)
             .setDescription("Inherited Risk Score")
             .setDirection(Metric.DIRECTION_BETTER)
             .setQualitative(true)
             .setDomain(DependencyCheckMetrics.DOMAIN)
-            .setFormula(new SumChildValuesFormula(false))
             .setBestValue(0.0)
             .create();
 
-    public static final Metric VULNERABLE_COMPONENT_RATIO = new Metric.Builder(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO_KEY, "Vulnerable Component Ratio", Metric.ValueType.PERCENT)
+    public static final Metric<Serializable> VULNERABLE_COMPONENT_RATIO = new Metric.Builder(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO_KEY, "Vulnerable Component Ratio", Metric.ValueType.PERCENT)
             .setDescription("Vulnerable Component Ratio")
             .setDirection(Metric.DIRECTION_BETTER)
             .setQualitative(true)
             .setDomain(DependencyCheckMetrics.DOMAIN)
-            .setFormula(new SumChildValuesFormula(false))
             .setBestValue(0.0)
             .create();
 
-    public static final Metric HIGH_SEVERITY_VULNS = new Metric.Builder(HIGH_SEVERITY_VULNS_KEY, "High Severity Vulnerabilities", Metric.ValueType.INT)
+    public static final Metric<Serializable> HIGH_SEVERITY_VULNS = new Metric.Builder(HIGH_SEVERITY_VULNS_KEY, "High Severity Vulnerabilities", Metric.ValueType.INT)
             .setDescription("High Severity Vulnerabilities")
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
             .setDomain(DependencyCheckMetrics.DOMAIN)
-            .setFormula(new SumChildValuesFormula(false))
             .setBestValue(0.0)
             .setHidden(false)
             .create();
 
-    public static final Metric MEDIUM_SEVERITY_VULNS = new Metric.Builder(MEDIUM_SEVERITY_VULNS_KEY, "Medium Severity Vulnerabilities", Metric.ValueType.INT)
+    public static final Metric<Serializable> MEDIUM_SEVERITY_VULNS = new Metric.Builder(MEDIUM_SEVERITY_VULNS_KEY, "Medium Severity Vulnerabilities", Metric.ValueType.INT)
             .setDescription("Medium Severity Vulnerabilities")
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
             .setDomain(DependencyCheckMetrics.DOMAIN)
-            .setFormula(new SumChildValuesFormula(false))
             .setBestValue(0.0)
             .setHidden(false)
             .create();
 
-    public static final Metric LOW_SEVERITY_VULNS = new Metric.Builder(LOW_SEVERITY_VULNS_KEY, "Low Severity Vulnerabilities", Metric.ValueType.INT)
+    public static final Metric<Serializable> LOW_SEVERITY_VULNS = new Metric.Builder(LOW_SEVERITY_VULNS_KEY, "Low Severity Vulnerabilities", Metric.ValueType.INT)
             .setDescription("Low Severity Vulnerabilities")
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
             .setDomain(DependencyCheckMetrics.DOMAIN)
-            .setFormula(new SumChildValuesFormula(false))
             .setBestValue(0.0)
             .setHidden(false)
             .create();
 
-    public static final Metric TOTAL_DEPENDENCIES = new Metric.Builder(TOTAL_DEPENDENCIES_KEY, "Total Dependencies", Metric.ValueType.INT)
+    public static final Metric<Serializable> TOTAL_DEPENDENCIES = new Metric.Builder(TOTAL_DEPENDENCIES_KEY, "Total Dependencies", Metric.ValueType.INT)
             .setDescription("Total Dependencies")
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
             .setDomain(DependencyCheckMetrics.DOMAIN)
-            .setFormula(new SumChildValuesFormula(false))
             .setHidden(false)
             .create();
 
-    public static final Metric VULNERABLE_DEPENDENCIES = new Metric.Builder(VULNERABLE_DEPENDENCIES_KEY, "Vulnerable Dependencies", Metric.ValueType.INT)
+    public static final Metric<Serializable> VULNERABLE_DEPENDENCIES = new Metric.Builder(VULNERABLE_DEPENDENCIES_KEY, "Vulnerable Dependencies", Metric.ValueType.INT)
             .setDescription("Vulnerable Dependencies")
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
             .setDomain(DependencyCheckMetrics.DOMAIN)
-            .setFormula(new SumChildValuesFormula(false))
             .setBestValue(0.0)
             .setHidden(false)
             .create();
 
-    public static final Metric TOTAL_VULNERABILITIES = new Metric.Builder(TOTAL_VULNERABILITIES_KEY, "Total Vulnerabilities", Metric.ValueType.INT)
+    public static final Metric<Serializable> TOTAL_VULNERABILITIES = new Metric.Builder(TOTAL_VULNERABILITIES_KEY, "Total Vulnerabilities", Metric.ValueType.INT)
             .setDescription("Total Vulnerabilities")
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
             .setDomain(DependencyCheckMetrics.DOMAIN)
-            .setFormula(new SumChildValuesFormula(false))
             .setBestValue(0.0)
             .setHidden(false)
             .create();

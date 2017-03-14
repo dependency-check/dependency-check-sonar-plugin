@@ -1,6 +1,6 @@
 /*
  * Dependency-Check Plugin for SonarQube
- * Copyright (C) 2015 Steve Springett
+ * Copyright (C) 2015-2017 Steve Springett
  * steve.springett@owasp.org
  *
  * This program is free software; you can redistribute it and/or
@@ -13,37 +13,43 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.dependencycheck;
 
-import org.sonar.api.SonarPlugin;
+import org.sonar.api.Plugin;
+import org.sonar.api.config.PropertyDefinition;
+import org.sonar.dependencycheck.base.DependencyCheckConstants;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 import org.sonar.dependencycheck.rule.KnownCveRuleDefinition;
 import org.sonar.dependencycheck.rule.NeutralLanguage;
 import org.sonar.dependencycheck.rule.NeutralProfile;
 import org.sonar.dependencycheck.ui.DependencyCheckWidget;
 
-import java.util.Arrays;
-import java.util.List;
-
-public final class DependencyCheckPlugin extends SonarPlugin {
+public final class DependencyCheckPlugin implements Plugin {
 
     public static final String REPOSITORY_KEY = "OWASP";
     public static final String LANGUAGE_KEY = "neutral";
     public static final String RULE_KEY = "UsingComponentWithKnownVulnerability";
 
     @Override
-    public List getExtensions() {
-        return Arrays.asList(
+    public void define(Context context) {
+        context.addExtensions(
                 DependencyCheckSensor.class,
-                DependencyCheckSensorConfiguration.class,
                 DependencyCheckMetrics.class,
                 NeutralProfile.class,
                 NeutralLanguage.class,
                 KnownCveRuleDefinition.class,
                 DependencyCheckWidget.class);
+
+        context.addExtension(
+                PropertyDefinition.builder(DependencyCheckConstants.REPORT_PATH_PROPERTY)
+                        .name("Dependency-Check report path")
+                        .description("path to the 'dependency-check-report.xml' file")
+                        .defaultValue("${WORKSPACE}/dependency-check-report.xml")
+                        .build()
+        );
     }
 }
