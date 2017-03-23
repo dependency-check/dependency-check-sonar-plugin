@@ -43,10 +43,7 @@ import org.sonar.dependencycheck.parser.element.Vulnerability;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
+import java.io.*;
 
 public class DependencyCheckSensor implements Sensor {
 
@@ -179,6 +176,8 @@ public class DependencyCheckSensor implements Sensor {
             Analysis analysis = parseAnalysis(sensorContext);
             totalDependencies = analysis.getDependencies().size();
             addIssues(sensorContext, analysis);
+        } catch (FileNotFoundException e) {
+            LOGGER.debug("Analysis aborted due to missing report file", e);
         } catch (Exception e) {
             throw new RuntimeException("Can not process Dependency-Check report.", e);
         } finally {
