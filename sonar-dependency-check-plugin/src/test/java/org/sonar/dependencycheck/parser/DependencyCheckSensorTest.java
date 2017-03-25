@@ -22,24 +22,41 @@ package org.sonar.dependencycheck.parser;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputComponent;
+import org.sonar.api.batch.measure.Metric;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.dependencycheck.DependencyCheckSensor;
+import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
+import java.io.File;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 public class DependencyCheckSensorTest {
     private FileSystem fileSystem;
     private PathResolver pathResolver;
     private DependencyCheckSensor sensor;
 
+    private File sampleReport;
+
     @Before
-    public void init() {
-        this.fileSystem = mock(FileSystem.class);
+    public void init() throws URISyntaxException {
+        this.fileSystem = mock(FileSystem.class, RETURNS_DEEP_STUBS);
         this.pathResolver = mock(PathResolver.class);
         this.sensor = new DependencyCheckSensor(this.fileSystem, this.pathResolver);
+
+        // mock a sample report
+        final URL sampleResourceURI = getClass().getClassLoader().getResource("report/dependency-check-report.xml");
+        assert sampleResourceURI != null;
+        this.sampleReport = Paths.get(sampleResourceURI.toURI()).toFile();
     }
 
     @Test
@@ -48,7 +65,59 @@ public class DependencyCheckSensorTest {
     }
 
     @Test
+    public void testDescribe() {
+        final SensorDescriptor descriptor = mock(SensorDescriptor.class);
+        sensor.describe(descriptor);
+        verify(descriptor).name("OWASP Dependency-Check");
+    }
+    @Test
     public void shouldAnalyse() throws URISyntaxException {
-        //todo: Once the Sensor is capable of working properly, populate this unit test.
+        final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
+
+        when(context.settings().getString(DependencyCheckConstants.REPORT_PATH_PROPERTY)).thenReturn("dependency-check-report.xml");
+        when(pathResolver.relativeFile(any(File.class), anyString())).thenReturn(sampleReport);
+        sensor.execute(context);
+    }
+
+    @Test
+    public void shouldSkipIfReportWasNotFound() throws URISyntaxException {
+        final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
+
+        when(pathResolver.relativeFile(any(File.class), anyString())).thenReturn(null);
+        sensor.execute(context);
+        verify(context, never()).newIssue();
+    }
+
+    @Test
+    public void shouldAddAnIssueForAVulnerability() throws URISyntaxException {
+        final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
+
+        when(context.settings().getString(DependencyCheckConstants.REPORT_PATH_PROPERTY)).thenReturn("dependency-check-report.xml");
+        when(pathResolver.relativeFile(any(File.class), anyString())).thenReturn(sampleReport);
+        sensor.execute(context);
+
+        verify(context, times(3)).newIssue();
+    }
+
+    @Test
+    public void shouldPersistTotalMetrics() throws URISyntaxException {
+        final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
+
+        when(context.settings().getString(DependencyCheckConstants.REPORT_PATH_PROPERTY)).thenReturn("dependency-check-report.xml");
+        when(pathResolver.relativeFile(any(File.class), anyString())).thenReturn(sampleReport);
+        sensor.execute(context);
+
+        verify(context.newMeasure(), times(8)).forMetric(any(Metric.class));
+    }
+
+    @Test
+    public void shouldPersistMetricsOnReport() throws URISyntaxException {
+        final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
+
+        when(context.settings().getString(DependencyCheckConstants.REPORT_PATH_PROPERTY)).thenReturn("dependency-check-report.xml");
+        when(pathResolver.relativeFile(any(File.class), anyString())).thenReturn(sampleReport);
+        sensor.execute(context);
+
+        verify(context.newMeasure(), atLeastOnce()).on(any(InputComponent.class));
     }
 }

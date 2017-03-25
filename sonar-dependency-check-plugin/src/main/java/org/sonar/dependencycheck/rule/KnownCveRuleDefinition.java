@@ -29,6 +29,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class KnownCveRuleDefinition implements RulesDefinition {
 
 
+    @Override
     @ParametersAreNonnullByDefault
     public void define(Context context) {
         NewRepository repo = context.createRepository(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.LANGUAGE_KEY);
@@ -52,8 +53,6 @@ public class KnownCveRuleDefinition implements RulesDefinition {
         rule.setHtmlDescription(description);
 
         // There's simply no way to know how much effort will be involved in updating/replacing a vulnerable component
-        //rule.setDebtSubCharacteristic(RulesDefinition.SubCharacteristics.SECURITY_COMPLIANCE);
-        //rule.setDebtRemediationFunction(rule.debtRemediationFunctions().linearWithOffset("1h", "30min"));
 
         repo.done();
     }

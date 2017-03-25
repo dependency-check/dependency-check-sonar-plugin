@@ -43,7 +43,10 @@ import org.sonar.dependencycheck.parser.element.Vulnerability;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
 
 public class DependencyCheckSensor implements Sensor {
 
@@ -106,6 +109,8 @@ public class DependencyCheckSensor implements Sensor {
             case MINOR:
                 this.minorIssuesCount++;
                 break;
+            default:
+                LOGGER.debug("Unknown severity {}", severity);
         }
     }
 
@@ -114,7 +119,7 @@ public class DependencyCheckSensor implements Sensor {
             return;
         }
         for (Dependency dependency : analysis.getDependencies()) {
-            InputFile testFile = fileSystem.inputFile(fileSystem.predicates().is(new File(dependency.getFilePath())));
+            InputFile testFile = fileSystem.inputFile(fileSystem.predicates().hasPath(dependency.getFilePath()));
 
             int depVulnCount = dependency.getVulnerabilities().size();
 
@@ -174,7 +179,7 @@ public class DependencyCheckSensor implements Sensor {
         profiler.startInfo("Process Dependency-Check report");
         try {
             Analysis analysis = parseAnalysis(sensorContext);
-            totalDependencies = analysis.getDependencies().size();
+            this.totalDependencies = analysis.getDependencies().size();
             addIssues(sensorContext, analysis);
         } catch (FileNotFoundException e) {
             LOGGER.debug("Analysis aborted due to missing report file", e);
