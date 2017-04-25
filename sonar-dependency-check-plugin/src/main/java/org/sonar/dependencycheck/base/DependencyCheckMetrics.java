@@ -28,7 +28,7 @@ import java.util.List;
 
 public final class DependencyCheckMetrics implements Metrics {
 
-    public static final String DOMAIN = "OWASP-Dependency-Check";
+    private static final String DOMAIN = "OWASP-Dependency-Check";
 
     private static final String INHERITED_RISK_SCORE_KEY = "inherited_risk_score";
     private static final String VULNERABLE_COMPONENT_RATIO_KEY = "vulnerable_component_ratio";
@@ -39,19 +39,6 @@ public final class DependencyCheckMetrics implements Metrics {
     private static final String HIGH_SEVERITY_VULNS_KEY = "high_severity_vulns";
     private static final String MEDIUM_SEVERITY_VULNS_KEY = "medium_severity_vulns";
     private static final String LOW_SEVERITY_VULNS_KEY = "low_severity_vulns";
-
-
-    public static int inheritedRiskScore(int high, int medium, int low) {
-        return (high * 5) + (medium * 3) + (low);
-    }
-
-    public static double vulnerableComponentRatio(int vulnerabilities, int vulnerableComponents) {
-        double ratio = 0.0;
-        if(vulnerableComponents > 0) {
-            ratio = (double) vulnerabilities / vulnerableComponents;
-        }
-        return ratio;
-    }
 
     public static final Metric<Serializable> INHERITED_RISK_SCORE = new Metric.Builder(DependencyCheckMetrics.INHERITED_RISK_SCORE_KEY, "Inherited Risk Score", Metric.ValueType.INT)
             .setDescription("Inherited Risk Score")
@@ -121,6 +108,19 @@ public final class DependencyCheckMetrics implements Metrics {
             .setBestValue(0.0)
             .setHidden(false)
             .create();
+
+    public static double vulnerableComponentRatio(int vulnerabilities, int vulnerableComponents) {
+        double ratio = 0.0;
+        if(vulnerableComponents > 0) {
+            ratio = (double) vulnerabilities / vulnerableComponents;
+        }
+        return ratio;
+    }
+
+    public static int inheritedRiskScore(int high, int medium, int low) {
+        return (high * 5) + (medium * 3) + (low);
+    }
+
 
     @Override
     public List<Metric> getMetrics() {
