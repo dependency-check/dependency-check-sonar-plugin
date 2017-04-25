@@ -184,7 +184,10 @@ public class DependencyCheckSensor implements Sensor {
         } catch (FileNotFoundException e) {
             LOGGER.debug("Analysis aborted due to missing report file", e);
         } catch (Exception e) {
-            throw new RuntimeException("Can not process Dependency-Check report.", e);
+            //If the dependency-Check report doesn't exists, don't log a additional warning.
+            if(!(e instanceof FileNotFoundException)){
+                LOGGER.error("Can not process Dependency-Check report.", e);
+            }
         } finally {
             profiler.stopInfo();
         }
