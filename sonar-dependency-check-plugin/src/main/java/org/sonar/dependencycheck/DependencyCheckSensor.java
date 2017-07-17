@@ -84,7 +84,7 @@ public class DependencyCheckSensor implements Sensor {
 
     /**
      * todo: Add Markdown formatting if and when Sonar supports it
-     * https://jira.codehaus.org/browse/SONAR-4161
+     * https://jira.sonarsource.com/browse/SONAR-4161
      */
     private String formatDescription(Dependency dependency, Vulnerability vulnerability) {
         StringBuilder sb = new StringBuilder();
