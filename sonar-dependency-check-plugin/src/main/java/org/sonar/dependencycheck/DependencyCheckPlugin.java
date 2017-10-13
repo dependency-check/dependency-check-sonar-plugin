@@ -23,6 +23,7 @@ import org.sonar.api.Plugin;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
+import org.sonar.dependencycheck.page.DependencyCheckReportPage;
 import org.sonar.dependencycheck.rule.KnownCveRuleDefinition;
 import org.sonar.dependencycheck.rule.NeutralLanguage;
 import org.sonar.dependencycheck.rule.NeutralProfile;
@@ -42,13 +43,19 @@ public final class DependencyCheckPlugin implements Plugin {
                 NeutralProfile.class,
                 NeutralLanguage.class,
                 KnownCveRuleDefinition.class,
-                DependencyCheckWidget.class);
+                DependencyCheckWidget.class,
+                DependencyCheckReportPage.class);
 
-        context.addExtension(
+        context.addExtensions(
                 PropertyDefinition.builder(DependencyCheckConstants.REPORT_PATH_PROPERTY)
                         .name("Dependency-Check report path")
                         .description("path to the 'dependency-check-report.xml' file")
                         .defaultValue("${WORKSPACE}/dependency-check-report.xml")
+                        .build(),
+                PropertyDefinition.builder(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY)
+                        .name("Dependency-Check HTML report path")
+                        .description("path to the 'dependency-check-report.html' file")
+                        .defaultValue("${WORKSPACE}/dependency-check-report.html")
                         .build()
         );
     }

@@ -17,14 +17,24 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.dependencycheck.base;
+package org.sonar.dependencycheck.page;
 
-public final class DependencyCheckConstants {
+import org.sonar.api.web.page.Context;
+import org.sonar.api.web.page.Page;
+import org.sonar.api.web.page.Page.Scope;
+import org.sonar.api.web.page.PageDefinition;
 
-    public static final String REPORT_PATH_PROPERTY = "sonar.dependencyCheck.reportPath";
-    public static final String HTML_REPORT_PATH_PROPERTY = "sonar.dependencyCheck.htmlReportPath";
+public class DependencyCheckReportPage implements PageDefinition {
 
-    private DependencyCheckConstants() {
-    }
+	@Override
+	public void define(Context context) {
+		context.addPage(
+				Page.builder("dependencycheck/report")
+				.setScope(Scope.COMPONENT)
+				.setComponentQualifiers(Page.Qualifier.PROJECT)
+				.setName("OWASP Dependency-Check")
+				.setAdmin(false).build());
+		
+	}
 
 }
