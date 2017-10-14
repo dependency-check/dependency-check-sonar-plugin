@@ -53,8 +53,8 @@ public class XmlReportFile {
      * @throws org.sonar.api.utils.MessageException if the property relates to a directory or a non-existing file.
      */
     @CheckForNull
-    private File getReportFromProperty() {
-        String path = settings.getString(DependencyCheckConstants.REPORT_PATH_PROPERTY);
+    private File getReportFromProperty(String property) {
+        String path = settings.getString(property);
         if (path == null) {
             return null;
         }
@@ -69,23 +69,23 @@ public class XmlReportFile {
         return report;
     }
 
-    public File getFile() {
+    public File getFile(String property) {
         if (report == null) {
-            report = getReportFromProperty();
+            report = getReportFromProperty(property);
         }
         return report;
     }
 
-    public InputStream getInputStream() throws FileNotFoundException {
-        File reportFile = getFile();
+    public InputStream getInputStream(String property) throws FileNotFoundException {
+        File reportFile = getFile(property);
         if (reportFile == null) {
             throw new FileNotFoundException("Dependency-Check report does not exist.");
         }
         return new FileInputStream(reportFile);
     }
 
-    public boolean exist() {
-        File reportFile = getReportFromProperty();
+    public boolean exist(String property) {
+        File reportFile = getReportFromProperty(property);
         return reportFile != null;
     }
 }
