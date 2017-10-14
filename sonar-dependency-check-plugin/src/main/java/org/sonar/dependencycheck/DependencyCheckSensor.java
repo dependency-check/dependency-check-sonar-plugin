@@ -33,6 +33,7 @@ import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.api.utils.log.Profiler;
+import org.sonar.dependencycheck.base.DependencyCheckConstants;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.parser.ReportParser;
@@ -43,6 +44,9 @@ import org.sonar.dependencycheck.parser.element.Vulnerability;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -146,10 +150,27 @@ public class DependencyCheckSensor implements Sensor {
     private Analysis parseAnalysis(SensorContext context) throws IOException, ParserConfigurationException, SAXException {
         XmlReportFile report = new XmlReportFile(context.settings(), fileSystem, this.pathResolver);
 
-        try (InputStream stream = report.getInputStream()) {
-            return new ReportParser().parse(stream);
+        try (InputStream stream = report.getInputStream(DependencyCheckConstants.REPORT_PATH_PROPERTY)) {
+        	return new ReportParser().parse(stream);
         }
     }
+    
+	private String getHtmlReport(SensorContext context) {
+		XmlReportFile report = new XmlReportFile(context.settings(), fileSystem, this.pathResolver);
+		File reportFile = report.getFile(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY);
+		if (reportFile == null || !reportFile.exists() || !reportFile.isFile() || !reportFile.canRead()) {
+			return null;
+		}
+		int len = (int) reportFile.length();
+		try (FileInputStream reportFileInputStream = new FileInputStream(reportFile)) {
+			byte[] readBuffer = new byte[len];
+			reportFileInputStream.read(readBuffer, 0, len);
+			return new String(readBuffer);
+		} catch (IOException e) {
+			LOGGER.error("", e);
+			return null;
+		}
+	}
 
     private void saveMeasures(SensorContext context) {
         context.newMeasure().forMetric(DependencyCheckMetrics.HIGH_SEVERITY_VULNS).on(context.module()).withValue(criticalIssuesCount).save();
@@ -161,6 +182,11 @@ public class DependencyCheckSensor implements Sensor {
 
         context.newMeasure().forMetric(DependencyCheckMetrics.INHERITED_RISK_SCORE).on(context.module()).withValue(DependencyCheckMetrics.inheritedRiskScore(criticalIssuesCount, majorIssuesCount, minorIssuesCount)).save();
         context.newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO).on(context.module()).withValue(DependencyCheckMetrics.vulnerableComponentRatio(vulnerabilityCount, vulnerableDependencies)).save();
+
+        String htmlReport = getHtmlReport(context);
+        if (htmlReport != null) {
+            context.newMeasure().forMetric(DependencyCheckMetrics.REPORT).on(context.module()).withValue(htmlReport).save();
+        }
     }
 
     @Override

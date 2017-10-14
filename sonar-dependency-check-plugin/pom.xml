@@ -13,7 +13,7 @@
     <url>https://www.owasp.org/index.php/OWASP_Dependency_Check</url>
 
     <properties>
-        <sonar.version>6.0</sonar.version>
+        <sonar.version>6.3</sonar.version>
         <!-- Configuration for sonar-packaging-maven-plugin -->
         <sonar.pluginClass>org.sonar.dependencycheck.DependencyCheckPlugin</sonar.pluginClass>
         <sonar.pluginName>Dependency-Check</sonar.pluginName>
