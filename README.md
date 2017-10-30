@@ -67,11 +67,16 @@ Plugin Configuration
 -------------------
 Dependency-Check will output a file named 'dependency-check-report.xml' when asked to output XML. The Dependency-Check SonarQube plugin reads an existing Dependency-Check XML report.
 
-A typical SonarQube configuraiton will have the following parameter. This example assumes the use of a Jenkins workspace, but can easily be altered for other CI/CD systems.
+A typical SonarQube configuration will have the following parameter. This example assumes the use of a Jenkins workspace, but can easily be altered for other CI/CD systems.
 
 ```ini
 sonar.dependencyCheck.reportPath=${WORKSPACE}/dependency-check-report.xml
+sonar.dependencyCheck.htmlReportPath=${WORKSPACE}/dependency-check-report.html
 ```
+
+In this example, both the XML and HTML reports are specified. Only the XML report is required, however, if the HTML
+report is also available, it greatly enhances the usability of the SonarQube plugin by incorporating the actual
+Dependency-Check HTML report in the SonarQube project.
 
 Ecosystem
 -------------------

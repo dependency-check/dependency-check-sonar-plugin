@@ -1,4 +1,4 @@
-window.registerExtension('dependencycheck/report', function(options) {
+window.registerExtension("dependencycheck/report", function(options) {
 	var isDisplayed = true;
 	
 	if (!document.querySelector('style#dependency-check-report')) {
@@ -13,7 +13,7 @@ window.registerExtension('dependencycheck/report', function(options) {
 	
 	window.SonarRequest.getJSON('/api/measures/component', {
 		componentKey : options.component.key,
-		metricKeys : 'report'
+		metricKeys : "report"
 	}).then(function(response) {
 		if (isDisplayed) {
 			var htmlString = response.component.measures.filter(measure => measure.metric == 'report')[0].value;
@@ -26,17 +26,17 @@ window.registerExtension('dependencycheck/report', function(options) {
 			}
 			currentEl.classList.add('dependency-check-report-container');
 			
-			var reportFrame = document.createElement('iframe');
-			reportFrame.sandbox.value = 'allow-scripts allow-same-origin';
-			reportFrame.style.border = 'none';
-			reportFrame.style.flex= '1 1 auto';
+			var reportFrame = document.createElement("iframe");
+			reportFrame.sandbox.value = "allow-scripts allow-same-origin";
+			reportFrame.style.border = "none";
+			reportFrame.style.flex= "1 1 auto";
 			reportFrame.srcdoc = htmlString;
 			options.el.append(reportFrame);
 		}
 	});
 
 	return function() {
-		options.el.textContent = '';
+		options.el.textContent = "";
 		var isDisplayed = false;
 		options.el.classList.remove('dependency-check-report-content');
 		var currentEl = options.el.parentElement;
