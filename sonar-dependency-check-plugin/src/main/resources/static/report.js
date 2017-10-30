@@ -2,7 +2,7 @@ window.registerExtension("dependencycheck/report", function(options) {
 	var isDisplayed = true;
 	
 	if (!document.querySelector("style#dependency-check-report")) {
-		style = document.createElement("style");
+		var style = document.createElement("style");
 		style.id = "dependency-check-report";
 		// WebKit hack :(
 		style.appendChild(document.createTextNode(""));
