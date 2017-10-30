@@ -7,8 +7,8 @@ window.registerExtension("dependencycheck/report", function(options) {
 		// WebKit hack :(
 		style.appendChild(document.createTextNode(""));
 		document.head.appendChild(style);
-		style.insertRule(".dependency-check-report-content {flex: 1 1 auto;}", 1);
-		style.insertRule(".dependency-check-report-container {display: flex; flex-direction: column;}", 2);
+		style.sheet.insertRule(".dependency-check-report-content {flex: 1 1 auto;}", 0);
+		style.sheet.insertRule(".dependency-check-report-container {display: flex; flex-direction: column;}", 0);
 	}
 	
 	window.SonarRequest.getJSON('/api/measures/component', {
@@ -17,8 +17,7 @@ window.registerExtension("dependencycheck/report", function(options) {
 	}).then(function(response) {
 		if (isDisplayed) {
 			var htmlString = response.component.measures.filter(measure => measure.metric == 'report')[0].value;
-			options.el.classList.add('dependency-check-report-content');
-			var currentEl = options.el.parentElement;
+			var currentEl = options.el;
 			while (currentEl.id !== 'container') {
 				currentEl.classList.add('dependency-check-report-content');
 				currentEl.classList.add('dependency-check-report-container');
@@ -38,8 +37,7 @@ window.registerExtension("dependencycheck/report", function(options) {
 	return function() {
 		options.el.textContent = "";
 		var isDisplayed = false;
-		options.el.classList.remove('dependency-check-report-content');
-		var currentEl = options.el.parentElement;
+		var currentEl = options.el;
 		while (currentEl.id !== 'container') {
 			currentEl.classList.remove('dependency-check-report-content');
 			currentEl.classList.remove('dependency-check-report-container');
