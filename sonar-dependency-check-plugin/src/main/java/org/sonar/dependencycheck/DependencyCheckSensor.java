@@ -55,7 +55,7 @@ import java.io.Serializable;
 public class DependencyCheckSensor implements Sensor {
 
     private static final Logger LOGGER = Loggers.get(DependencyCheckSensor.class);
-    private static final String SENSOR_NAME = "OWASP Dependency-Check";
+    private static final String SENSOR_NAME = "Dependency-Check";
 
     private final FileSystem fileSystem;
     private final PathResolver pathResolver;

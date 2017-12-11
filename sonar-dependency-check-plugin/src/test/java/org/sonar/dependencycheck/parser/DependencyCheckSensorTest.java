@@ -61,14 +61,14 @@ public class DependencyCheckSensorTest {
 
     @Test
     public void toStringTest() {
-        assertThat(this.sensor.toString()).isEqualTo("OWASP Dependency-Check");
+        assertThat(this.sensor.toString()).isEqualTo("Dependency-Check");
     }
 
     @Test
     public void testDescribe() {
         final SensorDescriptor descriptor = mock(SensorDescriptor.class);
         sensor.describe(descriptor);
-        verify(descriptor).name("OWASP Dependency-Check");
+        verify(descriptor).name("Dependency-Check");
     }
     @Test
     public void shouldAnalyse() throws URISyntaxException {

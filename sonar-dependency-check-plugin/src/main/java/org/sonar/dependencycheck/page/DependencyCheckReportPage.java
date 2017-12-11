@@ -32,7 +32,7 @@ public class DependencyCheckReportPage implements PageDefinition {
 				Page.builder("dependencycheck/report")
 				.setScope(Scope.COMPONENT)
 				.setComponentQualifiers(Page.Qualifier.PROJECT)
-				.setName("OWASP Dependency-Check")
+				.setName("Dependency-Check")
 				.setAdmin(false).build());
 		
 	}

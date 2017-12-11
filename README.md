@@ -5,7 +5,7 @@
 Dependency-Check Plugin for SonarQube 6.x
 =====================================
 
-Integrates [OWASP Dependency-Check] reports into SonarQube v6.3 or higher. 
+Integrates [Dependency-Check] reports into SonarQube v6.3 or higher. 
 
 Please see the [SonarQube 5.x] branch for older SonarQube 5.x support
 
@@ -94,14 +94,14 @@ NOTE: The Sonar plugin does not generate reports, it reads existing reports. Use
 Copyright & License
 -------------------
 
-OWASP Dependency-Check Sonar Plugin is Copyright (c) Steve Springett. All Rights Reserved.
+Dependency-Check Sonar Plugin is Copyright (c) Steve Springett. All Rights Reserved.
 
-OWASP Dependency-Check is Copyright (c) Jeremy Long. All Rights Reserved.
+Dependency-Check is Copyright (c) Jeremy Long. All Rights Reserved.
 
 Permission to modify and redistribute is granted under the terms of the [LGPLv3] license.
 
   [LGPLv3]: http://www.gnu.org/licenses/lgpl.txt
   [bintray]: https://bintray.com/stevespringett/owasp/dependency-check-sonar/
   [GitHub]: https://github.com/stevespringett/dependency-check-sonar-plugin/releases
-  [OWASP Dependency-Check]: https://www.owasp.org/index.php/OWASP_Dependency_Check
+  [Dependency-Check]: https://www.owasp.org/index.php/OWASP_Dependency_Check
   [SonarQube 5.x]: https://github.com/stevespringett/dependency-check-sonar-plugin/tree/SonarQube_5.x
