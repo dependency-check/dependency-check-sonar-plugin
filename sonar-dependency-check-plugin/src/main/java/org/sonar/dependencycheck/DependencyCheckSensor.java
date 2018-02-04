@@ -123,7 +123,11 @@ public class DependencyCheckSensor implements Sensor {
             return;
         }
         for (Dependency dependency : analysis.getDependencies()) {
-            InputFile testFile = fileSystem.inputFile(fileSystem.predicates().hasPath(dependency.getFilePath()));
+            InputFile testFile = fileSystem.inputFile(
+                    fileSystem.predicates().hasPath(
+                            escapeReservedPathChars(dependency.getFilePath())
+                    )
+            );
 
             int depVulnCount = dependency.getVulnerabilities().size();
 
@@ -215,5 +219,29 @@ public class DependencyCheckSensor implements Sensor {
             profiler.stopInfo();
         }
         saveMeasures(sensorContext);
+    }
+
+    /**
+     * The following characters are reserved on Windows systems.
+     * Some are also reserved on Unix systems.
+     *
+     * < (less than)
+     * > (greater than)
+     * : (colon)
+     * " (double quote)
+     * / (forward slash)
+     * \ (backslash)
+     * | (vertical bar or pipe)
+     * ? (question mark)
+     * (asterisk)
+     */
+    private String escapeReservedPathChars(String path) {
+        /*
+        todo:
+        For the time being, only try to replace ? (question mark) since that
+        is the only reserved character intentionally used by Dependency-Check.
+         */
+        String replacement = path.contains("/") ? "/" : "\\";
+        return path.replace("?", replacement);
     }
 }
