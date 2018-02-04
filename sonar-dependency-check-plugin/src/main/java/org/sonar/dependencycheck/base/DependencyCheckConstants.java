@@ -23,6 +23,8 @@ public final class DependencyCheckConstants {
 
     public static final String REPORT_PATH_PROPERTY = "sonar.dependencyCheck.reportPath";
     public static final String HTML_REPORT_PATH_PROPERTY = "sonar.dependencyCheck.htmlReportPath";
+    public static final String SEVERITY_CRITICAL = "sonar.dependencyCheck.severity.critical";
+    public static final String SEVERITY_MAJOR = "sonar.dependencyCheck.severity.major";
 
     private DependencyCheckConstants() {
     }

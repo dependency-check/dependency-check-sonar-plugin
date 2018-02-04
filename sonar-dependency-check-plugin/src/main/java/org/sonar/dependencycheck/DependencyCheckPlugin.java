@@ -20,6 +20,7 @@
 package org.sonar.dependencycheck;
 
 import org.sonar.api.Plugin;
+import org.sonar.api.PropertyType;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
@@ -48,14 +49,30 @@ public final class DependencyCheckPlugin implements Plugin {
 
         context.addExtensions(
                 PropertyDefinition.builder(DependencyCheckConstants.REPORT_PATH_PROPERTY)
+                        .subCategory("Paths")
                         .name("Dependency-Check report path")
                         .description("path to the 'dependency-check-report.xml' file")
                         .defaultValue("${WORKSPACE}/dependency-check-report.xml")
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY)
+                        .subCategory("Paths")
                         .name("Dependency-Check HTML report path")
                         .description("path to the 'dependency-check-report.html' file")
                         .defaultValue("${WORKSPACE}/dependency-check-report.html")
+                        .build(),
+                PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_CRITICAL)
+                        .subCategory("Severities")
+                        .name("Critical")
+                        .description("Minimum score for critical issues or -1 to deactivate critical issues.")
+                        .defaultValue("7.0")
+                        .type(PropertyType.FLOAT)
+                        .build(),
+                PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_MAJOR)
+                        .subCategory("Severities")
+                        .name("Major")
+                        .description("Minimum score for major issues or -1 to deactivate major issues.")
+                        .defaultValue("4.0")
+                        .type(PropertyType.FLOAT)
                         .build()
         );
     }
