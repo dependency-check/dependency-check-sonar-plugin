@@ -105,6 +105,7 @@ public class ReportParser {
 
     private Vulnerability processVulnerability(SMInputCursor vulnC) throws XMLStreamException {
         Vulnerability vulnerability = new Vulnerability();
+        vulnerability.setLineNumer(vulnC.getLocation().getLineNumber());
         SMInputCursor childCursor = vulnC.childCursor();
         while (childCursor.getNext() != null) {
             String nodeName = childCursor.getLocalName();
