@@ -53,198 +53,198 @@ import java.io.Serializable;
 
 public class DependencyCheckSensor implements Sensor {
 
-	private static final Logger LOGGER = Loggers.get(DependencyCheckSensor.class);
-	private static final String SENSOR_NAME = "Dependency-Check";
+    private static final Logger LOGGER = Loggers.get(DependencyCheckSensor.class);
+    private static final String SENSOR_NAME = "Dependency-Check";
 
-	private final FileSystem fileSystem;
-	private final PathResolver pathResolver;
+    private final FileSystem fileSystem;
+    private final PathResolver pathResolver;
 
-	private int totalDependencies;
-	private int vulnerableDependencies;
-	private int vulnerabilityCount;
-	private int blockerIssuesCount;
-	private int criticalIssuesCount;
-	private int majorIssuesCount;
-	private int minorIssuesCount;
+    private int totalDependencies;
+    private int vulnerableDependencies;
+    private int vulnerabilityCount;
+    private int blockerIssuesCount;
+    private int criticalIssuesCount;
+    private int majorIssuesCount;
+    private int minorIssuesCount;
 
-	public DependencyCheckSensor(FileSystem fileSystem, PathResolver pathResolver) {
-		this.fileSystem = fileSystem;
-		this.pathResolver = pathResolver;
-	}
+    public DependencyCheckSensor(FileSystem fileSystem, PathResolver pathResolver) {
+        this.fileSystem = fileSystem;
+        this.pathResolver = pathResolver;
+    }
 
-	private void addIssue(SensorContext context, Dependency dependency, Vulnerability vulnerability) {
-		Severity severity = DependencyCheckUtils
-			.cvssToSonarQubeSeverity(vulnerability.getCvssScore(), context.settings().getDouble(DependencyCheckConstants.SEVERITY_BLOCKER),
-				context.settings().getDouble(DependencyCheckConstants.SEVERITY_CRITICAL),
-				context.settings().getDouble(DependencyCheckConstants.SEVERITY_MAJOR));
-		context.newIssue().forRule(RuleKey.of(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY))
-			.at(new DefaultIssueLocation().on(context.module()).message(formatDescription(dependency, vulnerability)))
-			.overrideSeverity(severity).save();
+    private void addIssue(SensorContext context, Dependency dependency, Vulnerability vulnerability) {
+        Severity severity = DependencyCheckUtils
+            .cvssToSonarQubeSeverity(vulnerability.getCvssScore(), context.settings().getDouble(DependencyCheckConstants.SEVERITY_BLOCKER),
+                context.settings().getDouble(DependencyCheckConstants.SEVERITY_CRITICAL),
+                context.settings().getDouble(DependencyCheckConstants.SEVERITY_MAJOR));
+        context.newIssue().forRule(RuleKey.of(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY))
+            .at(new DefaultIssueLocation().on(context.module()).message(formatDescription(dependency, vulnerability)))
+            .overrideSeverity(severity).save();
 
-		incrementCount(severity);
-	}
+        incrementCount(severity);
+    }
 
-	/**
-	 * todo: Add Markdown formatting if and when Sonar supports it
-	 * https://jira.sonarsource.com/browse/SONAR-4161
-	 */
-	private String formatDescription(Dependency dependency, Vulnerability vulnerability) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
-		sb.append("Reference: ").append(vulnerability.getName()).append(" | ");
-		sb.append("CVSS Score: ").append(vulnerability.getCvssScore()).append(" | ");
-		if (StringUtils.isNotBlank(vulnerability.getCwe())) {
-			sb.append("Category: ").append(vulnerability.getCwe()).append(" | ");
-		}
-		sb.append(vulnerability.getDescription());
-		return sb.toString();
-	}
+    /**
+     * todo: Add Markdown formatting if and when Sonar supports it
+     * https://jira.sonarsource.com/browse/SONAR-4161
+     */
+    private String formatDescription(Dependency dependency, Vulnerability vulnerability) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
+        sb.append("Reference: ").append(vulnerability.getName()).append(" | ");
+        sb.append("CVSS Score: ").append(vulnerability.getCvssScore()).append(" | ");
+        if (StringUtils.isNotBlank(vulnerability.getCwe())) {
+            sb.append("Category: ").append(vulnerability.getCwe()).append(" | ");
+        }
+        sb.append(vulnerability.getDescription());
+        return sb.toString();
+    }
 
-	private void incrementCount(Severity severity) {
-		switch (severity) {
-			case BLOCKER:
-				this.blockerIssuesCount++;
-				break;
-			case CRITICAL:
-				this.criticalIssuesCount++;
-				break;
-			case MAJOR:
-				this.majorIssuesCount++;
-				break;
-			case MINOR:
-				this.minorIssuesCount++;
-				break;
-			default:
-				LOGGER.debug("Unknown severity {}", severity);
-		}
-	}
+    private void incrementCount(Severity severity) {
+        switch (severity) {
+            case BLOCKER:
+                this.blockerIssuesCount++;
+                break;
+            case CRITICAL:
+                this.criticalIssuesCount++;
+                break;
+            case MAJOR:
+                this.majorIssuesCount++;
+                break;
+            case MINOR:
+                this.minorIssuesCount++;
+                break;
+            default:
+                LOGGER.debug("Unknown severity {}", severity);
+        }
+    }
 
-	private void addIssues(SensorContext context, Analysis analysis) {
-		if (analysis.getDependencies() == null) {
-			return;
-		}
-		for (Dependency dependency : analysis.getDependencies()) {
-			InputFile testFile = fileSystem.inputFile(fileSystem.predicates().hasPath(escapeReservedPathChars(dependency.getFilePath())));
+    private void addIssues(SensorContext context, Analysis analysis) {
+        if (analysis.getDependencies() == null) {
+            return;
+        }
+        for (Dependency dependency : analysis.getDependencies()) {
+            InputFile testFile = fileSystem.inputFile(fileSystem.predicates().hasPath(escapeReservedPathChars(dependency.getFilePath())));
 
-			int depVulnCount = dependency.getVulnerabilities().size();
+            int depVulnCount = dependency.getVulnerabilities().size();
 
-			if (depVulnCount > 0) {
-				vulnerableDependencies++;
-				saveMetricOnFile(context, testFile, DependencyCheckMetrics.VULNERABLE_DEPENDENCIES, (double) depVulnCount);
-			}
-			saveMetricOnFile(context, testFile, DependencyCheckMetrics.TOTAL_VULNERABILITIES, (double) depVulnCount);
-			saveMetricOnFile(context, testFile, DependencyCheckMetrics.TOTAL_DEPENDENCIES, (double) depVulnCount);
+            if (depVulnCount > 0) {
+                vulnerableDependencies++;
+                saveMetricOnFile(context, testFile, DependencyCheckMetrics.VULNERABLE_DEPENDENCIES, (double) depVulnCount);
+            }
+            saveMetricOnFile(context, testFile, DependencyCheckMetrics.TOTAL_VULNERABILITIES, (double) depVulnCount);
+            saveMetricOnFile(context, testFile, DependencyCheckMetrics.TOTAL_DEPENDENCIES, (double) depVulnCount);
 
-			for (Vulnerability vulnerability : dependency.getVulnerabilities()) {
-				addIssue(context, dependency, vulnerability);
-				vulnerabilityCount++;
-			}
-		}
-	}
+            for (Vulnerability vulnerability : dependency.getVulnerabilities()) {
+                addIssue(context, dependency, vulnerability);
+                vulnerabilityCount++;
+            }
+        }
+    }
 
-	private void saveMetricOnFile(SensorContext context, InputFile inputFile, Metric<Serializable> metric, double value) {
-		if (inputFile != null) {
-			context.newMeasure().on(inputFile).forMetric(metric).withValue(value);
-		}
-	}
+    private void saveMetricOnFile(SensorContext context, InputFile inputFile, Metric<Serializable> metric, double value) {
+        if (inputFile != null) {
+            context.newMeasure().on(inputFile).forMetric(metric).withValue(value);
+        }
+    }
 
-	private Analysis parseAnalysis(SensorContext context)
-		throws IOException, ParserConfigurationException, SAXException {
-		XmlReportFile report = new XmlReportFile(context.settings(), fileSystem, this.pathResolver);
+    private Analysis parseAnalysis(SensorContext context)
+        throws IOException, ParserConfigurationException, SAXException {
+        XmlReportFile report = new XmlReportFile(context.settings(), fileSystem, this.pathResolver);
 
-		try (InputStream stream = report.getInputStream(DependencyCheckConstants.REPORT_PATH_PROPERTY)) {
-			return new ReportParser().parse(stream);
-		}
-	}
+        try (InputStream stream = report.getInputStream(DependencyCheckConstants.REPORT_PATH_PROPERTY)) {
+            return new ReportParser().parse(stream);
+        }
+    }
 
-	private String getHtmlReport(SensorContext context) {
-		XmlReportFile report = new XmlReportFile(context.settings(), fileSystem, this.pathResolver);
-		File reportFile = report.getFile(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY);
-		if (reportFile == null || !reportFile.exists() || !reportFile.isFile() || !reportFile.canRead()) {
-			return null;
-		}
-		int len = (int) reportFile.length();
-		try (FileInputStream reportFileInputStream = new FileInputStream(reportFile)) {
-			byte[] readBuffer = new byte[len];
-			reportFileInputStream.read(readBuffer, 0, len);
-			return new String(readBuffer);
-		} catch (IOException e) {
-			LOGGER.error("", e);
-			return null;
-		}
-	}
+    private String getHtmlReport(SensorContext context) {
+        XmlReportFile report = new XmlReportFile(context.settings(), fileSystem, this.pathResolver);
+        File reportFile = report.getFile(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY);
+        if (reportFile == null || !reportFile.exists() || !reportFile.isFile() || !reportFile.canRead()) {
+            return null;
+        }
+        int len = (int) reportFile.length();
+        try (FileInputStream reportFileInputStream = new FileInputStream(reportFile)) {
+            byte[] readBuffer = new byte[len];
+            reportFileInputStream.read(readBuffer, 0, len);
+            return new String(readBuffer);
+        } catch (IOException e) {
+            LOGGER.error("", e);
+            return null;
+        }
+    }
 
-	private void saveMeasures(SensorContext context) {
-		context.newMeasure().forMetric(DependencyCheckMetrics.HIGH_SEVERITY_VULNS).on(context.module()).withValue(criticalIssuesCount)
-			.save();
-		context.newMeasure().forMetric(DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS).on(context.module()).withValue(majorIssuesCount)
-			.save();
-		context.newMeasure().forMetric(DependencyCheckMetrics.LOW_SEVERITY_VULNS).on(context.module()).withValue(minorIssuesCount).save();
-		context.newMeasure().forMetric(DependencyCheckMetrics.TOTAL_DEPENDENCIES).on(context.module()).withValue(totalDependencies).save();
-		context.newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_DEPENDENCIES).on(context.module())
-			.withValue(vulnerableDependencies).save();
-		context.newMeasure().forMetric(DependencyCheckMetrics.TOTAL_VULNERABILITIES).on(context.module()).withValue(vulnerabilityCount)
-			.save();
+    private void saveMeasures(SensorContext context) {
+        context.newMeasure().forMetric(DependencyCheckMetrics.HIGH_SEVERITY_VULNS).on(context.module()).withValue(criticalIssuesCount)
+            .save();
+        context.newMeasure().forMetric(DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS).on(context.module()).withValue(majorIssuesCount)
+            .save();
+        context.newMeasure().forMetric(DependencyCheckMetrics.LOW_SEVERITY_VULNS).on(context.module()).withValue(minorIssuesCount).save();
+        context.newMeasure().forMetric(DependencyCheckMetrics.TOTAL_DEPENDENCIES).on(context.module()).withValue(totalDependencies).save();
+        context.newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_DEPENDENCIES).on(context.module())
+            .withValue(vulnerableDependencies).save();
+        context.newMeasure().forMetric(DependencyCheckMetrics.TOTAL_VULNERABILITIES).on(context.module()).withValue(vulnerabilityCount)
+            .save();
 
-		context.newMeasure().forMetric(DependencyCheckMetrics.INHERITED_RISK_SCORE).on(context.module())
-			.withValue(DependencyCheckMetrics.inheritedRiskScore(criticalIssuesCount, majorIssuesCount, minorIssuesCount)).save();
-		context.newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO).on(context.module())
-			.withValue(DependencyCheckMetrics.vulnerableComponentRatio(vulnerabilityCount, vulnerableDependencies)).save();
+        context.newMeasure().forMetric(DependencyCheckMetrics.INHERITED_RISK_SCORE).on(context.module())
+            .withValue(DependencyCheckMetrics.inheritedRiskScore(criticalIssuesCount, majorIssuesCount, minorIssuesCount)).save();
+        context.newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO).on(context.module())
+            .withValue(DependencyCheckMetrics.vulnerableComponentRatio(vulnerabilityCount, vulnerableDependencies)).save();
 
-		String htmlReport = getHtmlReport(context);
-		if (htmlReport != null) {
-			context.newMeasure().forMetric(DependencyCheckMetrics.REPORT).on(context.module()).withValue(htmlReport).save();
-		}
-	}
+        String htmlReport = getHtmlReport(context);
+        if (htmlReport != null) {
+            context.newMeasure().forMetric(DependencyCheckMetrics.REPORT).on(context.module()).withValue(htmlReport).save();
+        }
+    }
 
-	@Override
-	public String toString() {
-		return SENSOR_NAME;
-	}
+    @Override
+    public String toString() {
+        return SENSOR_NAME;
+    }
 
-	@Override
-	public void describe(SensorDescriptor sensorDescriptor) {
-		sensorDescriptor.name(SENSOR_NAME);
-	}
+    @Override
+    public void describe(SensorDescriptor sensorDescriptor) {
+        sensorDescriptor.name(SENSOR_NAME);
+    }
 
-	@Override
-	public void execute(SensorContext sensorContext) {
-		Profiler profiler = Profiler.create(LOGGER);
-		profiler.startInfo("Process Dependency-Check report");
-		try {
-			Analysis analysis = parseAnalysis(sensorContext);
-			this.totalDependencies = analysis.getDependencies().size();
-			addIssues(sensorContext, analysis);
-		} catch (FileNotFoundException e) {
-			LOGGER.debug("Analysis aborted due to missing report file", e);
-		} catch (Exception e) {
-			throw new RuntimeException("Can not process Dependency-Check report.", e);
-		} finally {
-			profiler.stopInfo();
-		}
-		saveMeasures(sensorContext);
-	}
+    @Override
+    public void execute(SensorContext sensorContext) {
+        Profiler profiler = Profiler.create(LOGGER);
+        profiler.startInfo("Process Dependency-Check report");
+        try {
+            Analysis analysis = parseAnalysis(sensorContext);
+            this.totalDependencies = analysis.getDependencies().size();
+            addIssues(sensorContext, analysis);
+        } catch (FileNotFoundException e) {
+            LOGGER.debug("Analysis aborted due to missing report file", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Can not process Dependency-Check report.", e);
+        } finally {
+            profiler.stopInfo();
+        }
+        saveMeasures(sensorContext);
+    }
 
-	/**
-	 * The following characters are reserved on Windows systems.
-	 * Some are also reserved on Unix systems.
-	 * < (less than)
-	 * > (greater than)
-	 * : (colon)
-	 * " (double quote)
-	 * / (forward slash)
-	 * \ (backslash)
-	 * | (vertical bar or pipe)
-	 * ? (question mark)
-	 * (asterisk)
-	 */
-	private String escapeReservedPathChars(String path) {
-		/*
-		todo:
+    /**
+     * The following characters are reserved on Windows systems.
+     * Some are also reserved on Unix systems.
+     * < (less than)
+     * > (greater than)
+     * : (colon)
+     * " (double quote)
+     * / (forward slash)
+     * \ (backslash)
+     * | (vertical bar or pipe)
+     * ? (question mark)
+     * (asterisk)
+     */
+    private String escapeReservedPathChars(String path) {
+        /*
+        todo:
         For the time being, only try to replace ? (question mark) since that
         is the only reserved character intentionally used by Dependency-Check.
          */
-		String replacement = path.contains("/") ? "/" : "\\";
-		return path.replace("?", replacement);
-	}
+        String replacement = path.contains("/") ? "/" : "\\";
+        return path.replace("?", replacement);
+    }
 }

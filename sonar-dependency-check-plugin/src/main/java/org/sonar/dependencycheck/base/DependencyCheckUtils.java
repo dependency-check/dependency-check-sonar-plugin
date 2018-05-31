@@ -27,31 +27,31 @@ import javax.xml.stream.XMLInputFactory;
 
 public final class DependencyCheckUtils {
 
-	private DependencyCheckUtils() {
-	}
+    private DependencyCheckUtils() {
+    }
 
-	public static SMInputFactory newStaxParser()
-		throws FactoryConfigurationError {
-		XMLInputFactory xmlFactory = XMLInputFactory.newInstance();
-		xmlFactory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);
-		xmlFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.FALSE);
-		xmlFactory.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.FALSE);
-		xmlFactory.setProperty(XMLInputFactory.IS_VALIDATING, Boolean.FALSE);
-		return new SMInputFactory(xmlFactory);
-	}
+    public static SMInputFactory newStaxParser()
+        throws FactoryConfigurationError {
+        XMLInputFactory xmlFactory = XMLInputFactory.newInstance();
+        xmlFactory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);
+        xmlFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.FALSE);
+        xmlFactory.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.FALSE);
+        xmlFactory.setProperty(XMLInputFactory.IS_VALIDATING, Boolean.FALSE);
+        return new SMInputFactory(xmlFactory);
+    }
 
-	public static Severity cvssToSonarQubeSeverity(String cvssScore, Double blocker, Double critical, Double major) {
-		double score = Double.parseDouble(cvssScore);
-		if (blocker.doubleValue() > 0 && score >= blocker.doubleValue()) {
-			return Severity.BLOCKER;
-		}
-		if (critical.doubleValue() > 0 && score >= critical.doubleValue()) {
-			return Severity.CRITICAL;
-		} else if (major.doubleValue() > 0 && score >= major.doubleValue()) {
-			return Severity.MAJOR;
-		} else {
-			return Severity.MINOR;
-		}
-	}
+    public static Severity cvssToSonarQubeSeverity(String cvssScore, Double blocker, Double critical, Double major) {
+        double score = Double.parseDouble(cvssScore);
+        if (blocker.doubleValue() > 0 && score >= blocker.doubleValue()) {
+            return Severity.BLOCKER;
+        }
+        if (critical.doubleValue() > 0 && score >= critical.doubleValue()) {
+            return Severity.CRITICAL;
+        } else if (major.doubleValue() > 0 && score >= major.doubleValue()) {
+            return Severity.MAJOR;
+        } else {
+            return Severity.MINOR;
+        }
+    }
 
 }

@@ -32,77 +32,77 @@ import static org.fest.assertions.Assertions.assertThat;
 @RunWith(Parameterized.class)
 public class DependencyCheckUtilsTest {
 
-	private final String cvssSeverity;
-	private final Double blocker;
-	private final Double critical;
-	private final Double major;
-	private final Severity expectedSeverity;
+    private final String cvssSeverity;
+    private final Double blocker;
+    private final Double critical;
+    private final Double major;
+    private final Severity expectedSeverity;
 
-	public DependencyCheckUtilsTest(String cvssSeverity, Double blocker, Double critical, Double major, Severity expectedSeverity) {
-		this.cvssSeverity = cvssSeverity;
-		this.blocker = blocker;
-		this.critical = critical;
-		this.major = major;
-		this.expectedSeverity = expectedSeverity;
-	}
+    public DependencyCheckUtilsTest(String cvssSeverity, Double blocker, Double critical, Double major, Severity expectedSeverity) {
+        this.cvssSeverity = cvssSeverity;
+        this.blocker = blocker;
+        this.critical = critical;
+        this.major = major;
+        this.expectedSeverity = expectedSeverity;
+    }
 
-	@Parameterized.Parameters
-	public static Collection<Object[]> severities() {
-		return Arrays.asList(new Object[][] {
-			// defaults
-			{ "10.0", Double.valueOf("9.0"), Double.valueOf("7.0"), Double.valueOf("4.0"), Severity.BLOCKER },
-			{ "9.0", Double.valueOf("9.0"), Double.valueOf("7.0"), Double.valueOf("4.0"), Severity.BLOCKER },
-			{ "7.0", Double.valueOf("9.0"), Double.valueOf("7.0"), Double.valueOf("4.0"), Severity.CRITICAL },
-			{ "6.9", Double.valueOf("9.0"), Double.valueOf("7.0"), Double.valueOf("4.0"), Severity.MAJOR },
-			{ "4.0", Double.valueOf("9.0"), Double.valueOf("7.0"), Double.valueOf("4.0"), Severity.MAJOR },
-			{ "3.9", Double.valueOf("9.0"), Double.valueOf("7.0"), Double.valueOf("4.0"), Severity.MINOR },
-			{ "0.0", Double.valueOf("9.0"), Double.valueOf("7.0"), Double.valueOf("4.0"), Severity.MINOR },
+    @Parameterized.Parameters
+    public static Collection<Object[]> severities() {
+        return Arrays.asList(new Object[][] {
+            // defaults
+            { "10.0", Double.valueOf("9.0"), Double.valueOf("7.0"), Double.valueOf("4.0"), Severity.BLOCKER },
+            { "9.0", Double.valueOf("9.0"), Double.valueOf("7.0"), Double.valueOf("4.0"), Severity.BLOCKER },
+            { "7.0", Double.valueOf("9.0"), Double.valueOf("7.0"), Double.valueOf("4.0"), Severity.CRITICAL },
+            { "6.9", Double.valueOf("9.0"), Double.valueOf("7.0"), Double.valueOf("4.0"), Severity.MAJOR },
+            { "4.0", Double.valueOf("9.0"), Double.valueOf("7.0"), Double.valueOf("4.0"), Severity.MAJOR },
+            { "3.9", Double.valueOf("9.0"), Double.valueOf("7.0"), Double.valueOf("4.0"), Severity.MINOR },
+            { "0.0", Double.valueOf("9.0"), Double.valueOf("7.0"), Double.valueOf("4.0"), Severity.MINOR },
 
-			// custom
-			{ "10.0", Double.valueOf("9.0"), Double.valueOf("5.0"), Double.valueOf("2.0"), Severity.BLOCKER },
-			{ "9.0", Double.valueOf("9.0"), Double.valueOf("5.0"), Double.valueOf("2.0"), Severity.BLOCKER },
-			{ "7.0", Double.valueOf("9.0"), Double.valueOf("5.0"), Double.valueOf("2.0"), Severity.CRITICAL },
-			{ "6.9", Double.valueOf("9.0"), Double.valueOf("5.0"), Double.valueOf("2.0"), Severity.CRITICAL },
-			{ "4.0", Double.valueOf("9.0"), Double.valueOf("5.0"), Double.valueOf("2.0"), Severity.MAJOR },
-			{ "3.9", Double.valueOf("9.0"), Double.valueOf("5.0"), Double.valueOf("2.0"), Severity.MAJOR },
-			{ "1.9", Double.valueOf("9.0"), Double.valueOf("5.0"), Double.valueOf("2.0"), Severity.MINOR },
-			{ "0.0", Double.valueOf("9.0"), Double.valueOf("5.0"), Double.valueOf("2.0"), Severity.MINOR },
+            // custom
+            { "10.0", Double.valueOf("9.0"), Double.valueOf("5.0"), Double.valueOf("2.0"), Severity.BLOCKER },
+            { "9.0", Double.valueOf("9.0"), Double.valueOf("5.0"), Double.valueOf("2.0"), Severity.BLOCKER },
+            { "7.0", Double.valueOf("9.0"), Double.valueOf("5.0"), Double.valueOf("2.0"), Severity.CRITICAL },
+            { "6.9", Double.valueOf("9.0"), Double.valueOf("5.0"), Double.valueOf("2.0"), Severity.CRITICAL },
+            { "4.0", Double.valueOf("9.0"), Double.valueOf("5.0"), Double.valueOf("2.0"), Severity.MAJOR },
+            { "3.9", Double.valueOf("9.0"), Double.valueOf("5.0"), Double.valueOf("2.0"), Severity.MAJOR },
+            { "1.9", Double.valueOf("9.0"), Double.valueOf("5.0"), Double.valueOf("2.0"), Severity.MINOR },
+            { "0.0", Double.valueOf("9.0"), Double.valueOf("5.0"), Double.valueOf("2.0"), Severity.MINOR },
 
-			// custom, blocker deactivated
-			{ "10.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
-			{ "9.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
-			{ "7.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
-			{ "6.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
-			{ "4.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
-			{ "3.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
-			{ "1.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MINOR },
-			{ "0.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MINOR },
+            // custom, blocker deactivated
+            { "10.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
+            { "9.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
+            { "7.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
+            { "6.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
+            { "4.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
+            { "3.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
+            { "1.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MINOR },
+            { "0.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MINOR },
 
-			// custom, critical deactivated
-			{ "10.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
-			{ "9.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
-			{ "7.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
-			{ "6.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
-			{ "4.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
-			{ "3.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
-			{ "1.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MINOR },
-			{ "0.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MINOR },
+            // custom, critical deactivated
+            { "10.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
+            { "9.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
+            { "7.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
+            { "6.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
+            { "4.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
+            { "3.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MAJOR },
+            { "1.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MINOR },
+            { "0.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("2.0"), Severity.MINOR },
 
-			// custom, critical and major deactivated
-			{ "10.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("-1"), Severity.MINOR },
-			{ "9.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("-1"), Severity.MINOR },
-			{ "7.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("-1"), Severity.MINOR },
-			{ "6.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("-1"), Severity.MINOR },
-			{ "4.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("-1"), Severity.MINOR },
-			{ "3.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("-1"), Severity.MINOR },
-			{ "1.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("-1"), Severity.MINOR },
-			{ "0.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("-1"), Severity.MINOR } });
-	}
+            // custom, critical and major deactivated
+            { "10.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("-1"), Severity.MINOR },
+            { "9.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("-1"), Severity.MINOR },
+            { "7.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("-1"), Severity.MINOR },
+            { "6.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("-1"), Severity.MINOR },
+            { "4.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("-1"), Severity.MINOR },
+            { "3.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("-1"), Severity.MINOR },
+            { "1.9", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("-1"), Severity.MINOR },
+            { "0.0", Double.valueOf("-1"), Double.valueOf("-1"), Double.valueOf("-1"), Severity.MINOR } });
+    }
 
-	@Test
-	public void testCvssToSonarQubeSeverity() {
-		assertThat(DependencyCheckUtils.cvssToSonarQubeSeverity(this.cvssSeverity, this.blocker, this.critical, this.major))
-			.isEqualTo(this.expectedSeverity);
-	}
+    @Test
+    public void testCvssToSonarQubeSeverity() {
+        assertThat(DependencyCheckUtils.cvssToSonarQubeSeverity(this.cvssSeverity, this.blocker, this.critical, this.major))
+            .isEqualTo(this.expectedSeverity);
+    }
 
 }
