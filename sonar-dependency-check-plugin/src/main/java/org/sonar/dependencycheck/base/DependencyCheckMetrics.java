@@ -144,7 +144,7 @@ public final class DependencyCheckMetrics implements Metrics {
         return Arrays.asList(
                 DependencyCheckMetrics.INHERITED_RISK_SCORE,
                 DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO,
-				DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS,
+                DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS,
                 DependencyCheckMetrics.HIGH_SEVERITY_VULNS,
                 DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS,
                 DependencyCheckMetrics.LOW_SEVERITY_VULNS,
