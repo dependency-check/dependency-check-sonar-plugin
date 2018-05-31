@@ -57,7 +57,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setBestValue(0.0)
             .create();
 
-    public static final Metric<Serializable> CRITICAL_SEVERITY_VULNS_KEY = new Metric.Builder(CRITICAL_SEVERITY_VULNS_KEY, "Critical Severity Vulnerabilities", Metric.ValueType.INT)
+    public static final Metric<Serializable> CRITICAL_SEVERITY_VULNS = new Metric.Builder(CRITICAL_SEVERITY_VULNS_KEY, "Critical Severity Vulnerabilities", Metric.ValueType.INT)
             .setDescription("Critical Severity Vulnerabilities")
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
@@ -144,7 +144,7 @@ public final class DependencyCheckMetrics implements Metrics {
         return Arrays.asList(
                 DependencyCheckMetrics.INHERITED_RISK_SCORE,
                 DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO,
-				DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS_KEY,
+				DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS,
                 DependencyCheckMetrics.HIGH_SEVERITY_VULNS,
                 DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS,
                 DependencyCheckMetrics.LOW_SEVERITY_VULNS,
