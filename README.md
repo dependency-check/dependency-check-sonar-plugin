@@ -13,7 +13,11 @@ About Dependency-Check
 -------------------
 Dependency-Check is a utility that attempts to detect publicly disclosed vulnerabilities contained within project dependencies. It does this by determining if there is a Common Platform Enumeration (CPE) identifier for a given dependency. If found, it will generate a report linking to the associated CVE entries.
 
-Dependency-Check supports the identification of project dependencies in a number of different languages including Java, .NET, and Python.
+Dependency-Check supports the identification of project dependencies in a number of different languages including Java, .NET, Node.js, Ruby, and Python.
+
+Note
+-------------------
+**This SonarQube plugin does not perform analysis**, rather, it reads existing Dependency-Check reports. Use one of the other available methods to scan project dependencies and generate the necessary XML report which can then be consumed by this plugin. Refer to the [Dependency-Check project](https://github.com/jeremylong/DependencyCheck) for relevant [documentation](https://jeremylong.github.io/DependencyCheck/).
 
 Screenshots
 -------------------
@@ -95,8 +99,6 @@ Dependency-Check is available as a:
 * Jenkins Plugin
 * Maven Plugin
 * SonarQube Plugin
-
-NOTE: The Sonar plugin does not generate reports, it reads existing reports. Use one of the other available methods to scan project dependencies and generate the necessary XML report.
 
 Copyright & License
 -------------------
