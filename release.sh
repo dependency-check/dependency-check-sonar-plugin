@@ -7,6 +7,7 @@ if ( [ "$REPLY" == "Y" ] ) then
 
   mvn clean
   mvn release:clean release:prepare release:perform -Prelease -X -e | tee release.log
+  mvn github-release:release
 
 else
   echo -e "Exit without deploy"
