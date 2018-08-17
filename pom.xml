@@ -79,6 +79,7 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <useReleaseProfile>false</useReleaseProfile>
                     <releaseProfiles>release</releaseProfiles>
+                    <completionGoals>github-release:release</completionGoals>
                 </configuration>
             </plugin>
             <plugin>
