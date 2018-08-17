@@ -8,7 +8,7 @@
     </parent>
     <groupId>org.sonarsource.owasp</groupId>
     <artifactId>sonar-dependency-check</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Dependency-Check for SonarQube</name>
     <description>Integrates Dependency-Check reports into SonarQube</description>
@@ -79,6 +79,24 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <useReleaseProfile>false</useReleaseProfile>
                     <releaseProfiles>release</releaseProfiles>
+                    <completionGoals>github-release:release</completionGoals>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>de.jutzig</groupId>
+                <artifactId>github-release-plugin</artifactId>
+                <version>1.2.0</version>
+                <configuration>
+                    <releaseName>sonar-dependency-check-${project.version}</releaseName>
+                    <tag>${project.version}</tag>
+                    <fileSets>
+                        <fileSet>
+                            <directory>sonar-dependency-check-plugin/target</directory>
+                            <includes>
+                                <include>sonar-dependency-check-plugin-${project.version}.jar</include>
+                            </includes>
+                        </fileSet>
+                    </fileSets>
                 </configuration>
             </plugin>
         </plugins>
