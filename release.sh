@@ -10,9 +10,11 @@ if ( [ "$REPLY" == "Y" ] ) then
 
   mvn versions:set -DnewVersion=$REPLY
   mvn package
+  #git commit -m "Releasing $REPLY"
+  #git push
   mvn github-release:release
-
   mvn versions:revert
+
   mvn release:clean release:prepare release:perform -Prelease -X -e | tee release.log
 
 else

@@ -91,9 +91,9 @@
                     <tag>${project.version}</tag>
                     <fileSets>
                         <fileSet>
-                            <directory>${project.basedir}/sonar-dependency-check-plugin/target</directory>
+                            <directory>sonar-dependency-check-plugin/target</directory>
                             <includes>
-                                <include>${project.build.finalName}.jar</include>
+                                <include>sonar-dependency-check-plugin-${project.version}.jar</include>
                             </includes>
                         </fileSet>
                     </fileSets>
