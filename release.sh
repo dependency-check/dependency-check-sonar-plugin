@@ -8,8 +8,8 @@ if ( [ "$REPLY" == "Y" ] ) then
   #mvn release:rollback
   mvn clean
   mvn release:clean
-  mvn -DdryRun=true release:prepare
-  mvn github-release:release
+
+  #mvn github-release:release
   #mvn release:prepare
   #mvn release:perform -Prelease -X -e | tee release.log
 
