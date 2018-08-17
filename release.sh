@@ -9,6 +9,7 @@ if ( [ "$REPLY" == "Y" ] ) then
   mvn release:clean
 
   mvn versions:set -DnewVersion=$REPLY
+  mvn package
   mvn github-release:release
 
   mvn versions:revert
