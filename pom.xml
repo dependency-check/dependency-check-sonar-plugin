@@ -92,7 +92,7 @@
                         <fileSet>
                             <directory>${project.basedir}/sonar-dependency-check-plugin/target</directory>
                             <includes>
-                                <include>${project.build.finalName}.jar</include>
+                                <include>sonar-dependency-check-plugin-*.jar</include>
                             </includes>
                         </fileSet>
                     </fileSets>
