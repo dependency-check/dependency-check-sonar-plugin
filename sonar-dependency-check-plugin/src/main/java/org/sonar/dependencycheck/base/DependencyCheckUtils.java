@@ -41,9 +41,9 @@ public final class DependencyCheckUtils {
 
     public static Severity cvssToSonarQubeSeverity(String cvssScore, Double critical, Double major) {
         double score = Double.parseDouble(cvssScore);
-        if (critical.doubleValue() > 0 && score >= critical.doubleValue()) {
+        if (critical.doubleValue() >= 0 && score >= critical.doubleValue()) {
             return Severity.CRITICAL;
-        } else if (major.doubleValue() > 0 && score >= major.doubleValue()) {
+        } else if (major.doubleValue() >= 0 && score >= major.doubleValue()) {
             return Severity.MAJOR;
         } else {
             return Severity.MINOR;
