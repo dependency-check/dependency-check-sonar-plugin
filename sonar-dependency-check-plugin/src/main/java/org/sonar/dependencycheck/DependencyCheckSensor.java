@@ -79,7 +79,7 @@ public class DependencyCheckSensor implements Sensor {
         LOGGER.debug("TextRange: '{}' for dependency: '{}' and vulnerability: '{}'", artificialTextRange,
                 dependency.getFileName(), vulnerability.getName());
 
-        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(), context.settings().getDouble(DependencyCheckConstants.SEVERITY_CRITICAL), context.settings().getDouble(DependencyCheckConstants.SEVERITY_MAJOR));
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(), context.settings().getDouble(DependencyCheckConstants.SEVERITY_CRITICAL), context.settings().getDouble(DependencyCheckConstants.SEVERITY_MAJOR), context.settings().getDouble(DependencyCheckConstants.SEVERITY_MINOR));
 
         context.newIssue()
                 .forRule(RuleKey.of(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY))

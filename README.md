@@ -87,6 +87,7 @@ To configure the severity of the created issues you can optionally specify the m
 ```ini
 sonar.dependencyCheck.severity.critical=7.0
 sonar.dependencyCheck.severity.major=4.0
+sonar.dependencyCheck.severity.minor=0.0
 ```
 
 Ecosystem

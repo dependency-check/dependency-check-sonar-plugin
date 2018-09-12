@@ -73,6 +73,13 @@ public final class DependencyCheckPlugin implements Plugin {
                         .description("Minimum score for major issues or -1 to deactivate major issues.")
                         .defaultValue("4.0")
                         .type(PropertyType.FLOAT)
+                        .build(),
+                PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_MINOR)
+                        .subCategory("Severities")
+                        .name("Minor")
+                        .description("Minimum score for minor issues or -1 to deactivate minor issues.")
+                        .defaultValue("0.0")
+                        .type(PropertyType.FLOAT)
                         .build()
         );
     }
