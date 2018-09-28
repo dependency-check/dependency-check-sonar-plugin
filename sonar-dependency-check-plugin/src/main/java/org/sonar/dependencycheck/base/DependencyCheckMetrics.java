@@ -21,7 +21,7 @@ package org.sonar.dependencycheck.base;
 
 import org.sonar.api.measures.Metric;
 import org.sonar.api.measures.Metrics;
-import java.io.Serializable;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,7 +40,7 @@ public final class DependencyCheckMetrics implements Metrics {
     private static final String LOW_SEVERITY_VULNS_KEY = "low_severity_vulns";
     private static final String REPORT_KEY = "report";
 
-    public static final Metric<Serializable> INHERITED_RISK_SCORE = new Metric.Builder(DependencyCheckMetrics.INHERITED_RISK_SCORE_KEY, "Inherited Risk Score", Metric.ValueType.INT)
+    public static final Metric<Integer> INHERITED_RISK_SCORE = new Metric.Builder(DependencyCheckMetrics.INHERITED_RISK_SCORE_KEY, "Inherited Risk Score", Metric.ValueType.INT)
             .setDescription("Inherited Risk Score")
             .setDirection(Metric.DIRECTION_BETTER)
             .setQualitative(true)
@@ -48,7 +48,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setBestValue(0.0)
             .create();
 
-    public static final Metric<Serializable> VULNERABLE_COMPONENT_RATIO = new Metric.Builder(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO_KEY, "Vulnerable Component Ratio", Metric.ValueType.PERCENT)
+    public static final Metric<Double> VULNERABLE_COMPONENT_RATIO = new Metric.Builder(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO_KEY, "Vulnerable Component Ratio", Metric.ValueType.PERCENT)
             .setDescription("Vulnerable Component Ratio")
             .setDirection(Metric.DIRECTION_BETTER)
             .setQualitative(true)
@@ -56,7 +56,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setBestValue(0.0)
             .create();
 
-    public static final Metric<Serializable> HIGH_SEVERITY_VULNS = new Metric.Builder(HIGH_SEVERITY_VULNS_KEY, "High Severity Vulnerabilities", Metric.ValueType.INT)
+    public static final Metric<Integer> HIGH_SEVERITY_VULNS = new Metric.Builder(HIGH_SEVERITY_VULNS_KEY, "High Severity Vulnerabilities", Metric.ValueType.INT)
             .setDescription("High Severity Vulnerabilities")
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
@@ -65,7 +65,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setHidden(false)
             .create();
 
-    public static final Metric<Serializable> MEDIUM_SEVERITY_VULNS = new Metric.Builder(MEDIUM_SEVERITY_VULNS_KEY, "Medium Severity Vulnerabilities", Metric.ValueType.INT)
+    public static final Metric<Integer> MEDIUM_SEVERITY_VULNS = new Metric.Builder(MEDIUM_SEVERITY_VULNS_KEY, "Medium Severity Vulnerabilities", Metric.ValueType.INT)
             .setDescription("Medium Severity Vulnerabilities")
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
@@ -74,7 +74,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setHidden(false)
             .create();
 
-    public static final Metric<Serializable> LOW_SEVERITY_VULNS = new Metric.Builder(LOW_SEVERITY_VULNS_KEY, "Low Severity Vulnerabilities", Metric.ValueType.INT)
+    public static final Metric<Integer> LOW_SEVERITY_VULNS = new Metric.Builder(LOW_SEVERITY_VULNS_KEY, "Low Severity Vulnerabilities", Metric.ValueType.INT)
             .setDescription("Low Severity Vulnerabilities")
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
@@ -83,7 +83,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setHidden(false)
             .create();
 
-    public static final Metric<Serializable> TOTAL_DEPENDENCIES = new Metric.Builder(TOTAL_DEPENDENCIES_KEY, "Total Dependencies", Metric.ValueType.INT)
+    public static final Metric<Integer> TOTAL_DEPENDENCIES = new Metric.Builder(TOTAL_DEPENDENCIES_KEY, "Total Dependencies", Metric.ValueType.INT)
             .setDescription("Total Dependencies")
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
@@ -91,7 +91,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setHidden(false)
             .create();
 
-    public static final Metric<Serializable> VULNERABLE_DEPENDENCIES = new Metric.Builder(VULNERABLE_DEPENDENCIES_KEY, "Vulnerable Dependencies", Metric.ValueType.INT)
+    public static final Metric<Integer> VULNERABLE_DEPENDENCIES = new Metric.Builder(VULNERABLE_DEPENDENCIES_KEY, "Vulnerable Dependencies", Metric.ValueType.INT)
             .setDescription("Vulnerable Dependencies")
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
@@ -100,7 +100,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setHidden(false)
             .create();
 
-    public static final Metric<Serializable> TOTAL_VULNERABILITIES = new Metric.Builder(TOTAL_VULNERABILITIES_KEY, "Total Vulnerabilities", Metric.ValueType.INT)
+    public static final Metric<Integer> TOTAL_VULNERABILITIES = new Metric.Builder(TOTAL_VULNERABILITIES_KEY, "Total Vulnerabilities", Metric.ValueType.INT)
             .setDescription("Total Vulnerabilities")
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(false)
@@ -109,7 +109,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setHidden(false)
             .create();
 
-    public static final Metric<Serializable> REPORT = new Metric.Builder(REPORT_KEY, "Dependency-Check Report", Metric.ValueType.DATA)
+    public static final Metric<String> REPORT = new Metric.Builder(REPORT_KEY, "Dependency-Check Report", Metric.ValueType.DATA)
             .setDescription("Report HTML")
             .setQualitative(false)
             .setDomain(DependencyCheckMetrics.DOMAIN)
