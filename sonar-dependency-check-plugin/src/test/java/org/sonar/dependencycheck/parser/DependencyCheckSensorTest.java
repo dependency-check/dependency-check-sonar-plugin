@@ -21,11 +21,8 @@ package org.sonar.dependencycheck.parser;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputComponent;
-import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.measure.Metric;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
@@ -79,12 +76,6 @@ public class DependencyCheckSensorTest {
 
         when(context.settings().getString(DependencyCheckConstants.REPORT_PATH_PROPERTY)).thenReturn("dependency-check-report.xml");
         when(pathResolver.relativeFile(any(File.class), anyString())).thenReturn(sampleReport);
-
-        InputFile mockInputFile = mock(DefaultInputFile.class);
-        when(fileSystem.inputFile(any(FilePredicate.class))).thenReturn(mockInputFile);
-        when(mockInputFile.isFile()).thenReturn(true);
-
-
         sensor.execute(context);
     }
 
@@ -103,11 +94,6 @@ public class DependencyCheckSensorTest {
 
         when(context.settings().getString(DependencyCheckConstants.REPORT_PATH_PROPERTY)).thenReturn("dependency-check-report.xml");
         when(pathResolver.relativeFile(any(File.class), anyString())).thenReturn(sampleReport);
-
-        InputFile mockInputFile = mock(DefaultInputFile.class);
-        when(fileSystem.inputFile(any(FilePredicate.class))).thenReturn(mockInputFile);
-        when(mockInputFile.isFile()).thenReturn(true);
-
         sensor.execute(context);
 
         verify(context, times(3)).newIssue();
@@ -119,11 +105,6 @@ public class DependencyCheckSensorTest {
 
         when(context.settings().getString(DependencyCheckConstants.REPORT_PATH_PROPERTY)).thenReturn("dependency-check-report.xml");
         when(pathResolver.relativeFile(any(File.class), anyString())).thenReturn(sampleReport);
-
-        InputFile mockInputFile = mock(DefaultInputFile.class);
-        when(fileSystem.inputFile(any(FilePredicate.class))).thenReturn(mockInputFile);
-        when(mockInputFile.isFile()).thenReturn(true);
-
         sensor.execute(context);
 
         verify(context.newMeasure(), times(8)).forMetric(any(Metric.class));
@@ -135,11 +116,6 @@ public class DependencyCheckSensorTest {
 
         when(context.settings().getString(DependencyCheckConstants.REPORT_PATH_PROPERTY)).thenReturn("dependency-check-report.xml");
         when(pathResolver.relativeFile(any(File.class), anyString())).thenReturn(sampleReport);
-
-        InputFile mockInputFile = mock(DefaultInputFile.class);
-        when(fileSystem.inputFile(any(FilePredicate.class))).thenReturn(mockInputFile);
-        when(mockInputFile.isFile()).thenReturn(true);
-
         sensor.execute(context);
 
         verify(context.newMeasure(), atLeastOnce()).on(any(InputComponent.class));

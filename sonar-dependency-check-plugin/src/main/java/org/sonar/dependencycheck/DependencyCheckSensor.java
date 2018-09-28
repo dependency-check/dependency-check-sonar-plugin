@@ -22,7 +22,6 @@ package org.sonar.dependencycheck;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -73,19 +72,12 @@ public class DependencyCheckSensor implements Sensor {
         this.pathResolver = pathResolver;
     }
 
-    private void addIssue(SensorContext context, InputFile reportFile, Dependency dependency, Vulnerability vulnerability) {
-
-        TextRange artificialTextRange = reportFile.selectLine(vulnerability.getLineNumer());
-        LOGGER.debug("TextRange: '{}' for dependency: '{}' and vulnerability: '{}'", artificialTextRange,
-                dependency.getFileName(), vulnerability.getName());
-
+    private void addIssue(SensorContext context, Dependency dependency, Vulnerability vulnerability) {
         Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(), context.settings().getDouble(DependencyCheckConstants.SEVERITY_CRITICAL), context.settings().getDouble(DependencyCheckConstants.SEVERITY_MAJOR));
-
         context.newIssue()
                 .forRule(RuleKey.of(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY))
                 .at(new DefaultIssueLocation()
-                        .on(reportFile)
-                        .at(artificialTextRange)
+                        .on(context.module())
                         .message(formatDescription(dependency, vulnerability))
                 )
                 .overrideSeverity(severity)
@@ -131,19 +123,11 @@ public class DependencyCheckSensor implements Sensor {
             return;
         }
         for (Dependency dependency : analysis.getDependencies()) {
-            LOGGER.debug("Processing dependency '{}', filePath: '{}'", dependency.getFileName(), dependency.getFilePath());
             InputFile testFile = fileSystem.inputFile(
                     fileSystem.predicates().hasPath(
                             escapeReservedPathChars(dependency.getFilePath())
                     )
             );
-
-            String reportFilePath = context.settings().getString(DependencyCheckConstants.REPORT_PATH_PROPERTY);
-            InputFile reportFile = fileSystem.inputFile(fileSystem.predicates().hasPath(reportFilePath));
-            if (null == reportFile) {
-                LOGGER.warn("skipping dependency '{}' as no inputFile could established.", dependency.getFileName());
-                return;
-            }
 
             int depVulnCount = dependency.getVulnerabilities().size();
 
@@ -155,7 +139,7 @@ public class DependencyCheckSensor implements Sensor {
             saveMetricOnFile(context, testFile, DependencyCheckMetrics.TOTAL_DEPENDENCIES, (double) depVulnCount);
 
             for (Vulnerability vulnerability : dependency.getVulnerabilities()) {
-                addIssue(context, reportFile, dependency, vulnerability);
+                addIssue(context, dependency, vulnerability);
                 vulnerabilityCount++;
             }
         }
@@ -174,7 +158,7 @@ public class DependencyCheckSensor implements Sensor {
         	return new ReportParser().parse(stream);
         }
     }
-
+    
 	private String getHtmlReport(SensorContext context) {
 		XmlReportFile report = new XmlReportFile(context.settings(), fileSystem, this.pathResolver);
 		File reportFile = report.getFile(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY);
