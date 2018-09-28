@@ -24,7 +24,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 
 import javax.annotation.Nullable;
 
@@ -135,10 +134,10 @@ public class DependencyCheckSensor implements Sensor {
 
             if (depVulnCount > 0) {
                 vulnerableDependencies++;
-                saveMetricOnFile(context, testFile, DependencyCheckMetrics.VULNERABLE_DEPENDENCIES, (double) depVulnCount);
+                saveMetricOnFile(context, testFile, DependencyCheckMetrics.VULNERABLE_DEPENDENCIES, depVulnCount);
             }
-            saveMetricOnFile(context, testFile, DependencyCheckMetrics.TOTAL_VULNERABILITIES, (double) depVulnCount);
-            saveMetricOnFile(context, testFile, DependencyCheckMetrics.TOTAL_DEPENDENCIES, (double) depVulnCount);
+            saveMetricOnFile(context, testFile, DependencyCheckMetrics.TOTAL_VULNERABILITIES, depVulnCount);
+            saveMetricOnFile(context, testFile, DependencyCheckMetrics.TOTAL_DEPENDENCIES, depVulnCount);
 
             for (Vulnerability vulnerability : dependency.getVulnerabilities()) {
                 addIssue(context, dependency, vulnerability);
@@ -147,9 +146,9 @@ public class DependencyCheckSensor implements Sensor {
         }
     }
 
-    private void saveMetricOnFile(SensorContext context, @Nullable InputFile inputFile, Metric<Serializable> metric, double value) {
+    private void saveMetricOnFile(SensorContext context, @Nullable InputFile inputFile, Metric<Integer> metric, int value) {
         if (inputFile != null) {
-            context.newMeasure().on(inputFile).forMetric(metric).withValue(value);
+            context.<Integer>newMeasure().on(inputFile).forMetric(metric).withValue(value);
         }
     }
 
@@ -179,19 +178,21 @@ public class DependencyCheckSensor implements Sensor {
     }
 
     private void saveMeasures(SensorContext context) {
-        context.newMeasure().forMetric(DependencyCheckMetrics.HIGH_SEVERITY_VULNS).on(context.module()).withValue(criticalIssuesCount).save();
-        context.newMeasure().forMetric(DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS).on(context.module()).withValue(majorIssuesCount).save();
-        context.newMeasure().forMetric(DependencyCheckMetrics.LOW_SEVERITY_VULNS).on(context.module()).withValue(minorIssuesCount).save();
-        context.newMeasure().forMetric(DependencyCheckMetrics.TOTAL_DEPENDENCIES).on(context.module()).withValue(totalDependencies).save();
-        context.newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_DEPENDENCIES).on(context.module()).withValue(vulnerableDependencies).save();
-        context.newMeasure().forMetric(DependencyCheckMetrics.TOTAL_VULNERABILITIES).on(context.module()).withValue(vulnerabilityCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.HIGH_SEVERITY_VULNS).on(context.module()).withValue(criticalIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS).on(context.module()).withValue(majorIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.LOW_SEVERITY_VULNS).on(context.module()).withValue(minorIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.TOTAL_DEPENDENCIES).on(context.module()).withValue(totalDependencies).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_DEPENDENCIES).on(context.module()).withValue(vulnerableDependencies).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.TOTAL_VULNERABILITIES).on(context.module()).withValue(vulnerabilityCount).save();
 
-        context.newMeasure().forMetric(DependencyCheckMetrics.INHERITED_RISK_SCORE).on(context.module()).withValue(DependencyCheckMetrics.inheritedRiskScore(criticalIssuesCount, majorIssuesCount, minorIssuesCount)).save();
-        context.newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO).on(context.module()).withValue(DependencyCheckMetrics.vulnerableComponentRatio(vulnerabilityCount, vulnerableDependencies)).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.INHERITED_RISK_SCORE).on(context.module())
+            .withValue(DependencyCheckMetrics.inheritedRiskScore(criticalIssuesCount, majorIssuesCount, minorIssuesCount)).save();
+        context.<Double>newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO).on(context.module())
+            .withValue(DependencyCheckMetrics.vulnerableComponentRatio(vulnerabilityCount, vulnerableDependencies)).save();
 
         String htmlReport = getHtmlReport(context);
         if (htmlReport != null) {
-            context.newMeasure().forMetric(DependencyCheckMetrics.REPORT).on(context.module()).withValue(htmlReport).save();
+            context.<String>newMeasure().forMetric(DependencyCheckMetrics.REPORT).on(context.module()).withValue(htmlReport).save();
         }
     }
 
