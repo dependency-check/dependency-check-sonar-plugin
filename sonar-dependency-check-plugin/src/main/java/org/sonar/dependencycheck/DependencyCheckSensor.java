@@ -87,7 +87,7 @@ public class DependencyCheckSensor implements Sensor {
     }
 
     /**
-     * todo: Add Markdown formatting if and when Sonar supports it
+     * TODO: Add Markdown formatting if and when Sonar supports it
      * https://jira.sonarsource.com/browse/SONAR-4161
      */
     private String formatDescription(Dependency dependency, Vulnerability vulnerability) {
@@ -237,7 +237,7 @@ public class DependencyCheckSensor implements Sensor {
      */
     private String escapeReservedPathChars(String path) {
         /*
-        todo:
+        TODO:
         For the time being, only try to replace ? (question mark) since that
         is the only reserved character intentionally used by Dependency-Check.
          */
