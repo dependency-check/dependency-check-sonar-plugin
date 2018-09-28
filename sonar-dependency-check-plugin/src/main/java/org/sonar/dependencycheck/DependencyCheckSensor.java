@@ -19,6 +19,15 @@
  */
 package org.sonar.dependencycheck;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -41,16 +50,6 @@ import org.sonar.dependencycheck.parser.XmlReportFile;
 import org.sonar.dependencycheck.parser.element.Analysis;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
 
 public class DependencyCheckSensor implements Sensor {
 
@@ -145,7 +144,7 @@ public class DependencyCheckSensor implements Sensor {
         }
     }
 
-    private void saveMetricOnFile(SensorContext context, InputFile inputFile, Metric<Serializable> metric, double value) {
+    private void saveMetricOnFile(SensorContext context, @Nullable InputFile inputFile, Metric<Serializable> metric, double value) {
         if (inputFile != null) {
             context.newMeasure().on(inputFile).forMetric(metric).withValue(value);
         }
