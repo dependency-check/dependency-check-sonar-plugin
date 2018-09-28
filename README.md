@@ -91,6 +91,13 @@ sonar.dependencyCheck.severity.major=4.0
 sonar.dependencyCheck.severity.minor=0.0
 ```
 
+In large projects you have many dependencies with (hopefully) no vulnerabilities. The following configuration summarize all vulnerabilities of one dependency into one issue.
+
+```ini
+sonar.dependencyCheck.summarize=true
+sonar.dependencyCheck.summarize=false (default)
+```
+
 Ecosystem
 -------------------
 
