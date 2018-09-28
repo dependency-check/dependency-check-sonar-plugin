@@ -73,7 +73,7 @@ public class DependencyCheckSensor implements Sensor {
     }
 
     private void addIssue(SensorContext context, Dependency dependency, Vulnerability vulnerability) {
-        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(), context.settings().getDouble(DependencyCheckConstants.SEVERITY_CRITICAL), context.settings().getDouble(DependencyCheckConstants.SEVERITY_MAJOR));
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(), context.settings().getFloat(DependencyCheckConstants.SEVERITY_CRITICAL), context.settings().getFloat(DependencyCheckConstants.SEVERITY_MAJOR));
         context.newIssue()
                 .forRule(RuleKey.of(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY))
                 .at(new DefaultIssueLocation()
