@@ -72,7 +72,10 @@ public class DependencyCheckSensor implements Sensor {
     }
 
     private void addIssue(SensorContext context, Dependency dependency, Vulnerability vulnerability) {
-        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(), context.settings().getFloat(DependencyCheckConstants.SEVERITY_CRITICAL), context.settings().getFloat(DependencyCheckConstants.SEVERITY_MAJOR));
+        Float severityCritical = context.config().getFloat(DependencyCheckConstants.SEVERITY_CRITICAL).orElse(DependencyCheckConstants.SEVERITY_CRITICAL_DEFAULT);
+        Float severityMajor = context.config().getFloat(DependencyCheckConstants.SEVERITY_MAJOR).orElse(DependencyCheckConstants.SEVERITY_MAJOR_DEFAULT);
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(), severityCritical, severityMajor);
+
         context.newIssue()
                 .forRule(RuleKey.of(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY))
                 .at(new DefaultIssueLocation()
@@ -151,7 +154,7 @@ public class DependencyCheckSensor implements Sensor {
     }
 
     private Analysis parseAnalysis(SensorContext context) throws IOException {
-        XmlReportFile report = new XmlReportFile(context.settings(), fileSystem, this.pathResolver);
+        XmlReportFile report = new XmlReportFile(context.config(), fileSystem, this.pathResolver);
 
         try (InputStream stream = report.getInputStream(DependencyCheckConstants.REPORT_PATH_PROPERTY)) {
             return new ReportParser().parse(stream);
@@ -159,7 +162,7 @@ public class DependencyCheckSensor implements Sensor {
     }
 
     private String getHtmlReport(SensorContext context) {
-        XmlReportFile report = new XmlReportFile(context.settings(), fileSystem, this.pathResolver);
+        XmlReportFile report = new XmlReportFile(context.config(), fileSystem, this.pathResolver);
         File reportFile = report.getFile(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY);
         if (reportFile == null || !reportFile.exists() || !reportFile.isFile() || !reportFile.canRead()) {
             return null;

@@ -20,7 +20,7 @@
 package org.sonar.dependencycheck.parser;
 
 import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.config.Settings;
+import org.sonar.api.config.Configuration;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
@@ -31,18 +31,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Optional;
 
 public class XmlReportFile {
     private static final Logger LOGGER = Loggers.get(XmlReportFile.class);
 
-    private final Settings settings;
+    private final Configuration config;
     private final FileSystem fileSystem;
     private final PathResolver pathResolver;
 
     private File report;
 
-    public XmlReportFile(Settings settings, FileSystem fileSystem, PathResolver pathResolver) {
-        this.settings = settings;
+    public XmlReportFile(Configuration config, FileSystem fileSystem, PathResolver pathResolver) {
+        this.config = config;
         this.fileSystem = fileSystem;
         this.pathResolver = pathResolver;
     }
@@ -54,16 +55,16 @@ public class XmlReportFile {
      */
     @CheckForNull
     private File getReportFromProperty(String property) {
-        String path = settings.getString(property);
-        if (path == null) {
+        Optional<String> path = config.get(property);
+        if (!path.isPresent()) {
             return null;
         }
 
-        this.report = pathResolver.relativeFile(fileSystem.baseDir(), path);
+        this.report = pathResolver.relativeFile(fileSystem.baseDir(), path.get());
 
         if (report != null && !report.isFile()) {
             LOGGER.warn("Dependency-Check report does not exist. SKIPPING. Please check property " +
-                    DependencyCheckConstants.REPORT_PATH_PROPERTY + ": " + path);
+                    DependencyCheckConstants.REPORT_PATH_PROPERTY + ": " + path.get());
             return null;
         }
         return report;
