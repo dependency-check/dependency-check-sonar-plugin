@@ -158,23 +158,23 @@ public class DependencyCheckSensor implements Sensor {
         	return new ReportParser().parse(stream);
         }
     }
-    
-	private String getHtmlReport(SensorContext context) {
-		XmlReportFile report = new XmlReportFile(context.settings(), fileSystem, this.pathResolver);
-		File reportFile = report.getFile(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY);
-		if (reportFile == null || !reportFile.exists() || !reportFile.isFile() || !reportFile.canRead()) {
-			return null;
-		}
-		int len = (int) reportFile.length();
-		try (FileInputStream reportFileInputStream = new FileInputStream(reportFile)) {
-			byte[] readBuffer = new byte[len];
-			reportFileInputStream.read(readBuffer, 0, len);
-			return new String(readBuffer);
-		} catch (IOException e) {
-			LOGGER.error("", e);
-			return null;
-		}
-	}
+
+    private String getHtmlReport(SensorContext context) {
+        XmlReportFile report = new XmlReportFile(context.settings(), fileSystem, this.pathResolver);
+        File reportFile = report.getFile(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY);
+        if (reportFile == null || !reportFile.exists() || !reportFile.isFile() || !reportFile.canRead()) {
+            return null;
+        }
+        int len = (int) reportFile.length();
+        try (FileInputStream reportFileInputStream = new FileInputStream(reportFile)) {
+            byte[] readBuffer = new byte[len];
+            reportFileInputStream.read(readBuffer, 0, len);
+            return new String(readBuffer);
+        } catch (IOException e) {
+            LOGGER.error("", e);
+            return null;
+        }
+    }
 
     private void saveMeasures(SensorContext context) {
         context.newMeasure().forMetric(DependencyCheckMetrics.HIGH_SEVERITY_VULNS).on(context.module()).withValue(criticalIssuesCount).save();
