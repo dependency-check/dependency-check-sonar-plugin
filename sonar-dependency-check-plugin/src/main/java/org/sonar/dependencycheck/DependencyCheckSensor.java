@@ -21,6 +21,8 @@ package org.sonar.dependencycheck;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.xml.stream.XMLStreamException;
@@ -89,6 +91,26 @@ public class DependencyCheckSensor implements Sensor {
         incrementCount(severity);
     }
 
+    private void addIssue(SensorContext context, Dependency dependency) {
+        dependency.sortVulnerabilityBycvssScore();
+        List<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
+        Float severityBlocker = context.config().getFloat(DependencyCheckConstants.SEVERITY_BLOCKER).orElse(DependencyCheckConstants.SEVERITY_BLOCKER_DEFAULT);
+        Float severityCritical = context.config().getFloat(DependencyCheckConstants.SEVERITY_CRITICAL).orElse(DependencyCheckConstants.SEVERITY_CRITICAL_DEFAULT);
+        Float severityMajor = context.config().getFloat(DependencyCheckConstants.SEVERITY_MAJOR).orElse(DependencyCheckConstants.SEVERITY_MAJOR_DEFAULT);
+        Float severityMinor = context.config().getFloat(DependencyCheckConstants.SEVERITY_MINOR).orElse(DependencyCheckConstants.SEVERITY_MINOR_DEFAULT);
+        Vulnerability highestVulnerability = vulnerabilities.get(0);
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(highestVulnerability.getCvssScore(), severityBlocker ,severityCritical, severityMajor, severityMinor);
+        context.newIssue()
+            .forRule(RuleKey.of(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY))
+            .at(new DefaultIssueLocation()
+                .on(context.module())
+                .message(formatDescription(dependency, vulnerabilities, highestVulnerability)))
+            .overrideSeverity(severity)
+            .save();
+
+        incrementCount(severity);
+    }
+
     /**
      * TODO: Add Markdown formatting if and when Sonar supports it
      * https://jira.sonarsource.com/browse/SONAR-4161
@@ -103,6 +125,18 @@ public class DependencyCheckSensor implements Sensor {
         }
         sb.append(vulnerability.getDescription());
         return sb.toString();
+    }
+
+    private String formatDescription(Dependency dependency, Collection<Vulnerability> vulnerabilities, Vulnerability highestVulnerability) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
+        sb.append("Highest CVSS Score: ").append(highestVulnerability.getCvssScore()).append(" | ");
+        sb.append("Amount of CVSS: ").append(vulnerabilities.size()).append(" | ");
+        sb.append("References: ");
+        for (Vulnerability vulnerability : vulnerabilities) {
+            sb.append(vulnerability.getName()).append(" (").append(vulnerability.getCvssScore()).append(") ");
+        }
+        return sb.toString().trim();
     }
 
     private void incrementCount(Severity severity) {
@@ -137,6 +171,7 @@ public class DependencyCheckSensor implements Sensor {
             );
 
             int depVulnCount = dependency.getVulnerabilities().size();
+            vulnerabilityCount += depVulnCount;
 
             if (depVulnCount > 0) {
                 vulnerableDependencies++;
@@ -145,9 +180,14 @@ public class DependencyCheckSensor implements Sensor {
             saveMetricOnFile(context, testFile, DependencyCheckMetrics.TOTAL_VULNERABILITIES, depVulnCount);
             saveMetricOnFile(context, testFile, DependencyCheckMetrics.TOTAL_DEPENDENCIES, depVulnCount);
 
-            for (Vulnerability vulnerability : dependency.getVulnerabilities()) {
-                addIssue(context, dependency, vulnerability);
-                vulnerabilityCount++;
+            if (!dependency.getVulnerabilities().isEmpty()
+                && context.config().getBoolean(DependencyCheckConstants.SUMMARIZE_PROPERTY).orElse(DependencyCheckConstants.SUMMARIZE_PROPERTY_DEFAULT)) {
+                // One Issue per dependency
+                addIssue(context, dependency);
+            } else {
+                for (Vulnerability vulnerability : dependency.getVulnerabilities()) {
+                    addIssue(context, dependency, vulnerability);
+                }
             }
         }
     }

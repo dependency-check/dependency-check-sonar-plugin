@@ -21,6 +21,8 @@ package org.sonar.dependencycheck.parser.element;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class Dependency {
 
@@ -29,7 +31,7 @@ public class Dependency {
     private String md5Hash;
     private String sha1Hash;
     private Collection<Evidence> evidenceCollected = Collections.emptyList();
-    private Collection<Vulnerability> vulnerabilities = Collections.emptyList();
+    private List<Vulnerability> vulnerabilities = Collections.emptyList();
 
     public String getFileName() {
         return fileName;
@@ -71,12 +73,17 @@ public class Dependency {
         this.evidenceCollected = evidenceCollected;
     }
 
-    public Collection<Vulnerability> getVulnerabilities() {
+    public List<Vulnerability> getVulnerabilities() {
         return vulnerabilities;
     }
 
-    public void setVulnerabilities(Collection<Vulnerability> vulnerabilities) {
+    public void setVulnerabilities(List<Vulnerability> vulnerabilities) {
         this.vulnerabilities = vulnerabilities;
+    }
+
+    public void sortVulnerabilityBycvssScore() {
+        final Comparator<Vulnerability> comp = (vul1, vul2) -> Float.compare( vul1.getCvssScore(), vul2.getCvssScore());
+        Collections.sort(this.vulnerabilities, comp.reversed());
     }
 
 }

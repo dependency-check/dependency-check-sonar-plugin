@@ -143,4 +143,20 @@ public class DependencyCheckSensorTest {
 
         verify(context.<String>newMeasure().forMetric(DependencyCheckMetrics.REPORT), times(1)).on(any(InputComponent.class));
     }
+
+    @Test
+    public void shouldPersistSummarizeIssues() throws URISyntaxException {
+        final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
+        // Mock config
+        MapSettings settings = new MapSettings();
+        settings.setProperty(DependencyCheckConstants.REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        settings.setProperty(DependencyCheckConstants.SUMMARIZE_PROPERTY, Boolean.TRUE);
+        config = settings.asConfig();
+
+        when(context.config()).thenReturn(config);
+        when(pathResolver.relativeFile(any(File.class), eq(config.get(DependencyCheckConstants.REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
+        sensor.execute(context);
+
+        verify(context, times(2)).newIssue();
+    }
 }
