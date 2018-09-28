@@ -28,7 +28,6 @@ import org.sonar.dependencycheck.page.DependencyCheckReportPage;
 import org.sonar.dependencycheck.rule.KnownCveRuleDefinition;
 import org.sonar.dependencycheck.rule.NeutralLanguage;
 import org.sonar.dependencycheck.rule.NeutralProfile;
-import org.sonar.dependencycheck.ui.DependencyCheckWidget;
 
 public final class DependencyCheckPlugin implements Plugin {
 
@@ -44,7 +43,6 @@ public final class DependencyCheckPlugin implements Plugin {
                 NeutralProfile.class,
                 NeutralLanguage.class,
                 KnownCveRuleDefinition.class,
-                DependencyCheckWidget.class,
                 DependencyCheckReportPage.class);
 
         context.addExtensions(

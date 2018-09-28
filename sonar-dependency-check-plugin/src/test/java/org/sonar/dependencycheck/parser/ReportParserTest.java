@@ -45,7 +45,7 @@ public class ReportParserTest {
 
         Collection<Dependency> dependencies = analysis.getDependencies();
         assertThat(dependencies).hasSize(5);
-        Iterator iterator = dependencies.iterator();
+        Iterator<Dependency> iterator = dependencies.iterator();
         Dependency dependency = (Dependency) iterator.next();
 
         assertThat(dependency.getFileName()).isEqualTo("axis-1.4.jar");
@@ -63,7 +63,7 @@ public class ReportParserTest {
 
         Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
         assertThat(vulnerabilities.size()).isEqualTo(2);
-        Iterator vulnIterator = vulnerabilities.iterator();
+        Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
         Vulnerability vulnerability = (Vulnerability) vulnIterator.next();
         assertThat(vulnerability.getName()).isEqualTo("CVE-2014-3596");
         assertThat(vulnerability.getCvssScore()).isEqualTo("5.8");
