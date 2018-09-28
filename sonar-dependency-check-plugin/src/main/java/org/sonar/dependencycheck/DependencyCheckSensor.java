@@ -151,7 +151,7 @@ public class DependencyCheckSensor implements Sensor {
         }
     }
 
-    private Analysis parseAnalysis(SensorContext context) throws IOException, ParserConfigurationException, SAXException {
+    private Analysis parseAnalysis(SensorContext context) throws IOException {
         XmlReportFile report = new XmlReportFile(context.settings(), fileSystem, this.pathResolver);
 
         try (InputStream stream = report.getInputStream(DependencyCheckConstants.REPORT_PATH_PROPERTY)) {
