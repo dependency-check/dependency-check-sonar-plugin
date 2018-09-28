@@ -154,7 +154,7 @@ public class DependencyCheckSensor implements Sensor {
         XmlReportFile report = new XmlReportFile(context.settings(), fileSystem, this.pathResolver);
 
         try (InputStream stream = report.getInputStream(DependencyCheckConstants.REPORT_PATH_PROPERTY)) {
-        	return new ReportParser().parse(stream);
+            return new ReportParser().parse(stream);
         }
     }
 
@@ -236,9 +236,8 @@ public class DependencyCheckSensor implements Sensor {
      */
     private String escapeReservedPathChars(String path) {
         /*
-        TODO:
-        For the time being, only try to replace ? (question mark) since that
-        is the only reserved character intentionally used by Dependency-Check.
+         * TODO: For the time being, only try to replace ? (question mark) since that is the only reserved character
+         * intentionally used by Dependency-Check.
          */
         String replacement = path.contains("/") ? "/" : "\\";
         return path.replace("?", replacement);
