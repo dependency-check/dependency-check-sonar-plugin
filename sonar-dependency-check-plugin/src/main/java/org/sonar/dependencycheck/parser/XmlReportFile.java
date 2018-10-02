@@ -24,13 +24,13 @@ import org.sonar.api.config.Configuration;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
 import javax.annotation.CheckForNull;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Optional;
 
 public class XmlReportFile {
@@ -76,12 +76,12 @@ public class XmlReportFile {
         return report;
     }
 
-    public InputStream getInputStream(String property) throws FileNotFoundException {
+    public InputStream getInputStream(String property) throws IOException {
         File reportFile = getFile(property);
         if (reportFile == null) {
             throw new FileNotFoundException("Dependency-Check report does not exist.");
         }
-        return new FileInputStream(reportFile);
+        return Files.newInputStream(reportFile.toPath());
     }
 
     public boolean exist(String property) {
