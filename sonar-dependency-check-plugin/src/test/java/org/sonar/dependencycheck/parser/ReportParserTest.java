@@ -43,6 +43,7 @@ public class ReportParserTest {
         assertThat(analysis.getProjectInfo().getReportDate()).isEqualTo("2014-12-02T04:57:02.663+0200");
         assertThat(analysis.getProjectInfo().getCredits()).isEqualTo("This report contains data retrieved from the National Vulnerability Database: http://nvd.nist.gov");
 
+        // axis-1.4.jar
         Collection<Dependency> dependencies = analysis.getDependencies();
         assertThat(dependencies).hasSize(5);
         Iterator<Dependency> iterator = dependencies.iterator();
@@ -66,33 +67,44 @@ public class ReportParserTest {
         Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
         Vulnerability vulnerability = (Vulnerability) vulnIterator.next();
         assertThat(vulnerability.getName()).isEqualTo("CVE-2014-3596");
-        assertThat(vulnerability.getCvssScore()).isEqualTo("5.8");
+        assertThat(vulnerability.getCvssScore()).isEqualTo(5.8f);
         assertThat(vulnerability.getSeverity()).isEqualTo("Medium");
         assertThat(vulnerability.getCwe()).isNull();
         assertThat(vulnerability.getDescription()).isEqualTo("The getCN function in Apache Axis 1.4 and earlier does not properly verify that the server hostname matches a domain name in the subject's Common Name (CN) or subjectAltName field of the X.509 certificate, which allows man-in-the-middle attackers to spoof SSL servers via a certificate with a subject that specifies a common name in a field that is not the CN field.  NOTE: this issue exists because of an incomplete fix for CVE-2012-5784.");
 
         vulnerability = (Vulnerability) vulnIterator.next();
         assertThat(vulnerability.getName()).isEqualTo("CVE-2012-5784");
-        assertThat(vulnerability.getCvssScore()).isEqualTo("5.8");
+        assertThat(vulnerability.getCvssScore()).isEqualTo(5.8f);
         assertThat(vulnerability.getSeverity()).isEqualTo("Medium");
         assertThat(vulnerability.getCwe()).isEqualTo("CWE-20 Improper Input Validation");
         assertThat(vulnerability.getDescription()).isEqualTo("Apache Axis 1.4 and earlier, as used in PayPal Payments Pro, PayPal Mass Pay, PayPal Transactional Information SOAP, the Java Message Service implementation in Apache ActiveMQ, and other products, does not verify that the server hostname matches a domain name in the subject's Common Name (CN) or subjectAltName field of the X.509 certificate, which allows man-in-the-middle attackers to spoof SSL servers via an arbitrary valid certificate.");
 
+        // commons-cli-1.1.jar
         dependency = (Dependency) iterator.next();
         assertThat(dependency.getEvidenceCollected().size()).isEqualTo(13);
         assertThat(dependency.getVulnerabilities().size()).isEqualTo(0);
 
+        // commons-codec-1.3.jar
         dependency = (Dependency) iterator.next();
         assertThat(dependency.getEvidenceCollected()).hasSize(12);
         assertThat(dependency.getVulnerabilities()).isEmpty();
 
+        // mail-1.4.5.jar
         dependency = (Dependency) iterator.next();
         assertThat(dependency.getEvidenceCollected()).hasSize(32);
         assertThat(dependency.getVulnerabilities()).hasSize(1);
+        vulnerabilities = dependency.getVulnerabilities();
+        assertThat(vulnerabilities.size()).isEqualTo(1);
+        vulnIterator = vulnerabilities.iterator();
+        vulnerability = (Vulnerability) vulnIterator.next();
+        assertThat(vulnerability.getName()).isEqualTo("CVE-2007-6059");
+        assertThat(vulnerability.getCvssScore()).isEqualTo(0.0f);
 
+        // mysql-connector-java-commercial-5.1.25.jar
         dependency = (Dependency) iterator.next();
         assertThat(dependency.getEvidenceCollected()).hasSize(9);
         assertThat(dependency.getVulnerabilities()).isEmpty();
+
     }
 
 }

@@ -23,6 +23,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.codehaus.staxmate.SMInputFactory;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
 import org.codehaus.staxmate.in.SMInputCursor;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.parser.element.*;
 
@@ -32,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class ReportParser {
+
+    private static final Logger LOGGER = Loggers.get(ReportParser.class);
 
     public Analysis parse(InputStream inputStream) {
 
@@ -111,7 +115,13 @@ public class ReportParser {
             if ("name".equals(nodeName)) {
                 vulnerability.setName(StringUtils.trim(childCursor.collectDescendantText(false)));
             } else if ("cvssScore".equals(nodeName)) {
-                vulnerability.setCvssScore(StringUtils.trim(childCursor.collectDescendantText(false)));
+                String cvssScore = StringUtils.trim(childCursor.collectDescendantText(false));
+                try {
+                    vulnerability.setCvssScore(Float.parseFloat(cvssScore));
+                } catch (NumberFormatException e) {
+                    LOGGER.warn("Could not parse CVSS-Score {} to Float. Setting CVSS-Score to 0.0", cvssScore);
+                    vulnerability.setCvssScore(0.0f);
+                }
             } else if ("severity".equals(nodeName)) {
                 vulnerability.setSeverity(StringUtils.trim(childCursor.collectDescendantText(false)));
             } else if ("cwe".equals(nodeName)) {
