@@ -20,10 +20,11 @@
 package org.sonar.dependencycheck;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 import javax.annotation.Nullable;
 
@@ -167,14 +168,15 @@ public class DependencyCheckSensor implements Sensor {
             return null;
         }
         int len = (int) reportFile.length();
-        try (FileInputStream reportFileInputStream = new FileInputStream(reportFile)) {
+        String htmlReport = null;
+        try (InputStream reportFileInputStream = Files.newInputStream(reportFile.toPath())){
             byte[] readBuffer = new byte[len];
             reportFileInputStream.read(readBuffer, 0, len);
-            return new String(readBuffer);
+            htmlReport = new String(readBuffer, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            LOGGER.error("", e);
-            return null;
+            LOGGER.error("Could not read HTML-Report", e);
         }
+        return htmlReport;
     }
 
     private void saveMeasures(SensorContext context) {
