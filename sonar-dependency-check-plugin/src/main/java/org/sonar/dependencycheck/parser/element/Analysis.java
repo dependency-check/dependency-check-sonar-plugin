@@ -29,7 +29,7 @@ public class Analysis {
     private final ProjectInfo projectInfo;
     private final Collection<Dependency> dependencies;
 
-    public Analysis(@Nullable ScanInfo scanInfo, @Nullable ProjectInfo projectInfo, @Nullable Collection<Dependency> dependencies) {
+    public Analysis(@Nullable ScanInfo scanInfo, @Nullable ProjectInfo projectInfo, Collection<Dependency> dependencies) {
         this.scanInfo = scanInfo;
         this.projectInfo = projectInfo;
         this.dependencies = dependencies;

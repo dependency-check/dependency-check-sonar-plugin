@@ -32,6 +32,7 @@ import javax.xml.stream.XMLStreamException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 public class ReportParser {
 
@@ -48,7 +49,7 @@ public class ReportParser {
 
             ScanInfo scanInfo = null;
             ProjectInfo projectInfo = null;
-            Collection<Dependency> dependencies = null;
+            Collection<Dependency> dependencies = Collections.emptyList();
 
             while (childCursor.getNext() != null) {
                 String nodeName = childCursor.getLocalName();
