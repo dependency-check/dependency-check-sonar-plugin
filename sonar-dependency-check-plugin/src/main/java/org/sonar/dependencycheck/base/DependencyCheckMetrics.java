@@ -114,6 +114,7 @@ public final class DependencyCheckMetrics implements Metrics {
             .setQualitative(false)
             .setDomain(DependencyCheckMetrics.DOMAIN)
             .setHidden(false)
+            .setDeleteHistoricalData(true)
             .create();
 
     public static double vulnerableComponentRatio(int vulnerabilities, int vulnerableComponents) {
