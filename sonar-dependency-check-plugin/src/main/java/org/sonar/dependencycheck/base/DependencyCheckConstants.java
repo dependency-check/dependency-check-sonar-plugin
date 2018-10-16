@@ -23,10 +23,12 @@ public final class DependencyCheckConstants {
 
     public static final String REPORT_PATH_PROPERTY = "sonar.dependencyCheck.reportPath";
     public static final String HTML_REPORT_PATH_PROPERTY = "sonar.dependencyCheck.htmlReportPath";
+    public static final String SEVERITY_BLOCKER = "sonar.dependencyCheck.severity.blocker";
     public static final String SEVERITY_CRITICAL = "sonar.dependencyCheck.severity.critical";
     public static final String SEVERITY_MAJOR = "sonar.dependencyCheck.severity.major";
     public static final String SEVERITY_MINOR = "sonar.dependencyCheck.severity.minor";
 
+    public static final Float SEVERITY_BLOCKER_DEFAULT = 9.0f;
     public static final Float SEVERITY_CRITICAL_DEFAULT = 7.0f;
     public static final Float SEVERITY_MAJOR_DEFAULT = 4.0f;
     public static final Float SEVERITY_MINOR_DEFAULT = 0.0f;
