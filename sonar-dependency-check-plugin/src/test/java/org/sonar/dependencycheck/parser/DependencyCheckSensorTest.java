@@ -115,7 +115,7 @@ public class DependencyCheckSensorTest {
         when(pathResolver.relativeFile(any(File.class), anyString())).thenReturn(sampleReport);
         sensor.execute(context);
 
-        verify(context.newMeasure(), times(8)).forMetric(any(Metric.class));
+        verify(context.newMeasure(), times(9)).forMetric(any(Metric.class));
     }
 
     @Test

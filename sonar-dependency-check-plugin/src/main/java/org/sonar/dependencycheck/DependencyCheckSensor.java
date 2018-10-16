@@ -63,6 +63,7 @@ public class DependencyCheckSensor implements Sensor {
     private int totalDependencies;
     private int vulnerableDependencies;
     private int vulnerabilityCount;
+    private int blockerIssuesCount;
     private int criticalIssuesCount;
     private int majorIssuesCount;
     private int minorIssuesCount;
@@ -73,10 +74,11 @@ public class DependencyCheckSensor implements Sensor {
     }
 
     private void addIssue(SensorContext context, Dependency dependency, Vulnerability vulnerability) {
+        Float severityBlocker = context.config().getFloat(DependencyCheckConstants.SEVERITY_BLOCKER).orElse(DependencyCheckConstants.SEVERITY_BLOCKER_DEFAULT);
         Float severityCritical = context.config().getFloat(DependencyCheckConstants.SEVERITY_CRITICAL).orElse(DependencyCheckConstants.SEVERITY_CRITICAL_DEFAULT);
         Float severityMajor = context.config().getFloat(DependencyCheckConstants.SEVERITY_MAJOR).orElse(DependencyCheckConstants.SEVERITY_MAJOR_DEFAULT);
         Float severityMinor = context.config().getFloat(DependencyCheckConstants.SEVERITY_MINOR).orElse(DependencyCheckConstants.SEVERITY_MINOR_DEFAULT);
-        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(), severityCritical, severityMajor, severityMinor);
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(), severityBlocker ,severityCritical, severityMajor, severityMinor);
 
         context.newIssue()
                 .forRule(RuleKey.of(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY))
@@ -108,6 +110,9 @@ public class DependencyCheckSensor implements Sensor {
 
     private void incrementCount(Severity severity) {
         switch (severity) {
+            case BLOCKER:
+                this.blockerIssuesCount++;
+                break;
             case CRITICAL:
                 this.criticalIssuesCount++;
                 break;
@@ -182,9 +187,10 @@ public class DependencyCheckSensor implements Sensor {
     }
 
     private void saveMeasures(SensorContext context) {
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.HIGH_SEVERITY_VULNS).on(context.module()).withValue(criticalIssuesCount).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS).on(context.module()).withValue(majorIssuesCount).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.LOW_SEVERITY_VULNS).on(context.module()).withValue(minorIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.BLOCKER_SEVERITY_VULNS).on(context.module()).withValue(blockerIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS).on(context.module()).withValue(criticalIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.MAJOR_SEVERITY_VULNS).on(context.module()).withValue(majorIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.MINOR_SEVERITY_VULNS).on(context.module()).withValue(minorIssuesCount).save();
         context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.TOTAL_DEPENDENCIES).on(context.module()).withValue(totalDependencies).save();
         context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_DEPENDENCIES).on(context.module()).withValue(vulnerableDependencies).save();
         context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.TOTAL_VULNERABILITIES).on(context.module()).withValue(vulnerabilityCount).save();

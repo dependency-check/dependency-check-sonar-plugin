@@ -59,6 +59,13 @@ public final class DependencyCheckPlugin implements Plugin {
                         .description("path to the 'dependency-check-report.html' file")
                         .defaultValue(DependencyCheckConstants.HTML_REPORT_PATH_DEFAULT)
                         .build(),
+                PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_BLOCKER)
+                        .subCategory(SUB_CATEGORY_SEVERITIES)
+                        .name("Blocker")
+                        .description("Minimum score for blocker issues or -1 to deactivate blocker issues.")
+                        .defaultValue("9.0")
+                        .type(PropertyType.FLOAT)
+                        .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_CRITICAL)
                         .subCategory(SUB_CATEGORY_SEVERITIES)
                         .name("Critical")
