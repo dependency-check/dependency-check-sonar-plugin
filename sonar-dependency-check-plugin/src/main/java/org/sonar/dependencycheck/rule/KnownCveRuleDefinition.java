@@ -36,7 +36,7 @@ public class KnownCveRuleDefinition implements RulesDefinition {
         repo.setName("OWASP");
 
         NewRule rule = repo.createRule(DependencyCheckPlugin.RULE_KEY);
-        rule.addTags("cwe-937", "cve", "security", "vulnerability");
+        rule.addTags("cwe-937", "cve", "owasp-a9", "security", "vulnerability");
         rule.setName("Using Components with Known Vulnerabilities");
         rule.setSeverity(Severity.MAJOR);
         rule.setStatus(RuleStatus.READY);
