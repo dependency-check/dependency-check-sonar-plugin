@@ -28,7 +28,6 @@ import org.sonar.dependencycheck.page.DependencyCheckReportPage;
 import org.sonar.dependencycheck.rule.KnownCveRuleDefinition;
 import org.sonar.dependencycheck.rule.NeutralLanguage;
 import org.sonar.dependencycheck.rule.NeutralProfile;
-import org.sonar.dependencycheck.ui.DependencyCheckWidget;
 
 public final class DependencyCheckPlugin implements Plugin {
 
@@ -44,7 +43,6 @@ public final class DependencyCheckPlugin implements Plugin {
                 NeutralProfile.class,
                 NeutralLanguage.class,
                 KnownCveRuleDefinition.class,
-                DependencyCheckWidget.class,
                 DependencyCheckReportPage.class);
 
         context.addExtensions(
@@ -52,26 +50,26 @@ public final class DependencyCheckPlugin implements Plugin {
                         .subCategory("Paths")
                         .name("Dependency-Check report path")
                         .description("path to the 'dependency-check-report.xml' file")
-                        .defaultValue("${WORKSPACE}/dependency-check-report.xml")
+                        .defaultValue(DependencyCheckConstants.REPORT_PATH_DEFAULT)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY)
                         .subCategory("Paths")
                         .name("Dependency-Check HTML report path")
                         .description("path to the 'dependency-check-report.html' file")
-                        .defaultValue("${WORKSPACE}/dependency-check-report.html")
+                        .defaultValue(DependencyCheckConstants.HTML_REPORT_PATH_DEFAULT)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_CRITICAL)
                         .subCategory("Severities")
                         .name("Critical")
                         .description("Minimum score for critical issues or -1 to deactivate critical issues.")
-                        .defaultValue("7.0")
+                        .defaultValue(Float.toString(DependencyCheckConstants.SEVERITY_CRITICAL_DEFAULT))
                         .type(PropertyType.FLOAT)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_MAJOR)
                         .subCategory("Severities")
                         .name("Major")
                         .description("Minimum score for major issues or -1 to deactivate major issues.")
-                        .defaultValue("4.0")
+                        .defaultValue(Float.toString(DependencyCheckConstants.SEVERITY_MAJOR_DEFAULT))
                         .type(PropertyType.FLOAT)
                         .build()
         );

@@ -39,11 +39,10 @@ public final class DependencyCheckUtils {
         return new SMInputFactory(xmlFactory);
     }
 
-    public static Severity cvssToSonarQubeSeverity(String cvssScore, Double critical, Double major) {
-        double score = Double.parseDouble(cvssScore);
-        if (critical.doubleValue() > 0 && score >= critical.doubleValue()) {
+    public static Severity cvssToSonarQubeSeverity(Float cvssScore, Float critical, Float major) {
+        if (critical.floatValue() > 0 && cvssScore.floatValue() >= critical.floatValue()) {
             return Severity.CRITICAL;
-        } else if (major.doubleValue() > 0 && score >= major.doubleValue()) {
+        } else if (major.floatValue() > 0 && cvssScore.floatValue() >= major.floatValue()) {
             return Severity.MAJOR;
         } else {
             return Severity.MINOR;
