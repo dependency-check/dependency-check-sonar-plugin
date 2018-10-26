@@ -551,7 +551,7 @@
             <vulnerabilities>
                 <vulnerability>
                     <name>CVE-2007-6059</name>
-                    <cvssScore>5.0</cvssScore>
+                    <cvssScore>5.0-NOTRIGHT</cvssScore>
                     <severity>Medium</severity>
                     <cwe>CWE-399 Resource Management Errors</cwe>
                     <description>** DISPUTED **  Javamail does not properly handle a series of invalid login attempts in which the same e-mail address is entered as username and password, and the domain portion of this address yields a Java UnknownHostException error, which allows remote attackers to cause a denial of service (connection pool exhaustion) via a large number of requests, resulting in a SQLNestedException.  NOTE: Sun disputes this issue, stating &quot;The report makes references to source code and files that do not exist in the mentioned products.&quot;</description>

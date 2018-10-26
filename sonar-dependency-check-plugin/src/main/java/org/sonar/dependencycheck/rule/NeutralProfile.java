@@ -19,24 +19,15 @@
  */
 package org.sonar.dependencycheck.rule;
 
-import org.sonar.api.profiles.ProfileDefinition;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.profiles.XMLProfileParser;
-import org.sonar.api.utils.ValidationMessages;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
+import org.sonar.dependencycheck.DependencyCheckPlugin;
 
-import java.io.InputStreamReader;
-
-public class NeutralProfile extends ProfileDefinition {
-
-    private final XMLProfileParser xmlParser;
-
-    public NeutralProfile(XMLProfileParser xmlParser) {
-        this.xmlParser = xmlParser;
-    }
+public class NeutralProfile implements BuiltInQualityProfilesDefinition {
 
     @Override
-    public RulesProfile createProfile(ValidationMessages validation) {
-        return xmlParser.parse(new InputStreamReader(getClass().getResourceAsStream("/org/sonar/dependencycheck/profile.xml")), validation);
+    public void define(Context context) {
+        NewBuiltInQualityProfile dependencyCheckWay = context.createBuiltInQualityProfile("Neutral", DependencyCheckPlugin.LANGUAGE_KEY);
+        dependencyCheckWay.activateRule(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY);
+        dependencyCheckWay.done();
     }
-
 }
