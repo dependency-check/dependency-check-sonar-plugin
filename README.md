@@ -2,12 +2,14 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/412eb95dd49d47bca70d53b685fb247a)](https://www.codacy.com/app/stevespringett/dependency-check-sonar-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=stevespringett/dependency-check-sonar-plugin&amp;utm_campaign=Badge_Grade)
 [ ![Download](https://api.bintray.com/packages/stevespringett/owasp/dependency-check-sonar/images/download.svg) ](https://bintray.com/stevespringett/owasp/dependency-check-sonar/_latestVersion)
 
-Dependency-Check Plugin for SonarQube 6.x
+Dependency-Check Plugin for SonarQube 7.x
 =====================================
 
-Integrates [Dependency-Check] reports into SonarQube v6.3 or higher. 
+Integrates [Dependency-Check] reports into SonarQube v7.3 or higher.
 
-Please see the [SonarQube 5.x] branch for older SonarQube 5.x support
+Please see the [SonarQube 6.x] branch for SonarQube 6.x LTS support. The project will try to backport all code from master branch, as long as the LTS version is supported.
+Please see the [SonarQube 5.x] branch for older SonarQube 5.x support.
+
 
 About Dependency-Check
 -------------------
@@ -18,11 +20,6 @@ Dependency-Check supports the identification of project dependencies in a number
 Note
 -------------------
 **This SonarQube plugin does not perform analysis**, rather, it reads existing Dependency-Check reports. Use one of the other available methods to scan project dependencies and generate the necessary XML report which can then be consumed by this plugin. Refer to the [Dependency-Check project](https://github.com/jeremylong/DependencyCheck) for relevant [documentation](https://jeremylong.github.io/DependencyCheck/).
-
-Screenshots
--------------------
-
-![alt tag](screenshots/dashboard-widget.png)
 
 Metrics
 -------------------
@@ -114,3 +111,4 @@ Permission to modify and redistribute is granted under the terms of the [LGPLv3]
   [GitHub]: https://github.com/stevespringett/dependency-check-sonar-plugin/releases
   [Dependency-Check]: https://www.owasp.org/index.php/OWASP_Dependency_Check
   [SonarQube 5.x]: https://github.com/stevespringett/dependency-check-sonar-plugin/tree/SonarQube_5.x
+  [SonarQube 6.x]: https://github.com/stevespringett/dependency-check-sonar-plugin/tree/SonarQube_6.x
