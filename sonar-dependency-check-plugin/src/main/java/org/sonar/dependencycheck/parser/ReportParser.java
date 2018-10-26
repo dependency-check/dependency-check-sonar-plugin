@@ -38,33 +38,29 @@ public class ReportParser {
 
     private static final Logger LOGGER = Loggers.get(ReportParser.class);
 
-    public Analysis parse(InputStream inputStream) {
+    public Analysis parse(InputStream inputStream) throws XMLStreamException {
 
         SMInputFactory inputFactory = DependencyCheckUtils.newStaxParser();
-        try {
-            SMHierarchicCursor rootC = inputFactory.rootElementCursor(inputStream);
-            rootC.advance(); // <analysis>
+        SMHierarchicCursor rootC = inputFactory.rootElementCursor(inputStream);
+        rootC.advance(); // <analysis>
 
-            SMInputCursor childCursor = rootC.childCursor();
+        SMInputCursor childCursor = rootC.childCursor();
 
-            ScanInfo scanInfo = null;
-            ProjectInfo projectInfo = null;
-            Collection<Dependency> dependencies = Collections.emptyList();
+        ScanInfo scanInfo = null;
+        ProjectInfo projectInfo = null;
+        Collection<Dependency> dependencies = Collections.emptyList();
 
-            while (childCursor.getNext() != null) {
-                String nodeName = childCursor.getLocalName();
-                if ("scanInfo".equals(nodeName)) {
-                    scanInfo = processScanInfo(childCursor);
-                } else if ("projectInfo".equals(nodeName)) {
-                    projectInfo = processProjectInfo(childCursor);
-                } else if ("dependencies".equals(nodeName)) {
-                    dependencies = processDependencies(childCursor);
-                }
+        while (childCursor.getNext() != null) {
+            String nodeName = childCursor.getLocalName();
+            if ("scanInfo".equals(nodeName)) {
+                scanInfo = processScanInfo(childCursor);
+            } else if ("projectInfo".equals(nodeName)) {
+                projectInfo = processProjectInfo(childCursor);
+            } else if ("dependencies".equals(nodeName)) {
+                dependencies = processDependencies(childCursor);
             }
-            return new Analysis(scanInfo, projectInfo, dependencies);
-        } catch (XMLStreamException e) {
-            throw new IllegalStateException("XML is not valid", e);
         }
+        return new Analysis(scanInfo, projectInfo, dependencies);
     }
 
     private Collection<Dependency> processDependencies(SMInputCursor depC) throws XMLStreamException {

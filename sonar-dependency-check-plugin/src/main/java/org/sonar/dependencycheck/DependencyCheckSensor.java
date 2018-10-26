@@ -27,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import javax.annotation.Nullable;
+import javax.xml.stream.XMLStreamException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.batch.fs.FileSystem;
@@ -153,7 +154,7 @@ public class DependencyCheckSensor implements Sensor {
         }
     }
 
-    private Analysis parseAnalysis(SensorContext context) throws IOException {
+    private Analysis parseAnalysis(SensorContext context) throws IOException, XMLStreamException {
         XmlReportFile report = new XmlReportFile(context.config(), fileSystem, this.pathResolver);
 
         try (InputStream stream = report.getInputStream(DependencyCheckConstants.REPORT_PATH_PROPERTY)) {
@@ -219,7 +220,9 @@ public class DependencyCheckSensor implements Sensor {
         } catch (FileNotFoundException e) {
             LOGGER.debug("Analysis aborted due to missing report file", e);
         } catch (IOException e) {
-            LOGGER.warn("Can not process Dependency-Check report", e);
+            LOGGER.warn("Analysis aborted due to: IO Errors", e);
+        } catch (XMLStreamException e) {
+            LOGGER.warn("Analysis aborted due to: XML is not valid", e);
         } finally {
             profiler.stopInfo();
         }
