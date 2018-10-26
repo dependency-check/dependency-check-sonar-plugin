@@ -13,7 +13,7 @@
     <url>https://www.owasp.org/index.php/OWASP_Dependency_Check</url>
 
     <properties>
-        <sonar.version>7.0</sonar.version>
+        <sonar.version>7.3</sonar.version>
         <!-- Configuration for sonar-packaging-maven-plugin -->
         <sonar.pluginClass>org.sonar.dependencycheck.DependencyCheckPlugin</sonar.pluginClass>
         <sonar.pluginName>Dependency-Check</sonar.pluginName>
@@ -32,9 +32,15 @@
             <version>3.8.1</version>
         </dependency>
         <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.2</version>
+            <groupId>com.fasterxml.staxmate</groupId>
+            <artifactId>staxmate</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>3.1.8</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- unit tests -->
