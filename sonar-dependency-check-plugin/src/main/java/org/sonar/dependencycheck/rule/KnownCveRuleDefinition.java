@@ -29,17 +29,21 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class KnownCveRuleDefinition implements RulesDefinition {
 
 
-    @Override
+    private static final int CWE_937 = 937;
+
+	@Override
     @ParametersAreNonnullByDefault
     public void define(Context context) {
         NewRepository repo = context.createRepository(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.LANGUAGE_KEY);
         repo.setName("OWASP");
 
         NewRule rule = repo.createRule(DependencyCheckPlugin.RULE_KEY);
-        rule.addTags("cwe-937", "cve", "security", "vulnerability");
+        rule.addTags("cwe-937", "cwe", "cve", "owasp-a9", "security", "vulnerability");
         rule.setName("Using Components with Known Vulnerabilities");
         rule.setSeverity(Severity.MAJOR);
         rule.setStatus(RuleStatus.READY);
+        rule.addOwaspTop10(OwaspTop10.A9);
+        rule.addCwe(CWE_937);
 
         String description = "<p>Components, such as libraries, frameworks, and other software modules, " +
                 "almost always run with full privileges. If a vulnerable component is exploited, such " +
