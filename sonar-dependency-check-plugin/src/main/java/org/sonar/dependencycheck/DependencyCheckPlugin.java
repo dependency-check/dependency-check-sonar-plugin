@@ -34,6 +34,7 @@ public final class DependencyCheckPlugin implements Plugin {
     public static final String REPOSITORY_KEY = "OWASP";
     public static final String LANGUAGE_KEY = "neutral";
     public static final String RULE_KEY = "UsingComponentWithKnownVulnerability";
+    public static final String SUB_CATEGORY_SEVERITIES = "Severities";
 
     @Override
     public void define(Context context) {
@@ -59,17 +60,24 @@ public final class DependencyCheckPlugin implements Plugin {
                         .defaultValue(DependencyCheckConstants.HTML_REPORT_PATH_DEFAULT)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_CRITICAL)
-                        .subCategory("Severities")
+                        .subCategory(SUB_CATEGORY_SEVERITIES)
                         .name("Critical")
                         .description("Minimum score for critical issues or -1 to deactivate critical issues.")
                         .defaultValue(Float.toString(DependencyCheckConstants.SEVERITY_CRITICAL_DEFAULT))
                         .type(PropertyType.FLOAT)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_MAJOR)
-                        .subCategory("Severities")
+                        .subCategory(SUB_CATEGORY_SEVERITIES)
                         .name("Major")
                         .description("Minimum score for major issues or -1 to deactivate major issues.")
                         .defaultValue(Float.toString(DependencyCheckConstants.SEVERITY_MAJOR_DEFAULT))
+                        .type(PropertyType.FLOAT)
+                        .build(),
+                PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_MINOR)
+                        .subCategory(SUB_CATEGORY_SEVERITIES)
+                        .name("Minor")
+                        .description("Minimum score for minor issues or -1 to deactivate minor issues.")
+                        .defaultValue(Float.toString(DependencyCheckConstants.SEVERITY_MINOR_DEFAULT))
                         .type(PropertyType.FLOAT)
                         .build()
         );
