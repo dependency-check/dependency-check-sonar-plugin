@@ -35,12 +35,14 @@ public class DependencyCheckUtilsTest {
     private final Float cvssSeverity;
     private final Float critical;
     private final Float major;
+    private final Float minor;
     private final Severity expectedSeverity;
 
-    public DependencyCheckUtilsTest(Float cvssSeverity, Float critical, Float major, Severity expectedSeverity) {
+    public DependencyCheckUtilsTest(Float cvssSeverity, Float critical, Float major, Float minor, Severity expectedSeverity) {
         this.cvssSeverity = cvssSeverity;
         this.critical = critical;
         this.major = major;
+        this.minor = minor;
         this.expectedSeverity = expectedSeverity;
     }
 
@@ -48,45 +50,81 @@ public class DependencyCheckUtilsTest {
     public static Collection<Object[]> severities() {
         return Arrays.asList(new Object[][]{
                 // defaults
-                {Float.valueOf("10.0"), Float.valueOf("7.0"), Float.valueOf("4.0"), Severity.CRITICAL},
-                {Float.valueOf("7.0"),  Float.valueOf("7.0"), Float.valueOf("4.0"), Severity.CRITICAL},
-                {Float.valueOf("6.9"),  Float.valueOf("7.0"), Float.valueOf("4.0"), Severity.MAJOR},
-                {Float.valueOf("4.0"),  Float.valueOf("7.0"), Float.valueOf("4.0"), Severity.MAJOR},
-                {Float.valueOf("3.9"),  Float.valueOf("7.0"), Float.valueOf("4.0"), Severity.MINOR},
-                {Float.valueOf("0.0"),  Float.valueOf("7.0"), Float.valueOf("4.0"), Severity.MINOR},
+                {Float.valueOf("10.0"), Float.valueOf("7.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Severity.CRITICAL},
+                {Float.valueOf("7.0"),  Float.valueOf("7.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Severity.CRITICAL},
+                {Float.valueOf("6.9"),  Float.valueOf("7.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Severity.MAJOR},
+                {Float.valueOf("4.0"),  Float.valueOf("7.0"), Float.valueOf("4.0"), Float.valueOf("0.0"),  Severity.MAJOR},
+                {Float.valueOf("3.9"),  Float.valueOf("7.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Severity.MINOR},
+                {Float.valueOf("0.0"),  Float.valueOf("7.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Severity.MINOR},
                 
                 // custom
-                {Float.valueOf("10.0"), Float.valueOf("5.0"), Float.valueOf("2.0"), Severity.CRITICAL},
-                {Float.valueOf("7.0"),  Float.valueOf("5.0"), Float.valueOf("2.0"), Severity.CRITICAL},
-                {Float.valueOf("6.9"),  Float.valueOf("5.0"), Float.valueOf("2.0"), Severity.CRITICAL},
-                {Float.valueOf("4.0"),  Float.valueOf("5.0"), Float.valueOf("2.0"), Severity.MAJOR},
-                {Float.valueOf("3.9"),  Float.valueOf("5.0"), Float.valueOf("2.0"), Severity.MAJOR},
-                {Float.valueOf("1.9"),  Float.valueOf("5.0"), Float.valueOf("2.0"), Severity.MINOR},
-                {Float.valueOf("0.0"),  Float.valueOf("5.0"), Float.valueOf("2.0"), Severity.MINOR},
+                {Float.valueOf("10.0"), Float.valueOf("5.0"), Float.valueOf("2.0"), Float.valueOf("1.0"), Severity.CRITICAL},
+                {Float.valueOf("7.0"),  Float.valueOf("5.0"), Float.valueOf("2.0"), Float.valueOf("1.0"), Severity.CRITICAL},
+                {Float.valueOf("6.9"),  Float.valueOf("5.0"), Float.valueOf("2.0"), Float.valueOf("1.0"), Severity.CRITICAL},
+                {Float.valueOf("4.0"),  Float.valueOf("5.0"), Float.valueOf("2.0"), Float.valueOf("1.0"), Severity.MAJOR},
+                {Float.valueOf("3.9"),  Float.valueOf("5.0"), Float.valueOf("2.0"), Float.valueOf("1.0"), Severity.MAJOR},
+                {Float.valueOf("1.9"),  Float.valueOf("5.0"), Float.valueOf("2.0"), Float.valueOf("1.0"), Severity.MINOR},
+                {Float.valueOf("0.0"),  Float.valueOf("5.0"), Float.valueOf("2.0"), Float.valueOf("1.0"), Severity.INFO},
                 
                 // custom, critical deactivated
-                {Float.valueOf("10.0"), Float.valueOf("-1"),  Float.valueOf("2.0"), Severity.MAJOR},
-                {Float.valueOf("7.0"),  Float.valueOf("-1"),  Float.valueOf("2.0"), Severity.MAJOR},
-                {Float.valueOf("6.9"),  Float.valueOf("-1"),  Float.valueOf("2.0"), Severity.MAJOR},
-                {Float.valueOf("4.0"),  Float.valueOf("-1"),  Float.valueOf("2.0"), Severity.MAJOR},
-                {Float.valueOf("3.9"),  Float.valueOf("-1"),  Float.valueOf("2.0"), Severity.MAJOR},
-                {Float.valueOf("1.9"),  Float.valueOf("-1"),  Float.valueOf("2.0"), Severity.MINOR},
-                {Float.valueOf("0.0"),  Float.valueOf("-1"),  Float.valueOf("2.0"), Severity.MINOR},
+                {Float.valueOf("10.0"), Float.valueOf("-1"),  Float.valueOf("2.0"), Float.valueOf("1.0"), Severity.MAJOR},
+                {Float.valueOf("7.0"),  Float.valueOf("-1"),  Float.valueOf("2.0"), Float.valueOf("1.0"), Severity.MAJOR},
+                {Float.valueOf("6.9"),  Float.valueOf("-1"),  Float.valueOf("2.0"), Float.valueOf("1.0"), Severity.MAJOR},
+                {Float.valueOf("4.0"),  Float.valueOf("-1"),  Float.valueOf("2.0"), Float.valueOf("1.0"), Severity.MAJOR},
+                {Float.valueOf("3.9"),  Float.valueOf("-1"),  Float.valueOf("2.0"), Float.valueOf("1.0"), Severity.MAJOR},
+                {Float.valueOf("1.9"),  Float.valueOf("-1"),  Float.valueOf("2.0"), Float.valueOf("1.0"), Severity.MINOR},
+                {Float.valueOf("0.0"),  Float.valueOf("-1"),  Float.valueOf("2.0"), Float.valueOf("1.0"), Severity.INFO},
                 
                 // custom, critical and major deactivated
-                {Float.valueOf("10.0"), Float.valueOf("-1"),  Float.valueOf("-1"),  Severity.MINOR},
-                {Float.valueOf("7.0"),  Float.valueOf("-1"),  Float.valueOf("-1"),  Severity.MINOR},
-                {Float.valueOf("6.9"),  Float.valueOf("-1"),  Float.valueOf("-1"),  Severity.MINOR},
-                {Float.valueOf("4.0"),  Float.valueOf("-1"),  Float.valueOf("-1"),  Severity.MINOR},
-                {Float.valueOf("3.9"),  Float.valueOf("-1"),  Float.valueOf("-1"),  Severity.MINOR},
-                {Float.valueOf("1.9"),  Float.valueOf("-1"),  Float.valueOf("-1"),  Severity.MINOR},
-                {Float.valueOf("0.0"),  Float.valueOf("-1"),  Float.valueOf("-1"),  Severity.MINOR}
+                {Float.valueOf("10.0"), Float.valueOf("-1"),  Float.valueOf("-1"), Float.valueOf("1.0"), Severity.MINOR},
+                {Float.valueOf("7.0"),  Float.valueOf("-1"),  Float.valueOf("-1"), Float.valueOf("1.0"), Severity.MINOR},
+                {Float.valueOf("6.9"),  Float.valueOf("-1"),  Float.valueOf("-1"), Float.valueOf("1.0"), Severity.MINOR},
+                {Float.valueOf("4.0"),  Float.valueOf("-1"),  Float.valueOf("-1"), Float.valueOf("1.0"), Severity.MINOR},
+                {Float.valueOf("3.9"),  Float.valueOf("-1"),  Float.valueOf("-1"), Float.valueOf("1.0"), Severity.MINOR},
+                {Float.valueOf("1.9"),  Float.valueOf("-1"),  Float.valueOf("-1"), Float.valueOf("1.0"), Severity.MINOR},
+                {Float.valueOf("0.0"),  Float.valueOf("-1"),  Float.valueOf("-1"), Float.valueOf("1.0"), Severity.INFO},
+
+                // all vulnerabilites are critical
+                {Float.valueOf("10.0"), Float.valueOf("0.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Severity.CRITICAL},
+                {Float.valueOf("7.0"),  Float.valueOf("0.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Severity.CRITICAL},
+                {Float.valueOf("6.9"),  Float.valueOf("0.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Severity.CRITICAL},
+                {Float.valueOf("4.0"),  Float.valueOf("0.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Severity.CRITICAL},
+                {Float.valueOf("3.9"),  Float.valueOf("0.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Severity.CRITICAL},
+                {Float.valueOf("1.9"),  Float.valueOf("0.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Severity.CRITICAL},
+                {Float.valueOf("0.0"),  Float.valueOf("0.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Severity.CRITICAL},
+
+                // all vulnerabilites are MAJOR, critical is deactivated
+                {Float.valueOf("10.0"), Float.valueOf("-1"), Float.valueOf("0.0"), Float.valueOf("0.0"), Severity.MAJOR},
+                {Float.valueOf("7.0"),  Float.valueOf("-1"), Float.valueOf("0.0"), Float.valueOf("0.0"), Severity.MAJOR},
+                {Float.valueOf("6.9"),  Float.valueOf("-1"), Float.valueOf("0.0"), Float.valueOf("0.0"), Severity.MAJOR},
+                {Float.valueOf("4.0"),  Float.valueOf("-1"), Float.valueOf("0.0"), Float.valueOf("0.0"), Severity.MAJOR},
+                {Float.valueOf("3.9"),  Float.valueOf("-1"), Float.valueOf("0.0"), Float.valueOf("0.0"), Severity.MAJOR},
+                {Float.valueOf("1.9"),  Float.valueOf("-1"), Float.valueOf("0.0"), Float.valueOf("0.0"), Severity.MAJOR},
+                {Float.valueOf("0.0"),  Float.valueOf("-1"), Float.valueOf("0.0"), Float.valueOf("0.0"), Severity.MAJOR},
+
+                // all vulnerabilites are MINOR, critical and major are deactivated
+                {Float.valueOf("10.0"), Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("0.0"), Severity.MINOR},
+                {Float.valueOf("7.0"),  Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("0.0"), Severity.MINOR},
+                {Float.valueOf("6.9"),  Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("0.0"), Severity.MINOR},
+                {Float.valueOf("4.0"),  Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("0.0"), Severity.MINOR},
+                {Float.valueOf("3.9"),  Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("0.0"), Severity.MINOR},
+                {Float.valueOf("1.9"),  Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("0.0"), Severity.MINOR},
+                {Float.valueOf("0.0"),  Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("0.0"), Severity.MINOR},
+
+                // all vulnerabilities are INFO, critical, major and minor deactivated
+                {Float.valueOf("10.0"), Float.valueOf("-1"),  Float.valueOf("-1"),  Float.valueOf("-1"), Severity.INFO},
+                {Float.valueOf("7.0"),  Float.valueOf("-1"),  Float.valueOf("-1"),  Float.valueOf("-1"), Severity.INFO},
+                {Float.valueOf("6.9"),  Float.valueOf("-1"),  Float.valueOf("-1"),  Float.valueOf("-1"), Severity.INFO},
+                {Float.valueOf("4.0"),  Float.valueOf("-1"),  Float.valueOf("-1"),  Float.valueOf("-1"), Severity.INFO},
+                {Float.valueOf("3.9"),  Float.valueOf("-1"),  Float.valueOf("-1"),  Float.valueOf("-1"), Severity.INFO},
+                {Float.valueOf("1.9"),  Float.valueOf("-1"),  Float.valueOf("-1"),  Float.valueOf("-1"), Severity.INFO},
+                {Float.valueOf("0.0"),  Float.valueOf("-1"),  Float.valueOf("-1"),  Float.valueOf("-1"), Severity.INFO}
         });
     }
 
     @Test
     public void testCvssToSonarQubeSeverity() {
-        assertThat(DependencyCheckUtils.cvssToSonarQubeSeverity(this.cvssSeverity, this.critical, this.major)).isEqualTo(this.expectedSeverity);
+        assertThat(DependencyCheckUtils.cvssToSonarQubeSeverity(this.cvssSeverity, this.critical, this.major, this.minor)).isEqualTo(this.expectedSeverity);
     }
 
 }

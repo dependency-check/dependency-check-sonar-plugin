@@ -39,13 +39,15 @@ public final class DependencyCheckUtils {
         return new SMInputFactory(xmlFactory);
     }
 
-    public static Severity cvssToSonarQubeSeverity(Float cvssScore, Float critical, Float major) {
-        if (critical.floatValue() > 0 && cvssScore.floatValue() >= critical.floatValue()) {
+    public static Severity cvssToSonarQubeSeverity(Float cvssScore, Float critical, Float major, Float minor) {
+        if (critical.floatValue() >= 0 && cvssScore.floatValue() >= critical.floatValue()) {
             return Severity.CRITICAL;
-        } else if (major.floatValue() > 0 && cvssScore.floatValue() >= major.floatValue()) {
+        } else if (major.floatValue() >= 0 && cvssScore.floatValue() >= major.floatValue()) {
             return Severity.MAJOR;
-        } else {
+        } else if (minor.floatValue() >= 0 && cvssScore.floatValue() >= minor.floatValue()) {
             return Severity.MINOR;
+        } else {
+            return Severity.INFO;
         }
     }
 
