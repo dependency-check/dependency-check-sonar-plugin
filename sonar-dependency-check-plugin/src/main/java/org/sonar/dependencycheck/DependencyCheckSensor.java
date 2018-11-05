@@ -187,16 +187,16 @@ public class DependencyCheckSensor implements Sensor {
     }
 
     private void saveMeasures(SensorContext context) {
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.BLOCKER_SEVERITY_VULNS).on(context.module()).withValue(blockerIssuesCount).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS).on(context.module()).withValue(criticalIssuesCount).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.MAJOR_SEVERITY_VULNS).on(context.module()).withValue(majorIssuesCount).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.MINOR_SEVERITY_VULNS).on(context.module()).withValue(minorIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS).on(context.module()).withValue(blockerIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.HIGH_SEVERITY_VULNS).on(context.module()).withValue(criticalIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS).on(context.module()).withValue(majorIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.LOW_SEVERITY_VULNS).on(context.module()).withValue(minorIssuesCount).save();
         context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.TOTAL_DEPENDENCIES).on(context.module()).withValue(totalDependencies).save();
         context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_DEPENDENCIES).on(context.module()).withValue(vulnerableDependencies).save();
         context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.TOTAL_VULNERABILITIES).on(context.module()).withValue(vulnerabilityCount).save();
 
         context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.INHERITED_RISK_SCORE).on(context.module())
-            .withValue(DependencyCheckMetrics.inheritedRiskScore(criticalIssuesCount, majorIssuesCount, minorIssuesCount)).save();
+            .withValue(DependencyCheckMetrics.inheritedRiskScore(blockerIssuesCount, criticalIssuesCount, majorIssuesCount, minorIssuesCount)).save();
         context.<Double>newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO).on(context.module())
             .withValue(DependencyCheckMetrics.vulnerableComponentRatio(vulnerabilityCount, vulnerableDependencies)).save();
 
