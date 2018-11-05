@@ -58,8 +58,8 @@ public final class DependencyCheckMetrics implements Metrics {
             .setBestValue(0.0)
             .create();
 
-    public static final Metric<Integer> BLOCKER_SEVERITY_VULNS = new Metric.Builder(CRITICAL_SEVERITY_VULNS_KEY, "Critical Severity Vulnerabilities", Metric.ValueType.INT)
-            .setDescription("Blocker Severity Vulnerabilities")
+    public static final Metric<Integer> CRITICAL_SEVERITY_VULNS = new Metric.Builder(CRITICAL_SEVERITY_VULNS_KEY, "Critical Severity Vulnerabilities", Metric.ValueType.INT)
+            .setDescription("Critical Severity Vulnerabilities")
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(Boolean.FALSE)
             .setDomain(DependencyCheckMetrics.DOMAIN)
@@ -67,8 +67,8 @@ public final class DependencyCheckMetrics implements Metrics {
             .setHidden(false)
             .create();
 
-    public static final Metric<Integer> CRITICAL_SEVERITY_VULNS = new Metric.Builder(HIGH_SEVERITY_VULNS_KEY, "High Severity Vulnerabilities", Metric.ValueType.INT)
-            .setDescription("High (Critical) Severity Vulnerabilities")
+    public static final Metric<Integer> HIGH_SEVERITY_VULNS = new Metric.Builder(HIGH_SEVERITY_VULNS_KEY, "High Severity Vulnerabilities", Metric.ValueType.INT)
+            .setDescription("High Severity Vulnerabilities")
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(Boolean.FALSE)
             .setDomain(DependencyCheckMetrics.DOMAIN)
@@ -76,8 +76,8 @@ public final class DependencyCheckMetrics implements Metrics {
             .setHidden(false)
             .create();
 
-    public static final Metric<Integer> MAJOR_SEVERITY_VULNS = new Metric.Builder(MEDIUM_SEVERITY_VULNS_KEY, "Medium Severity Vulnerabilities", Metric.ValueType.INT)
-            .setDescription("Medium (Major) Severity Vulnerabilities")
+    public static final Metric<Integer> MEDIUM_SEVERITY_VULNS = new Metric.Builder(MEDIUM_SEVERITY_VULNS_KEY, "Medium Severity Vulnerabilities", Metric.ValueType.INT)
+            .setDescription("Medium Severity Vulnerabilities")
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(Boolean.FALSE)
             .setDomain(DependencyCheckMetrics.DOMAIN)
@@ -85,8 +85,8 @@ public final class DependencyCheckMetrics implements Metrics {
             .setHidden(false)
             .create();
 
-    public static final Metric<Integer> MINOR_SEVERITY_VULNS = new Metric.Builder(LOW_SEVERITY_VULNS_KEY, "Low Severity Vulnerabilities", Metric.ValueType.INT)
-            .setDescription("Low (Minor) Severity Vulnerabilities")
+    public static final Metric<Integer> LOW_SEVERITY_VULNS = new Metric.Builder(LOW_SEVERITY_VULNS_KEY, "Low Severity Vulnerabilities", Metric.ValueType.INT)
+            .setDescription("Low Severity Vulnerabilities")
             .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(Boolean.FALSE)
             .setDomain(DependencyCheckMetrics.DOMAIN)
@@ -136,8 +136,8 @@ public final class DependencyCheckMetrics implements Metrics {
         return ratio;
     }
 
-    public static int inheritedRiskScore(int high, int medium, int low) {
-        return (high * 5) + (medium * 3) + (low);
+    public static int inheritedRiskScore(int blocker, int high, int medium, int low) {
+        return (blocker * 7) + (high * 5) + (medium * 3) + (low);
     }
 
 
@@ -146,10 +146,10 @@ public final class DependencyCheckMetrics implements Metrics {
         return Arrays.asList(
                 DependencyCheckMetrics.INHERITED_RISK_SCORE,
                 DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO,
-                DependencyCheckMetrics.BLOCKER_SEVERITY_VULNS,
                 DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS,
-                DependencyCheckMetrics.MAJOR_SEVERITY_VULNS,
-                DependencyCheckMetrics.MINOR_SEVERITY_VULNS,
+                DependencyCheckMetrics.HIGH_SEVERITY_VULNS,
+                DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS,
+                DependencyCheckMetrics.LOW_SEVERITY_VULNS,
                 DependencyCheckMetrics.TOTAL_DEPENDENCIES,
                 DependencyCheckMetrics.VULNERABLE_DEPENDENCIES,
                 DependencyCheckMetrics.TOTAL_VULNERABILITIES,

@@ -32,13 +32,13 @@ The plugin keeps track of a number of statistics including:
 * Total number of dependencies scanned
 * Total number of vulnerabilities found across all dependencies
 * Total number of vulnerable components
-* Total number of high, medium, and low severity vulnerabilities
+* Total number of critical, high, medium, and low severity vulnerabilities
 
 Additionally, the following two metrics are defined:
 
 __Inherited Risk Score (IRS)__
 
-(high * 5) + (medium * 3) + (low * 1)
+(critical * 7) + (high * 5) + (medium * 3) + (low * 1)
 
 The IRS is simply a weighted measurement of the vulnerabilities inherited by the 
 application through the use of vulnerable components. It does not measure the 
