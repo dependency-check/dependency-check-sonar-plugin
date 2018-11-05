@@ -1,13 +1,13 @@
 Example Single Module Maven Project
 =====================================
 
-Integrates [Dependency-Check] analysis and reporting into SonarQube v5.1 or higher in a single module (flat) Maven project. 
+Integrates [Dependency-Check] analysis and reporting into SonarQube v6.7 or higher in a single module (flat) Maven project.
 
 Usage
 -------------------
 
 ```
-mvn clean dependency-check:check
+mvn clean package dependency-check:check
 mvn sonar:sonar
 ```
 

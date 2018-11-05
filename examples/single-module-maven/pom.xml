@@ -21,6 +21,7 @@
         <sonar.host.url>http://localhost:9000/</sonar.host.url>
         <sonar.sources>src/main/java</sonar.sources>
         <sonar.dependencyCheck.reportPath>${dependency.check.report.dir}/dependency-check-report.xml</sonar.dependencyCheck.reportPath>
+        <sonar.dependencyCheck.htmlReportPath>${dependency.check.report.dir}/dependency-check-report.html</sonar.dependencyCheck.htmlReportPath>
     </properties>
 
     <developers>
@@ -62,16 +63,16 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.5.0.1254</version>
             </plugin>
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>1.4.5</version>
+                <version>3.3.3</version>
                 <configuration>
-                    <format>XML</format>
+                    <format>ALL</format>
                     <outputDirectory>${dependency.check.report.dir}</outputDirectory>
                 </configuration>
             </plugin>
