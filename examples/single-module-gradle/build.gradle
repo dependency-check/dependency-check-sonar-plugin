@@ -1,0 +1,41 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.owasp:dependency-check-gradle:3.3.4'
+    }
+}
+
+
+plugins {
+    id 'java'
+    id 'application'
+    id "org.sonarqube" version "2.6.2"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.google.guava:guava:21.0'
+    compile 'org.owasp:dependency-check-gradle:3.3.4'
+    compile 'org.springframework:spring:2.0'
+    testCompile 'junit:junit:4.12'
+}
+
+
+apply plugin: 'org.owasp.dependencycheck'
+mainClassName = 'com.example.HelloWorld'
+
+dependencyCheck {
+    format='ALL'
+}
+
+sonarqube {
+    properties {
+        property 'sonar.dependencyCheck.reportPath', 'build/reports/dependency-check-report.xml'
+        property 'sonar.dependencyCheck.htmlReportPath', 'build/reports/dependency-check-report.html' 
+    }
+}
