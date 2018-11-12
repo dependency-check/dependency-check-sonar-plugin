@@ -128,4 +128,17 @@ public class DependencyCheckSensorTest {
 
         verify(context.newMeasure(), atLeastOnce()).on(any(InputComponent.class));
     }
+
+    @Test
+    public void shouldSkipPlugin() {
+        final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
+
+        MapSettings settings = new MapSettings();
+        settings.setProperty(DependencyCheckConstants.SKIP_PLUGIN, "true");
+        when(context.config()).thenReturn(settings.asConfig());
+        sensor.execute(context);
+
+        verify(context, times(0)).newMeasure();
+        verify(context, times(0)).newIssue();
+    }
 }

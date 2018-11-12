@@ -27,6 +27,7 @@ public final class DependencyCheckConstants {
     public static final String SEVERITY_CRITICAL = "sonar.dependencyCheck.severity.critical";
     public static final String SEVERITY_MAJOR = "sonar.dependencyCheck.severity.major";
     public static final String SEVERITY_MINOR = "sonar.dependencyCheck.severity.minor";
+    public static final String SKIP_PLUGIN = "sonar.dependencyCheck.skip";
 
     public static final Float SEVERITY_BLOCKER_DEFAULT = 9.0f;
     public static final Float SEVERITY_CRITICAL_DEFAULT = 7.0f;
@@ -34,6 +35,7 @@ public final class DependencyCheckConstants {
     public static final Float SEVERITY_MINOR_DEFAULT = 0.0f;
     public static final String REPORT_PATH_DEFAULT = "${WORKSPACE}/dependency-check-report.xml";
     public static final String HTML_REPORT_PATH_DEFAULT = "${WORKSPACE}/dependency-check-report.html";
+    public static final Boolean SKIP_PLUGIN_DEFAULT = Boolean.FALSE;
 
     private DependencyCheckConstants() {
     }

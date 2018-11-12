@@ -219,21 +219,25 @@ public class DependencyCheckSensor implements Sensor {
     @Override
     public void execute(SensorContext sensorContext) {
         Profiler profiler = Profiler.create(LOGGER);
-        profiler.startInfo("Process Dependency-Check report");
-        try {
-            Analysis analysis = parseAnalysis(sensorContext);
-            this.totalDependencies = analysis.getDependencies().size();
-            addIssues(sensorContext, analysis);
-        } catch (FileNotFoundException e) {
-            LOGGER.debug("Analysis aborted due to missing report file", e);
-        } catch (IOException e) {
-            LOGGER.warn("Analysis aborted due to: IO Errors", e);
-        } catch (XMLStreamException e) {
-            LOGGER.warn("Analysis aborted due to: XML is not valid", e);
-        } finally {
-            profiler.stopInfo();
+        if (sensorContext.config().getBoolean(DependencyCheckConstants.SKIP_PLUGIN).orElse(DependencyCheckConstants.SKIP_PLUGIN_DEFAULT)) {
+            LOGGER.debug("Skipping DependencyCheck Plugin");
+        } else {
+            profiler.startInfo("Process Dependency-Check report");
+            try {
+                Analysis analysis = parseAnalysis(sensorContext);
+                this.totalDependencies = analysis.getDependencies().size();
+                addIssues(sensorContext, analysis);
+            } catch (FileNotFoundException e) {
+                LOGGER.debug("Analysis aborted due to missing report file", e);
+            } catch (IOException e) {
+                LOGGER.warn("Analysis aborted due to: IO Errors", e);
+            } catch (XMLStreamException e) {
+                LOGGER.warn("Analysis aborted due to: XML is not valid", e);
+            } finally {
+                profiler.stopInfo();
+            }
+            saveMeasures(sensorContext);
         }
-        saveMeasures(sensorContext);
     }
 
     /**

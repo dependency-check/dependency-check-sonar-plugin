@@ -47,6 +47,13 @@ public final class DependencyCheckPlugin implements Plugin {
                 DependencyCheckReportPage.class);
 
         context.addExtensions(
+                PropertyDefinition.builder(DependencyCheckConstants.SKIP_PLUGIN)
+                        .subCategory("General")
+                        .name("Skipping")
+                        .description("Option to skip this plugin")
+                        .defaultValue(Boolean.toString(DependencyCheckConstants.SKIP_PLUGIN_DEFAULT))
+                        .type(PropertyType.BOOLEAN)
+                        .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.REPORT_PATH_PROPERTY)
                         .subCategory("Paths")
                         .name("Dependency-Check report path")
