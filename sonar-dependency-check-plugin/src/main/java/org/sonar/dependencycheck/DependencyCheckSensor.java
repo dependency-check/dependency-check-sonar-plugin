@@ -181,7 +181,7 @@ public class DependencyCheckSensor implements Sensor {
             reportFileInputStream.read(readBuffer, 0, len);
             htmlReport = new String(readBuffer, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            LOGGER.error("Could not read HTML-Report", e);
+            LOGGER.warn("Could not read HTML-Report", e);
         }
         return htmlReport;
     }
@@ -202,6 +202,7 @@ public class DependencyCheckSensor implements Sensor {
 
         String htmlReport = getHtmlReport(context);
         if (htmlReport != null) {
+            LOGGER.info("Upload Dependency-Check HTML-Report");
             context.<String>newMeasure().forMetric(DependencyCheckMetrics.REPORT).on(context.module()).withValue(htmlReport).save();
         }
     }
@@ -225,15 +226,15 @@ public class DependencyCheckSensor implements Sensor {
             this.totalDependencies = analysis.getDependencies().size();
             addIssues(sensorContext, analysis);
         } catch (FileNotFoundException e) {
-            LOGGER.debug("Analysis aborted due to missing report file", e);
+            LOGGER.info("Analysis skipped/aborted due to missing report file");
+            LOGGER.debug(e.getMessage(), e);
         } catch (IOException e) {
             LOGGER.warn("Analysis aborted due to: IO Errors", e);
         } catch (XMLStreamException e) {
             LOGGER.warn("Analysis aborted due to: XML is not valid", e);
-        } finally {
-            profiler.stopInfo();
         }
         saveMeasures(sensorContext);
+        profiler.stopInfo();
     }
 
     /**

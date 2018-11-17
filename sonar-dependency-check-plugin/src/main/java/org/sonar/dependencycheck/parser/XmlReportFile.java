@@ -63,7 +63,7 @@ public class XmlReportFile {
         this.report = pathResolver.relativeFile(fileSystem.baseDir(), path.get());
 
         if (report != null && !report.isFile()) {
-            LOGGER.warn("Dependency-Check report does not exist. SKIPPING. Please check property {}:{}", property, path.get());
+            LOGGER.info("Dependency-Check report does not exist. SKIPPING. Please check property {}:{}", property, path.get());
             return null;
         }
         return report;
