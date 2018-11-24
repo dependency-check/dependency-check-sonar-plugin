@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
 export PATH=JAVA_HOME/bin:$PATH
 
 read -p "Are you sure you want to release? (Y/N)? "
