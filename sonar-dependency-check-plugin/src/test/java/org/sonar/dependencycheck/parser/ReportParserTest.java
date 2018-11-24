@@ -35,9 +35,8 @@ public class ReportParserTest {
 
     @Test
     public void parseReport() throws Exception {
-        ReportParser parser = new ReportParser();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("report/dependency-check-report.xml");
-        Analysis analysis = parser.parse(inputStream);
+        Analysis analysis = ReportParser.parse(inputStream);
         assertThat(analysis.getScanInfo().getEngineVersion()).isEqualTo("1.2.3");
         assertThat(analysis.getProjectInfo().getName()).isEqualTo("trunk-scan");
         assertThat(analysis.getProjectInfo().getReportDate()).isEqualTo("2014-12-02T04:57:02.663+0200");
