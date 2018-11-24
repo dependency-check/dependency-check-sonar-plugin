@@ -19,6 +19,13 @@
  */
 package org.sonar.dependencycheck.parser;
 
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
+import javax.xml.stream.XMLStreamException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.staxmate.SMInputFactory;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
@@ -26,19 +33,22 @@ import org.codehaus.staxmate.in.SMInputCursor;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
-import org.sonar.dependencycheck.parser.element.*;
-
-import javax.xml.stream.XMLStreamException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import org.sonar.dependencycheck.parser.element.Analysis;
+import org.sonar.dependencycheck.parser.element.Dependency;
+import org.sonar.dependencycheck.parser.element.Evidence;
+import org.sonar.dependencycheck.parser.element.ProjectInfo;
+import org.sonar.dependencycheck.parser.element.ScanInfo;
+import org.sonar.dependencycheck.parser.element.Vulnerability;
 
 public class ReportParser {
 
     private static final Logger LOGGER = Loggers.get(ReportParser.class);
 
-    public Analysis parse(InputStream inputStream) throws XMLStreamException {
+    private ReportParser() {
+        // do nothing
+    }
+
+    public static Analysis parse(InputStream inputStream) throws XMLStreamException {
 
         SMInputFactory inputFactory = DependencyCheckUtils.newStaxParser();
         SMHierarchicCursor rootC = inputFactory.rootElementCursor(inputStream);
@@ -63,7 +73,7 @@ public class ReportParser {
         return new Analysis(scanInfo, projectInfo, dependencies);
     }
 
-    private Collection<Dependency> processDependencies(SMInputCursor depC) throws XMLStreamException {
+    private static Collection<Dependency> processDependencies(SMInputCursor depC) throws XMLStreamException {
         Collection<Dependency> dependencies = new ArrayList<>();
         SMInputCursor cursor = depC.childElementCursor("dependency");
         while (cursor.getNext() != null) {
@@ -72,7 +82,7 @@ public class ReportParser {
         return dependencies;
     }
 
-    private Dependency processDependency(SMInputCursor depC) throws XMLStreamException {
+    private static Dependency processDependency(SMInputCursor depC) throws XMLStreamException {
         Dependency dependency = new Dependency();
         SMInputCursor childCursor = depC.childCursor();
         while (childCursor.getNext() != null) {
@@ -95,7 +105,7 @@ public class ReportParser {
         return dependency;
     }
 
-    private Collection<Vulnerability> processVulnerabilities(SMInputCursor vulnC) throws XMLStreamException {
+    private static Collection<Vulnerability> processVulnerabilities(SMInputCursor vulnC) throws XMLStreamException {
         Collection<Vulnerability> vulnerabilities = new ArrayList<>();
         SMInputCursor cursor = vulnC.childElementCursor("vulnerability");
         while (cursor.getNext() != null) {
@@ -104,7 +114,7 @@ public class ReportParser {
         return vulnerabilities;
     }
 
-    private Vulnerability processVulnerability(SMInputCursor vulnC) throws XMLStreamException {
+    private static Vulnerability processVulnerability(SMInputCursor vulnC) throws XMLStreamException {
         Vulnerability vulnerability = new Vulnerability();
         SMInputCursor childCursor = vulnC.childCursor();
         while (childCursor.getNext() != null) {
@@ -130,7 +140,7 @@ public class ReportParser {
         return vulnerability;
     }
 
-    private Collection<Evidence> processEvidenceCollected(SMInputCursor ecC) throws XMLStreamException {
+    private static Collection<Evidence> processEvidenceCollected(SMInputCursor ecC) throws XMLStreamException {
         Collection<Evidence> evidenceCollection = new ArrayList<>();
         SMInputCursor cursor = ecC.childElementCursor("evidence");
         while (cursor.getNext() != null) {
@@ -139,7 +149,7 @@ public class ReportParser {
         return evidenceCollection;
     }
 
-    private Evidence processEvidence(SMInputCursor ecC) throws XMLStreamException {
+    private static Evidence processEvidence(SMInputCursor ecC) throws XMLStreamException {
         Evidence evidence = new Evidence();
         SMInputCursor childCursor = ecC.childCursor();
         while (childCursor.getNext() != null) {
@@ -155,7 +165,7 @@ public class ReportParser {
         return evidence;
     }
 
-    private ScanInfo processScanInfo(SMInputCursor siC) throws XMLStreamException {
+    private static ScanInfo processScanInfo(SMInputCursor siC) throws XMLStreamException {
         SMInputCursor childCursor = siC.childCursor();
         ScanInfo scanInfo = new ScanInfo();
         while (childCursor.getNext() != null) {
@@ -167,7 +177,7 @@ public class ReportParser {
         return scanInfo;
     }
 
-    private ProjectInfo processProjectInfo(SMInputCursor piC) throws XMLStreamException {
+    private static ProjectInfo processProjectInfo(SMInputCursor piC) throws XMLStreamException {
         SMInputCursor childCursor = piC.childCursor();
         ProjectInfo projectInfo = new ProjectInfo();
         while (childCursor.getNext() != null) {

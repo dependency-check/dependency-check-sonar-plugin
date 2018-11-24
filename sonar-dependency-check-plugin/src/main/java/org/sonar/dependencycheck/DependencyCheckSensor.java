@@ -19,12 +19,8 @@
  */
 package org.sonar.dependencycheck;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 import javax.annotation.Nullable;
 import javax.xml.stream.XMLStreamException;
@@ -47,10 +43,11 @@ import org.sonar.dependencycheck.base.DependencyCheckConstants;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.parser.ReportParser;
-import org.sonar.dependencycheck.parser.XmlReportFile;
 import org.sonar.dependencycheck.parser.element.Analysis;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
+import org.sonar.dependencycheck.report.HtmlReportFile;
+import org.sonar.dependencycheck.report.XmlReportFile;
 
 public class DependencyCheckSensor implements Sensor {
 
@@ -161,29 +158,8 @@ public class DependencyCheckSensor implements Sensor {
     }
 
     private Analysis parseAnalysis(SensorContext context) throws IOException, XMLStreamException {
-        XmlReportFile report = new XmlReportFile(context.config(), fileSystem, this.pathResolver);
-
-        try (InputStream stream = report.getInputStream(DependencyCheckConstants.REPORT_PATH_PROPERTY)) {
-            return new ReportParser().parse(stream);
-        }
-    }
-
-    private String getHtmlReport(SensorContext context) {
-        XmlReportFile report = new XmlReportFile(context.config(), fileSystem, this.pathResolver);
-        File reportFile = report.getFile(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY);
-        if (reportFile == null || !reportFile.exists() || !reportFile.isFile() || !reportFile.canRead()) {
-            return null;
-        }
-        int len = (int) reportFile.length();
-        String htmlReport = null;
-        try (InputStream reportFileInputStream = Files.newInputStream(reportFile.toPath())){
-            byte[] readBuffer = new byte[len];
-            reportFileInputStream.read(readBuffer, 0, len);
-            htmlReport = new String(readBuffer, StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            LOGGER.warn("Could not read HTML-Report", e);
-        }
-        return htmlReport;
+        XmlReportFile report = XmlReportFile.getXmlReport(context.config(), fileSystem, this.pathResolver);
+        return ReportParser.parse(report.getInputStream());
     }
 
     private void saveMeasures(SensorContext context) {
@@ -200,10 +176,16 @@ public class DependencyCheckSensor implements Sensor {
         context.<Double>newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO).on(context.module())
             .withValue(DependencyCheckMetrics.vulnerableComponentRatio(vulnerabilityCount, vulnerableDependencies)).save();
 
-        String htmlReport = getHtmlReport(context);
-        if (htmlReport != null) {
-            LOGGER.info("Upload Dependency-Check HTML-Report");
-            context.<String>newMeasure().forMetric(DependencyCheckMetrics.REPORT).on(context.module()).withValue(htmlReport).save();
+        try {
+            HtmlReportFile htmlReportFile = HtmlReportFile.getHtmlReport(context.config(), fileSystem, pathResolver);
+            String htmlReport = htmlReportFile.getReportContent();
+            if (htmlReport != null) {
+                LOGGER.info("Upload Dependency-Check HTML-Report");
+                context.<String>newMeasure().forMetric(DependencyCheckMetrics.REPORT).on(context.module()).withValue(htmlReport).save();
+            }
+        } catch (FileNotFoundException e) {
+            LOGGER.info(e.getMessage());
+            LOGGER.debug(e.getMessage(), e);
         }
     }
 
