@@ -121,6 +121,7 @@ public class DependencyCheckSensor implements Sensor {
                 break;
             default:
                 LOGGER.debug("Unknown severity {}", severity);
+                break;
         }
     }
 
