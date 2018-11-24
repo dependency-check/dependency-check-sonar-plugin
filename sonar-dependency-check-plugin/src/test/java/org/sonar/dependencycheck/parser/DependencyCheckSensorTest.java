@@ -31,6 +31,7 @@ import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.dependencycheck.DependencyCheckSensor;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
+import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -47,7 +48,8 @@ public class DependencyCheckSensorTest {
     private PathResolver pathResolver;
     private DependencyCheckSensor sensor;
 
-    private File sampleReport;
+    private File sampleXmlReport;
+    private File sampleHtmlReport;
 
     private Configuration config;
 
@@ -62,9 +64,12 @@ public class DependencyCheckSensorTest {
         settings.setProperty(DependencyCheckConstants.REPORT_PATH_PROPERTY, "dependency-check-report.xml");
         config = settings.asConfig();
         // mock a sample report
-        final URL sampleResourceURI = getClass().getClassLoader().getResource("report/dependency-check-report.xml");
-        assert sampleResourceURI != null;
-        this.sampleReport = Paths.get(sampleResourceURI.toURI()).toFile();
+        final URL sampleXmlResourceURI = getClass().getClassLoader().getResource("report/dependency-check-report.xml");
+        assert sampleXmlResourceURI != null;
+        this.sampleXmlReport = Paths.get(sampleXmlResourceURI.toURI()).toFile();
+        final URL sampleHtmlResourceURI = getClass().getClassLoader().getResource("report/dependency-check-report.html");
+        assert sampleHtmlResourceURI != null;
+        this.sampleHtmlReport = Paths.get(sampleHtmlResourceURI.toURI()).toFile();
     }
 
     @Test
@@ -83,7 +88,7 @@ public class DependencyCheckSensorTest {
         final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
 
         when(context.config()).thenReturn(config);
-        when(pathResolver.relativeFile(any(File.class), anyString())).thenReturn(sampleReport);
+        when(pathResolver.relativeFile(any(File.class), eq(config.get(DependencyCheckConstants.REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
         sensor.execute(context);
     }
 
@@ -92,7 +97,7 @@ public class DependencyCheckSensorTest {
         final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
 
         when(context.config()).thenReturn(config);
-        when(pathResolver.relativeFile(any(File.class), anyString())).thenReturn(null);
+        when(pathResolver.relativeFile(any(File.class), eq(config.get(DependencyCheckConstants.REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.REPORT_PATH_DEFAULT)))).thenReturn(null);
         sensor.execute(context);
         verify(context, never()).newIssue();
     }
@@ -101,7 +106,7 @@ public class DependencyCheckSensorTest {
     public void shouldAddAnIssueForAVulnerability() throws URISyntaxException {
         final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
         when(context.config()).thenReturn(config);
-        when(pathResolver.relativeFile(any(File.class), anyString())).thenReturn(sampleReport);
+        when(pathResolver.relativeFile(any(File.class), eq(config.get(DependencyCheckConstants.REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
         sensor.execute(context);
 
         verify(context, times(3)).newIssue();
@@ -112,7 +117,7 @@ public class DependencyCheckSensorTest {
         final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
 
         when(context.config()).thenReturn(config);
-        when(pathResolver.relativeFile(any(File.class), anyString())).thenReturn(sampleReport);
+        when(pathResolver.relativeFile(any(File.class), eq(config.get(DependencyCheckConstants.REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
         sensor.execute(context);
 
         verify(context.newMeasure(), times(9)).forMetric(any(Metric.class));
@@ -123,9 +128,20 @@ public class DependencyCheckSensorTest {
         final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
 
         when(context.config()).thenReturn(config);
-        when(pathResolver.relativeFile(any(File.class), anyString())).thenReturn(sampleReport);
+        when(pathResolver.relativeFile(any(File.class), eq(config.get(DependencyCheckConstants.REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
         sensor.execute(context);
 
         verify(context.newMeasure(), atLeastOnce()).on(any(InputComponent.class));
+    }
+
+    @Test
+    public void shouldPersistHtmlReport() throws URISyntaxException {
+        final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
+
+        when(context.config()).thenReturn(config);
+        when(pathResolver.relativeFile(any(File.class), eq(config.get(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.HTML_REPORT_PATH_DEFAULT)))).thenReturn(sampleHtmlReport);
+        sensor.execute(context);
+
+        verify(context.<String>newMeasure().forMetric(DependencyCheckMetrics.REPORT), times(1)).on(any(InputComponent.class));
     }
 }
