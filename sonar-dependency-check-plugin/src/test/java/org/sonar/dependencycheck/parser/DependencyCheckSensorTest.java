@@ -40,11 +40,10 @@ import java.nio.file.Paths;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class DependencyCheckSensorTest {
-    private FileSystem fileSystem;
+
     private PathResolver pathResolver;
     private DependencyCheckSensor sensor;
 
@@ -55,9 +54,9 @@ public class DependencyCheckSensorTest {
 
     @Before
     public void init() throws URISyntaxException {
-        this.fileSystem = mock(FileSystem.class, RETURNS_DEEP_STUBS);
+        FileSystem fileSystem = mock(FileSystem.class, RETURNS_DEEP_STUBS);
         this.pathResolver = mock(PathResolver.class);
-        this.sensor = new DependencyCheckSensor(this.fileSystem, this.pathResolver);
+        this.sensor = new DependencyCheckSensor(fileSystem, this.pathResolver);
 
         // Mock config
         MapSettings settings = new MapSettings();
