@@ -82,6 +82,7 @@ Dependency-Check HTML report in the SonarQube project.
 To configure the severity of the created issues you can optionally specify the minimum score for each severity with the following parameter. Specify a score of `-1` to completely disable a severity. 
 
 ```ini
+sonar.dependencyCheck.severity.blocker=9.0
 sonar.dependencyCheck.severity.critical=7.0
 sonar.dependencyCheck.severity.major=4.0
 sonar.dependencyCheck.severity.minor=0.0
