@@ -5,7 +5,7 @@
 Dependency-Check Plugin for SonarQube 6.x
 =====================================
 
-Integrates [Dependency-Check] reports into SonarQube v6.3 or higher. 
+Integrates [Dependency-Check] reports into SonarQube v6.5 or higher. 
 
 Please see the [SonarQube 5.x] branch for older SonarQube 5.x support
 
