@@ -86,6 +86,13 @@ public final class DependencyCheckPlugin implements Plugin {
                         .description("Minimum score for minor issues or -1 to deactivate minor issues.")
                         .defaultValue(Float.toString(DependencyCheckConstants.SEVERITY_MINOR_DEFAULT))
                         .type(PropertyType.FLOAT)
+                        .build(),
+                PropertyDefinition.builder(DependencyCheckConstants.SUMMARIZE_PROPERTY)
+                        .subCategory("General")
+                        .name("Summarize")
+                        .description("When enabled we summarize all vulnerabilities per dependency.")
+                        .defaultValue(Boolean.toString(DependencyCheckConstants.SUMMARIZE_PROPERTY_DEFAULT))
+                        .type(PropertyType.BOOLEAN)
                         .build()
         );
     }

@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -105,8 +106,8 @@ public class ReportParser {
         return dependency;
     }
 
-    private static Collection<Vulnerability> processVulnerabilities(SMInputCursor vulnC) throws XMLStreamException {
-        Collection<Vulnerability> vulnerabilities = new ArrayList<>();
+    private static List<Vulnerability> processVulnerabilities(SMInputCursor vulnC) throws XMLStreamException {
+        List<Vulnerability> vulnerabilities = new ArrayList<>();
         SMInputCursor cursor = vulnC.childElementCursor("vulnerability");
         while (cursor.getNext() != null) {
             vulnerabilities.add(processVulnerability(cursor));
