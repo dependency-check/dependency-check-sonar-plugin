@@ -36,7 +36,7 @@ public abstract class ReportFile {
 
     protected final ReportFormat reportFormat;
     protected final String property;
-    protected File report;
+    protected final File report;
 
     protected ReportFile(ReportFormat reportFormat, String property, File report) {
         this.reportFormat = reportFormat;
