@@ -70,11 +70,8 @@ public abstract class ReportFile {
     @CheckForNull
     public String getReportContent() {
         String reportContent = null;
-        int len = (int) this.report.length();
-        try (InputStream reportFileInputStream = getInputStream()) {
-            byte[] readBuffer = new byte[len];
-            reportFileInputStream.read(readBuffer, 0, len);
-            reportContent = new String(readBuffer, StandardCharsets.UTF_8);
+        try {
+            reportContent = new String(Files.readAllBytes(report.toPath()), StandardCharsets.UTF_8);
         } catch (IOException e) {
             LOGGER.warn("Could not read {}-Report", reportFormat, e);
         }
