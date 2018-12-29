@@ -66,6 +66,7 @@ public class DependencyCheckSensor implements Sensor {
     private int criticalIssuesCount;
     private int majorIssuesCount;
     private int minorIssuesCount;
+    private int infoIssuesCount;
 
     public DependencyCheckSensor(FileSystem fileSystem, PathResolver pathResolver) {
         this.fileSystem = fileSystem;
@@ -153,6 +154,9 @@ public class DependencyCheckSensor implements Sensor {
             case MINOR:
                 this.minorIssuesCount++;
                 break;
+            case INFO:
+                this.infoIssuesCount++;
+                break;
             default:
                 LOGGER.debug("Unknown severity {}", severity);
                 break;
@@ -211,6 +215,7 @@ public class DependencyCheckSensor implements Sensor {
         context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.TOTAL_DEPENDENCIES).on(context.module()).withValue(totalDependencies).save();
         context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_DEPENDENCIES).on(context.module()).withValue(vulnerableDependencies).save();
         context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.TOTAL_VULNERABILITIES).on(context.module()).withValue(vulnerabilityCount).save();
+        LOGGER.debug("Found {} info Issues", infoIssuesCount);
 
         context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.INHERITED_RISK_SCORE).on(context.module())
             .withValue(DependencyCheckMetrics.inheritedRiskScore(blockerIssuesCount, criticalIssuesCount, majorIssuesCount, minorIssuesCount)).save();
