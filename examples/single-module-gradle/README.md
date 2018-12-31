@@ -9,7 +9,7 @@ Usage
 ```
 gradle build
 gradle dependencyCheckAnalyze
-gradle sonarqubee
+gradle sonarqube
 ```
 
 Copyright & License
