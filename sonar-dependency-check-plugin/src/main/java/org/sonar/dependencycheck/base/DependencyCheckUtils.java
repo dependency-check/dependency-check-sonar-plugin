@@ -21,6 +21,7 @@ package org.sonar.dependencycheck.base;
 
 import org.codehaus.staxmate.SMInputFactory;
 import org.sonar.api.batch.rule.Severity;
+import org.sonar.api.config.Configuration;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
@@ -51,6 +52,14 @@ public final class DependencyCheckUtils {
         } else {
             return Severity.INFO;
         }
+    }
+
+    public static Severity cvssToSonarQubeSeverity(Float cvssScore, Configuration config) {
+        Float severityBlocker = config.getFloat(DependencyCheckConstants.SEVERITY_BLOCKER).orElse(DependencyCheckConstants.SEVERITY_BLOCKER_DEFAULT);
+        Float severityCritical = config.getFloat(DependencyCheckConstants.SEVERITY_CRITICAL).orElse(DependencyCheckConstants.SEVERITY_CRITICAL_DEFAULT);
+        Float severityMajor = config.getFloat(DependencyCheckConstants.SEVERITY_MAJOR).orElse(DependencyCheckConstants.SEVERITY_MAJOR_DEFAULT);
+        Float severityMinor = config.getFloat(DependencyCheckConstants.SEVERITY_MINOR).orElse(DependencyCheckConstants.SEVERITY_MINOR_DEFAULT);
+        return DependencyCheckUtils.cvssToSonarQubeSeverity(cvssScore, severityBlocker ,severityCritical, severityMajor, severityMinor);
     }
 
 }
