@@ -22,7 +22,7 @@ package org.sonar.dependencycheck.rule;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.dependencycheck.DependencyCheckPlugin;
+import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
@@ -40,7 +40,7 @@ public class KnownCveRuleDefinitionTest {
         final RulesDefinition.NewRepository repo = mock(RulesDefinition.NewRepository.class);
         final RulesDefinition.NewRule rule = mock(RulesDefinition.NewRule.class, RETURNS_SMART_NULLS);
 
-        when(repo.createRule(DependencyCheckPlugin.RULE_KEY)).thenReturn(rule);
+        when(repo.createRule(DependencyCheckConstants.RULE_KEY)).thenReturn(rule);
         when(context.createRepository(anyString(), anyString())).thenReturn(repo);
 
         this.rule.define(context);
@@ -48,7 +48,7 @@ public class KnownCveRuleDefinitionTest {
         InOrder inOrder = inOrder(context, repo);
 
         inOrder.verify(context).createRepository("OWASP","neutral");
-        inOrder.verify(repo).createRule(DependencyCheckPlugin.RULE_KEY);
+        inOrder.verify(repo).createRule(DependencyCheckConstants.RULE_KEY);
 
         inOrder.verify(repo).done();
         inOrder.verifyNoMoreInteractions();

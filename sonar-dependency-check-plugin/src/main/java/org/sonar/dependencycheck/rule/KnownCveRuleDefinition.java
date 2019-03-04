@@ -22,7 +22,7 @@ package org.sonar.dependencycheck.rule;
 import org.sonar.api.rule.RuleStatus;
 import org.sonar.api.rule.Severity;
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.dependencycheck.DependencyCheckPlugin;
+import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -34,10 +34,10 @@ public class KnownCveRuleDefinition implements RulesDefinition {
 	@Override
     @ParametersAreNonnullByDefault
     public void define(Context context) {
-        NewRepository repo = context.createRepository(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.LANGUAGE_KEY);
+        NewRepository repo = context.createRepository(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckConstants.LANGUAGE_KEY);
         repo.setName("OWASP");
 
-        NewRule rule = repo.createRule(DependencyCheckPlugin.RULE_KEY);
+        NewRule rule = repo.createRule(DependencyCheckConstants.RULE_KEY);
         rule.addTags("cwe-937", "cwe", "cve", "owasp-a9", "security", "vulnerability");
         rule.setName("Using Components with Known Vulnerabilities");
         rule.setSeverity(Severity.MAJOR);

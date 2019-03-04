@@ -37,6 +37,11 @@ public final class DependencyCheckConstants {
     public static final String HTML_REPORT_PATH_DEFAULT = "${WORKSPACE}/dependency-check-report.html";
     public static final Boolean SUMMARIZE_PROPERTY_DEFAULT = Boolean.FALSE;
 
+    public static final String REPOSITORY_KEY = "OWASP";
+    public static final String LANGUAGE_KEY = "neutral";
+    public static final String RULE_KEY = "UsingComponentWithKnownVulnerability";
+    public static final String SUB_CATEGORY_SEVERITIES = "Severities";
+
     private DependencyCheckConstants() {
     }
 

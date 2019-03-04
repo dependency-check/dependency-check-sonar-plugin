@@ -20,14 +20,14 @@
 package org.sonar.dependencycheck.rule;
 
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
-import org.sonar.dependencycheck.DependencyCheckPlugin;
+import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
 public class NeutralProfile implements BuiltInQualityProfilesDefinition {
 
     @Override
     public void define(Context context) {
-        NewBuiltInQualityProfile dependencyCheckWay = context.createBuiltInQualityProfile("Neutral", DependencyCheckPlugin.LANGUAGE_KEY);
-        dependencyCheckWay.activateRule(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY);
+        NewBuiltInQualityProfile dependencyCheckWay = context.createBuiltInQualityProfile("Neutral", DependencyCheckConstants.LANGUAGE_KEY);
+        dependencyCheckWay.activateRule(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckConstants.RULE_KEY);
         dependencyCheckWay.done();
     }
 }
