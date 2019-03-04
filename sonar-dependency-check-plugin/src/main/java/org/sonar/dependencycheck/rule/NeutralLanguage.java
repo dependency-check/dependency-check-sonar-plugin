@@ -20,7 +20,7 @@
 package org.sonar.dependencycheck.rule;
 
 import org.sonar.api.resources.AbstractLanguage;
-import org.sonar.dependencycheck.DependencyCheckPlugin;
+import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
 /**
  * In order for a rule repository to work properly, the rules created in the repository
@@ -33,7 +33,7 @@ import org.sonar.dependencycheck.DependencyCheckPlugin;
 public class NeutralLanguage extends AbstractLanguage {
 
     public NeutralLanguage() {
-        super(DependencyCheckPlugin.LANGUAGE_KEY, "Neutral");
+        super(DependencyCheckConstants.LANGUAGE_KEY, "Neutral");
     }
 
     @Override

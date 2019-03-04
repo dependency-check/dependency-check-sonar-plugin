@@ -77,7 +77,7 @@ public class DependencyCheckSensor implements Sensor {
         Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(), context.config());
 
         context.newIssue()
-                .forRule(RuleKey.of(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY))
+                .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckConstants.RULE_KEY))
                 .at(new DefaultIssueLocation()
                         .on(context.module())
                         .message(formatDescription(dependency, vulnerability))
@@ -94,7 +94,7 @@ public class DependencyCheckSensor implements Sensor {
         Vulnerability highestVulnerability = vulnerabilities.get(0);
         Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(highestVulnerability.getCvssScore(), context.config());
         context.newIssue()
-            .forRule(RuleKey.of(DependencyCheckPlugin.REPOSITORY_KEY, DependencyCheckPlugin.RULE_KEY))
+            .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckConstants.RULE_KEY))
             .at(new DefaultIssueLocation()
                 .on(context.module())
                 .message(formatDescription(dependency, vulnerabilities, highestVulnerability)))
