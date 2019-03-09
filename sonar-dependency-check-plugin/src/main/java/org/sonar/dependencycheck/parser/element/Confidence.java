@@ -17,4 +17,12 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-@javax.annotation.ParametersAreNonnullByDefault package org.sonar.dependencycheck.parser;
+
+package org.sonar.dependencycheck.parser.element;
+
+public enum Confidence {
+    LOW,
+    MEDIUM,
+    HIGH,
+    HIGHEST,
+}
