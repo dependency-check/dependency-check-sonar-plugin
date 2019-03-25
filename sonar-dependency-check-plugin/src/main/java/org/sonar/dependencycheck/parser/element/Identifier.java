@@ -17,36 +17,47 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package org.sonar.dependencycheck.parser.element;
 
-import java.util.Collection;
-
-import javax.annotation.Nullable;
-
-import edu.umd.cs.findbugs.annotations.NonNull;
-
-public class Analysis {
-
-    private final ScanInfo scanInfo;
-    private final ProjectInfo projectInfo;
-    private final Collection<Dependency> dependencies;
-
-    public Analysis(@Nullable ScanInfo scanInfo, @Nullable ProjectInfo projectInfo, @NonNull Collection<Dependency> dependencies) {
-        this.scanInfo = scanInfo;
-        this.projectInfo = projectInfo;
-        this.dependencies = dependencies;
+public class Identifier {
+    private String type;
+    private Confidence confidence;
+    private String name;
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
     }
-
-    public ScanInfo getScanInfo() {
-        return scanInfo;
+    /**
+     * @param type the type to set
+     */
+    public void setType(String type) {
+        this.type = type;
     }
-
-    public ProjectInfo getProjectInfo() {
-        return projectInfo;
+    /**
+     * @return the confidence
+     */
+    public Confidence getConfidence() {
+        return confidence;
     }
-
-    public Collection<Dependency> getDependencies() {
-        return dependencies;
+    /**
+     * @param confidence the confidence to set
+     */
+    public void setConfidence(Confidence confidence) {
+        this.confidence = confidence;
     }
-
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 }

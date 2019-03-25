@@ -35,8 +35,10 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.parser.element.Analysis;
+import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Evidence;
+import org.sonar.dependencycheck.parser.element.Identifier;
 import org.sonar.dependencycheck.parser.element.ProjectInfo;
 import org.sonar.dependencycheck.parser.element.ScanInfo;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
@@ -88,20 +90,35 @@ public class ReportParser {
         SMInputCursor childCursor = depC.childCursor();
         while (childCursor.getNext() != null) {
             String nodeName = childCursor.getLocalName();
-            if ("fileName".equals(nodeName)) {
-                dependency.setFileName(StringUtils.trim(childCursor.collectDescendantText(false)));
-            } else if ("filePath".equals(nodeName)) {
-                dependency.setFilePath(StringUtils.trim(childCursor.collectDescendantText(false)));
-            } else if ("md5".equals(nodeName)) {
-                dependency.setMd5Hash(StringUtils.trim(childCursor.collectDescendantText(false)));
-            } else if ("sha1".equals(nodeName)) {
-                dependency.setSha1Hash(StringUtils.trim(childCursor.collectDescendantText(false)));
-            } else if ("evidenceCollected".equals(nodeName)) {
-                dependency.setEvidenceCollected(processEvidenceCollected(childCursor));
-            } else if ("vulnerabilities".equals(nodeName)) {
-                dependency.setVulnerabilities(processVulnerabilities(childCursor));
+            if (nodeName == null) {
+                continue;
             }
-
+            switch (nodeName) {
+                case "fileName":
+                    dependency.setFileName(StringUtils.trim(childCursor.collectDescendantText(false)));
+                    break;
+                case "filePath":
+                    dependency.setFilePath(StringUtils.trim(childCursor.collectDescendantText(false)));
+                    break;
+                case "md5":
+                    dependency.setMd5Hash(StringUtils.trim(childCursor.collectDescendantText(false)));
+                    break;
+                case "sha1":
+                    dependency.setSha1Hash(StringUtils.trim(childCursor.collectDescendantText(false)));
+                    break;
+                case "evidenceCollected":
+                    dependency.setEvidenceCollected(processEvidenceCollected(childCursor));
+                    break;
+                case "vulnerabilities":
+                    dependency.setVulnerabilities(processVulnerabilities(childCursor));
+                    break;
+                case "identifiers":
+                    dependency.setIdentifiersCollected(processIdentifiersCollected(childCursor));
+                    break;
+                default:
+                    LOGGER.debug("Depedency Node {} is not used", nodeName);
+                    break;
+            }
         }
         return dependency;
     }
@@ -164,6 +181,35 @@ public class ReportParser {
             }
         }
         return evidence;
+    }
+
+    private static Collection<Identifier> processIdentifiersCollected(SMInputCursor ifC) throws XMLStreamException {
+        Collection<Identifier> identifierCollection = new ArrayList<>();
+        SMInputCursor cursor = ifC.childElementCursor("identifier");
+        while (cursor.getNext() != null) {
+            identifierCollection.add(processIdentifiers(cursor));
+        }
+        return identifierCollection;
+    }
+
+    private static Identifier processIdentifiers(SMInputCursor ifC) throws XMLStreamException {
+        Identifier identifier = new Identifier();
+        for (int i = 0; i < ifC.getAttrCount(); ++i) {
+            if (ifC.getAttrLocalName(i).equals("type")) {
+                identifier.setType(ifC.getAttrValue(i));
+            }
+            if (ifC.getAttrLocalName(i).equals("confidence")) {
+                identifier.setConfidence(Confidence.valueOf(ifC.getAttrValue(i)));
+            }
+        }
+        SMInputCursor childCursor = ifC.childCursor();
+        while (childCursor.getNext() != null) {
+            String nodeName = childCursor.getLocalName();
+            if ("name".equals(nodeName)) {
+                identifier.setName(StringUtils.trim(childCursor.collectDescendantText(false)));
+            }
+        }
+        return identifier;
     }
 
     private static ScanInfo processScanInfo(SMInputCursor siC) throws XMLStreamException {
