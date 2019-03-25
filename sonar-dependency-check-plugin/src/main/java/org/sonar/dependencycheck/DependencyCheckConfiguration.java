@@ -23,11 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.sonar.api.PropertyType;
-import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
-@ScannerSide
 public class DependencyCheckConfiguration {
     
     private DependencyCheckConfiguration() {

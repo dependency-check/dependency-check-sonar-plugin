@@ -7,7 +7,7 @@ Usage
 -------------------
 
 ```
-mvn clean package dependency-check:check
+mvn clean package dependency-check:aggregate
 mvn sonar:sonar
 ```
 

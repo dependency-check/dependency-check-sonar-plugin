@@ -30,8 +30,10 @@ import java.util.Iterator;
 
 import org.junit.Test;
 import org.sonar.dependencycheck.parser.element.Analysis;
+import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Evidence;
+import org.sonar.dependencycheck.parser.element.Identifier;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
 
 public class ReportParserTest {
@@ -95,6 +97,12 @@ public class ReportParserTest {
         dependency = (Dependency) iterator.next();
         assertEquals(32, dependency.getEvidenceCollected().size());
         assertEquals(1, dependency.getVulnerabilities().size());
+        assertEquals(1, dependency.getIdentifiersCollected().size());
+        Collection<Identifier> identifiers = dependency.getIdentifiersCollected();
+        Identifier identifier = identifiers.iterator().next();
+        assertEquals(Confidence.LOW, identifier.getConfidence());
+        assertEquals("(javax.mail:mail:1.4.5)", identifier.getName());
+        assertEquals("maven", identifier.getType());
         vulnerabilities = dependency.getVulnerabilities();
         assertEquals(1, vulnerabilities.size());
         vulnIterator = vulnerabilities.iterator();

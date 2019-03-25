@@ -19,12 +19,14 @@
  */
 package org.sonar.dependencycheck.base;
 
-import org.sonar.api.measures.Metric;
-import org.sonar.api.measures.Metrics;
-
 import java.util.Arrays;
 import java.util.List;
 
+import org.sonar.api.measures.Metric;
+import org.sonar.api.measures.Metrics;
+import org.sonar.api.batch.ScannerSide;
+
+@ScannerSide
 public final class DependencyCheckMetrics implements Metrics {
 
     private static final String DOMAIN = "OWASP-Dependency-Check"; // TODO: I think OWASP needs to stay here in order to keep existing users metrics

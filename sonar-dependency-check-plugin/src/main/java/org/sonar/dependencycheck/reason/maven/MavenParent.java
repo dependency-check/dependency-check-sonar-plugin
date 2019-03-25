@@ -17,22 +17,35 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.dependencycheck.page;
 
-import org.sonar.api.web.page.Context;
-import org.sonar.api.web.page.Page;
-import org.sonar.api.web.page.Page.Scope;
-import org.sonar.api.web.page.PageDefinition;
+package org.sonar.dependencycheck.reason.maven;
 
-public class DependencyCheckReportPage implements PageDefinition {
+import javax.annotation.Nullable;
 
-    @Override
-    public void define(Context context) {
-        context.addPage(
-            Page.builder("dependencycheck/report")
-                .setScope(Scope.COMPONENT)
-                .setComponentQualifiers(Page.Qualifier.PROJECT, Page.Qualifier.MODULE)
-                .setName("Dependency-Check")
-                .setAdmin(false).build());
+import org.sonar.api.batch.fs.TextRange;
+
+public class MavenParent {
+
+    private final String groupId;
+    private final TextRange textRange;
+    /**
+     * @param groupId
+     * @param textRange
+     */
+    public MavenParent(String groupId, @Nullable TextRange textRange) {
+        this.groupId = groupId;
+        this.textRange = textRange;
+    }
+    /**
+     * @return the groupId
+     */
+    public String getGroupId() {
+        return groupId;
+    }
+    /**
+     * @return the textRange
+     */
+    public TextRange getTextRange() {
+        return textRange;
     }
 }

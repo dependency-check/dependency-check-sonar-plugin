@@ -19,12 +19,21 @@
  */
 package org.sonar.dependencycheck.base;
 
-import org.codehaus.staxmate.SMInputFactory;
-import org.sonar.api.batch.rule.Severity;
-import org.sonar.api.config.Configuration;
+import java.util.Collection;
+import java.util.Optional;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
+
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.staxmate.SMInputFactory;
+import org.sonar.api.batch.rule.Severity;
+import org.sonar.api.config.Configuration;
+import org.sonar.dependencycheck.parser.element.Dependency;
+import org.sonar.dependencycheck.parser.element.Identifier;
+import org.sonar.dependencycheck.parser.element.Vulnerability;
+
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 public final class DependencyCheckUtils {
 
@@ -62,4 +71,40 @@ public final class DependencyCheckUtils {
         return DependencyCheckUtils.cvssToSonarQubeSeverity(cvssScore, severityBlocker ,severityCritical, severityMajor, severityMinor);
     }
 
+    public static Optional<Identifier> getMavenIdentifier (@NonNull Dependency dependency){
+        for (Identifier identifier : dependency.getIdentifiersCollected()) {
+            if ("maven".equals(identifier.getType())) {
+                return Optional.of(identifier);
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * TODO: Add Markdown formatting if and when Sonar supports it
+     * https://jira.sonarsource.com/browse/SONAR-4161
+     */
+    public static String formatDescription(Dependency dependency, Vulnerability vulnerability) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
+        sb.append("Reference: ").append(vulnerability.getName()).append(" | ");
+        sb.append("CVSS Score: ").append(vulnerability.getCvssScore()).append(" | ");
+        if (StringUtils.isNotBlank(vulnerability.getCwe())) {
+            sb.append("Category: ").append(vulnerability.getCwe()).append(" | ");
+        }
+        sb.append(vulnerability.getDescription());
+        return sb.toString().trim();
+    }
+
+    public static String formatDescription(Dependency dependency, Collection<Vulnerability> vulnerabilities, Vulnerability highestVulnerability) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
+        sb.append("Highest CVSS Score: ").append(highestVulnerability.getCvssScore()).append(" | ");
+        sb.append("Amount of CVSS: ").append(vulnerabilities.size()).append(" | ");
+        sb.append("References: ");
+        for (Vulnerability vulnerability : vulnerabilities) {
+            sb.append(vulnerability.getName()).append(" (").append(vulnerability.getCvssScore()).append(") ");
+        }
+        return sb.toString().trim();
+    }
 }
