@@ -19,9 +19,9 @@
  */
 package org.sonar.dependencycheck.rule;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.junit.Test;
 
 
 /**
@@ -30,7 +30,7 @@ import static org.fest.assertions.Assertions.assertThat;
 public class NeutralLanguageTest {
     @Test
     public void getFileSuffixes() throws Exception {
-        assertThat(new NeutralLanguage().getFileSuffixes()).isEmpty();
+        assertEquals(0, new NeutralLanguage().getFileSuffixes().length);
     }
 
 }

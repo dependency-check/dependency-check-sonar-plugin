@@ -19,15 +19,15 @@
  */
 package org.sonar.dependencycheck.base;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.sonar.api.batch.rule.Severity;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.sonar.api.batch.rule.Severity;
 
 @RunWith(Parameterized.class)
 public class DependencyCheckUtilsTest {
@@ -137,7 +137,7 @@ public class DependencyCheckUtilsTest {
 
     @Test
     public void testCvssToSonarQubeSeverity() {
-        assertThat(DependencyCheckUtils.cvssToSonarQubeSeverity(this.cvssSeverity, this.blocker, this.critical, this.major, this.minor)).isEqualTo(this.expectedSeverity);
+        assertEquals(this.expectedSeverity, DependencyCheckUtils.cvssToSonarQubeSeverity(this.cvssSeverity, this.blocker, this.critical, this.major, this.minor));
     }
 
 }
