@@ -19,28 +19,31 @@
  */
 package org.sonar.dependencycheck.parser;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.fs.InputComponent;
-import org.sonar.api.batch.measure.Metric;
-import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.SensorDescriptor;
-import org.sonar.api.config.Configuration;
-import org.sonar.api.config.internal.MapSettings;
-import org.sonar.api.scan.filesystem.PathResolver;
-import org.sonar.dependencycheck.DependencyCheckSensor;
-import org.sonar.dependencycheck.base.DependencyCheckConstants;
-import org.sonar.dependencycheck.base.DependencyCheckMetrics;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.api.config.Configuration;
+import org.sonar.api.config.internal.MapSettings;
+import org.sonar.api.scan.filesystem.PathResolver;
+import org.sonar.dependencycheck.DependencyCheckSensor;
+import org.sonar.dependencycheck.base.DependencyCheckConstants;
+import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 
 public class DependencyCheckSensorTest {
 
@@ -51,6 +54,7 @@ public class DependencyCheckSensorTest {
     private File sampleHtmlReport;
 
     private Configuration config;
+    private MapSettings settings;
 
     @Before
     public void init() throws URISyntaxException {
@@ -59,7 +63,7 @@ public class DependencyCheckSensorTest {
         this.sensor = new DependencyCheckSensor(fileSystem, this.pathResolver);
 
         // Mock config
-        MapSettings settings = new MapSettings();
+        settings = new MapSettings();
         settings.setProperty(DependencyCheckConstants.REPORT_PATH_PROPERTY, "dependency-check-report.xml");
         config = settings.asConfig();
         // mock a sample report
@@ -73,7 +77,7 @@ public class DependencyCheckSensorTest {
 
     @Test
     public void toStringTest() {
-        assertThat(this.sensor.toString()).isEqualTo("Dependency-Check");
+        assertEquals("Dependency-Check", this.sensor.toString());
     }
 
     @Test
@@ -84,79 +88,71 @@ public class DependencyCheckSensorTest {
     }
     @Test
     public void shouldAnalyse() throws URISyntaxException {
-        final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
-
-        when(context.config()).thenReturn(config);
+        final SensorContextTester context = SensorContextTester.create(new File(""));
+        context.setSettings(settings);
         when(pathResolver.relativeFile(any(File.class), eq(config.get(DependencyCheckConstants.REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
         sensor.execute(context);
     }
 
     @Test
     public void shouldSkipIfReportWasNotFound() throws URISyntaxException {
-        final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
-
-        when(context.config()).thenReturn(config);
+        final SensorContextTester context = SensorContextTester.create(new File(""));
+        context.setSettings(settings);
         when(pathResolver.relativeFile(any(File.class), eq(config.get(DependencyCheckConstants.REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.REPORT_PATH_DEFAULT)))).thenReturn(null);
         sensor.execute(context);
-        verify(context, never()).newIssue();
+        assertEquals(0, context.allIssues().size());
     }
 
     @Test
     public void shouldAddAnIssueForAVulnerability() throws URISyntaxException {
-        final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
-        when(context.config()).thenReturn(config);
+        final SensorContextTester context = SensorContextTester.create(new File(""));
+        context.setSettings(settings);
         when(pathResolver.relativeFile(any(File.class), eq(config.get(DependencyCheckConstants.REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
         sensor.execute(context);
-
-        verify(context, times(3)).newIssue();
+        assertEquals(3, context.allIssues().size());
     }
 
     @Test
     public void shouldPersistTotalMetrics() throws URISyntaxException {
-        final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
-
-        when(context.config()).thenReturn(config);
+        final SensorContextTester context = SensorContextTester.create(new File(""));
+        context.setSettings(settings);
         when(pathResolver.relativeFile(any(File.class), eq(config.get(DependencyCheckConstants.REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
         sensor.execute(context);
+        assertEquals(9, context.measures("projectKey").size());
 
-        verify(context.newMeasure(), times(9)).forMetric(any(Metric.class));
     }
 
     @Test
     public void shouldPersistMetricsOnReport() throws URISyntaxException {
-        final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
-
-        when(context.config()).thenReturn(config);
+        final SensorContextTester context = SensorContextTester.create(new File(""));
+        context.setSettings(settings);
         when(pathResolver.relativeFile(any(File.class), eq(config.get(DependencyCheckConstants.REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
         sensor.execute(context);
+        assertNotNull(context.measures("projectKey"));
 
-        verify(context.newMeasure(), atLeastOnce()).on(any(InputComponent.class));
     }
 
     @Test
     public void shouldPersistHtmlReport() throws URISyntaxException {
-        final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
-
-        when(context.config()).thenReturn(config);
+        final SensorContextTester context = SensorContextTester.create(new File(""));
+        context.setSettings(settings);
         when(pathResolver.relativeFile(any(File.class), eq(config.get(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.HTML_REPORT_PATH_DEFAULT)))).thenReturn(sampleHtmlReport);
         sensor.execute(context);
+        assertNotNull(context.measure("projectKey", DependencyCheckMetrics.REPORT).value());
 
-        verify(context.<String>newMeasure().forMetric(DependencyCheckMetrics.REPORT), times(1)).on(any(InputComponent.class));
     }
 
     @Test
     public void shouldPersistSummarizeIssues() throws URISyntaxException {
-        final SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
+        final SensorContextTester context = SensorContextTester.create(new File(""));
         // Mock config
         MapSettings settings = new MapSettings();
         settings.setProperty(DependencyCheckConstants.REPORT_PATH_PROPERTY, "dependency-check-report.xml");
         settings.setProperty(DependencyCheckConstants.SUMMARIZE_PROPERTY, Boolean.TRUE);
-        config = settings.asConfig();
+        context.setSettings(settings);
 
-        when(context.config()).thenReturn(config);
         when(pathResolver.relativeFile(any(File.class), eq(config.get(DependencyCheckConstants.REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
         sensor.execute(context);
-
-        verify(context, times(2)).newIssue();
+        assertEquals(2, context.allIssues().size());
     }
 }
