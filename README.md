@@ -1,10 +1,10 @@
-[![Build Status](https://travis-ci.org/stevespringett/dependency-check-sonar-plugin.svg?branch=master)](https://travis-ci.org/stevespringett/dependency-check-sonar-plugin) 
+[![Build Status](https://travis-ci.org/stevespringett/dependency-check-sonar-plugin.svg?branch=master)](https://travis-ci.org/stevespringett/dependency-check-sonar-plugin)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/412eb95dd49d47bca70d53b685fb247a)](https://www.codacy.com/app/stevespringett/dependency-check-sonar-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=stevespringett/dependency-check-sonar-plugin&amp;utm_campaign=Badge_Grade)
 
 Dependency-Check Plugin for SonarQube 7.x
 =====================================
 
-Integrates [Dependency-Check] reports into SonarQube v7.3 or higher.
+Integrates [Dependency-Check] reports into SonarQube v7.6 or higher.
 
 Please see the [SonarQube 6.x] branch for SonarQube 6.x LTS support. The project will try to backport all code from master branch, as long as the LTS version is supported.
 Please see the [SonarQube 5.x] branch for older SonarQube 5.x support.
@@ -36,18 +36,13 @@ __Inherited Risk Score (IRS)__
 
 (critical * 7) + (high * 5) + (medium * 3) + (low * 1)
 
-The IRS is simply a weighted measurement of the vulnerabilities inherited by the 
-application through the use of vulnerable components. It does not measure the 
-applications actual risk due to those components. The higher the score the more 
-risk the application inherits.
+The IRS is simply a weighted measurement of the vulnerabilities inherited by the application through the use of vulnerable components. It does not measure the applications actual risk due to those components. The higher the score the more risk the application inherits.
 
 __Vulnerable Component Ratio__
 
 (vulnerabilities / vulnerableComponents)
 
-This is simply a measurement of the number of vulnerabilities to the vulnerable 
-components (as a percentage). A higher percentage indicates that a large number 
-of components contain vulnerabilities. Lower percentages are better.
+This is simply a measurement of the number of vulnerabilities to the vulnerable components (as a percentage). A higher percentage indicates that a large number of components contain vulnerabilities. Lower percentages are better.
 
 
 Compiling
@@ -57,15 +52,18 @@ Compiling
 
 Distribution
 -------------------
-Ready to use binaries are available from [bintray] as well as [GitHub].
+Ready to use binaries are available from [GitHub].
 
 Installation
 -------------------
 Copy the plugin (jar file) to $SONAR_INSTALL_DIR/extensions/plugins and restart SonarQube.
 
+Using
+-------------------
+Create aggregate reports with Dependency-Check. Dependency-Check will output a file named 'dependency-check-report.xml' when asked to output XML. The Dependency-Check SonarQube plugin reads an existing Dependency-Check XML report.
+
 Plugin Configuration
 -------------------
-Dependency-Check will output a file named 'dependency-check-report.xml' when asked to output XML. The Dependency-Check SonarQube plugin reads an existing Dependency-Check XML report.
 
 A typical SonarQube configuration will have the following parameter. This example assumes the use of a Jenkins workspace, but can easily be altered for other CI/CD systems.
 
@@ -78,7 +76,7 @@ In this example, both the XML and HTML reports are specified. Only the XML repor
 report is also available, it greatly enhances the usability of the SonarQube plugin by incorporating the actual
 Dependency-Check HTML report in the SonarQube project.
 
-To configure the severity of the created issues you can optionally specify the minimum score for each severity with the following parameter. Specify a score of `-1` to completely disable a severity. 
+To configure the severity of the created issues you can optionally specify the minimum score for each severity with the following parameter. Specify a score of `-1` to completely disable a severity.
 
 ```ini
 sonar.dependencyCheck.severity.blocker=9.0
@@ -115,7 +113,6 @@ Dependency-Check is Copyright (c) Jeremy Long. All Rights Reserved.
 Permission to modify and redistribute is granted under the terms of the [LGPLv3] license.
 
   [LGPLv3]: http://www.gnu.org/licenses/lgpl.txt
-  [bintray]: https://bintray.com/stevespringett/owasp/dependency-check-sonar/
   [GitHub]: https://github.com/stevespringett/dependency-check-sonar-plugin/releases
   [Dependency-Check]: https://www.owasp.org/index.php/OWASP_Dependency_Check
   [SonarQube 5.x]: https://github.com/stevespringett/dependency-check-sonar-plugin/tree/SonarQube_5.x
