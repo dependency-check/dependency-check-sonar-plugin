@@ -36,6 +36,7 @@ dependencyCheck {
 sonarqube {
     properties {
         property 'sonar.dependencyCheck.reportPath', 'build/reports/dependency-check-report.xml'
-        property 'sonar.dependencyCheck.htmlReportPath', 'build/reports/dependency-check-report.html' 
+        property 'sonar.dependencyCheck.htmlReportPath', 'build/reports/dependency-check-report.html'
+        properties["sonar.sources"] += "build.gradle"
     }
 }
