@@ -8,7 +8,7 @@ Usage
 
 ```
 gradle build
-gradle dependencyCheckAnalyze
+gradle dependencyCheckAggregate
 gradle sonarqube
 ```
 
