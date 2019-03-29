@@ -17,22 +17,5 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.dependencycheck.page;
+@javax.annotation.ParametersAreNonnullByDefault package org.sonar.dependencycheck.reason;
 
-import org.sonar.api.web.page.Context;
-import org.sonar.api.web.page.Page;
-import org.sonar.api.web.page.Page.Scope;
-import org.sonar.api.web.page.PageDefinition;
-
-public class DependencyCheckReportPage implements PageDefinition {
-
-    @Override
-    public void define(Context context) {
-        context.addPage(
-            Page.builder("dependencycheck/report")
-                .setScope(Scope.COMPONENT)
-                .setComponentQualifiers(Page.Qualifier.PROJECT, Page.Qualifier.MODULE)
-                .setName("Dependency-Check")
-                .setAdmin(false).build());
-    }
-}
