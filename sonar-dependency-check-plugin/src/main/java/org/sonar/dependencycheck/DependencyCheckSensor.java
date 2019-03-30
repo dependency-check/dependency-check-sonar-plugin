@@ -219,7 +219,7 @@ public class DependencyCheckSensor implements Sensor {
             String htmlReport = htmlReportFile.getReportContent();
             if (htmlReport != null) {
                 LOGGER.info("Upload Dependency-Check HTML-Report");
-                context.<String>newMeasure().forMetric(DependencyCheckMetrics.REPORT).on(context.fileSystem().inputFile(context.fileSystem().predicates().hasRelativePath("pom.xml"))).withValue(htmlReport).save();
+                context.<String>newMeasure().forMetric(DependencyCheckMetrics.REPORT).on(context.module()).withValue(htmlReport).save();
             }
         } catch (FileNotFoundException e) {
             LOGGER.info(e.getMessage());
