@@ -79,7 +79,7 @@ public class DependencyCheckSensor implements Sensor {
         context.newIssue()
                 .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckConstants.RULE_KEY))
                 .at(new DefaultIssueLocation()
-                        .on(context.module())
+                        .on(context.fileSystem().inputFile(context.fileSystem().predicates().hasRelativePath("pom.xml")))
                         .message(formatDescription(dependency, vulnerability))
                 )
                 .overrideSeverity(severity)
@@ -96,7 +96,7 @@ public class DependencyCheckSensor implements Sensor {
         context.newIssue()
             .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckConstants.RULE_KEY))
             .at(new DefaultIssueLocation()
-                .on(context.module())
+                .on(context.fileSystem().inputFile(context.fileSystem().predicates().hasRelativePath("pom.xml")))
                 .message(formatDescription(dependency, vulnerabilities, highestVulnerability)))
             .overrideSeverity(severity)
             .save();
@@ -200,18 +200,18 @@ public class DependencyCheckSensor implements Sensor {
     }
 
     private void saveMeasures(SensorContext context) {
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS).on(context.module()).withValue(blockerIssuesCount).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.HIGH_SEVERITY_VULNS).on(context.module()).withValue(criticalIssuesCount).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS).on(context.module()).withValue(majorIssuesCount).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.LOW_SEVERITY_VULNS).on(context.module()).withValue(minorIssuesCount).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.TOTAL_DEPENDENCIES).on(context.module()).withValue(totalDependencies).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_DEPENDENCIES).on(context.module()).withValue(vulnerableDependencies).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.TOTAL_VULNERABILITIES).on(context.module()).withValue(vulnerabilityCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS).on(context.fileSystem().inputFile(context.fileSystem().predicates().hasRelativePath("pom.xml"))).withValue(blockerIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.HIGH_SEVERITY_VULNS).on(context.fileSystem().inputFile(context.fileSystem().predicates().hasRelativePath("pom.xml"))).withValue(criticalIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS).on(context.fileSystem().inputFile(context.fileSystem().predicates().hasRelativePath("pom.xml"))).withValue(majorIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.LOW_SEVERITY_VULNS).on(context.fileSystem().inputFile(context.fileSystem().predicates().hasRelativePath("pom.xml"))).withValue(minorIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.TOTAL_DEPENDENCIES).on(context.fileSystem().inputFile(context.fileSystem().predicates().hasRelativePath("pom.xml"))).withValue(totalDependencies).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_DEPENDENCIES).on(context.fileSystem().inputFile(context.fileSystem().predicates().hasRelativePath("pom.xml"))).withValue(vulnerableDependencies).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.TOTAL_VULNERABILITIES).on(context.fileSystem().inputFile(context.fileSystem().predicates().hasRelativePath("pom.xml"))).withValue(vulnerabilityCount).save();
         LOGGER.debug("Found {} info Issues", infoIssuesCount);
 
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.INHERITED_RISK_SCORE).on(context.module())
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.INHERITED_RISK_SCORE).on(context.fileSystem().inputFile(context.fileSystem().predicates().hasRelativePath("pom.xml")))
             .withValue(DependencyCheckMetrics.inheritedRiskScore(blockerIssuesCount, criticalIssuesCount, majorIssuesCount, minorIssuesCount)).save();
-        context.<Double>newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO).on(context.module())
+        context.<Double>newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO).on(context.fileSystem().inputFile(context.fileSystem().predicates().hasRelativePath("pom.xml")))
             .withValue(DependencyCheckMetrics.vulnerableComponentRatio(vulnerabilityCount, vulnerableDependencies)).save();
 
         try {
@@ -219,7 +219,7 @@ public class DependencyCheckSensor implements Sensor {
             String htmlReport = htmlReportFile.getReportContent();
             if (htmlReport != null) {
                 LOGGER.info("Upload Dependency-Check HTML-Report");
-                context.<String>newMeasure().forMetric(DependencyCheckMetrics.REPORT).on(context.module()).withValue(htmlReport).save();
+                context.<String>newMeasure().forMetric(DependencyCheckMetrics.REPORT).on(context.fileSystem().inputFile(context.fileSystem().predicates().hasRelativePath("pom.xml"))).withValue(htmlReport).save();
             }
         } catch (FileNotFoundException e) {
             LOGGER.info(e.getMessage());

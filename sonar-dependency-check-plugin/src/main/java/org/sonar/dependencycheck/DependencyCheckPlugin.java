@@ -35,6 +35,7 @@ public final class DependencyCheckPlugin implements Plugin {
         context.addExtensions(Arrays.asList(
                 DependencyCheckSensor.class,
                 DependencyCheckMetrics.class,
+                DependencyCheckMeasureComputer.class,
                 NeutralProfile.class,
                 NeutralLanguage.class,
                 KnownCveRuleDefinition.class,
