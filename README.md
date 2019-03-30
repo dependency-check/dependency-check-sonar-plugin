@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/stevespringett/dependency-check-sonar-plugin.svg?branch=master)](https://travis-ci.org/stevespringett/dependency-check-sonar-plugin)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/412eb95dd49d47bca70d53b685fb247a)](https://www.codacy.com/app/stevespringett/dependency-check-sonar-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=stevespringett/dependency-check-sonar-plugin&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.org/SonarSecurityCommunity/dependency-check-sonar-plugin.svg?branch=master)](https://travis-ci.org/SonarSecurityCommunity/dependency-check-sonar-plugin)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/412eb95dd49d47bca70d53b685fb247a)](https://www.codacy.com/app/SonarSecurityCommunity/dependency-check-sonar-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=SonarSecurityCommunity/dependency-check-sonar-plugin&amp;utm_campaign=Badge_Grade)
 
 Dependency-Check Plugin for SonarQube 6.x
 =====================================
@@ -116,6 +116,6 @@ Dependency-Check is Copyright (c) Jeremy Long. All Rights Reserved.
 Permission to modify and redistribute is granted under the terms of the [LGPLv3] license.
 
   [LGPLv3]: http://www.gnu.org/licenses/lgpl.txt
-  [GitHub]: https://github.com/stevespringett/dependency-check-sonar-plugin/releases
+  [GitHub]: https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/releases
   [Dependency-Check]: https://www.owasp.org/index.php/OWASP_Dependency_Check
-  [SonarQube 5.x]: https://github.com/stevespringett/dependency-check-sonar-plugin/tree/SonarQube_5.x
+  [SonarQube 5.x]: https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/tree/SonarQube_5.x
