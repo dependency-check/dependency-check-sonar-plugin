@@ -41,27 +41,27 @@
     </developers>
 
     <scm>
-      <connection>scm:git:https://github.com/stevespringett/dependency-check-sonar-plugin</connection>
-      <developerConnection>scm:git:https://github.com/stevespringett/dependency-check-sonar-plugin</developerConnection>
-      <url>https://github.com/stevespringett/dependency-check-sonar-plugin</url>
+      <connection>scm:git:https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin</connection>
+      <developerConnection>scm:git:https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin</developerConnection>
+      <url>https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin</url>
       <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
       <system>GitHub</system>
-      <url>https://github.com/stevespringett/dependency-check-sonar-plugin/issues</url>
+      <url>https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/issues</url>
     </issueManagement>
 
     <ciManagement>
       <system>Travis CI</system>
-      <url>https://travis-ci.org/stevespringett/dependency-check-sonar-plugin</url>
+      <url>https://travis-ci.org/SonarSecurityCommunity/dependency-check-sonar-plugin</url>
     </ciManagement>
 
     <!-- todo: remove this when SonarSource Forge hosting becomes a reality -->
     <distributionManagement>
         <repository>
             <id>bintray</id>
-            <url>https://api.bintray.com/maven/stevespringett/owasp/dependency-check-sonar</url>
+            <url>https://api.bintray.com/maven/SonarSecurityCommunity/owasp/dependency-check-sonar</url>
         </repository>
     </distributionManagement>
 
