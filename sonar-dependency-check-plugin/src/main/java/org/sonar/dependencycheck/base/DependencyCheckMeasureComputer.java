@@ -51,6 +51,10 @@ public class DependencyCheckMeasureComputer implements MeasureComputer {
 
     @Override
     public void compute(MeasureComputerContext context) {
+        // Check if we have already measures on project
+        if (context.getComponent().getType() == Type.PROJECT && context.getMeasure(DependencyCheckMetrics.TOTAL_DEPENDENCIES.key()) != null) {
+            return;
+        }
         if (context.getComponent().getType() != Type.FILE) {
             int blocker = sumMeasure(context, DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS.key());
             int high = sumMeasure(context, DependencyCheckMetrics.HIGH_SEVERITY_VULNS.key());
