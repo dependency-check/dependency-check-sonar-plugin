@@ -22,6 +22,7 @@ package org.sonar.dependencycheck;
 import java.util.Arrays;
 
 import org.sonar.api.Plugin;
+import org.sonar.dependencycheck.base.DependencyCheckMeasureComputer;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 import org.sonar.dependencycheck.page.DependencyCheckReportPage;
 import org.sonar.dependencycheck.rule.KnownCveRuleDefinition;
@@ -35,6 +36,7 @@ public final class DependencyCheckPlugin implements Plugin {
         context.addExtensions(Arrays.asList(
                 DependencyCheckSensor.class,
                 DependencyCheckMetrics.class,
+                DependencyCheckMeasureComputer.class,
                 NeutralProfile.class,
                 NeutralLanguage.class,
                 KnownCveRuleDefinition.class,
