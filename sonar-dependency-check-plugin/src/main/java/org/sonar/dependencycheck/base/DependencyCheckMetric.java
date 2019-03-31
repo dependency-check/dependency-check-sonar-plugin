@@ -115,15 +115,4 @@ public class DependencyCheckMetric {
         context.<Double>newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO).on(inputcomponent)
             .withValue(DependencyCheckMetrics.vulnerableComponentRatio(vulnerabilityCount, vulnerableDependencies)).save();
     }
-
-    public void add(DependencyCheckMetric dependencyCheckMetric) {
-        this.totalDependencies += dependencyCheckMetric.totalDependencies;
-        this.vulnerableDependencies += dependencyCheckMetric.vulnerableDependencies;
-        this.vulnerabilityCount += dependencyCheckMetric.vulnerabilityCount;
-        this.blockerIssuesCount += dependencyCheckMetric.blockerIssuesCount;
-        this.criticalIssuesCount += dependencyCheckMetric.criticalIssuesCount;
-        this.majorIssuesCount += dependencyCheckMetric.majorIssuesCount;
-        this.minorIssuesCount += dependencyCheckMetric.minorIssuesCount;
-        this.infoIssuesCount += dependencyCheckMetric.infoIssuesCount;
-    }
 }

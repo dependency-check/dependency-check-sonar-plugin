@@ -74,7 +74,7 @@ public class DependencyReasonSearcherTest {
         ProjectInfo projectInfo = new ProjectInfo();
         Collection<Dependency> dependencies = new LinkedList<>();
         Analysis analysis = new Analysis(scanInfo, projectInfo, dependencies);
-        searcher.addDependenciesToProjectConfigurationFiles(analysis, context);
+        searcher.addDependenciesToInputComponents(analysis, context);
         assertEquals(2, searcher.getDependencyreasons().size());
     }
 
@@ -128,8 +128,7 @@ public class DependencyReasonSearcherTest {
         dependencies.add(dependency2);
 
         Analysis analysis = new Analysis(scanInfo, projectInfo, dependencies);
-        searcher.addDependenciesToProjectConfigurationFiles(analysis, context);
-        searcher.saveMeasures(context);
+        searcher.addDependenciesToInputComponents(analysis, context);
         assertEquals(2, context.allIssues().size());
         assertEquals(1, searcher.getDependencyreasons().size());
 
@@ -171,8 +170,7 @@ public class DependencyReasonSearcherTest {
         dependencies.add(dependency);
 
         Analysis analysis = new Analysis(scanInfo, projectInfo, dependencies);
-        searcher.addDependenciesToProjectConfigurationFiles(analysis, context);
-        searcher.saveMeasures(context);
+        searcher.addDependenciesToInputComponents(analysis, context);
         assertEquals(1, context.allIssues().size());
         assertEquals(1, searcher.getDependencyreasons().size());
         assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 24));
