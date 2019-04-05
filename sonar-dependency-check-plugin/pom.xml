@@ -66,7 +66,7 @@
                 <artifactId>github-release-plugin</artifactId>
                 <configuration>
                     <releaseName>sonar-dependency-check-${project.version}</releaseName>
-                    <description>Integrates Dependency-Check reports into SonarQube ${sonar.version} and higher</description>
+                    <description>Integrates Dependency-Check reports into SonarQube ${sonar.version} and above.</description>
                     <tag>${project.version}</tag>
                     <deleteRelease>true</deleteRelease>
                     <fileSets>
