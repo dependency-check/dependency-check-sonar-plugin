@@ -60,8 +60,9 @@
     <!-- todo: remove this when SonarSource Forge hosting becomes a reality -->
     <distributionManagement>
         <repository>
-            <id>bintray</id>
-            <url>https://api.bintray.com/maven/SonarSecurityCommunity/owasp/dependency-check-sonar</url>
+            <id>bintray-sonarsecuritycommunity-owasp</id>
+            <name>sonarsecuritycommunity-owasp</name>
+            <url>https://api.bintray.com/maven/sonarsecuritycommunity/owasp/sonar-dependency-check/</url>
         </repository>
     </distributionManagement>
 
