@@ -12,6 +12,13 @@
     <name>Dependency-Check Plugin for SonarQube</name>
     <url>https://www.owasp.org/index.php/OWASP_Dependency_Check</url>
 
+    <scm>
+      <connection>scm:git:https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin</connection>
+      <developerConnection>scm:git:https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin</developerConnection>
+      <url>https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin</url>
+      <tag>HEAD</tag>
+    </scm>
+
     <properties>
         <sonar.version>7.6</sonar.version>
         <!-- Configuration for sonar-packaging-maven-plugin -->
@@ -57,5 +64,26 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
+    <build>
+       <plugins>
+            <plugin>
+                <groupId>de.jutzig</groupId>
+                <artifactId>github-release-plugin</artifactId>
+                <configuration>
+                    <releaseName>sonar-dependency-check-${project.version}</releaseName>
+                    <description>Integrates Dependency-Check reports into SonarQube ${sonar.version} and above.</description>
+                    <tag>${project.version}</tag>
+                    <deleteRelease>true</deleteRelease>
+                    <fileSets>
+                        <fileSet>
+                            <directory>${project.build.directory}</directory>
+                            <includes>
+                                <include>sonar-dependency-check-plugin-${project.version}.jar</include>
+                            </includes>
+                        </fileSet>
+                    </fileSets>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
