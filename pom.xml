@@ -38,6 +38,12 @@
             <email>steve.springett@owasp.org</email>
             <url>http://www.stevespringett.com</url>
         </developer>
+        <developer>
+            <name>Philipp Dallig</name>
+            <email>philipp.dallig@gmail.com</email>
+            <id>Reamer</id>
+            <timezone>+1</timezone>
+        </developer>
     </developers>
 
     <scm>
