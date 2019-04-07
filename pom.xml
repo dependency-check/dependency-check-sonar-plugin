@@ -62,7 +62,7 @@
         <repository>
             <id>bintray-sonarsecuritycommunity-owasp</id>
             <name>sonarsecuritycommunity-owasp</name>
-            <url>https://api.bintray.com/maven/sonarsecuritycommunity/owasp/sonar-dependency-check/</url>
+            <url>https://api.bintray.com/maven/sonarsecuritycommunity/owasp/sonar-dependency-check/;publish=1</url>
         </repository>
     </distributionManagement>
 
@@ -92,6 +92,7 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <useReleaseProfile>false</useReleaseProfile>
                     <releaseProfiles>release</releaseProfiles>
+                    <pushChanges>true</pushChanges>
                 </configuration>
             </plugin>
         </plugins>
