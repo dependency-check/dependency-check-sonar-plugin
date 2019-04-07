@@ -88,8 +88,7 @@ public class DependencyCheckSensor implements ProjectSensor {
         try {
             Analysis analysis = parseAnalysis(sensorContext);
             DependencyReasonSearcher dependencyReasonSearcher = new DependencyReasonSearcher(sensorContext);
-            dependencyReasonSearcher.addDependenciesToProjectConfigurationFiles(analysis, sensorContext);
-            dependencyReasonSearcher.saveMeasures(sensorContext);
+            dependencyReasonSearcher.addDependenciesToInputComponents(analysis, sensorContext);
         } catch (FileNotFoundException e) {
             LOGGER.info("Analysis skipped/aborted due to missing report file");
             LOGGER.debug(e.getMessage(), e);

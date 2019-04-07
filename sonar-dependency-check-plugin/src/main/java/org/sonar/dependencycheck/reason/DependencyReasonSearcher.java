@@ -111,20 +111,26 @@ public class DependencyReasonSearcher {
         return parent;
     }
 
-    public void addDependenciesToProjectConfigurationFiles(@NonNull Analysis analysis,@NonNull SensorContext context) {
+    public void addDependenciesToInputComponents(@NonNull Analysis analysis,@NonNull SensorContext context) {
         if (analysis.getDependencies() == null) {
             LOGGER.info("Analyse doesn't report any Dependency");
             return;
         }
         if (dependencyreasons.isEmpty()) {
+            LOGGER.info("We doesn't found any Project configuration file e.g. pom.xml, gradle.build and can not link dependencies");
             linkIssuesToProject(analysis, context);
+            LOGGER.debug("Saving Metrics to project {}", projectMetric.toString());
+            projectMetric.saveMeasures(context);
         } else {
             linkIssuesToDependencyReasons(analysis, context);
+            for (DependencyReason reason : dependencyreasons) {
+                LOGGER.debug("Saving Metrics to Reasonfile {} ", reason.getMetrics().toString());
+                reason.getMetrics().saveMeasures(context);
+            }
         }
     }
     private void linkIssuesToProject(@NonNull Analysis analysis,@NonNull SensorContext context) {
-        LOGGER.info("We doesn't found any Project configuration file e.g. pom.xml, gradle.build and can not link dependencies");
-        LOGGER.info("Linking all dependencies to project");
+        LOGGER.info("Linking {} dependencies to project", analysis.getDependencies().size());
         for (Dependency dependency : analysis.getDependencies()) {
             projectMetric.increaseTotalDependencies(1);
             if (!dependency.getVulnerabilities().isEmpty()) {
@@ -145,6 +151,7 @@ public class DependencyReasonSearcher {
     }
 
     private void linkIssuesToDependencyReasons(@NonNull Analysis analysis,@NonNull SensorContext context) {
+        LOGGER.info("Linking {} dependencies to DependencyReasons", analysis.getDependencies().size());
         for (Dependency dependency : analysis.getDependencies()) {
             DependencyReason dependencyReason = getBestDependencyReason(dependency);
             dependencyReason.getMetrics().increaseTotalDependencies(1);
@@ -190,15 +197,5 @@ public class DependencyReasonSearcher {
             .overrideSeverity(severity)
             .save();
         projectMetric.incrementCount(severity);
-    }
-
-    public void saveMeasures(SensorContext sensorContext) {
-        for (DependencyReason reason : dependencyreasons) {
-            LOGGER.debug(reason.getMetrics().toString());
-            projectMetric.add(reason.getMetrics());
-            reason.getMetrics().saveMeasures(sensorContext);
-        }
-        LOGGER.debug(projectMetric.toString());
-        projectMetric.saveMeasures(sensorContext);
     }
 }
