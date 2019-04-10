@@ -17,34 +17,20 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.dependencycheck.parser.element;
+package org.sonar.dependencycheck.parser;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+public class ReportParserException extends Exception {
 
-import edu.umd.cs.findbugs.annotations.NonNull;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
-public class ScanInfo {
-
-    private final String engineVersion;
-    private Collection<DataSource> dataSources = new ArrayList<>();
-
-    public ScanInfo(@NonNull String engineVersion) {
-        this.engineVersion = engineVersion;
-        this.dataSources = Collections.emptyList();
+    public ReportParserException(String msg) {
+        super(msg);
     }
-
-    public String getEngineVersion() {
-        return engineVersion;
+    
+    public ReportParserException(String msg, Throwable t) {
+        super(msg, t);
     }
-
-    public Collection<DataSource> getDataSources() {
-        return dataSources;
-    }
-
-    public void setDataSources(Collection<DataSource> dataSources) {
-        this.dataSources = dataSources;
-    }
-
 }

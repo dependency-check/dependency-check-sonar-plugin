@@ -35,6 +35,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
@@ -87,14 +88,10 @@ public class MavenDependencyReasonTest {
     public void foundDependency() throws IOException {
         MavenDependencyReason maven = new MavenDependencyReason(inputFile("pom.xml"));
         // Create Dependency
-        Dependency dependency = new Dependency();
-        Identifier identifier = new Identifier();
-        identifier.setName("struts:struts:1.2.8");
-        identifier.setConfidence(Confidence.HIGHEST);
-        identifier.setType("maven");
+        Identifier identifier = new Identifier("maven", Confidence.HIGHEST, "struts:struts:1.2.8");
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
-        dependency.setIdentifiersCollected(identifiersCollected);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyList(),identifiersCollected, Collections.emptyList());
         assertTrue(maven.isReasonable());
         assertNotNull(maven.getBestTextRange(dependency));
         // verify that same dependency points to the same TextRange, use of HashMap
@@ -105,14 +102,10 @@ public class MavenDependencyReasonTest {
     public void foundNoDependency() throws IOException {
         MavenDependencyReason maven = new MavenDependencyReason(inputFile("pom.xml"));
         // Create Dependency
-        Dependency dependency = new Dependency();
-        Evidence evidence = new Evidence();
-        evidence.setName("artifactid");
-        evidence.setSource("pom");
-        evidence.setValue("xyz");
+        Evidence evidence = new Evidence("pom", "artifactid", "xyz");
         Collection<Evidence> evidences = new ArrayList<>();
         evidences.add(evidence);
-        dependency.setEvidenceCollected(evidences);
+        Dependency dependency = new Dependency(null, null, null, null, evidences, Collections.emptyList(), Collections.emptyList());
         TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
         // Check for default location, first line in file with low confidence
         assertNotNull(textRangeConfidence);
@@ -126,14 +119,10 @@ public class MavenDependencyReasonTest {
     public void noArtefactid() throws IOException {
         MavenDependencyReason maven = new MavenDependencyReason(inputFile("pom.xml"));
         // Create Dependency
-        Dependency dependency = new Dependency();
-        Evidence evidence = new Evidence();
-        evidence.setName("artifactid");
-        evidence.setSource("xyz");
-        evidence.setValue("spring");
+        Evidence evidence =new Evidence("xyz", "artifactid", "spring");
         Collection<Evidence> evidences = new ArrayList<>();
         evidences.add(evidence);
-        dependency.setEvidenceCollected(evidences);
+        Dependency dependency = new Dependency(null, null, null, null, evidences, Collections.emptyList(), Collections.emptyList());
         TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
         assertNotNull(textRangeConfidence);
         assertEquals(1, textRangeConfidence.getTextrange().start().line());

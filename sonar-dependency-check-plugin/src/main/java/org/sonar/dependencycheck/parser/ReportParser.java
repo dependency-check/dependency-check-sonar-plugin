@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -51,7 +52,7 @@ public class ReportParser {
         // do nothing
     }
 
-    public static Analysis parse(InputStream inputStream) throws XMLStreamException {
+    public static Analysis parse(InputStream inputStream) throws XMLStreamException, ReportParserException {
 
         SMInputFactory inputFactory = DependencyCheckUtils.newStaxParser();
         SMHierarchicCursor rootC = inputFactory.rootElementCursor(inputStream);
@@ -73,10 +74,11 @@ public class ReportParser {
                 dependencies = processDependencies(childCursor);
             }
         }
+        scanInfo = Optional.ofNullable(scanInfo).orElseThrow(() -> new ReportParserException("Analysis - scanInfo not found"));
         return new Analysis(scanInfo, projectInfo, dependencies);
     }
 
-    private static Collection<Dependency> processDependencies(SMInputCursor depC) throws XMLStreamException {
+    private static Collection<Dependency> processDependencies(SMInputCursor depC) throws XMLStreamException, ReportParserException {
         Collection<Dependency> dependencies = new ArrayList<>();
         SMInputCursor cursor = depC.childElementCursor("dependency");
         while (cursor.getNext() != null) {
@@ -85,9 +87,15 @@ public class ReportParser {
         return dependencies;
     }
 
-    private static Dependency processDependency(SMInputCursor depC) throws XMLStreamException {
-        Dependency dependency = new Dependency();
+    private static Dependency processDependency(SMInputCursor depC) throws XMLStreamException, ReportParserException {
         SMInputCursor childCursor = depC.childCursor();
+        String fileName = null;
+        String filepath = null;
+        String md5Hash = null;
+        String sha1Hash = null;
+        Collection<Evidence> evidences = Collections.emptyList();
+        Collection<Identifier> identifiers = Collections.emptyList();
+        List<Vulnerability> vulnerabilities = Collections.emptyList();
         while (childCursor.getNext() != null) {
             String nodeName = childCursor.getLocalName();
             if (nodeName == null) {
@@ -95,35 +103,39 @@ public class ReportParser {
             }
             switch (nodeName) {
                 case "fileName":
-                    dependency.setFileName(StringUtils.trim(childCursor.collectDescendantText(false)));
+                    fileName = StringUtils.trim(childCursor.collectDescendantText(false));
                     break;
                 case "filePath":
-                    dependency.setFilePath(StringUtils.trim(childCursor.collectDescendantText(false)));
+                    filepath = StringUtils.trim(childCursor.collectDescendantText(false));
                     break;
                 case "md5":
-                    dependency.setMd5Hash(StringUtils.trim(childCursor.collectDescendantText(false)));
+                    md5Hash = StringUtils.trim(childCursor.collectDescendantText(false));
                     break;
                 case "sha1":
-                    dependency.setSha1Hash(StringUtils.trim(childCursor.collectDescendantText(false)));
+                    sha1Hash = StringUtils.trim(childCursor.collectDescendantText(false));
                     break;
                 case "evidenceCollected":
-                    dependency.setEvidenceCollected(processEvidenceCollected(childCursor));
+                    evidences = processEvidenceCollected(childCursor);
                     break;
                 case "vulnerabilities":
-                    dependency.setVulnerabilities(processVulnerabilities(childCursor));
+                    vulnerabilities = processVulnerabilities(childCursor);
                     break;
                 case "identifiers":
-                    dependency.setIdentifiersCollected(processIdentifiersCollected(childCursor));
+                    identifiers = processIdentifiersCollected(childCursor);
                     break;
                 default:
                     LOGGER.debug("Depedency Node {} is not used", nodeName);
                     break;
             }
         }
-        return dependency;
+        fileName = Optional.ofNullable(fileName).orElseThrow(() -> new ReportParserException("Dependency - fileName not found"));
+        filepath = Optional.ofNullable(filepath).orElseThrow(() -> new ReportParserException("Dependency - filePath not found"));
+        md5Hash = Optional.ofNullable(md5Hash).orElseThrow(() -> new ReportParserException("Dependency - md5 not found"));
+        sha1Hash = Optional.ofNullable(sha1Hash).orElseThrow(() -> new ReportParserException("Dependency - sha1 not found"));
+        return new Dependency(fileName, filepath, md5Hash, sha1Hash, evidences, identifiers, vulnerabilities);
     }
 
-    private static List<Vulnerability> processVulnerabilities(SMInputCursor vulnC) throws XMLStreamException {
+    private static List<Vulnerability> processVulnerabilities(SMInputCursor vulnC) throws XMLStreamException, ReportParserException {
         List<Vulnerability> vulnerabilities = new ArrayList<>();
         SMInputCursor cursor = vulnC.childElementCursor("vulnerability");
         while (cursor.getNext() != null) {
@@ -132,33 +144,41 @@ public class ReportParser {
         return vulnerabilities;
     }
 
-    private static Vulnerability processVulnerability(SMInputCursor vulnC) throws XMLStreamException {
-        Vulnerability vulnerability = new Vulnerability();
+    private static Vulnerability processVulnerability(SMInputCursor vulnC) throws XMLStreamException, ReportParserException {
         SMInputCursor childCursor = vulnC.childCursor();
+        String name = null;
+        Float cvssScore = null;
+        String severity = null;
+        String description = null;
+        String cwe = null;
         while (childCursor.getNext() != null) {
             String nodeName = childCursor.getLocalName();
             if ("name".equals(nodeName)) {
-                vulnerability.setName(StringUtils.trim(childCursor.collectDescendantText(false)));
+                name = StringUtils.trim(childCursor.collectDescendantText(false));
             } else if ("cvssScore".equals(nodeName)) {
-                String cvssScore = StringUtils.trim(childCursor.collectDescendantText(false));
+                String cvssScoreTmp = StringUtils.trim(childCursor.collectDescendantText(false));
                 try {
-                    vulnerability.setCvssScore(Float.parseFloat(cvssScore));
+                    cvssScore = Float.parseFloat(cvssScoreTmp);
                 } catch (NumberFormatException e) {
-                    LOGGER.warn("Could not parse CVSS-Score {} to Float. Setting CVSS-Score to 0.0", cvssScore);
-                    vulnerability.setCvssScore(0.0f);
+                    LOGGER.warn("Could not parse CVSS-Score {} to Float. Setting CVSS-Score to 0.0", cvssScoreTmp);
+                    cvssScore = 0.0f;
                 }
             } else if ("severity".equals(nodeName)) {
-                vulnerability.setSeverity(StringUtils.trim(childCursor.collectDescendantText(false)));
+                severity = StringUtils.trim(childCursor.collectDescendantText(false));
             } else if ("cwe".equals(nodeName)) {
-                vulnerability.setCwe(StringUtils.trim(childCursor.collectDescendantText(false)));
+                cwe = StringUtils.trim(childCursor.collectDescendantText(false));
             } else if ("description".equals(nodeName)) {
-                vulnerability.setDescription(StringUtils.trim(childCursor.collectDescendantText(false)));
+                description = StringUtils.trim(childCursor.collectDescendantText(false));
             }
         }
-        return vulnerability;
+        name = Optional.ofNullable(name).orElseThrow(() -> new ReportParserException("Vulnerability - name not found"));
+        cvssScore = Optional.ofNullable(cvssScore).orElseThrow(() -> new ReportParserException("Vulnerability - cvssScore not found"));
+        severity = Optional.ofNullable(severity).orElseThrow(() -> new ReportParserException("Vulnerability - severity not found"));
+        description = Optional.ofNullable(description).orElseThrow(() -> new ReportParserException("Vulnerability - description not found"));
+        return new Vulnerability(name, cvssScore, severity, description, cwe);
     }
 
-    private static Collection<Evidence> processEvidenceCollected(SMInputCursor ecC) throws XMLStreamException {
+    private static Collection<Evidence> processEvidenceCollected(SMInputCursor ecC) throws XMLStreamException, ReportParserException {
         Collection<Evidence> evidenceCollection = new ArrayList<>();
         SMInputCursor cursor = ecC.childElementCursor("evidence");
         while (cursor.getNext() != null) {
@@ -167,23 +187,28 @@ public class ReportParser {
         return evidenceCollection;
     }
 
-    private static Evidence processEvidence(SMInputCursor ecC) throws XMLStreamException {
-        Evidence evidence = new Evidence();
+    private static Evidence processEvidence(SMInputCursor ecC) throws XMLStreamException, ReportParserException {
         SMInputCursor childCursor = ecC.childCursor();
+        String source = null;
+        String name = null;
+        String value = null;
         while (childCursor.getNext() != null) {
             String nodeName = childCursor.getLocalName();
             if ("source".equals(nodeName)) {
-                evidence.setSource(StringUtils.trim(childCursor.collectDescendantText(false)));
+                source = StringUtils.trim(childCursor.collectDescendantText(false));
             } else if ("name".equals(nodeName)) {
-                evidence.setName(StringUtils.trim(childCursor.collectDescendantText(false)));
+                name = StringUtils.trim(childCursor.collectDescendantText(false));
             } else if ("value".equals(nodeName)) {
-                evidence.setValue(StringUtils.trim(childCursor.collectDescendantText(false)));
+                value = StringUtils.trim(childCursor.collectDescendantText(false));
             }
         }
-        return evidence;
+        source = Optional.ofNullable(source).orElseThrow(() -> new ReportParserException("Evidence - source not found"));
+        name = Optional.ofNullable(name).orElseThrow(() -> new ReportParserException("Evidence - name not found"));
+        value = Optional.ofNullable(value).orElseThrow(() -> new ReportParserException("Evidence - source not found"));
+        return new Evidence(source, name, value);
     }
 
-    private static Collection<Identifier> processIdentifiersCollected(SMInputCursor ifC) throws XMLStreamException {
+    private static Collection<Identifier> processIdentifiersCollected(SMInputCursor ifC) throws XMLStreamException, ReportParserException {
         Collection<Identifier> identifierCollection = new ArrayList<>();
         SMInputCursor cursor = ifC.childElementCursor("identifier");
         while (cursor.getNext() != null) {
@@ -192,52 +217,73 @@ public class ReportParser {
         return identifierCollection;
     }
 
-    private static Identifier processIdentifiers(SMInputCursor ifC) throws XMLStreamException {
-        Identifier identifier = new Identifier();
+    private static Identifier processIdentifiers(SMInputCursor ifC) throws XMLStreamException, ReportParserException {
+        String type = null;
+        Confidence confidence = null;
+        String name = null;
         for (int i = 0; i < ifC.getAttrCount(); ++i) {
             if (ifC.getAttrLocalName(i).equals("type")) {
-                identifier.setType(ifC.getAttrValue(i));
+                type = ifC.getAttrValue(i);
             }
             if (ifC.getAttrLocalName(i).equals("confidence")) {
-                identifier.setConfidence(Confidence.valueOf(ifC.getAttrValue(i)));
+                confidence = Confidence.valueOf(ifC.getAttrValue(i));
             }
         }
         SMInputCursor childCursor = ifC.childCursor();
         while (childCursor.getNext() != null) {
             String nodeName = childCursor.getLocalName();
             if ("name".equals(nodeName)) {
-                identifier.setName(StringUtils.trim(childCursor.collectDescendantText(false)));
+                name = StringUtils.trim(childCursor.collectDescendantText(false));
             }
         }
-        return identifier;
+        type = Optional.ofNullable(type).orElseThrow(() -> new ReportParserException("Identifier - type not found"));
+        name = Optional.ofNullable(name).orElseThrow(() -> new ReportParserException("Identifier - name not found"));
+        return new Identifier(type, confidence, name);
     }
 
-    private static ScanInfo processScanInfo(SMInputCursor siC) throws XMLStreamException {
+    private static ScanInfo processScanInfo(SMInputCursor siC) throws XMLStreamException, ReportParserException {
         SMInputCursor childCursor = siC.childCursor();
-        ScanInfo scanInfo = new ScanInfo();
+        String engineVersion = null;
         while (childCursor.getNext() != null) {
             String nodeName = childCursor.getLocalName();
             if (StringUtils.equalsIgnoreCase("engineVersion", nodeName)) {
-                scanInfo.setEngineVersion(StringUtils.trim(childCursor.collectDescendantText(false)));
+                engineVersion = StringUtils.trim(childCursor.collectDescendantText(false));
             }
         }
-        return scanInfo;
+        if (engineVersion == null) {
+            throw new ReportParserException("eningeVersion not found");
+        }
+        return new ScanInfo(engineVersion);
     }
 
-    private static ProjectInfo processProjectInfo(SMInputCursor piC) throws XMLStreamException {
+    private static ProjectInfo processProjectInfo(SMInputCursor piC) throws XMLStreamException, ReportParserException {
         SMInputCursor childCursor = piC.childCursor();
-        ProjectInfo projectInfo = new ProjectInfo();
+        String projectName = null;
+        String projectReportDate = null;
+        String projectCredits = null;
         while (childCursor.getNext() != null) {
             String nodeName = childCursor.getLocalName();
-            if (StringUtils.equalsIgnoreCase("name", nodeName)) {
-                projectInfo.setName(StringUtils.trim(childCursor.collectDescendantText(false)));
-            } else if (StringUtils.equalsIgnoreCase("reportDate", nodeName)) {
-                projectInfo.setReportDate(StringUtils.trim(childCursor.collectDescendantText(false)));
-            } else if (StringUtils.equalsIgnoreCase("credits", nodeName)) {
-                projectInfo.setCredits(StringUtils.trim(childCursor.collectDescendantText(false)));
+            if (nodeName == null) {
+                continue;
+            }
+            switch (nodeName) {
+            case "name":
+                projectName = StringUtils.trim(childCursor.collectDescendantText(false));
+                break;
+            case "reportDate":
+                projectReportDate = StringUtils.trim(childCursor.collectDescendantText(false));
+                break;
+            case "credits":
+                projectCredits = StringUtils.trim(childCursor.collectDescendantText(false));
+                break;
+            default:
+                break;
             }
         }
-        return projectInfo;
+        projectName = Optional.ofNullable(projectName).orElseThrow(() -> new ReportParserException("project - name not found"));
+        projectReportDate = Optional.ofNullable(projectReportDate).orElseThrow(() -> new ReportParserException("project - reportDate not found"));
+        projectCredits =  Optional.ofNullable(projectCredits).orElseThrow(() -> new ReportParserException("project - credits not found"));
+        return new ProjectInfo(projectName, projectReportDate, projectCredits);
     }
 
 }

@@ -19,34 +19,29 @@
  */
 package org.sonar.dependencycheck.parser.element;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+
 public class ProjectInfo {
 
-    private String name;
-    private String reportDate;
-    private String credits;
+    private final String name;
+    private final String reportDate;
+    private final String credits;
+
+    public ProjectInfo(@NonNull String name, @NonNull String reportDate, @NonNull String credits) {
+        this.name = name;
+        this.reportDate = reportDate;
+        this.credits = credits;
+    }
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getReportDate() {
         return reportDate;
     }
 
-    public void setReportDate(String reportDate) {
-        this.reportDate = reportDate;
-    }
-
     public String getCredits() {
         return credits;
     }
-
-    public void setCredits(String credits) {
-        this.credits = credits;
-    }
-
 }

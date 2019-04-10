@@ -35,6 +35,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
@@ -87,14 +88,10 @@ public class GradleDependencyReasonTest {
     public void foundDependency() throws IOException {
         GradleDependencyReason gradle = new GradleDependencyReason(inputFile("build.gradle"));
         // Create Dependency
-        Dependency dependency = new Dependency();
-        Identifier identifier = new Identifier();
-        identifier.setName("org.springframework:spring:2.0");
-        identifier.setConfidence(Confidence.HIGHEST);
-        identifier.setType("maven");
+        Identifier identifier = new Identifier("maven", Confidence.HIGHEST, "org.springframework:spring:2.0");
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
-        dependency.setIdentifiersCollected(identifiersCollected);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyList(),identifiersCollected, Collections.emptyList());
         assertNotNull(gradle.getBestTextRange(dependency));
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(gradle.getBestTextRange(dependency), gradle.getBestTextRange(dependency));
@@ -104,14 +101,10 @@ public class GradleDependencyReasonTest {
     public void foundNoDependency() throws IOException {
         GradleDependencyReason gradle = new GradleDependencyReason(inputFile("build.gradle"));
         // Create Dependency
-        Dependency dependency = new Dependency();
-        Evidence evidence = new Evidence();
-        evidence.setName("artifactid");
-        evidence.setSource("pom");
-        evidence.setValue("xyz");
+        Evidence evidence = new Evidence("pom", "artifactid", "xyz");
         Collection<Evidence> evidences = new ArrayList<>();
         evidences.add(evidence);
-        dependency.setEvidenceCollected(evidences);
+        Dependency dependency = new Dependency(null, null, null, null, evidences, Collections.emptyList(), Collections.emptyList());
         assertNotNull(gradle.getBestTextRange(dependency));
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(gradle.getBestTextRange(dependency), gradle.getBestTextRange(dependency));
@@ -121,14 +114,10 @@ public class GradleDependencyReasonTest {
     public void noArtefactid() throws IOException {
         GradleDependencyReason gradle = new GradleDependencyReason(inputFile("build.gradle"));
         // Create Dependency
-        Dependency dependency = new Dependency();
-        Evidence evidence = new Evidence();
-        evidence.setName("artifactid");
-        evidence.setSource("xyz");
-        evidence.setValue("spring");
+        Evidence evidence = new Evidence("xyz", "artifactid", "spring");
         Collection<Evidence> evidences = new ArrayList<>();
         evidences.add(evidence);
-        dependency.setEvidenceCollected(evidences);
+        Dependency dependency = new Dependency(null, null, null, null, evidences, Collections.emptyList(), Collections.emptyList());
         assertNotNull(gradle.getBestTextRange(dependency));
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(gradle.getBestTextRange(dependency), gradle.getBestTextRange(dependency));

@@ -25,7 +25,6 @@ import java.util.Optional;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
 
-import org.apache.commons.lang3.StringUtils;
 import org.codehaus.staxmate.SMInputFactory;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.config.Configuration;
@@ -89,8 +88,9 @@ public final class DependencyCheckUtils {
         sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
         sb.append("Reference: ").append(vulnerability.getName()).append(" | ");
         sb.append("CVSS Score: ").append(vulnerability.getCvssScore()).append(" | ");
-        if (StringUtils.isNotBlank(vulnerability.getCwe())) {
-            sb.append("Category: ").append(vulnerability.getCwe()).append(" | ");
+        Optional<String> vulnerabilityCwe = vulnerability.getCwe();
+        if (vulnerabilityCwe.isPresent()) {
+            sb.append("Category: ").append(vulnerabilityCwe.get()).append(" | ");
         }
         sb.append(vulnerability.getDescription());
         return sb.toString().trim();

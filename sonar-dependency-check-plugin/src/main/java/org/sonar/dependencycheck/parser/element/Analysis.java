@@ -20,6 +20,7 @@
 package org.sonar.dependencycheck.parser.element;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
@@ -31,7 +32,7 @@ public class Analysis {
     private final ProjectInfo projectInfo;
     private final Collection<Dependency> dependencies;
 
-    public Analysis(@Nullable ScanInfo scanInfo, @Nullable ProjectInfo projectInfo, @NonNull Collection<Dependency> dependencies) {
+    public Analysis(@NonNull ScanInfo scanInfo, @Nullable ProjectInfo projectInfo, @NonNull Collection<Dependency> dependencies) {
         this.scanInfo = scanInfo;
         this.projectInfo = projectInfo;
         this.dependencies = dependencies;
@@ -41,8 +42,8 @@ public class Analysis {
         return scanInfo;
     }
 
-    public ProjectInfo getProjectInfo() {
-        return projectInfo;
+    public Optional<ProjectInfo> getProjectInfo() {
+        return Optional.ofNullable(projectInfo);
     }
 
     public Collection<Dependency> getDependencies() {
