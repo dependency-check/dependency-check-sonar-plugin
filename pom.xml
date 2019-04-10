@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.sonarsource.parent</groupId>
         <artifactId>parent</artifactId>
-        <version>40</version>
+        <version>50</version>
     </parent>
     <groupId>org.sonarsource.owasp</groupId>
     <artifactId>sonar-dependency-check</artifactId>
@@ -15,8 +15,8 @@
     <inceptionYear>2015</inceptionYear>
 
     <properties>
-        <license.owner>Steve Springett</license.owner>
-        <license.mailto>steve.springett@owasp.org</license.mailto>
+        <license.owner>SonarSecurityCommunity</license.owner>
+        <license.mailto>philipp.dallig@gmail.com</license.mailto>
     </properties>
 
     <organization>
@@ -93,7 +93,9 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <useReleaseProfile>false</useReleaseProfile>
