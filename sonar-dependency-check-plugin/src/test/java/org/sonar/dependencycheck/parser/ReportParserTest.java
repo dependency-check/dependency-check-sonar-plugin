@@ -116,5 +116,83 @@ public class ReportParserTest {
         assertTrue(dependency.getVulnerabilities().isEmpty());
 
     }
+    @Test
+    public void parseReportV5() throws Exception {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportV5/dependency-check-report.xml");
+        Analysis analysis = ReportParser.parse(inputStream);
+        assertEquals("1.2.3", analysis.getScanInfo().getEngineVersion());
+        assertEquals("trunk-scan", analysis.getProjectInfo().getName());
+        assertEquals("2014-12-02T04:57:02.663+0200", analysis.getProjectInfo().getReportDate());
+        assertEquals("This report contains data retrieved from the National Vulnerability Database: http://nvd.nist.gov", analysis.getProjectInfo().getCredits());
+
+        // axis-1.4.jar
+        Collection<Dependency> dependencies = analysis.getDependencies();
+        assertEquals(5, dependencies.size());
+        Iterator<Dependency> iterator = dependencies.iterator();
+        Dependency dependency = (Dependency) iterator.next();
+
+        assertEquals("axis-1.4.jar", dependency.getFileName());
+        assertEquals("/path/to/trunk/lib/axis-1.4.jar", dependency.getFilePath());
+        assertEquals("F5D153ADF794D67AF135BD281B7B0516", dependency.getMd5Hash());
+        assertEquals("B58604D52D0BF0A9D7C85434D8B770534BAF70B6", dependency.getSha1Hash());
+
+        Collection<Evidence> evidenceCollected = dependency.getEvidenceCollected();
+        assertEquals(4, evidenceCollected.size());
+        for (Evidence evidence : evidenceCollected) {
+            assertFalse(evidence.getSource().isEmpty());
+            assertFalse(evidence.getName().isEmpty());
+            assertFalse(evidence.getValue().isEmpty());
+        }
+
+        Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
+        assertEquals(2, vulnerabilities.size());
+        Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
+        Vulnerability vulnerability = (Vulnerability) vulnIterator.next();
+        assertEquals("CVE-2014-3596", vulnerability.getName());
+        assertEquals(5.8f, vulnerability.getCvssScore(), 0.0f);
+        assertEquals("Medium", vulnerability.getSeverity());
+        assertNull(vulnerability.getCwe());
+        assertEquals("The getCN function in Apache Axis 1.4 and earlier does not properly verify that the server hostname matches a domain name in the subject's Common Name (CN) or subjectAltName field of the X.509 certificate, which allows man-in-the-middle attackers to spoof SSL servers via a certificate with a subject that specifies a common name in a field that is not the CN field.  NOTE: this issue exists because of an incomplete fix for CVE-2012-5784.", vulnerability.getDescription());
+
+        vulnerability = (Vulnerability) vulnIterator.next();
+        assertEquals("CVE-2012-5784", vulnerability.getName());
+        assertEquals(5.8f , vulnerability.getCvssScore(), 0.0f);
+        assertEquals("Medium", vulnerability.getSeverity());
+        assertEquals("CWE-20 Improper Input Validation", vulnerability.getCwe());
+        assertEquals("Apache Axis 1.4 and earlier, as used in PayPal Payments Pro, PayPal Mass Pay, PayPal Transactional Information SOAP, the Java Message Service implementation in Apache ActiveMQ, and other products, does not verify that the server hostname matches a domain name in the subject's Common Name (CN) or subjectAltName field of the X.509 certificate, which allows man-in-the-middle attackers to spoof SSL servers via an arbitrary valid certificate.", vulnerability.getDescription());
+
+        // commons-cli-1.1.jar
+        dependency = (Dependency) iterator.next();
+        assertEquals(13, dependency.getEvidenceCollected().size());
+        assertEquals(0, dependency.getVulnerabilities().size());
+
+        // commons-codec-1.3.jar
+        dependency = (Dependency) iterator.next();
+        assertEquals(12, dependency.getEvidenceCollected().size());
+        assertTrue(dependency.getVulnerabilities().isEmpty());
+
+        // mail-1.4.5.jar
+        dependency = (Dependency) iterator.next();
+        assertEquals(32, dependency.getEvidenceCollected().size());
+        assertEquals(1, dependency.getVulnerabilities().size());
+        assertEquals(1, dependency.getIdentifiersCollected().size());
+        Collection<Identifier> identifiers = dependency.getIdentifiersCollected();
+        Identifier identifier = identifiers.iterator().next();
+        assertEquals(Confidence.LOW, identifier.getConfidence());
+        assertEquals("(javax.mail:mail:1.4.5)", identifier.getName());
+        assertEquals("maven", identifier.getType());
+        vulnerabilities = dependency.getVulnerabilities();
+        assertEquals(1, vulnerabilities.size());
+        vulnIterator = vulnerabilities.iterator();
+        vulnerability = (Vulnerability) vulnIterator.next();
+        assertEquals("CVE-2007-6059", vulnerability.getName());
+        assertEquals(0.0f, vulnerability.getCvssScore(), 0.0f);
+
+        // mysql-connector-java-commercial-5.1.25.jar
+        dependency = (Dependency) iterator.next();
+        assertEquals(9, dependency.getEvidenceCollected().size());
+        assertTrue(dependency.getVulnerabilities().isEmpty());
+
+    }
 
 }
