@@ -20,44 +20,40 @@
 
 package org.sonar.dependencycheck.parser.element;
 
+import java.util.Optional;
+
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
+
 public class Identifier {
-    private String type;
-    private Confidence confidence;
-    private String name;
+    private final String type;
+    private final Confidence confidence;
+    private final String name;
+
+    public Identifier(@NonNull String type, @Nullable Confidence confidence, @NonNull String name) {
+        this.type = type;
+        this.confidence = confidence;
+        this.name = name;
+    }
     /**
      * @return the type
      */
     public String getType() {
         return type;
     }
-    /**
-     * @param type the type to set
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
+
     /**
      * @return the confidence
      */
-    public Confidence getConfidence() {
-        return confidence;
+    public Optional<Confidence> getConfidence() {
+        return Optional.ofNullable(confidence);
     }
-    /**
-     * @param confidence the confidence to set
-     */
-    public void setConfidence(Confidence confidence) {
-        this.confidence = confidence;
-    }
+
     /**
      * @return the name
      */
     public String getName() {
         return name;
     }
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+
 }

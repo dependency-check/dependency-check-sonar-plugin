@@ -19,34 +19,30 @@
  */
 package org.sonar.dependencycheck.parser.element;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+
 public class Evidence {
 
-    private String source;
-    private String name;
-    private String value;
+    private final String source;
+    private final String name;
+    private final String value;
+
+    public Evidence(@NonNull String source, @NonNull String name, @NonNull String value) {
+        this.source = source;
+        this.name = name;
+        this.value = value;
+    }
 
     public String getSource() {
         return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getValue() {
         return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 
 }

@@ -34,6 +34,7 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.api.utils.log.Profiler;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 import org.sonar.dependencycheck.parser.ReportParser;
+import org.sonar.dependencycheck.parser.ReportParserException;
 import org.sonar.dependencycheck.parser.element.Analysis;
 import org.sonar.dependencycheck.reason.DependencyReasonSearcher;
 import org.sonar.dependencycheck.report.HtmlReportFile;
@@ -52,7 +53,7 @@ public class DependencyCheckSensor implements ProjectSensor {
         this.pathResolver = pathResolver;
     }
 
-    private Analysis parseAnalysis(SensorContext context) throws IOException, XMLStreamException {
+    private Analysis parseAnalysis(SensorContext context) throws IOException, XMLStreamException, ReportParserException {
         XmlReportFile report = XmlReportFile.getXmlReport(context.config(), fileSystem, this.pathResolver);
         return ReportParser.parse(report.getInputStream());
     }
@@ -96,6 +97,9 @@ public class DependencyCheckSensor implements ProjectSensor {
             LOGGER.warn("Analysis aborted due to: IO Errors", e);
         } catch (XMLStreamException e) {
             LOGGER.warn("Analysis aborted due to: XML is not valid", e);
+        } catch (ReportParserException e) {
+            LOGGER.warn("Analysis aborted due to: Mandatory elements are missing. Plugin is compatible to https://jeremylong.github.io/DependencyCheck/dependency-check.1.8.xsd");
+            LOGGER.debug(e.getMessage(), e);
         }
         uploadHTMLReport(sensorContext);
         profiler.stopInfo();

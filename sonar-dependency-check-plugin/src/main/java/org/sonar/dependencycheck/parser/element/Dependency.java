@@ -24,70 +24,54 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+
 public class Dependency {
 
-    private String fileName;
-    private String filePath;
-    private String md5Hash;
-    private String sha1Hash;
-    private Collection<Evidence> evidenceCollected = Collections.emptyList();
-    private Collection<Identifier> identifiersCollected = Collections.emptyList();
-    private List<Vulnerability> vulnerabilities = Collections.emptyList();
+    private final String fileName;
+    private final String filePath;
+    private final String md5Hash;
+    private final String sha1Hash;
+    private final Collection<Evidence> evidenceCollected;
+    private final Collection<Identifier> identifiersCollected;
+    private final List<Vulnerability> vulnerabilities;
+
+    public Dependency(@NonNull String fileName, @NonNull String filePath, @NonNull String md5Hash, @NonNull String sha1Hash, Collection<Evidence> evidenceCollected, Collection<Identifier> identifiersCollected, List<Vulnerability> vulnerabilities) {
+        this.fileName = fileName;
+        this.filePath = filePath;
+        this.md5Hash = md5Hash;
+        this.sha1Hash = sha1Hash;
+        this.evidenceCollected = evidenceCollected;
+        this.identifiersCollected = identifiersCollected;
+        this.vulnerabilities = vulnerabilities;
+    }
 
     public String getFileName() {
         return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
     }
 
     public String getFilePath() {
         return filePath;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
     public String getMd5Hash() {
         return md5Hash;
-    }
-
-    public void setMd5Hash(String md5Hash) {
-        this.md5Hash = md5Hash;
     }
 
     public String getSha1Hash() {
         return sha1Hash;
     }
 
-    public void setSha1Hash(String sha1Hash) {
-        this.sha1Hash = sha1Hash;
-    }
-
     public Collection<Evidence> getEvidenceCollected() {
         return evidenceCollected;
-    }
-
-    public void setEvidenceCollected(Collection<Evidence> evidenceCollected) {
-        this.evidenceCollected = evidenceCollected;
     }
 
     public List<Vulnerability> getVulnerabilities() {
         return vulnerabilities;
     }
 
-    public void setVulnerabilities(List<Vulnerability> vulnerabilities) {
-        this.vulnerabilities = vulnerabilities;
-    }
-
     public Collection<Identifier> getIdentifiersCollected() {
         return identifiersCollected;
-    }
-
-    public void setIdentifiersCollected(Collection<Identifier> identifiersCollected) {
-        this.identifiersCollected = identifiersCollected;
     }
 
     public void sortVulnerabilityBycvssScore() {

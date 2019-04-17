@@ -30,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -70,9 +71,8 @@ public class DependencyReasonSearcherTest {
         context.fileSystem().add(inputFile("pom.xml"));
         context.fileSystem().add(inputFile("build.gradle"));
         DependencyReasonSearcher searcher = new DependencyReasonSearcher(context);
-        ScanInfo scanInfo = new ScanInfo();
-        ProjectInfo projectInfo = new ProjectInfo();
-        Collection<Dependency> dependencies = new LinkedList<>();
+        ScanInfo scanInfo = new ScanInfo("testengine");
+        ProjectInfo projectInfo = new ProjectInfo("testproject", "testreportdate", "testcredits");        Collection<Dependency> dependencies = new LinkedList<>();
         Analysis analysis = new Analysis(scanInfo, projectInfo, dependencies);
         searcher.addDependenciesToInputComponents(analysis, context);
         assertEquals(2, searcher.getDependencyreasons().size());
@@ -87,41 +87,25 @@ public class DependencyReasonSearcherTest {
         context.fileSystem().add(inputFile("pom.xml"));
         DependencyReasonSearcher searcher = new DependencyReasonSearcher(context);
 
-        ScanInfo scanInfo = new ScanInfo();
-        ProjectInfo projectInfo = new ProjectInfo();
+        ScanInfo scanInfo = new ScanInfo("testengine");
+        ProjectInfo projectInfo = new ProjectInfo("testproject", "testreportdate", "testcredits");
         Collection<Dependency> dependencies = new LinkedList<>();
         // First Identifier
-        Identifier identifier1 = new Identifier();
-        identifier1.setName("struts:struts:1.2.8");
-        identifier1.setConfidence(Confidence.HIGHEST);
-        identifier1.setType("maven");
+        Identifier identifier1 = new Identifier("maven", Confidence.HIGHEST, "struts:struts:1.2.8");
         Collection<Identifier> identifiersCollected1 = new ArrayList<>();
         identifiersCollected1.add(identifier1);
-        Vulnerability vulnerability1 = new Vulnerability();
-        vulnerability1.setCvssScore(5.0f);
-        vulnerability1.setDescription("Test description");
-        vulnerability1.setName("Test name");
-        Dependency dependency1 = new Dependency();
+        Vulnerability vulnerability1 = new Vulnerability("Test name", 5.0f, null, "Test description", null);
         List<Vulnerability> vulnerabilities1 = new ArrayList<>();
         vulnerabilities1.add(vulnerability1);
-        dependency1.setIdentifiersCollected(identifiersCollected1);
-        dependency1.setVulnerabilities(vulnerabilities1);
+        Dependency dependency1 = new Dependency(null, null, null, null, Collections.emptyList(),identifiersCollected1, vulnerabilities1);
         // Second Identifier
-        Identifier identifier2 = new Identifier();
-        identifier2.setName("org.springframework:spring:2.0.8");
-        identifier2.setConfidence(Confidence.HIGHEST);
-        identifier2.setType("maven");
+        Identifier identifier2 = new Identifier("maven", Confidence.HIGHEST, "org.springframework:spring:2.0.8");
         Collection<Identifier> identifiersCollected2 = new ArrayList<>();
         identifiersCollected2.add(identifier2);
-        Vulnerability vulnerability2 = new Vulnerability();
-        vulnerability2.setCvssScore(5.0f);
-        vulnerability2.setDescription("Test description");
-        vulnerability2.setName("Test name");
-        Dependency dependency2 = new Dependency();
+        Vulnerability vulnerability2 = new Vulnerability("Test name", 5.0f, null, "Test description", null);
         List<Vulnerability> vulnerabilities2 = new ArrayList<>();
         vulnerabilities2.add(vulnerability2);
-        dependency2.setIdentifiersCollected(identifiersCollected2);
-        dependency2.setVulnerabilities(vulnerabilities2);
+        Dependency dependency2 = new Dependency(null, null, null, null, Collections.emptyList(),identifiersCollected2, vulnerabilities2);
 
         // Add dependencies
         dependencies.add(dependency1);
@@ -146,25 +130,17 @@ public class DependencyReasonSearcherTest {
         context.fileSystem().add(inputFile("build.gradle"));
         DependencyReasonSearcher searcher = new DependencyReasonSearcher(context);
 
-        ScanInfo scanInfo = new ScanInfo();
-        ProjectInfo projectInfo = new ProjectInfo();
+        ScanInfo scanInfo = new ScanInfo("testengine");
+        ProjectInfo projectInfo = new ProjectInfo("testproject", "testreportdate", "testcredits");
         Collection<Dependency> dependencies = new LinkedList<>();
         // Second Identifier
-        Identifier identifier = new Identifier();
-        identifier.setName("org.springframework:spring:2.0");
-        identifier.setConfidence(Confidence.HIGHEST);
-        identifier.setType("maven");
+        Identifier identifier = new Identifier("maven", Confidence.HIGHEST, "org.springframework:spring:2.0");
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
-        Vulnerability vulnerability = new Vulnerability();
-        vulnerability.setCvssScore(5.0f);
-        vulnerability.setDescription("Test description");
-        vulnerability.setName("Test name");
-        Dependency dependency = new Dependency();
+        Vulnerability vulnerability = new Vulnerability("Test name", 5.0f, null, "Test description", null);
         List<Vulnerability> vulnerabilities = new ArrayList<>();
         vulnerabilities.add(vulnerability);
-        dependency.setIdentifiersCollected(identifiersCollected);
-        dependency.setVulnerabilities(vulnerabilities);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyList(),identifiersCollected, vulnerabilities);
 
         // Add dependencies
         dependencies.add(dependency);
