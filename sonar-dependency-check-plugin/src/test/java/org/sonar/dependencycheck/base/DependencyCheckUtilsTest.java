@@ -19,38 +19,19 @@
  */
 package org.sonar.dependencycheck.base;
 
-import static org.junit.Assert.assertEquals;
 
-import java.util.Arrays;
-import java.util.Collection;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.sonar.api.batch.rule.Severity;
 
-@RunWith(Parameterized.class)
 public class DependencyCheckUtilsTest {
 
-    private final Float cvssSeverity;
-    private final Float blocker;
-    private final Float critical;
-    private final Float major;
-    private final Float minor;
-    private final Severity expectedSeverity;
-
-    public DependencyCheckUtilsTest(Float cvssSeverity, Float blocker, Float critical, Float major, Float minor, Severity expectedSeverity) {
-        this.cvssSeverity = cvssSeverity;
-        this.blocker = blocker;
-        this.critical = critical;
-        this.major = major;
-        this.minor = minor;
-        this.expectedSeverity = expectedSeverity;
-    }
-
-    @Parameterized.Parameters
-    public static Collection<Object[]> severities() {
-        return Arrays.asList(new Object[][]{
+    public static Stream<Object[]> severities() {
+        return Stream.of(new Object[][]{
                 // defaults
                 {Float.valueOf("10.0"), Float.valueOf("9.0"), Float.valueOf("7.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Severity.BLOCKER},
                 {Float.valueOf("7.0"),  Float.valueOf("9.0"), Float.valueOf("7.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Severity.CRITICAL},
@@ -135,9 +116,10 @@ public class DependencyCheckUtilsTest {
         });
     }
 
-    @Test
-    public void testCvssToSonarQubeSeverity() {
-        assertEquals(this.expectedSeverity, DependencyCheckUtils.cvssToSonarQubeSeverity(this.cvssSeverity, this.blocker, this.critical, this.major, this.minor));
+    @ParameterizedTest(name = "{index} => cvssSeverity={0}, blocker={1}, critical={2}, major={3}, minor={4}, expectedSeverity={5}")
+    @MethodSource("severities")
+    public void testCvssToSonarQubeSeverity(Float cvssSeverity, Float blocker, Float critical, Float major, Float minor, Severity expectedSeverity) {
+        assertEquals(expectedSeverity, DependencyCheckUtils.cvssToSonarQubeSeverity(cvssSeverity, blocker, critical, major, minor));
     }
 
 }
