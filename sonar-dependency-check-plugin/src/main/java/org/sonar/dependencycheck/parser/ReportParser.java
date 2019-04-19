@@ -37,6 +37,8 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.parser.element.Analysis;
 import org.sonar.dependencycheck.parser.element.Confidence;
+import org.sonar.dependencycheck.parser.element.CvssV2;
+import org.sonar.dependencycheck.parser.element.CvssV3;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Evidence;
 import org.sonar.dependencycheck.parser.element.Identifier;
@@ -151,6 +153,8 @@ public class ReportParser {
         String severity = null;
         String description = null;
         String cwe = null;
+        CvssV2 cvssV2 = null;
+        CvssV3 cvssV3 = null;
         while (childCursor.getNext() != null) {
             String nodeName = childCursor.getLocalName();
             if ("name".equals(nodeName)) {
@@ -160,9 +164,13 @@ public class ReportParser {
                 try {
                     cvssScore = Float.parseFloat(cvssScoreTmp);
                 } catch (NumberFormatException e) {
-                    LOGGER.warn("Could not parse CVSS-Score {} to Float. Setting CVSS-Score to 0.0", cvssScoreTmp);
+                    LOGGER.warn("Could not parse classic CVSS-Score {} to Float. Setting CVSS-Score to 0.0", cvssScoreTmp);
                     cvssScore = 0.0f;
                 }
+            } else if ("cvssV2".equals(nodeName)) {
+                cvssV2 = processCvssv2(childCursor);
+            } else if ("cvssV3".equals(nodeName)) {
+                cvssV3 = processCvssv3(childCursor);
             } else if ("severity".equals(nodeName)) {
                 severity = StringUtils.trim(childCursor.collectDescendantText(false));
             } else if ("cwe".equals(nodeName)) {
@@ -172,10 +180,62 @@ public class ReportParser {
             }
         }
         name = Optional.ofNullable(name).orElseThrow(() -> new ReportParserException("Vulnerability - name not found"));
-        cvssScore = Optional.ofNullable(cvssScore).orElseThrow(() -> new ReportParserException("Vulnerability - cvssScore not found"));
-        severity = Optional.ofNullable(severity).orElseThrow(() -> new ReportParserException("Vulnerability - severity not found"));
         description = Optional.ofNullable(description).orElseThrow(() -> new ReportParserException("Vulnerability - description not found"));
-        return new Vulnerability(name, cvssScore, severity, description, cwe);
+        if (cvssV2 != null || cvssV3 != null) {
+            // Use new Vulnerability
+            return new Vulnerability(name, description, cwe, cvssV2, cvssV3);
+        } else {
+            // Use classic Vulnerability
+            cvssScore = Optional.ofNullable(cvssScore).orElseThrow(() -> new ReportParserException("Vulnerability - cvssScore not found"));
+            severity = Optional.ofNullable(severity).orElseThrow(() -> new ReportParserException("Vulnerability - severity not found"));
+            return new Vulnerability(name, cvssScore, severity, description, cwe);
+        }
+    }
+
+    private static CvssV3 processCvssv3(SMInputCursor cvssv3C) throws XMLStreamException, ReportParserException {
+        SMInputCursor childCursor = cvssv3C.childCursor();
+        Float baseScore = null;
+        String baseSeverity = null;
+        while (childCursor.getNext() != null) {
+            String nodeName = childCursor.getLocalName();
+            if ("baseScore".equals(nodeName)) {
+                String cvssScoreTmp = StringUtils.trim(childCursor.collectDescendantText(false));
+                try {
+                    baseScore = Float.parseFloat(cvssScoreTmp);
+                } catch (NumberFormatException e) {
+                    LOGGER.warn("Could not parse CVSSv3-Score {} to Float. Setting CVSS-Score to 0.0", cvssScoreTmp);
+                    baseScore = 0.0f;
+                }
+            } else if ("baseSeverity".equals(nodeName)) {
+                baseSeverity = StringUtils.trim(childCursor.collectDescendantText(false));
+            }
+        }
+        baseScore = Optional.ofNullable(baseScore).orElseThrow(() -> new ReportParserException("CvssV3 - baseScore not found"));
+        baseSeverity = Optional.ofNullable(baseSeverity).orElseThrow(() -> new ReportParserException("CvssV3 - baseSeverity not found"));
+        return new CvssV3(baseScore, baseSeverity);
+    }
+
+    private static CvssV2 processCvssv2(SMInputCursor cvssv2C) throws XMLStreamException, ReportParserException {
+        SMInputCursor childCursor = cvssv2C.childCursor();
+        Float score = null;
+        String severity = null;
+        while (childCursor.getNext() != null) {
+            String nodeName = childCursor.getLocalName();
+            if ("score".equals(nodeName)) {
+                String cvssScoreTmp = StringUtils.trim(childCursor.collectDescendantText(false));
+                try {
+                    score = Float.parseFloat(cvssScoreTmp);
+                } catch (NumberFormatException e) {
+                    LOGGER.warn("Could not parse CVSSv2-Score {} to Float. Setting CVSS-Score to 0.0", cvssScoreTmp);
+                    score = 0.0f;
+                }
+            } else if ("severity".equals(nodeName)) {
+                severity = StringUtils.trim(childCursor.collectDescendantText(false));
+            }
+        }
+        score = Optional.ofNullable(score).orElseThrow(() -> new ReportParserException("CvssV2 - score not found"));
+        severity = Optional.ofNullable(severity).orElseThrow(() -> new ReportParserException("CvssV2 - severity not found"));
+        return new CvssV2(score, severity);
     }
 
     private static Collection<Evidence> processEvidenceCollected(SMInputCursor ecC) throws XMLStreamException, ReportParserException {
@@ -210,9 +270,18 @@ public class ReportParser {
 
     private static Collection<Identifier> processIdentifiersCollected(SMInputCursor ifC) throws XMLStreamException, ReportParserException {
         Collection<Identifier> identifierCollection = new ArrayList<>();
-        SMInputCursor cursor = ifC.childElementCursor("identifier");
-        while (cursor.getNext() != null) {
-            identifierCollection.add(processIdentifiers(cursor));
+        SMInputCursor childCursor = ifC.childCursor();
+        while (childCursor.getNext() != null) {
+            String nodeName = childCursor.getLocalName();
+            if ("identifier".equals(nodeName)) {
+                identifierCollection.add(processIdentifiers(childCursor));
+            }
+            if ("package".equals(nodeName)) {
+                identifierCollection.add(processIdentifiers(childCursor));
+            }
+            if ("vulnerabilityIds".equals(nodeName)) {
+                identifierCollection.add(processIdentifiers(childCursor));
+            }
         }
         return identifierCollection;
     }
@@ -221,6 +290,7 @@ public class ReportParser {
         String type = null;
         Confidence confidence = null;
         String name = null;
+        String id = null;
         for (int i = 0; i < ifC.getAttrCount(); ++i) {
             if (ifC.getAttrLocalName(i).equals("type")) {
                 type = ifC.getAttrValue(i);
@@ -235,6 +305,17 @@ public class ReportParser {
             if ("name".equals(nodeName)) {
                 name = StringUtils.trim(childCursor.collectDescendantText(false));
             }
+            if ("id".equals(nodeName)) {
+                id = StringUtils.trim(childCursor.collectDescendantText(false));
+            }
+        }
+        if (type == null && StringUtils.isNotEmpty(id)) {
+            // pkg:maven/struts/struts@1.2.8 -> maven
+            type = StringUtils.substringAfter(StringUtils.substringBefore(id, "/"), "pkg:");
+        }
+        if (name == null && StringUtils.isNotEmpty(id)) {
+            // pkg:maven/struts/struts@1.2.8 -> struts:struts:1.2.8
+            name = StringUtils.substringAfter(id, "/").replace('/', ':').replace('@', ':');
         }
         type = Optional.ofNullable(type).orElseThrow(() -> new ReportParserException("Identifier - type not found"));
         name = Optional.ofNullable(name).orElseThrow(() -> new ReportParserException("Identifier - name not found"));
@@ -250,9 +331,7 @@ public class ReportParser {
                 engineVersion = StringUtils.trim(childCursor.collectDescendantText(false));
             }
         }
-        if (engineVersion == null) {
-            throw new ReportParserException("eningeVersion not found");
-        }
+        engineVersion = Optional.ofNullable(engineVersion).orElseThrow(() -> new ReportParserException("eningeVersion not found"));
         return new ScanInfo(engineVersion);
     }
 
