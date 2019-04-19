@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
@@ -44,6 +45,8 @@ public class DependencyCheckSensor implements ProjectSensor {
 
     private static final Logger LOGGER = Loggers.get(DependencyCheckSensor.class);
     private static final String SENSOR_NAME = "Dependency-Check";
+    private static final String[] XSD = {"https://jeremylong.github.io/DependencyCheck/dependency-check.1.8.xsd",
+    "https://jeremylong.github.io/DependencyCheck/dependency-check.2.0.xsd"};
 
     private final FileSystem fileSystem;
     private final PathResolver pathResolver;
@@ -98,7 +101,7 @@ public class DependencyCheckSensor implements ProjectSensor {
         } catch (XMLStreamException e) {
             LOGGER.warn("Analysis aborted due to: XML is not valid", e);
         } catch (ReportParserException e) {
-            LOGGER.warn("Analysis aborted due to: Mandatory elements are missing. Plugin is compatible to https://jeremylong.github.io/DependencyCheck/dependency-check.1.8.xsd");
+            LOGGER.warn("Analysis aborted due to: Mandatory elements are missing. Plugin is compatible to {}", StringUtils.join(XSD, ", "));
             LOGGER.debug(e.getMessage(), e);
         }
         uploadHTMLReport(sensorContext);
