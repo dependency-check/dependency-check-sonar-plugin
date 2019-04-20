@@ -1,9 +1,20 @@
 # Change Log
 
-## [1.2.2-SNAPSHOT](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/tree/master)
-[All Commits](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/compare/1.2.1...master)
+## [1.2.3](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/tree/1.2.3) (2019-04-20)
+[All Commits](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/compare/1.2.2...1.2.3)
+
+- **[new]** Support dependency-check 5.0 ([#131](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/131))
+- **[testing]** Update test libaries ([#130](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/130))
+- **[parser]** Be more null safe ([#129](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/129))
+- **[misc]** Update license to 2019 ([#127](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/127))
+
+## [1.2.2](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/tree/1.2.2) (2019-04-07)
+[All Commits](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/compare/1.2.1...1.2.2)
 
 - **[new, BREAKING]** Go on search for dependencies in project configuration files ([#99](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/99))
+- **[misc]** Improve release process ([#125](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/125))
+- **[new]** Use measurecomputer ([#124](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/124) by [reallyinsane](https://github.com/reallyinsane))
+- **[misc]** Change project namespace ([#121](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/121))
 - **[examples]** Update examples ([#119](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/119/files))
 - **[examples]** Rename example project ([#118](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/118))
 - **[testing]** Remove old libaries ([#115](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/115))
