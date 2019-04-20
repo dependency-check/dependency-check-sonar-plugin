@@ -38,27 +38,27 @@ import org.sonar.dependencycheck.parser.element.Vulnerability;
 public class ReportParserTest {
 
     @Test
-    public void parseReport() throws Exception {
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("report/dependency-check-report.xml");
+    public void parseReport400() throws Exception {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("report/dependency-check-report-400.xml");
         Analysis analysis = ReportParser.parse(inputStream);
-        assertEquals("1.2.3", analysis.getScanInfo().getEngineVersion());
-        assertEquals("trunk-scan", analysis.getProjectInfo().get().getName());
-        assertEquals("2014-12-02T04:57:02.663+0200", analysis.getProjectInfo().get().getReportDate());
-        assertEquals("This report contains data retrieved from the National Vulnerability Database: http://nvd.nist.gov", analysis.getProjectInfo().get().getCredits());
+        assertEquals("4.0.2", analysis.getScanInfo().getEngineVersion());
+        assertEquals("Multi-Module Maven Example", analysis.getProjectInfo().get().getName());
+        assertEquals("2019-04-18T11:30:25.206+0200", analysis.getProjectInfo().get().getReportDate());
+        assertEquals("This report contains data retrieved from the National Vulnerability Database: https://nvd.nist.gov, NPM Public Advisories: https://www.npmjs.com/advisories, and the RetireJS community.", analysis.getProjectInfo().get().getCredits());
 
-        // axis-1.4.jar
+        // struts-1.2.8.jar
         Collection<Dependency> dependencies = analysis.getDependencies();
-        assertEquals(5, dependencies.size());
+        assertEquals(20, dependencies.size());
         Iterator<Dependency> iterator = dependencies.iterator();
         Dependency dependency = (Dependency) iterator.next();
 
-        assertEquals("axis-1.4.jar", dependency.getFileName());
-        assertEquals("/path/to/trunk/lib/axis-1.4.jar", dependency.getFilePath());
-        assertEquals("F5D153ADF794D67AF135BD281B7B0516", dependency.getMd5Hash());
-        assertEquals("B58604D52D0BF0A9D7C85434D8B770534BAF70B6", dependency.getSha1Hash());
+        assertEquals("struts-1.2.8.jar", dependency.getFileName());
+        assertEquals("/to/path/struts/struts/1.2.8/struts-1.2.8.jar", dependency.getFilePath());
+        assertEquals("8af31c3a406cfbfd991a6946102d583a", dependency.getMd5Hash());
+        assertEquals("5919caff42c3f42fb251fd82a58af4a7880826dd", dependency.getSha1Hash());
 
         Collection<Evidence> evidenceCollected = dependency.getEvidenceCollected();
-        assertEquals(4, evidenceCollected.size());
+        assertEquals(26, evidenceCollected.size());
         for (Evidence evidence : evidenceCollected) {
             assertFalse(evidence.getSource().isEmpty());
             assertFalse(evidence.getName().isEmpty());
@@ -66,52 +66,131 @@ public class ReportParserTest {
         }
 
         Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
-        assertEquals(2, vulnerabilities.size());
+        assertEquals(8, vulnerabilities.size());
         Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
         Vulnerability vulnerability = (Vulnerability) vulnIterator.next();
-        assertEquals("CVE-2014-3596", vulnerability.getName());
-        assertEquals(5.8f, vulnerability.getCvssScore(), 0.0f);
-        assertEquals("Medium", vulnerability.getSeverity());
+        assertEquals("CVE-2006-1546", vulnerability.getName());
+        assertEquals(7.5f, vulnerability.getCvssScore(), 0.0f);
+        assertEquals("High", vulnerability.getSeverity());
         assertFalse(vulnerability.getCwe().isPresent());
-        assertEquals("The getCN function in Apache Axis 1.4 and earlier does not properly verify that the server hostname matches a domain name in the subject's Common Name (CN) or subjectAltName field of the X.509 certificate, which allows man-in-the-middle attackers to spoof SSL servers via a certificate with a subject that specifies a common name in a field that is not the CN field.  NOTE: this issue exists because of an incomplete fix for CVE-2012-5784.", vulnerability.getDescription());
+        assertEquals("Apache Software Foundation (ASF) Struts ...", vulnerability.getDescription());
 
         vulnerability = (Vulnerability) vulnIterator.next();
-        assertEquals("CVE-2012-5784", vulnerability.getName());
-        assertEquals(5.8f , vulnerability.getCvssScore(), 0.0f);
-        assertEquals("Medium", vulnerability.getSeverity());
-        assertEquals("CWE-20 Improper Input Validation", vulnerability.getCwe().get());
-        assertEquals("Apache Axis 1.4 and earlier, as used in PayPal Payments Pro, PayPal Mass Pay, PayPal Transactional Information SOAP, the Java Message Service implementation in Apache ActiveMQ, and other products, does not verify that the server hostname matches a domain name in the subject's Common Name (CN) or subjectAltName field of the X.509 certificate, which allows man-in-the-middle attackers to spoof SSL servers via an arbitrary valid certificate.", vulnerability.getDescription());
+        assertEquals("CVE-2006-1547", vulnerability.getName());
+        assertEquals(7.8f , vulnerability.getCvssScore(), 0.0f);
+        assertEquals("High", vulnerability.getSeverity());
+        assertFalse(vulnerability.getCwe().isPresent());
+        assertEquals("ActionForm in Apache Software Foundation (ASF) Struts before 1.2.9 ...", vulnerability.getDescription());
 
-        // commons-cli-1.1.jar
+        // commons-beanutils-1.7.0.jar
         dependency = (Dependency) iterator.next();
-        assertEquals(13, dependency.getEvidenceCollected().size());
-        assertEquals(0, dependency.getVulnerabilities().size());
+        assertEquals(14, dependency.getEvidenceCollected().size());
+        assertEquals(1, dependency.getVulnerabilities().size());
 
-        // commons-codec-1.3.jar
+        // commons-digester-1.6.jar
         dependency = (Dependency) iterator.next();
-        assertEquals(12, dependency.getEvidenceCollected().size());
+        assertEquals(15, dependency.getEvidenceCollected().size());
         assertTrue(dependency.getVulnerabilities().isEmpty());
 
-        // mail-1.4.5.jar
+        // commons-collections-2.1.jar
         dependency = (Dependency) iterator.next();
-        assertEquals(32, dependency.getEvidenceCollected().size());
-        assertEquals(1, dependency.getVulnerabilities().size());
-        assertEquals(1, dependency.getIdentifiersCollected().size());
+        assertEquals(17, dependency.getEvidenceCollected().size());
+        assertEquals(2, dependency.getVulnerabilities().size());
+        assertEquals(2, dependency.getIdentifiersCollected().size());
         Collection<Identifier> identifiers = dependency.getIdentifiersCollected();
         Identifier identifier = identifiers.iterator().next();
-        assertEquals(Confidence.LOW, identifier.getConfidence().get());
-        assertEquals("(javax.mail:mail:1.4.5)", identifier.getName());
+        assertEquals(Confidence.HIGHEST, identifier.getConfidence().get());
+        assertEquals("commons-collections:commons-collections:2.1", identifier.getName());
         assertEquals("maven", identifier.getType());
         vulnerabilities = dependency.getVulnerabilities();
-        assertEquals(1, vulnerabilities.size());
+        assertEquals(2, vulnerabilities.size());
         vulnIterator = vulnerabilities.iterator();
         vulnerability = (Vulnerability) vulnIterator.next();
-        assertEquals("CVE-2007-6059", vulnerability.getName());
-        assertEquals(0.0f, vulnerability.getCvssScore(), 0.0f);
+        assertEquals("CVE-2015-6420", vulnerability.getName());
+        assertEquals(7.5f, vulnerability.getCvssScore(), 0.0f);
 
-        // mysql-connector-java-commercial-5.1.25.jar
+        // xml-apis-1.0.b2.jar
         dependency = (Dependency) iterator.next();
-        assertEquals(9, dependency.getEvidenceCollected().size());
+        System.out.println(dependency.getFileName());
+        assertEquals(32, dependency.getEvidenceCollected().size());
+        assertTrue(dependency.getVulnerabilities().isEmpty());
+
+    }
+    @Test
+    public void parseReport500() throws Exception {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("report/dependency-check-report-500.xml");
+        Analysis analysis = ReportParser.parse(inputStream);
+        assertEquals("5.0.0-M2", analysis.getScanInfo().getEngineVersion());
+        assertEquals("Multi-Module Maven Example", analysis.getProjectInfo().get().getName());
+        assertEquals("2019-04-17T18:25:00.460+0200", analysis.getProjectInfo().get().getReportDate());
+        assertEquals("This report contains data retrieved from the National Vulnerability Database: https://nvd.nist.gov, NPM Public Advisories: https://www.npmjs.com/advisories, and the RetireJS community.", analysis.getProjectInfo().get().getCredits());
+
+        // struts-1.2.8.jar
+        Collection<Dependency> dependencies = analysis.getDependencies();
+        assertEquals(34, dependencies.size());
+        Iterator<Dependency> iterator = dependencies.iterator();
+        Dependency dependency = (Dependency) iterator.next();
+
+        assertEquals("struts-1.2.8.jar", dependency.getFileName());
+        assertEquals("/to/path/struts/struts/1.2.8/struts-1.2.8.jar", dependency.getFilePath());
+        assertEquals("8af31c3a406cfbfd991a6946102d583a", dependency.getMd5Hash());
+        assertEquals("5919caff42c3f42fb251fd82a58af4a7880826dd", dependency.getSha1Hash());
+
+        Collection<Evidence> evidenceCollected = dependency.getEvidenceCollected();
+        assertEquals(30, evidenceCollected.size());
+        for (Evidence evidence : evidenceCollected) {
+            assertFalse(evidence.getSource().isEmpty());
+            assertFalse(evidence.getName().isEmpty());
+            assertFalse(evidence.getValue().isEmpty());
+        }
+
+        Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
+        assertEquals(11, vulnerabilities.size());
+        Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
+        Vulnerability vulnerability = (Vulnerability) vulnIterator.next();
+        assertEquals("CVE-2006-1546", vulnerability.getName());
+        assertEquals(7.5f, vulnerability.getCvssScore(), 0.0f);
+        assertEquals("HIGH", vulnerability.getSeverity());
+        assertFalse(vulnerability.getCwe().isPresent());
+        assertEquals("Apache Software Foundation (ASF) Struts ...", vulnerability.getDescription());
+
+        vulnerability = (Vulnerability) vulnIterator.next();
+        assertEquals("CVE-2006-1547", vulnerability.getName());
+        assertEquals(7.8f , vulnerability.getCvssScore(), 0.0f);
+        assertEquals("HIGH", vulnerability.getSeverity());
+        assertFalse(vulnerability.getCwe().isPresent());
+        assertEquals("ActionForm in Apache Software Foundation (ASF) Struts before 1.2.9 ...", vulnerability.getDescription());
+
+        // commons-beanutils-1.7.0.jar
+        dependency = (Dependency) iterator.next();
+        assertEquals(20, dependency.getEvidenceCollected().size());
+        assertEquals(1, dependency.getVulnerabilities().size());
+
+        // commons-digester-1.6.jar
+        dependency = (Dependency) iterator.next();
+        assertEquals(20, dependency.getEvidenceCollected().size());
+        assertTrue(dependency.getVulnerabilities().isEmpty());
+
+        // commons-collections-2.1.jar
+        dependency = (Dependency) iterator.next();
+        assertEquals(21, dependency.getEvidenceCollected().size());
+        assertEquals(2, dependency.getVulnerabilities().size());
+        assertEquals(2, dependency.getIdentifiersCollected().size());
+        Collection<Identifier> identifiers = dependency.getIdentifiersCollected();
+        Identifier identifier = identifiers.iterator().next();
+        assertEquals(Confidence.HIGH, identifier.getConfidence().get());
+        assertEquals("commons-collections:commons-collections:2.1", identifier.getName());
+        assertEquals("maven", identifier.getType());
+        vulnerabilities = dependency.getVulnerabilities();
+        assertEquals(2, vulnerabilities.size());
+        vulnIterator = vulnerabilities.iterator();
+        vulnerability = (Vulnerability) vulnIterator.next();
+        assertEquals("CVE-2015-6420", vulnerability.getName());
+        assertEquals(7.5f, vulnerability.getCvssScore(), 0.0f);
+
+        // xml-apis-1.0.b2.jar
+        dependency = (Dependency) iterator.next();
+        assertEquals(47, dependency.getEvidenceCollected().size());
         assertTrue(dependency.getVulnerabilities().isEmpty());
 
     }

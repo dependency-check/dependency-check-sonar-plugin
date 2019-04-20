@@ -74,7 +74,7 @@ public class MavenDependencyReason extends DependencyReason {
             if (mavenIdentifier.isPresent()) {
                 fillArtifactMatch(dependency, mavenIdentifier.get());
             } else {
-                LOGGER.warn("No Identifier with type maven found for Dependency {}", dependency.getFileName());
+                LOGGER.debug("No Identifier with type maven found for Dependency {}", dependency.getFileName());
             }
             if (!dependencyMap.containsKey(dependency) || dependencyMap.get(dependency) == null) {
                 LOGGER.debug("We doesn't find a TextRange for {} in {}. We link to first line with {} confidence",

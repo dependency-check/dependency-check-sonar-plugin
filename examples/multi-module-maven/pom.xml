@@ -22,10 +22,11 @@
     </organization>
 
     <properties>
-        <dependency.check.report.dir>target/dependency-check</dependency.check.report.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <sonar.dependencyCheck.reportPath>${dependency.check.report.dir}/dependency-check-report.xml</sonar.dependencyCheck.reportPath>
-        <sonar.dependencyCheck.htmlReportPath>${dependency.check.report.dir}/dependency-check-report.html</sonar.dependencyCheck.htmlReportPath>
+        <sonar.dependencyCheck.reportPath>target/dependency-check-report.xml</sonar.dependencyCheck.reportPath>
+        <sonar.dependencyCheck.htmlReportPath>target/dependency-check-report.html</sonar.dependencyCheck.htmlReportPath>
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <maven.compiler.target>1.6</maven.compiler.target>
     </properties>
 
     <developers>
@@ -53,10 +54,9 @@
                 <plugin>
                     <groupId>org.owasp</groupId>
                     <artifactId>dependency-check-maven</artifactId>
-                    <version>4.0.2</version>
+                    <version>5.0.0-M2</version>
                     <configuration>
                         <format>ALL</format>
-                        <outputDirectory>${dependency.check.report.dir}</outputDirectory>
                     </configuration>
                 </plugin>
             </plugins>
