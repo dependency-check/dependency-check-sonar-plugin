@@ -100,7 +100,12 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <useReleaseProfile>false</useReleaseProfile>
                     <releaseProfiles>release</releaseProfiles>
+                    <localCheckout>true</localCheckout>
+                    <mavenExecutorId>forked-path</mavenExecutorId>
                     <pushChanges>true</pushChanges>
+                    <preparationGoals>clean install</preparationGoals>
+                    <tagNameFormat>@{project.version}</tagNameFormat>
+                    <arguments>-Prelease</arguments>
                 </configuration>
             </plugin>
         </plugins>
