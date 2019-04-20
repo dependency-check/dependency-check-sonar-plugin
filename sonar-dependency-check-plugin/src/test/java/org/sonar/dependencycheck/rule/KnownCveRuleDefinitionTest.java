@@ -19,13 +19,14 @@
  */
 package org.sonar.dependencycheck.rule;
 
-import org.junit.Test;
 import org.mockito.InOrder;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Gregor Tudan, Cofinpro AG
