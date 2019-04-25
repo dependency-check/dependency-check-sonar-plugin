@@ -203,7 +203,16 @@ public class ReportParserTest {
         assertEquals("project", analysis.getProjectInfo().get().getName());
         assertEquals("2019-04-23T22:43:06.450+0000", analysis.getProjectInfo().get().getReportDate());
         assertEquals("This report contains data retrieved from the National Vulnerability Database: https://nvd.nist.gov, NPM Public Advisories: https://www.npmjs.com/advisories, and the RetireJS community.", analysis.getProjectInfo().get().getCredits());
+    }
 
+    @Test
+    public void parseBigReportNode500() throws Exception {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportNode.js/big-dependency-check-report.xml");
+        Analysis analysis = ReportParser.parse(inputStream);
+        assertEquals("5.0.0-M2", analysis.getScanInfo().getEngineVersion());
+        assertEquals("project", analysis.getProjectInfo().get().getName());
+        assertEquals("2019-04-23T22:43:06.450+0000", analysis.getProjectInfo().get().getReportDate());
+        assertEquals("This report contains data retrieved from the National Vulnerability Database: https://nvd.nist.gov, NPM Public Advisories: https://www.npmjs.com/advisories, and the RetireJS community.", analysis.getProjectInfo().get().getCredits());
     }
 
 }
