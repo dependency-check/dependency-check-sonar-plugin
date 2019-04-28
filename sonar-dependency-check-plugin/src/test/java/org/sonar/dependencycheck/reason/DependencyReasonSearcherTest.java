@@ -94,7 +94,7 @@ public class DependencyReasonSearcherTest {
         Identifier identifier1 = new Identifier("maven", Confidence.HIGHEST, "struts:struts:1.2.8");
         Collection<Identifier> identifiersCollected1 = new ArrayList<>();
         identifiersCollected1.add(identifier1);
-        Vulnerability vulnerability1 = new Vulnerability("Test name", 5.0f, null, "Test description", null);
+        Vulnerability vulnerability1 = new Vulnerability("Test name", "NVD", 5.0f, null, "Test description", null);
         List<Vulnerability> vulnerabilities1 = new ArrayList<>();
         vulnerabilities1.add(vulnerability1);
         Dependency dependency1 = new Dependency(null, null, null, null, Collections.emptyList(),identifiersCollected1, vulnerabilities1);
@@ -102,7 +102,7 @@ public class DependencyReasonSearcherTest {
         Identifier identifier2 = new Identifier("maven", Confidence.HIGHEST, "org.springframework:spring:2.0.8");
         Collection<Identifier> identifiersCollected2 = new ArrayList<>();
         identifiersCollected2.add(identifier2);
-        Vulnerability vulnerability2 = new Vulnerability("Test name", 5.0f, null, "Test description", null);
+        Vulnerability vulnerability2 = new Vulnerability("Test name", "NVD", 5.0f, null, "Test description", null);
         List<Vulnerability> vulnerabilities2 = new ArrayList<>();
         vulnerabilities2.add(vulnerability2);
         Dependency dependency2 = new Dependency(null, null, null, null, Collections.emptyList(),identifiersCollected2, vulnerabilities2);
@@ -137,7 +137,7 @@ public class DependencyReasonSearcherTest {
         Identifier identifier = new Identifier("maven", Confidence.HIGHEST, "org.springframework:spring:2.0");
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
-        Vulnerability vulnerability = new Vulnerability("Test name", 5.0f, null, "Test description", null);
+        Vulnerability vulnerability = new Vulnerability("Test name", "NVD", 5.0f, null, "Test description", null);
         List<Vulnerability> vulnerabilities = new ArrayList<>();
         vulnerabilities.add(vulnerability);
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyList(),identifiersCollected, vulnerabilities);
