@@ -147,19 +147,31 @@ public class ReportParser {
     }
 
     private static Vulnerability processVulnerability(SMInputCursor vulnC) throws XMLStreamException, ReportParserException {
-        SMInputCursor childCursor = vulnC.childCursor();
         String name = null;
+        String source = null;
         Float cvssScore = null;
         String severity = null;
         String description = null;
         String cwe = null;
         CvssV2 cvssV2 = null;
         CvssV3 cvssV3 = null;
+        // Attributes
+        for (int i = 0; i < vulnC.getAttrCount(); ++i) {
+            if (StringUtils.equalsAnyIgnoreCase("source", vulnC.getAttrLocalName(i))) {
+                source = StringUtils.trim(vulnC.getAttrValue(i));
+            }
+        }
+        SMInputCursor childCursor = vulnC.childCursor();
         while (childCursor.getNext() != null) {
             String nodeName = childCursor.getLocalName();
-            if ("name".equals(nodeName)) {
+            if (nodeName == null) {
+                continue;
+            }
+            switch (nodeName) {
+            case "name":
                 name = StringUtils.trim(childCursor.collectDescendantText(false));
-            } else if ("cvssScore".equals(nodeName)) {
+                break;
+            case "cvssScore":
                 String cvssScoreTmp = StringUtils.trim(childCursor.collectDescendantText(false));
                 try {
                     cvssScore = Float.parseFloat(cvssScoreTmp);
@@ -167,28 +179,37 @@ public class ReportParser {
                     LOGGER.warn("Could not parse classic CVSS-Score {} to Float. Setting CVSS-Score to 0.0", cvssScoreTmp);
                     cvssScore = 0.0f;
                 }
-            } else if ("cvssV2".equals(nodeName)) {
+                break;
+            case "cvssV2":
                 cvssV2 = processCvssv2(childCursor);
-            } else if ("cvssV3".equals(nodeName)) {
+                break;
+            case "cvssV3":
                 cvssV3 = processCvssv3(childCursor);
-            } else if ("severity".equals(nodeName)) {
+                break;
+            case "severity":
                 severity = StringUtils.trim(childCursor.collectDescendantText(false));
-            } else if ("cwe".equals(nodeName)) {
+                break;
+            case "cwe":
                 cwe = StringUtils.trim(childCursor.collectDescendantText(false));
-            } else if ("description".equals(nodeName)) {
+                break;
+            case "description":
                 description = StringUtils.trim(childCursor.collectDescendantText(false));
+                break;
+            default:
+                break;
             }
         }
         name = Optional.ofNullable(name).orElseThrow(() -> new ReportParserException("Vulnerability - name not found"));
+        source = Optional.ofNullable(source).orElseThrow(() -> new ReportParserException("Vulnerability - source not found"));
         description = Optional.ofNullable(description).orElseThrow(() -> new ReportParserException("Vulnerability - description not found"));
         if (cvssV2 != null || cvssV3 != null) {
             // Use new Vulnerability
-            return new Vulnerability(name, description, cwe, cvssV2, cvssV3);
+            return new Vulnerability(name, source, description, cwe, cvssV2, cvssV3);
         } else {
             // Use classic Vulnerability
             cvssScore = Optional.ofNullable(cvssScore).orElseThrow(() -> new ReportParserException("Vulnerability - cvssScore not found"));
             severity = Optional.ofNullable(severity).orElseThrow(() -> new ReportParserException("Vulnerability - severity not found"));
-            return new Vulnerability(name, cvssScore, severity, description, cwe);
+            return new Vulnerability(name, source, cvssScore, severity, description, cwe);
         }
     }
 
