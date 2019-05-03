@@ -70,6 +70,7 @@ public class ReportParserTest {
         Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
         Vulnerability vulnerability = (Vulnerability) vulnIterator.next();
         assertEquals("CVE-2006-1546", vulnerability.getName());
+        assertEquals("NVD", vulnerability.getSource());
         assertEquals(7.5f, vulnerability.getCvssScore(), 0.0f);
         assertEquals("High", vulnerability.getSeverity());
         assertFalse(vulnerability.getCwe().isPresent());
@@ -77,6 +78,7 @@ public class ReportParserTest {
 
         vulnerability = (Vulnerability) vulnIterator.next();
         assertEquals("CVE-2006-1547", vulnerability.getName());
+        assertEquals("NVD", vulnerability.getSource());
         assertEquals(7.8f , vulnerability.getCvssScore(), 0.0f);
         assertEquals("High", vulnerability.getSeverity());
         assertFalse(vulnerability.getCwe().isPresent());
@@ -107,6 +109,7 @@ public class ReportParserTest {
         vulnIterator = vulnerabilities.iterator();
         vulnerability = (Vulnerability) vulnIterator.next();
         assertEquals("CVE-2015-6420", vulnerability.getName());
+        assertEquals("NVD", vulnerability.getSource());
         assertEquals(7.5f, vulnerability.getCvssScore(), 0.0f);
 
         // xml-apis-1.0.b2.jar
@@ -149,6 +152,7 @@ public class ReportParserTest {
         Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
         Vulnerability vulnerability = (Vulnerability) vulnIterator.next();
         assertEquals("CVE-2006-1546", vulnerability.getName());
+        assertEquals("NVD", vulnerability.getSource());
         assertEquals(7.5f, vulnerability.getCvssScore(), 0.0f);
         assertEquals("HIGH", vulnerability.getSeverity());
         assertFalse(vulnerability.getCwe().isPresent());
@@ -156,6 +160,7 @@ public class ReportParserTest {
 
         vulnerability = (Vulnerability) vulnIterator.next();
         assertEquals("CVE-2006-1547", vulnerability.getName());
+        assertEquals("NVD", vulnerability.getSource());
         assertEquals(7.8f , vulnerability.getCvssScore(), 0.0f);
         assertEquals("HIGH", vulnerability.getSeverity());
         assertFalse(vulnerability.getCwe().isPresent());
@@ -186,6 +191,7 @@ public class ReportParserTest {
         vulnIterator = vulnerabilities.iterator();
         vulnerability = (Vulnerability) vulnIterator.next();
         assertEquals("CVE-2015-6420", vulnerability.getName());
+        assertEquals("NVD", vulnerability.getSource());
         assertEquals(7.5f, vulnerability.getCvssScore(), 0.0f);
 
         // xml-apis-1.0.b2.jar
