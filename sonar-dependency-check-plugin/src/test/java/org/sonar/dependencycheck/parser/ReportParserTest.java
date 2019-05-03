@@ -19,8 +19,13 @@
  */
 package org.sonar.dependencycheck.parser;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.InputStream;
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
 
 import org.junit.jupiter.api.Test;
 import org.sonar.dependencycheck.parser.element.Analysis;
@@ -29,8 +34,6 @@ import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Evidence;
 import org.sonar.dependencycheck.parser.element.Identifier;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class ReportParserTest {
 
