@@ -46,6 +46,8 @@ import org.sonar.dependencycheck.parser.element.ProjectInfo;
 import org.sonar.dependencycheck.parser.element.ScanInfo;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
 
+import edu.umd.cs.findbugs.annotations.Nullable;
+
 public class ReportParser {
 
     private static final Logger LOGGER = Loggers.get(ReportParser.class);
@@ -202,6 +204,15 @@ public class ReportParser {
         name = Optional.ofNullable(name).orElseThrow(() -> new ReportParserException("Vulnerability - name not found"));
         source = Optional.ofNullable(source).orElseThrow(() -> new ReportParserException("Vulnerability - source not found"));
         description = Optional.ofNullable(description).orElseThrow(() -> new ReportParserException("Vulnerability - description not found"));
+        /*
+         * FIXME: Workaround for https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/issues/135
+         * upstream issue in dependency-check: https://github.com/jeremylong/DependencyCheck/issues/1873
+         * Problem: Dependency-check doesn't report any cvssScore or severity from NPM vulnerability source in version 5.0.0-M2
+         */
+        if (isWorkaroundForMissingNPMScore(cvssV2, cvssV3, cvssScore, source)) {
+            cvssScore = 5.0f;
+            severity = Optional.ofNullable(severity).orElse("MEDIUM");
+        }
         if (cvssV2 != null || cvssV3 != null) {
             // Use new Vulnerability
             return new Vulnerability(name, source, description, cwe, cvssV2, cvssV3);
@@ -211,6 +222,10 @@ public class ReportParser {
             severity = Optional.ofNullable(severity).orElseThrow(() -> new ReportParserException("Vulnerability - severity not found"));
             return new Vulnerability(name, source, cvssScore, severity, description, cwe);
         }
+    }
+
+    private static boolean isWorkaroundForMissingNPMScore(@Nullable CvssV2 cvssV2, @Nullable CvssV3 cvssV3, @Nullable Float cvssScore, @Nullable String source) {
+        return StringUtils.equalsAnyIgnoreCase(source, "NPM") && cvssV2 == null && cvssV3 == null && cvssScore == null;
     }
 
     private static CvssV3 processCvssv3(SMInputCursor cvssv3C) throws XMLStreamException, ReportParserException {
