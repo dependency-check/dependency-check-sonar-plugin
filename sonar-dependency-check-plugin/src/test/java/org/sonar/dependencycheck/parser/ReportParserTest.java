@@ -238,8 +238,8 @@ public class ReportParserTest {
         assertEquals("NVD", vulnerability.getSource());
         assertEquals(4.3f, vulnerability.getCvssScore(false), 0.0f);
         assertEquals(6.1f, vulnerability.getCvssScore(), 0.0f);
-        assertEquals("moderate", vulnerability.getSeverity());
-        assertEquals("moderate", vulnerability.getSeverity(false));
+        assertEquals("MEDIUM", vulnerability.getSeverity());
+        assertEquals("MEDIUM", vulnerability.getSeverity(false));
         assertFalse(vulnerability.getCwe().isPresent());
         assertEquals("jQuery before 3.0.0 is vulnerable to Cross-site Scripting (XSS) attacks when a cross-domain Ajax request is performed without the dataType option, causing text/javascript responses to be executed.", vulnerability.getDescription());
 
@@ -248,7 +248,7 @@ public class ReportParserTest {
         assertEquals("NVD", vulnerability.getSource());
         assertEquals(4.3f, vulnerability.getCvssScore(false), 0.0f);
         assertEquals(6.1f , vulnerability.getCvssScore(), 0.0f);
-        assertEquals("moderate", vulnerability.getSeverity());
+        assertEquals("MEDIUM", vulnerability.getSeverity());
         assertFalse(vulnerability.getCwe().isPresent());
         assertEquals("jQuery before 3.4.0, as used in Drupal, Backdrop CMS, and other products, mishandles jQuery.extend(true, {}, ...) because of Object.prototype pollution. If an unsanitized source object contained an enumerable __proto__ property, it could extend the native Object.prototype.", vulnerability.getDescription());
 
@@ -335,8 +335,8 @@ public class ReportParserTest {
                 assertEquals("NVD", vulnerability.getSource());
                 assertEquals(4.3f, vulnerability.getCvssScore(false), 0.0f);
                 assertEquals(6.1f, vulnerability.getCvssScore(), 0.0f);
-                assertEquals("moderate", vulnerability.getSeverity());
-                assertEquals("moderate", vulnerability.getSeverity(false));
+                assertEquals("MEDIUM", vulnerability.getSeverity());
+                assertEquals("MEDIUM", vulnerability.getSeverity(false));
                 assertFalse(vulnerability.getCwe().isPresent());
                 assertEquals("jQuery before 3.0.0 is vulnerable to Cross-site Scripting (XSS) attacks when a cross-domain Ajax request is performed without the dataType option, causing text/javascript responses to be executed.", vulnerability.getDescription());
 
@@ -345,7 +345,7 @@ public class ReportParserTest {
                 assertEquals("NVD", vulnerability.getSource());
                 assertEquals(4.3f, vulnerability.getCvssScore(false), 0.0f);
                 assertEquals(6.1f , vulnerability.getCvssScore(), 0.0f);
-                assertEquals("moderate", vulnerability.getSeverity());
+                assertEquals("MEDIUM", vulnerability.getSeverity());
                 assertFalse(vulnerability.getCwe().isPresent());
                 assertEquals("jQuery before 3.4.0, as used in Drupal, Backdrop CMS, and other products, mishandles jQuery.extend(true, {}, ...) because of Object.prototype pollution. If an unsanitized source object contained an enumerable __proto__ property, it could extend the native Object.prototype.", vulnerability.getDescription());
             }

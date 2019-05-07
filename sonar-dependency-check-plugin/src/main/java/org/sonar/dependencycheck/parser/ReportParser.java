@@ -212,19 +212,21 @@ public class ReportParser {
          */
         if (isWorkaroundForMissingNPMScore(cvssV2, cvssV3, cvssScore, source)) {
             cvssScore = 5.0f;
-            switch (severity){
-                case "low":
-                    cvssScore = 3.0f;
-                break;
-                case "moderate":
-                    cvssScore = 5.0f;
-                break;
-                case "high":
-                    cvssScore = 7.0f;
-                break;
-                case "critical":
-                    cvssScore = 10.0f;
-                break;
+            if(severity != null){
+                switch (severity){
+                    case "low":
+                        cvssScore = 3.0f;
+                    break;
+                    case "moderate":
+                        cvssScore = 5.0f;
+                    break;
+                    case "high":
+                        cvssScore = 7.0f;
+                    break;
+                    case "critical":
+                        cvssScore = 10.0f;
+                    break;
+                }
             }
             severity = Optional.ofNullable(severity).orElse("moderate");
         }
