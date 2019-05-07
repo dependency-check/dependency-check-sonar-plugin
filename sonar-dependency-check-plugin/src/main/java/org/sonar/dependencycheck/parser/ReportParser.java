@@ -208,10 +208,25 @@ public class ReportParser {
          * FIXME: Workaround for https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/issues/135
          * upstream issue in dependency-check: https://github.com/jeremylong/DependencyCheck/issues/1873
          * Problem: Dependency-check doesn't report any cvssScore or severity from NPM vulnerability source in version 5.0.0-M2
+         * SeverityList come from : https://docs.npmjs.com/about-audit-reports#severity, 5.0.0-M3 report it in lowercase
          */
         if (isWorkaroundForMissingNPMScore(cvssV2, cvssV3, cvssScore, source)) {
             cvssScore = 5.0f;
-            severity = Optional.ofNullable(severity).orElse("MEDIUM");
+            switch (severity){
+                case "low":
+                    cvssScore = 3.0f;
+                break;
+                case "moderate":
+                    cvssScore = 5.0f;
+                break;
+                case "high":
+                    cvssScore = 7.0f;
+                break;
+                case "critical":
+                    cvssScore = 10.0f;
+                break;
+            }
+            severity = Optional.ofNullable(severity).orElse("moderate");
         }
         if (cvssV2 != null || cvssV3 != null) {
             // Use new Vulnerability

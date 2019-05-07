@@ -238,8 +238,8 @@ public class ReportParserTest {
         assertEquals("NVD", vulnerability.getSource());
         assertEquals(4.3f, vulnerability.getCvssScore(false), 0.0f);
         assertEquals(6.1f, vulnerability.getCvssScore(), 0.0f);
-        assertEquals("MEDIUM", vulnerability.getSeverity());
-        assertEquals("MEDIUM", vulnerability.getSeverity(false));
+        assertEquals("moderate", vulnerability.getSeverity());
+        assertEquals("moderate", vulnerability.getSeverity(false));
         assertFalse(vulnerability.getCwe().isPresent());
         assertEquals("jQuery before 3.0.0 is vulnerable to Cross-site Scripting (XSS) attacks when a cross-domain Ajax request is performed without the dataType option, causing text/javascript responses to be executed.", vulnerability.getDescription());
 
@@ -248,7 +248,7 @@ public class ReportParserTest {
         assertEquals("NVD", vulnerability.getSource());
         assertEquals(4.3f, vulnerability.getCvssScore(false), 0.0f);
         assertEquals(6.1f , vulnerability.getCvssScore(), 0.0f);
-        assertEquals("MEDIUM", vulnerability.getSeverity());
+        assertEquals("moderate", vulnerability.getSeverity());
         assertFalse(vulnerability.getCwe().isPresent());
         assertEquals("jQuery before 3.4.0, as used in Drupal, Backdrop CMS, and other products, mishandles jQuery.extend(true, {}, ...) because of Object.prototype pollution. If an unsanitized source object contained an enumerable __proto__ property, it could extend the native Object.prototype.", vulnerability.getDescription());
 
@@ -291,8 +291,8 @@ public class ReportParserTest {
         assertEquals("NPM", vulnerability.getSource());
         assertEquals(5.0f, vulnerability.getCvssScore(false), 0.0f);
         assertEquals(5.0f, vulnerability.getCvssScore(), 0.0f);
-        assertEquals("MEDIUM", vulnerability.getSeverity());
-        assertEquals("MEDIUM", vulnerability.getSeverity(false));
+        assertEquals("moderate", vulnerability.getSeverity());
+        assertEquals("moderate", vulnerability.getSeverity(false));
         assertFalse(vulnerability.getCwe().isPresent());
         assertEquals("Versions of `braces` prior to 2.3.1 are vulnerable to Regular Expression Denial of\n" +
                 "                        Service (ReDoS). Untrusted input may cause catastrophic backtracking while matching regular\n" +
@@ -335,8 +335,8 @@ public class ReportParserTest {
                 assertEquals("NVD", vulnerability.getSource());
                 assertEquals(4.3f, vulnerability.getCvssScore(false), 0.0f);
                 assertEquals(6.1f, vulnerability.getCvssScore(), 0.0f);
-                assertEquals("MEDIUM", vulnerability.getSeverity());
-                assertEquals("MEDIUM", vulnerability.getSeverity(false));
+                assertEquals("moderate", vulnerability.getSeverity());
+                assertEquals("moderate", vulnerability.getSeverity(false));
                 assertFalse(vulnerability.getCwe().isPresent());
                 assertEquals("jQuery before 3.0.0 is vulnerable to Cross-site Scripting (XSS) attacks when a cross-domain Ajax request is performed without the dataType option, causing text/javascript responses to be executed.", vulnerability.getDescription());
 
@@ -345,7 +345,7 @@ public class ReportParserTest {
                 assertEquals("NVD", vulnerability.getSource());
                 assertEquals(4.3f, vulnerability.getCvssScore(false), 0.0f);
                 assertEquals(6.1f , vulnerability.getCvssScore(), 0.0f);
-                assertEquals("MEDIUM", vulnerability.getSeverity());
+                assertEquals("moderate", vulnerability.getSeverity());
                 assertFalse(vulnerability.getCwe().isPresent());
                 assertEquals("jQuery before 3.4.0, as used in Drupal, Backdrop CMS, and other products, mishandles jQuery.extend(true, {}, ...) because of Object.prototype pollution. If an unsanitized source object contained an enumerable __proto__ property, it could extend the native Object.prototype.", vulnerability.getDescription());
             }
@@ -385,12 +385,153 @@ public class ReportParserTest {
                 assertEquals("NPM", vulnerability.getSource());
                 assertEquals(5.0f, vulnerability.getCvssScore(false), 0.0f);
                 assertEquals(5.0f, vulnerability.getCvssScore(), 0.0f);
-                assertEquals("MEDIUM", vulnerability.getSeverity());
-                assertEquals("MEDIUM", vulnerability.getSeverity(false));
+                assertEquals("moderate", vulnerability.getSeverity());
+                assertEquals("moderate", vulnerability.getSeverity(false));
                 assertFalse(vulnerability.getCwe().isPresent());
                 assertEquals("Versions of `braces` prior to 2.3.1 are vulnerable to Regular Expression Denial of Service (ReDoS). Untrusted input may cause catastrophic backtracking while matching regular expressions. This can cause the application to be unresponsive leading to Denial of Service.", vulnerability.getDescription());
             }
         }
     }
 
+    @Test
+    public void parseReportNodeXsd21() throws Exception {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportNode.js/dependency-check-report-xsd21.xml");
+        Analysis analysis = ReportParser.parse(inputStream);
+        assertEquals("5.0.0-M3", analysis.getScanInfo().getEngineVersion());
+        assertEquals("project", analysis.getProjectInfo().get().getName());
+        //date format seems to change ?
+        assertEquals("2019-05-07T20:53:16.260676Z", analysis.getProjectInfo().get().getReportDate());
+        assertEquals("This report contains data retrieved from the National Vulnerability Database: https://nvd.nist.gov, NPM Public Advisories: https://www.npmjs.com/advisories, and the RetireJS community.", analysis.getProjectInfo().get().getCredits());
+
+
+        Collection<Dependency> dependencies = analysis.getDependencies();
+        assertEquals(1291, dependencies.size());
+        for (Dependency dependency : dependencies) {
+            //check brace -> low
+            if ("141e2cb977a1b89b71fc0981497222518c16f9bb".equals(dependency.getSha1Hash())) {
+                assertEquals("braces:2.3.0", dependency.getFileName());
+                assertEquals("/project/node_modules/braces/package.json", dependency.getFilePath());
+                assertEquals("4079ad18a6577c423564d9530f8f19f9", dependency.getMd5Hash());
+                assertEquals("141e2cb977a1b89b71fc0981497222518c16f9bb", dependency.getSha1Hash());
+
+                Collection<Evidence> evidenceCollected = dependency.getEvidenceCollected();
+                assertEquals(6, evidenceCollected.size());
+                for (Evidence evidence : evidenceCollected) {
+                    assertFalse(evidence.getSource().isEmpty());
+                    assertFalse(evidence.getName().isEmpty());
+                    assertFalse(evidence.getValue().isEmpty());
+                }
+
+                Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
+                assertEquals(1, vulnerabilities.size());
+                Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
+                Vulnerability vulnerability = (Vulnerability) vulnIterator.next();
+                assertEquals("786", vulnerability.getName());
+                assertEquals("NPM", vulnerability.getSource());
+                assertEquals(3.0f, vulnerability.getCvssScore(false), 0.0f);
+                assertEquals(3.0f, vulnerability.getCvssScore(), 0.0f);
+                assertEquals("low", vulnerability.getSeverity());
+                assertEquals("low", vulnerability.getSeverity(false));
+                assertFalse(vulnerability.getCwe().isPresent());
+                assertEquals("Versions of `braces` prior to 2.3.1 are vulnerable to Regular Expression Denial of Service (ReDoS). Untrusted input may cause catastrophic backtracking while matching regular expressions. This can cause the application to be unresponsive leading to Denial of Service.", vulnerability.getDescription());
+            }
+
+            //check lodash -> moderate
+            if ("9991a54594068eff76da2d75f6eb2cd8375126bd".equals(dependency.getSha1Hash())) {
+                assertEquals("lodash:4.17.10", dependency.getFileName());
+                assertEquals("/project/node_modules/lodash/package.json", dependency.getFilePath());
+                assertEquals("ceaabacc17f54759e7afe6d729533580", dependency.getMd5Hash());
+                assertEquals("9991a54594068eff76da2d75f6eb2cd8375126bd", dependency.getSha1Hash());
+
+                Collection<Evidence> evidenceCollected = dependency.getEvidenceCollected();
+                assertEquals(7, evidenceCollected.size());
+                for (Evidence evidence : evidenceCollected) {
+                    assertFalse(evidence.getSource().isEmpty());
+                    assertFalse(evidence.getName().isEmpty());
+                    assertFalse(evidence.getValue().isEmpty());
+                }
+
+                Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
+                assertEquals(1, vulnerabilities.size());
+                Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
+                Vulnerability vulnerability = (Vulnerability) vulnIterator.next();
+                assertEquals("782", vulnerability.getName());
+                assertEquals("NPM", vulnerability.getSource());
+                assertEquals(5.0f, vulnerability.getCvssScore(false), 0.0f);
+                assertEquals(5.0f, vulnerability.getCvssScore(), 0.0f);
+                assertEquals("moderate", vulnerability.getSeverity());
+                assertEquals("moderate", vulnerability.getSeverity(false));
+                assertFalse(vulnerability.getCwe().isPresent());
+                assertEquals("Versions of `lodash` before 4.17.5 are vulnerable to prototype pollution.\n" +
+                        "\n" +
+                        "                        The vulnerable functions are 'defaultsDeep', 'merge', and 'mergeWith' which allow a malicious user to modify the prototype of `Object` via `{constructor: {prototype: {...}}}` causing the addition or modification of an existing property that will exist on all objects.", vulnerability.getDescription());
+
+            }
+
+            //check tar -> high
+            if ("efbcf604c67d76932d464121d8f7acd47f94d8dc".equals(dependency.getSha1Hash())) {
+                assertEquals("tar:4.4.0", dependency.getFileName());
+                assertEquals("/project/node_modules/tar/package.json", dependency.getFilePath());
+                assertEquals("064ecfda70c8110ab7cdbe0f2ce39f00", dependency.getMd5Hash());
+                assertEquals("efbcf604c67d76932d464121d8f7acd47f94d8dc", dependency.getSha1Hash());
+
+                Collection<Evidence> evidenceCollected = dependency.getEvidenceCollected();
+                assertEquals(7, evidenceCollected.size());
+                for (Evidence evidence : evidenceCollected) {
+                    assertFalse(evidence.getSource().isEmpty());
+                    assertFalse(evidence.getName().isEmpty());
+                    assertFalse(evidence.getValue().isEmpty());
+                }
+
+                Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
+                assertEquals(1, vulnerabilities.size());
+                Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
+                Vulnerability vulnerability = (Vulnerability) vulnIterator.next();
+                assertEquals("803", vulnerability.getName());
+                assertEquals("NPM", vulnerability.getSource());
+                assertEquals(7.0f, vulnerability.getCvssScore(false), 0.0f);
+                assertEquals(7.0f, vulnerability.getCvssScore(), 0.0f);
+                assertEquals("high", vulnerability.getSeverity());
+                assertEquals("high", vulnerability.getSeverity(false));
+                assertFalse(vulnerability.getCwe().isPresent());
+                assertEquals("Versions of `tar` prior to 4.4.2 are vulnerable to Arbitrary File Overwrite. Extracting tarballs containing a hardlink to a file that already exists in the system, and a file that matches the hardlink will overwrite the system's file with the contents of the extracted file.", vulnerability.getDescription());
+            }
+
+            //check open -> critical
+            if ("ae30fcdfa988a448ad4e5ae1d82ca1de4c82e049".equals(dependency.getSha1Hash())) {
+                assertEquals("open:0.0.5", dependency.getFileName());
+                assertEquals("/project/node_modules/open/package.json", dependency.getFilePath());
+                assertEquals("8673bc3cadcaa0f8b859fe27caf1301a", dependency.getMd5Hash());
+                assertEquals("ae30fcdfa988a448ad4e5ae1d82ca1de4c82e049", dependency.getSha1Hash());
+
+                Collection<Evidence> evidenceCollected = dependency.getEvidenceCollected();
+                assertEquals(6, evidenceCollected.size());
+                for (Evidence evidence : evidenceCollected) {
+                    assertFalse(evidence.getSource().isEmpty());
+                    assertFalse(evidence.getName().isEmpty());
+                    assertFalse(evidence.getValue().isEmpty());
+                }
+
+                Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
+                assertEquals(1, vulnerabilities.size());
+                Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
+                Vulnerability vulnerability = (Vulnerability) vulnIterator.next();
+                assertEquals("663", vulnerability.getName());
+                assertEquals("NPM", vulnerability.getSource());
+                assertEquals(10.0f, vulnerability.getCvssScore(false), 0.0f);
+                assertEquals(10.0f, vulnerability.getCvssScore(), 0.0f);
+                assertEquals("critical", vulnerability.getSeverity());
+                assertEquals("critical", vulnerability.getSeverity(false));
+                assertFalse(vulnerability.getCwe().isPresent());
+                assertEquals("Versions of `open` before 6.0.0 are vulnerable to command injection when unsanitized user input is passed in.\n" +
+                        "\n" +
+                        "                        The package does come with the following warning in the readme:\n" +
+                        "\n" +
+                        "                        ```\n" +
+                        "                        The same care should be taken when calling open as if you were calling child_process.exec directly. If it is an executable it will run in a new shell.\n" +
+                        "                        ```", vulnerability.getDescription());
+            }
+
+        }
+    }
 }
