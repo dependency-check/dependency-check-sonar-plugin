@@ -46,7 +46,7 @@ public class DependencyCheckSensor implements ProjectSensor {
     private static final Logger LOGGER = Loggers.get(DependencyCheckSensor.class);
     private static final String SENSOR_NAME = "Dependency-Check";
     private static final String[] XSD = {"https://jeremylong.github.io/DependencyCheck/dependency-check.1.8.xsd",
-    "https://jeremylong.github.io/DependencyCheck/dependency-check.2.0.xsd"};
+    "https://jeremylong.github.io/DependencyCheck/dependency-check.2.1.xsd"};
 
     private final FileSystem fileSystem;
     private final PathResolver pathResolver;
@@ -58,7 +58,7 @@ public class DependencyCheckSensor implements ProjectSensor {
 
     private Analysis parseAnalysis(SensorContext context) throws IOException, XMLStreamException, ReportParserException {
         XmlReportFile report = XmlReportFile.getXmlReport(context.config(), fileSystem, this.pathResolver);
-        return ReportParser.parse(report.getInputStream());
+        return new ReportParser(context).parse(report.getInputStream());
     }
 
     private void uploadHTMLReport (SensorContext context){

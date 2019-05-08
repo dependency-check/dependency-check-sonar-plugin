@@ -32,6 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.codehaus.staxmate.SMInputFactory;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
 import org.codehaus.staxmate.in.SMInputCursor;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
@@ -46,17 +47,16 @@ import org.sonar.dependencycheck.parser.element.ProjectInfo;
 import org.sonar.dependencycheck.parser.element.ScanInfo;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
-
 public class ReportParser {
 
     private static final Logger LOGGER = Loggers.get(ReportParser.class);
+    private final SensorContext context;
 
-    private ReportParser() {
-        // do nothing
+    public ReportParser(SensorContext context) {
+        this.context = context;
     }
 
-    public static Analysis parse(InputStream inputStream) throws XMLStreamException, ReportParserException {
+    public Analysis parse(InputStream inputStream) throws XMLStreamException, ReportParserException {
 
         SMInputFactory inputFactory = DependencyCheckUtils.newStaxParser();
         SMHierarchicCursor rootC = inputFactory.rootElementCursor(inputStream);
@@ -82,7 +82,7 @@ public class ReportParser {
         return new Analysis(scanInfo, projectInfo, dependencies);
     }
 
-    private static Collection<Dependency> processDependencies(SMInputCursor depC) throws XMLStreamException, ReportParserException {
+    private Collection<Dependency> processDependencies(SMInputCursor depC) throws XMLStreamException, ReportParserException {
         Collection<Dependency> dependencies = new ArrayList<>();
         SMInputCursor cursor = depC.childElementCursor("dependency");
         while (cursor.getNext() != null) {
@@ -91,7 +91,7 @@ public class ReportParser {
         return dependencies;
     }
 
-    private static Dependency processDependency(SMInputCursor depC) throws XMLStreamException, ReportParserException {
+    private Dependency processDependency(SMInputCursor depC) throws XMLStreamException, ReportParserException {
         SMInputCursor childCursor = depC.childCursor();
         String fileName = null;
         String filepath = null;
@@ -139,7 +139,7 @@ public class ReportParser {
         return new Dependency(fileName, filepath, md5Hash, sha1Hash, evidences, identifiers, vulnerabilities);
     }
 
-    private static List<Vulnerability> processVulnerabilities(SMInputCursor vulnC) throws XMLStreamException, ReportParserException {
+    private List<Vulnerability> processVulnerabilities(SMInputCursor vulnC) throws XMLStreamException, ReportParserException {
         List<Vulnerability> vulnerabilities = new ArrayList<>();
         SMInputCursor cursor = vulnC.childElementCursor("vulnerability");
         while (cursor.getNext() != null) {
@@ -148,7 +148,8 @@ public class ReportParser {
         return vulnerabilities;
     }
 
-    private static Vulnerability processVulnerability(SMInputCursor vulnC) throws XMLStreamException, ReportParserException {
+    @SuppressWarnings("squid:S3776")
+    private Vulnerability processVulnerability(SMInputCursor vulnC) throws XMLStreamException, ReportParserException {
         String name = null;
         String source = null;
         Float cvssScore = null;
@@ -204,19 +205,18 @@ public class ReportParser {
         name = Optional.ofNullable(name).orElseThrow(() -> new ReportParserException("Vulnerability - name not found"));
         source = Optional.ofNullable(source).orElseThrow(() -> new ReportParserException("Vulnerability - source not found"));
         description = Optional.ofNullable(description).orElseThrow(() -> new ReportParserException("Vulnerability - description not found"));
-        /*
-         * FIXME: Workaround for https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/issues/135
-         * upstream issue in dependency-check: https://github.com/jeremylong/DependencyCheck/issues/1873
-         * Problem: Dependency-check doesn't report any cvssScore or severity from NPM vulnerability source in version 5.0.0-M2
-         */
-        if (isWorkaroundForMissingNPMScore(cvssV2, cvssV3, cvssScore, source)) {
-            cvssScore = 5.0f;
-            severity = Optional.ofNullable(severity).orElse("MEDIUM");
-        }
         if (cvssV2 != null || cvssV3 != null) {
             // Use new Vulnerability
             return new Vulnerability(name, source, description, cwe, cvssV2, cvssV3);
         } else {
+            if (cvssScore == null && severity == null) {
+                LOGGER.warn("Found vulnerability {} without a score and serveriy. Setting severity to MEDIUM", name);
+                severity = "MEDIUM";
+            }
+            // Some reports have only a severity (for example NPM) so we calculate from this severity a score
+            if (!Optional.ofNullable(cvssScore).isPresent() && Optional.ofNullable(severity).isPresent()) {
+                cvssScore = DependencyCheckUtils.severityToScore(severity, context.config());
+            }
             // Use classic Vulnerability
             cvssScore = Optional.ofNullable(cvssScore).orElseThrow(() -> new ReportParserException("Vulnerability - cvssScore not found"));
             severity = Optional.ofNullable(severity).orElseThrow(() -> new ReportParserException("Vulnerability - severity not found"));
@@ -224,11 +224,7 @@ public class ReportParser {
         }
     }
 
-    private static boolean isWorkaroundForMissingNPMScore(@Nullable CvssV2 cvssV2, @Nullable CvssV3 cvssV3, @Nullable Float cvssScore, @Nullable String source) {
-        return StringUtils.equalsAnyIgnoreCase(source, "NPM") && cvssV2 == null && cvssV3 == null && cvssScore == null;
-    }
-
-    private static CvssV3 processCvssv3(SMInputCursor cvssv3C) throws XMLStreamException, ReportParserException {
+    private CvssV3 processCvssv3(SMInputCursor cvssv3C) throws XMLStreamException, ReportParserException {
         SMInputCursor childCursor = cvssv3C.childCursor();
         Float baseScore = null;
         String baseSeverity = null;
@@ -251,7 +247,7 @@ public class ReportParser {
         return new CvssV3(baseScore, baseSeverity);
     }
 
-    private static CvssV2 processCvssv2(SMInputCursor cvssv2C) throws XMLStreamException, ReportParserException {
+    private CvssV2 processCvssv2(SMInputCursor cvssv2C) throws XMLStreamException, ReportParserException {
         SMInputCursor childCursor = cvssv2C.childCursor();
         Float score = null;
         String severity = null;
@@ -274,7 +270,7 @@ public class ReportParser {
         return new CvssV2(score, severity);
     }
 
-    private static Collection<Evidence> processEvidenceCollected(SMInputCursor ecC) throws XMLStreamException, ReportParserException {
+    private Collection<Evidence> processEvidenceCollected(SMInputCursor ecC) throws XMLStreamException, ReportParserException {
         Collection<Evidence> evidenceCollection = new ArrayList<>();
         SMInputCursor cursor = ecC.childElementCursor("evidence");
         while (cursor.getNext() != null) {
@@ -283,7 +279,7 @@ public class ReportParser {
         return evidenceCollection;
     }
 
-    private static Evidence processEvidence(SMInputCursor ecC) throws XMLStreamException, ReportParserException {
+    private Evidence processEvidence(SMInputCursor ecC) throws XMLStreamException, ReportParserException {
         SMInputCursor childCursor = ecC.childCursor();
         String source = null;
         String name = null;
@@ -304,7 +300,7 @@ public class ReportParser {
         return new Evidence(source, name, value);
     }
 
-    private static Collection<Identifier> processIdentifiersCollected(SMInputCursor ifC) throws XMLStreamException, ReportParserException {
+    private Collection<Identifier> processIdentifiersCollected(SMInputCursor ifC) throws XMLStreamException, ReportParserException {
         Collection<Identifier> identifierCollection = new ArrayList<>();
         SMInputCursor childCursor = ifC.childCursor();
         while (childCursor.getNext() != null) {
@@ -322,7 +318,7 @@ public class ReportParser {
         return identifierCollection;
     }
 
-    private static Identifier processIdentifiers(SMInputCursor ifC) throws XMLStreamException, ReportParserException {
+    private Identifier processIdentifiers(SMInputCursor ifC) throws XMLStreamException, ReportParserException {
         String type = null;
         Confidence confidence = null;
         String name = null;
@@ -358,7 +354,7 @@ public class ReportParser {
         return new Identifier(type, confidence, name);
     }
 
-    private static ScanInfo processScanInfo(SMInputCursor siC) throws XMLStreamException, ReportParserException {
+    private ScanInfo processScanInfo(SMInputCursor siC) throws XMLStreamException, ReportParserException {
         SMInputCursor childCursor = siC.childCursor();
         String engineVersion = null;
         while (childCursor.getNext() != null) {
@@ -371,7 +367,7 @@ public class ReportParser {
         return new ScanInfo(engineVersion);
     }
 
-    private static ProjectInfo processProjectInfo(SMInputCursor piC) throws XMLStreamException, ReportParserException {
+    private ProjectInfo processProjectInfo(SMInputCursor piC) throws XMLStreamException, ReportParserException {
         SMInputCursor childCursor = piC.childCursor();
         String projectName = null;
         String projectReportDate = null;

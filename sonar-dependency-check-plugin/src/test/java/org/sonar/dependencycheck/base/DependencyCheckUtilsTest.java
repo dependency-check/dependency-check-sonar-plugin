@@ -122,4 +122,55 @@ public class DependencyCheckUtilsTest {
         assertEquals(expectedSeverity, DependencyCheckUtils.cvssToSonarQubeSeverity(cvssSeverity, blocker, critical, major, minor));
     }
 
+    public static Stream<Object[]> severitiestoscore() {
+        return Stream.of(new Object[][]{
+                // defaults
+                {"critical", Float.valueOf("9.0"), Float.valueOf("7.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Float.valueOf("9.0")},
+                {"high",     Float.valueOf("9.0"), Float.valueOf("7.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Float.valueOf("7.0")},
+                {"moderate", Float.valueOf("9.0"), Float.valueOf("7.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Float.valueOf("4.0")},
+                {"medium",   Float.valueOf("9.0"), Float.valueOf("7.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Float.valueOf("4.0")},
+                {"low",      Float.valueOf("9.0"), Float.valueOf("7.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Float.valueOf("0.0")},
+                {"dummy",    Float.valueOf("9.0"), Float.valueOf("7.0"), Float.valueOf("4.0"), Float.valueOf("0.0"), Float.valueOf("0.0")},
+
+                // custom
+                {"critical", Float.valueOf("9.0"), Float.valueOf("5.0"), Float.valueOf("2.0"), Float.valueOf("1.0"), Float.valueOf("9.0")},
+                {"high",     Float.valueOf("9.0"), Float.valueOf("5.0"), Float.valueOf("2.0"), Float.valueOf("1.0"), Float.valueOf("5.0")},
+                {"medium",   Float.valueOf("9.0"), Float.valueOf("5.0"), Float.valueOf("2.0"), Float.valueOf("1.0"), Float.valueOf("2.0")},
+                {"low",      Float.valueOf("9.0"), Float.valueOf("5.0"), Float.valueOf("2.0"), Float.valueOf("1.0"), Float.valueOf("1.0")},
+                {"info",     Float.valueOf("9.0"), Float.valueOf("5.0"), Float.valueOf("2.0"), Float.valueOf("1.0"), Float.valueOf("0.0")},
+
+                // custom, blocker deactivated
+                {"critical", Float.valueOf("-1"), Float.valueOf("5.0"),  Float.valueOf("2.0"), Float.valueOf("1.0"), Float.valueOf("5.0")},
+                {"high",     Float.valueOf("-1"), Float.valueOf("5.0"),  Float.valueOf("2.0"), Float.valueOf("1.0"), Float.valueOf("5.0")},
+                {"medium",   Float.valueOf("-1"), Float.valueOf("5.0"),  Float.valueOf("2.0"), Float.valueOf("1.0"), Float.valueOf("2.0")},
+                {"low",      Float.valueOf("-1"), Float.valueOf("5.0"),  Float.valueOf("2.0"), Float.valueOf("1.0"), Float.valueOf("1.0")},
+                {"info",     Float.valueOf("-1"), Float.valueOf("5.0"),  Float.valueOf("2.0"), Float.valueOf("1.0"), Float.valueOf("0.0")},
+
+                // custom, blocker, critical deactivated
+                {"critical", Float.valueOf("-1"), Float.valueOf("-1"),  Float.valueOf("2.0"), Float.valueOf("1.0"), Float.valueOf("2.0")},
+                {"high",     Float.valueOf("-1"), Float.valueOf("-1"),  Float.valueOf("2.0"), Float.valueOf("1.0"), Float.valueOf("2.0")},
+                {"medium",   Float.valueOf("-1"), Float.valueOf("-1"),  Float.valueOf("2.0"), Float.valueOf("1.0"), Float.valueOf("2.0")},
+                {"low",      Float.valueOf("-1"), Float.valueOf("-1"),  Float.valueOf("2.0"), Float.valueOf("1.0"), Float.valueOf("1.0")},
+                {"info",     Float.valueOf("-1"), Float.valueOf("-1"),  Float.valueOf("2.0"), Float.valueOf("1.0"), Float.valueOf("0.0")},
+
+                // custom, blocker, critical and major deactivated
+                {"critical", Float.valueOf("-1"), Float.valueOf("-1"),  Float.valueOf("-1"), Float.valueOf("1.0"), Float.valueOf("1.0")},
+                {"high",     Float.valueOf("-1"), Float.valueOf("-1"),  Float.valueOf("-1"), Float.valueOf("1.0"), Float.valueOf("1.0")},
+                {"medium",   Float.valueOf("-1"), Float.valueOf("-1"),  Float.valueOf("-1"), Float.valueOf("1.0"), Float.valueOf("1.0")},
+                {"low",      Float.valueOf("-1"), Float.valueOf("-1"),  Float.valueOf("-1"), Float.valueOf("1.0"), Float.valueOf("1.0")},
+                {"info",     Float.valueOf("-1"), Float.valueOf("-1"),  Float.valueOf("-1"), Float.valueOf("1.0"), Float.valueOf("0.0")},
+
+                // custom, blocker, critical, major and minor deactivated
+                {"critical", Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("0.0")},
+                {"high",     Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("0.0")},
+                {"medium",   Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("0.0")},
+                {"low",      Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("0.0")},
+                {"info",     Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("-1"), Float.valueOf("0.0")},
+        });
+    }
+    @ParameterizedTest(name = "{index} => severity={0}, blocker={1}, critical={2}, major={3}, minor={4}, expectedScore={5}")
+    @MethodSource("severitiestoscore")
+    public void testSeverityToScore(String severity, Float blocker, Float critical, Float major, Float minor, Float expectedScore) {
+        assertEquals(expectedScore, DependencyCheckUtils.severityToScore(severity, blocker, critical, major, minor));
+    }
 }
