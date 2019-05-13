@@ -35,7 +35,7 @@ jquery@2.2.0 => vulnerabilities moderate and high from NPM AND vulnerabilities M
 Copyright & License
 -------------------
 
-Dependency-Check Sonar Plugin is Copyright (c) Steve Springett. All Rights Reserved.
+Dependency-Check Sonar Plugin is Copyright (c) SonarSecurityCommunity. All Rights Reserved.
 
 Dependency-Check is Copyright (c) Jeremy Long. All Rights Reserved.
 
