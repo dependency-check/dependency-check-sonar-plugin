@@ -37,10 +37,10 @@ public final class DependencyCheckMetrics implements Metrics {
     private static final String TOTAL_DEPENDENCIES_KEY = "total_dependencies";
     private static final String VULNERABLE_DEPENDENCIES_KEY = "vulnerable_dependencies";
     private static final String TOTAL_VULNERABILITIES_KEY = "total_vulnerabilities";
-    private static final String CRITICAL_SEVERITY_VULNS_KEY = "critical_severity_vulns";
-    private static final String HIGH_SEVERITY_VULNS_KEY = "high_severity_vulns";
-    private static final String MEDIUM_SEVERITY_VULNS_KEY = "medium_severity_vulns";
-    private static final String LOW_SEVERITY_VULNS_KEY = "low_severity_vulns";
+    private static final String CRITICAL_SEVERITY_VULNS_KEY = "critical_severity_vuls";
+    private static final String HIGH_SEVERITY_VULNS_KEY = "high_severity_vuls";
+    private static final String MEDIUM_SEVERITY_VULNS_KEY = "medium_severity_vuls";
+    private static final String LOW_SEVERITY_VULNS_KEY = "low_severity_vuls";
 
     private static final String REPORT_KEY = "report";
 
