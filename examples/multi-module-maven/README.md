@@ -14,7 +14,7 @@ mvn sonar:sonar
 Copyright & License
 -------------------
 
-Dependency-Check Sonar Plugin is Copyright (c) Steve Springett. All Rights Reserved.
+Dependency-Check Sonar Plugin is Copyright (c) SonarSecurityCommunity. All Rights Reserved.
 
 Dependency-Check is Copyright (c) Jeremy Long. All Rights Reserved.
 
