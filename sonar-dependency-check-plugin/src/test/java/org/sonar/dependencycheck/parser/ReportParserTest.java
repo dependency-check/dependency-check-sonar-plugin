@@ -23,11 +23,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.dependencycheck.parser.element.Analysis;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
@@ -37,10 +40,18 @@ import org.sonar.dependencycheck.parser.element.Vulnerability;
 
 public class ReportParserTest {
 
+    private ReportParser parser;
+
+    @BeforeEach
+    public void init() {
+        final SensorContextTester context = SensorContextTester.create(new File(""));
+        parser = new ReportParser(context);
+    }
+
     @Test
     public void parseReport400() throws Exception {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("report/dependency-check-report-400.xml");
-        Analysis analysis = ReportParser.parse(inputStream);
+        Analysis analysis = parser.parse(inputStream);
         assertEquals("4.0.2", analysis.getScanInfo().getEngineVersion());
         assertEquals("Multi-Module Maven Example", analysis.getProjectInfo().get().getName());
         assertEquals("2019-04-18T11:30:25.206+0200", analysis.getProjectInfo().get().getReportDate());
@@ -122,7 +133,7 @@ public class ReportParserTest {
     @Test
     public void parseReport500() throws Exception {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("report/dependency-check-report-500.xml");
-        Analysis analysis = ReportParser.parse(inputStream);
+        Analysis analysis = parser.parse(inputStream);
         assertEquals("5.0.0-M2", analysis.getScanInfo().getEngineVersion());
         assertEquals("Multi-Module Maven Example", analysis.getProjectInfo().get().getName());
         assertEquals("2019-04-17T18:25:00.460+0200", analysis.getProjectInfo().get().getReportDate());
@@ -204,7 +215,7 @@ public class ReportParserTest {
     @Test
     public void parseReportNode500() throws Exception {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportNode.js/dependency-check-report.xml");
-        Analysis analysis = ReportParser.parse(inputStream);
+        Analysis analysis = parser.parse(inputStream);
         assertEquals("5.0.0-M2", analysis.getScanInfo().getEngineVersion());
         assertEquals("project", analysis.getProjectInfo().get().getName());
         assertEquals("2019-04-23T22:43:06.450+0000", analysis.getProjectInfo().get().getReportDate());
@@ -289,8 +300,8 @@ public class ReportParserTest {
         vulnerability = (Vulnerability) vulnIterator.next();
         assertEquals("786", vulnerability.getName());
         assertEquals("NPM", vulnerability.getSource());
-        assertEquals(5.0f, vulnerability.getCvssScore(false), 0.0f);
-        assertEquals(5.0f, vulnerability.getCvssScore(), 0.0f);
+        assertEquals(4.0f, vulnerability.getCvssScore(false), 0.0f);
+        assertEquals(4.0f, vulnerability.getCvssScore(), 0.0f);
         assertEquals("MEDIUM", vulnerability.getSeverity());
         assertEquals("MEDIUM", vulnerability.getSeverity(false));
         assertFalse(vulnerability.getCwe().isPresent());
@@ -302,7 +313,7 @@ public class ReportParserTest {
     @Test
     public void parseBigReportNode500() throws Exception {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportNode.js/big-dependency-check-report.xml");
-        Analysis analysis = ReportParser.parse(inputStream);
+        Analysis analysis = parser.parse(inputStream);
         assertEquals("5.0.0-M2", analysis.getScanInfo().getEngineVersion());
         assertEquals("project", analysis.getProjectInfo().get().getName());
         assertEquals("2019-04-23T22:43:06.450+0000", analysis.getProjectInfo().get().getReportDate());
@@ -383,8 +394,8 @@ public class ReportParserTest {
                 Vulnerability vulnerability = (Vulnerability) vulnIterator.next();;
                 assertEquals("786", vulnerability.getName());
                 assertEquals("NPM", vulnerability.getSource());
-                assertEquals(5.0f, vulnerability.getCvssScore(false), 0.0f);
-                assertEquals(5.0f, vulnerability.getCvssScore(), 0.0f);
+                assertEquals(4.0f, vulnerability.getCvssScore(false), 0.0f);
+                assertEquals(4.0f, vulnerability.getCvssScore(), 0.0f);
                 assertEquals("MEDIUM", vulnerability.getSeverity());
                 assertEquals("MEDIUM", vulnerability.getSeverity(false));
                 assertFalse(vulnerability.getCwe().isPresent());
