@@ -25,7 +25,8 @@ import java.util.List;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.issue.internal.DefaultIssueLocation;
+import org.sonar.api.batch.sensor.issue.NewIssue;
+import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 import org.sonar.dependencycheck.base.DependencyCheckMetric;
@@ -77,12 +78,17 @@ public abstract class DependencyReason {
 
         TextRangeConfidence textRange = getBestTextRange(dependency);
         InputComponent inputComponent = getInputComponent();
-        context.newIssue()
+
+        NewIssue sonarIssue = context.newIssue();
+
+        NewIssueLocation location = sonarIssue.newLocation()
+            .on(inputComponent)
+            .at(textRange.getTextrange())
+            .message(DependencyCheckUtils.formatDescription(dependency, vulnerabilities, highestVulnerability));
+
+        sonarIssue
+            .at(location)
             .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckConstants.RULE_KEY))
-            .at(new DefaultIssueLocation()
-                .on(inputComponent)
-                .at(textRange.getTextrange())
-                .message(DependencyCheckUtils.formatDescription(dependency, vulnerabilities, highestVulnerability)))
             .overrideSeverity(severity)
             .save();
         metrics.incrementCount(severity);
@@ -93,12 +99,17 @@ public abstract class DependencyReason {
 
         TextRangeConfidence textRange = getBestTextRange(dependency);
         InputComponent inputComponent = getInputComponent();
-        context.newIssue()
+
+        NewIssue sonarIssue = context.newIssue();
+
+        NewIssueLocation location = sonarIssue.newLocation()
+            .on(inputComponent)
+            .at(textRange.getTextrange())
+            .message(DependencyCheckUtils.formatDescription(dependency, vulnerability));
+
+        sonarIssue
+            .at(location)
             .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckConstants.RULE_KEY))
-            .at(new DefaultIssueLocation()
-                .on(inputComponent)
-                .at(textRange.getTextrange())
-                .message(DependencyCheckUtils.formatDescription(dependency, vulnerability)))
             .overrideSeverity(severity)
             .save();
         metrics.incrementCount(severity);
