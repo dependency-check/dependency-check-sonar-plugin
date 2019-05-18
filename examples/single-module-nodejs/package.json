@@ -1,0 +1,18 @@
+{
+  "name": "single-module-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "braces": "2.3.0",
+    "lodash": "4.17.10",
+    "open": "0.0.5",
+    "jquery": "2.2.0",
+    "tar": "4.4.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
