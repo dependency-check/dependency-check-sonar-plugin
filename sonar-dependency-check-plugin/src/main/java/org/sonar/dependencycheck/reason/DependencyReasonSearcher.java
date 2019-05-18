@@ -26,7 +26,8 @@ import java.util.List;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.issue.internal.DefaultIssueLocation;
+import org.sonar.api.batch.sensor.issue.NewIssue;
+import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
@@ -174,11 +175,15 @@ public class DependencyReasonSearcher {
 
     public void addIssueToProject(SensorContext context, Dependency dependency, Vulnerability vulnerability) {
         Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(), context.config());
-        context.newIssue()
+        NewIssue sonarIssue = context.newIssue();
+
+        NewIssueLocation location = sonarIssue.newLocation()
+            .on(context.module())
+            .message(DependencyCheckUtils.formatDescription(dependency, vulnerability));
+
+        sonarIssue
+            .at(location)
             .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckConstants.RULE_KEY))
-            .at(new DefaultIssueLocation()
-                .on(context.module())
-                .message(DependencyCheckUtils.formatDescription(dependency, vulnerability)))
             .overrideSeverity(severity)
             .save();
         projectMetric.incrementCount(severity);
@@ -189,11 +194,16 @@ public class DependencyReasonSearcher {
         List<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
         Vulnerability highestVulnerability = vulnerabilities.get(0);
         Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(highestVulnerability.getCvssScore(), context.config());
-        context.newIssue()
+
+        NewIssue sonarIssue = context.newIssue();
+
+        NewIssueLocation location = sonarIssue.newLocation()
+            .on(context.module())
+            .message(DependencyCheckUtils.formatDescription(dependency, vulnerabilities, highestVulnerability));
+
+        sonarIssue
+            .at(location)
             .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckConstants.RULE_KEY))
-            .at(new DefaultIssueLocation()
-                .on(context.module())
-                .message(DependencyCheckUtils.formatDescription(dependency, vulnerabilities, highestVulnerability)))
             .overrideSeverity(severity)
             .save();
         projectMetric.incrementCount(severity);
