@@ -55,6 +55,17 @@ Distribution
 -------------------
 Ready to use binaries are available from [GitHub] and [bintray].
 
+Plugin version compatibility
+-------------------
+
+Please use the newest minor version. Keep in mind, that SonarQube 5.6 LTS is not supported anymore.
+
+Plugin Version | SonarQube version
+----------------- | --------------
+1.2.x | SonarQube 7.6 and up
+1.1.x | SonarQube 6.7 LTS
+1.0.3 | SonarQube 5.6 LTS
+
 Installation
 -------------------
 Copy the plugin (jar file) to $SONAR_INSTALL_DIR/extensions/plugins and restart SonarQube.
