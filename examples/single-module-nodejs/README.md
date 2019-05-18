@@ -27,11 +27,11 @@ sonar-runner
 Dependencies with vulnerabilities
 -------------------
 
-braces@2.3.0 => vulnerability low from NPM
-lodash@4.17.10 => vulnerability moderate from NPM
-open@0.0.5 => vulnerability critical from NPM
-tar@4.4.0 => vulnerability high from NPM
-jquery@2.2.0 => vulnerabilities moderate and high from NPM AND vulnerabilities MEDIUM (multiple times) from NVD
+ - braces@2.3.0 => vulnerability low from NPM
+ - lodash@4.17.10 => vulnerability moderate from NPM
+ - open@0.0.5 => vulnerability critical from NPM
+ - tar@4.4.0 => vulnerability high from NPM
+ - jquery@2.2.0 => vulnerabilities moderate and high from NPM AND vulnerabilities MEDIUM (multiple times) from NVD
 
 
 Copyright & License
