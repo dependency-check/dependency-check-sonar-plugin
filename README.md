@@ -57,18 +57,14 @@ Ready to use binaries are available from [GitHub] and [bintray].
 
 Plugin version compatibility
 -------------------
+
+Please use the newest minor version. Keep in mind, that SonarQube 5.6 LTS is not supported anymore.
+
 Plugin Version | SonarQube version
 ----------------- | --------------
-1.2.3 | SonarQube 7.6 and up
-1.2.2 | SonarQube 7.6 and up
-1.2.1 | SonarQube 7.3 - 7.5
-1.2.0 | SonarQube 7.3 - 7.5
-1.1.4 | SonarQube 6.7.5 - 7.2.1
-1.1.3 | SonarQube 6.7.5 - 7.2.1
-1.1.2 | SonarQube 6.7.5 - 7.2.1
-1.1.1 | SonarQube 6.3 - 6.7.4
-1.1.0 | SonarQube 6.3 - 6.7.4
-1.0.3 | SonarQube 5.2 - 6.2
+1.2.x | SonarQube 7.6 and up
+1.1.x | SonarQube 6.7 LTS
+1.0.3 | SonarQube 5.6 LTS
 
 Installation
 -------------------
