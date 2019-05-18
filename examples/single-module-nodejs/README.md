@@ -4,22 +4,24 @@ Example Single Module Nodejs Project
 
 Integrates [Dependency-Check] analysis and reporting into SonarQube v6.7 or higher in a single module (flat) Nodejs project.
 
+Pre requirements
+-------------------
+ - [npm]
+ - [dependency-check-cli]
+ - [sonar-runner]
+
 Usage
 -------------------
-Install dependencies
-```
-npm install
-```
 
-if you want to use it fastly :
-Use the `command-line-project` :
-```
-mkdir ../command-line-project/lib
-cp * ../command-line-project/lib
-cd ../command-line-project/lib
+```bash
+# Install dependencies
 npm install
-cd ..
-./build.sh
+# Create Folder for reports
+mkdir -p reports/dependency-check
+# Run Dependency-Check
+dependency-check.sh --format ALL -s . --out reports/dependency-check --project "nodejs example"
+# Invoke Sonar-Runner. This reads from sonar-project.properties
+sonar-runner
 ```
 
 Dependencies with vulnerabilities
@@ -43,3 +45,6 @@ Permission to modify and redistribute is granted under the terms of the [LGPLv3]
 
   [LGPLv3]: http://www.gnu.org/licenses/lgpl.txt
   [Dependency-Check]: https://www.owasp.org/index.php/OWASP_Dependency_Check
+  [npm]: https://www.npmjs.com/get-npm
+  [dependency-check-cli]: https://jeremylong.github.io/DependencyCheck/dependency-check-cli/index.html
+  [sonar-runner]: https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner
