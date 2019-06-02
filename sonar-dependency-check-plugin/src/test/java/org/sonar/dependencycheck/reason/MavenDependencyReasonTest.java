@@ -43,7 +43,6 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
-import org.sonar.dependencycheck.parser.element.Evidence;
 import org.sonar.dependencycheck.parser.element.Identifier;
 
 public class MavenDependencyReasonTest {
@@ -88,24 +87,25 @@ public class MavenDependencyReasonTest {
     public void foundDependency() throws IOException {
         MavenDependencyReason maven = new MavenDependencyReason(inputFile("pom.xml"));
         // Create Dependency
-        Identifier identifier = new Identifier("maven", Confidence.HIGHEST, "struts:struts:1.2.8");
-        Collection<Identifier> identifiersCollected = new ArrayList<>();
-        identifiersCollected.add(identifier);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyList(),identifiersCollected, Collections.emptyList());
+        Identifier identifier1 = new Identifier("pkg:maven/struts/struts@1.2.8", Confidence.HIGHEST);
+        Collection<Identifier> packageidentifiers1 = new ArrayList<>();
+        packageidentifiers1.add(identifier1);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList());
         assertTrue(maven.isReasonable());
         assertNotNull(maven.getBestTextRange(dependency));
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
+        assertEquals(43, maven.getBestTextRange(dependency).getTextrange().start().line());
     }
 
     @Test
     public void foundNoDependency() throws IOException {
         MavenDependencyReason maven = new MavenDependencyReason(inputFile("pom.xml"));
         // Create Dependency
-        Evidence evidence = new Evidence("pom", "artifactid", "xyz");
-        Collection<Evidence> evidences = new ArrayList<>();
-        evidences.add(evidence);
-        Dependency dependency = new Dependency(null, null, null, null, evidences, Collections.emptyList(), Collections.emptyList());
+        Identifier identifier1 = new Identifier("pkg:maven/myvendor/myartefact@1.2.8", Confidence.HIGHEST);
+        Collection<Identifier> packageidentifiers1 = new ArrayList<>();
+        packageidentifiers1.add(identifier1);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList());
         TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
         // Check for default location, first line in file with low confidence
         assertNotNull(textRangeConfidence);
@@ -113,21 +113,6 @@ public class MavenDependencyReasonTest {
         assertEquals(Confidence.LOW, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
-    }
-
-    @Test
-    public void noArtefactid() throws IOException {
-        MavenDependencyReason maven = new MavenDependencyReason(inputFile("pom.xml"));
-        // Create Dependency
-        Evidence evidence =new Evidence("xyz", "artifactid", "spring");
-        Collection<Evidence> evidences = new ArrayList<>();
-        evidences.add(evidence);
-        Dependency dependency = new Dependency(null, null, null, null, evidences, Collections.emptyList(), Collections.emptyList());
-        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
-        assertNotNull(textRangeConfidence);
-        assertEquals(1, textRangeConfidence.getTextrange().start().line());
-        assertEquals(Confidence.LOW, textRangeConfidence.getConfidence());
-        // verify that same dependency points to the same TextRange, use of HashMap
-        assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
+        assertEquals(1, maven.getBestTextRange(dependency).getTextrange().start().line());
     }
 }

@@ -89,16 +89,21 @@ public class GradleDependencyReason extends DependencyReason {
      * @return TextRange if found in pom, else null
      */
     private Optional<TextRangeConfidence> tryArtifactMatch(Identifier gradleIdentifier) {
-        String[] gradleIdentifierSplit = gradleIdentifier.getName().split(":");
-        String artefactId = gradleIdentifierSplit[1];
-        try (final Scanner scanner = new Scanner(content)) {
-            int linenumber = 0;
-            while (scanner.hasNextLine()) {
-                final String lineFromFile = scanner.nextLine();
-                linenumber++;
-                if (lineFromFile.contains(artefactId)) {
-                    LOGGER.debug("We found {} in {} on line {}", artefactId, buildGradle, linenumber);
-                    return Optional.of(new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.MEDIUM));
+        Optional<String> packageArtefact = Identifier.getPackageArtefact(gradleIdentifier);
+        if (packageArtefact.isPresent()) {
+            // packageArtefact has something like struts/struts@1.2.8
+            String[] gradleIdentifierSplit = packageArtefact.get().split("@");
+            gradleIdentifierSplit = gradleIdentifierSplit[0].split("/");
+            String artefactId = gradleIdentifierSplit[1];
+            try (final Scanner scanner = new Scanner(content)) {
+                int linenumber = 0;
+                while (scanner.hasNextLine()) {
+                    final String lineFromFile = scanner.nextLine();
+                    linenumber++;
+                    if (lineFromFile.contains(artefactId)) {
+                        LOGGER.debug("We found {} in {} on line {}", artefactId, buildGradle, linenumber);
+                        return Optional.of(new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.MEDIUM));
+                    }
                 }
             }
         }

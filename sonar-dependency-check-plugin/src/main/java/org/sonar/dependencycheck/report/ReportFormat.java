@@ -20,5 +20,5 @@
 package org.sonar.dependencycheck.report;
 
 public enum ReportFormat {
-    XML, HTML;
+    XML, HTML, JSON;
 }

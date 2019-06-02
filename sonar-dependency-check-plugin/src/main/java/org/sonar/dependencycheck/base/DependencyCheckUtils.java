@@ -111,8 +111,8 @@ public final class DependencyCheckUtils {
     }
 
     public static Optional<Identifier> getMavenIdentifier (@NonNull Dependency dependency){
-        for (Identifier identifier : dependency.getIdentifiersCollected()) {
-            if ("maven".equals(identifier.getType())) {
+        for (Identifier identifier : dependency.getPackages()) {
+            if (identifier.getId().contains("maven")) {
                 return Optional.of(identifier);
             }
         }

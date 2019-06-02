@@ -107,31 +107,41 @@ public class MavenDependencyReason extends DependencyReason {
     }
 
     private Optional<TextRangeConfidence> checkPomDependency(Identifier mavenIdentifier, MavenDependency dependency) {
-        String[] mavenIdentifierSplit = mavenIdentifier.getName().split(":");
-        String groupId = mavenIdentifierSplit[0];
-        String artefactId = mavenIdentifierSplit[1];
-        if (StringUtils.equals(artefactId, dependency.getArtifactId())
-                && StringUtils.equals(groupId, dependency.getGroupId())) {
-            LOGGER.debug("Found a artefactid and groupid match in {}", pom);
-            return Optional.of(new TextRangeConfidence(dependency.getTextRange(), Confidence.HIGHEST));
-        }
-        if (StringUtils.equals(artefactId, dependency.getArtifactId())) {
-            LOGGER.debug("Found a artefactid match in {} for {}", pom, artefactId);
-            return Optional.of(new TextRangeConfidence(dependency.getTextRange(), Confidence.HIGH));
-        }
-        if (StringUtils.equals(groupId, dependency.getGroupId())) {
-            LOGGER.debug("Found a groupId match in {} for {}", pom, groupId);
-            return Optional.of(new TextRangeConfidence(dependency.getTextRange(), Confidence.MEDIUM));
+        Optional<String> packageArtefact = Identifier.getPackageArtefact(mavenIdentifier);
+        if (packageArtefact.isPresent()) {
+            // packageArtefact has something like struts/struts@1.2.8
+            String[] mavenIdentifierSplit = packageArtefact.get().split("@");
+            mavenIdentifierSplit = mavenIdentifierSplit[0].split("/");
+            String groupId = mavenIdentifierSplit[0];
+            String artefactId = mavenIdentifierSplit[1];
+            if (StringUtils.equals(artefactId, dependency.getArtifactId())
+                    && StringUtils.equals(groupId, dependency.getGroupId())) {
+                LOGGER.debug("Found a artefactid and groupid match in {}", pom);
+                return Optional.of(new TextRangeConfidence(dependency.getTextRange(), Confidence.HIGHEST));
+            }
+            if (StringUtils.equals(artefactId, dependency.getArtifactId())) {
+                LOGGER.debug("Found a artefactid match in {} for {}", pom, artefactId);
+                return Optional.of(new TextRangeConfidence(dependency.getTextRange(), Confidence.HIGH));
+            }
+            if (StringUtils.equals(groupId, dependency.getGroupId())) {
+                LOGGER.debug("Found a groupId match in {} for {}", pom, groupId);
+                return Optional.of(new TextRangeConfidence(dependency.getTextRange(), Confidence.MEDIUM));
+            }
         }
         return Optional.empty();
     }
 
     private Optional<TextRangeConfidence> checkPomParent(Identifier mavenIdentifier, MavenParent parent) {
-        String[] mavenIdentifierSplit = mavenIdentifier.getName().split(":");
-        String groupId = mavenIdentifierSplit[0];
-        if (StringUtils.equals(groupId, parent.getGroupId())) {
-            LOGGER.debug("Found a groupId match in {} for {}", pom, groupId);
-            return Optional.of(new TextRangeConfidence(parent.getTextRange(), Confidence.MEDIUM));
+        Optional<String> packageArtefact = Identifier.getPackageArtefact(mavenIdentifier);
+        if (packageArtefact.isPresent()) {
+            // packageArtefact has something like struts/struts@1.2.8
+            String[] mavenIdentifierSplit = packageArtefact.get().split("@");
+            mavenIdentifierSplit = mavenIdentifierSplit[0].split("/");
+            String groupId = mavenIdentifierSplit[0];
+            if (StringUtils.equals(groupId, parent.getGroupId())) {
+                LOGGER.debug("Found a groupId match in {} for {}", pom, groupId);
+                return Optional.of(new TextRangeConfidence(parent.getTextRange(), Confidence.MEDIUM));
+            }
         }
         return Optional.empty();
     }

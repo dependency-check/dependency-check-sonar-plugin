@@ -23,7 +23,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.xml.stream.XMLStreamException;
@@ -47,12 +50,14 @@ import org.sonar.dependencycheck.parser.element.ProjectInfo;
 import org.sonar.dependencycheck.parser.element.ScanInfo;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
 
-public class ReportParser {
+public class XMLReportParser {
 
-    private static final Logger LOGGER = Loggers.get(ReportParser.class);
+    private static final Logger LOGGER = Loggers.get(XMLReportParser.class);
     private final SensorContext context;
+    private static final String IDENTIFIER_VULNERABILITY_IDS = "vulnerabilityIds";
+    private static final String IDENTIFIER_PACKAGE = "package";
 
-    public ReportParser(SensorContext context) {
+    public XMLReportParser(SensorContext context) {
         this.context = context;
     }
 
@@ -97,8 +102,8 @@ public class ReportParser {
         String filepath = null;
         String md5Hash = null;
         String sha1Hash = null;
-        Collection<Evidence> evidences = Collections.emptyList();
-        Collection<Identifier> identifiers = Collections.emptyList();
+        Map<String, List<Evidence>> evidences = Collections.emptyMap();
+        Map<String, Collection<Identifier>> identifiers = Collections.emptyMap();
         List<Vulnerability> vulnerabilities = Collections.emptyList();
         while (childCursor.getNext() != null) {
             String nodeName = childCursor.getLocalName();
@@ -136,7 +141,7 @@ public class ReportParser {
         filepath = Optional.ofNullable(filepath).orElseThrow(() -> new ReportParserException("Dependency - filePath not found"));
         md5Hash = Optional.ofNullable(md5Hash).orElseThrow(() -> new ReportParserException("Dependency - md5 not found"));
         sha1Hash = Optional.ofNullable(sha1Hash).orElseThrow(() -> new ReportParserException("Dependency - sha1 not found"));
-        return new Dependency(fileName, filepath, md5Hash, sha1Hash, evidences, identifiers, vulnerabilities);
+        return new Dependency(fileName, filepath, md5Hash, sha1Hash, evidences, vulnerabilities, identifiers.get(IDENTIFIER_PACKAGE), identifiers.get(IDENTIFIER_VULNERABILITY_IDS));
     }
 
     private List<Vulnerability> processVulnerabilities(SMInputCursor vulnC) throws XMLStreamException, ReportParserException {
@@ -270,16 +275,34 @@ public class ReportParser {
         return new CvssV2(score, severity);
     }
 
-    private Collection<Evidence> processEvidenceCollected(SMInputCursor ecC) throws XMLStreamException, ReportParserException {
-        Collection<Evidence> evidenceCollection = new ArrayList<>();
+    private Map<String, List<Evidence>> processEvidenceCollected(SMInputCursor ecC) throws XMLStreamException, ReportParserException {
+        Map<String, List<Evidence>> evidences = new HashMap<>();
         SMInputCursor cursor = ecC.childElementCursor("evidence");
         while (cursor.getNext() != null) {
-            evidenceCollection.add(processEvidence(cursor));
+            Evidence evidence = processEvidence(cursor);
+            String mapKey = evidence.getType() + "Evidence";
+            if (evidences.containsKey(mapKey)) {
+                evidences.get(mapKey).add(evidence);
+            } else {
+                List<Evidence> list = new LinkedList<>();
+                list.add(evidence);
+                evidences.put(mapKey, list);
+            }
         }
-        return evidenceCollection;
+        return evidences;
     }
 
     private Evidence processEvidence(SMInputCursor ecC) throws XMLStreamException, ReportParserException {
+        String type = null;
+        Confidence confidence = null;
+        for (int i = 0; i < ecC.getAttrCount(); ++i) {
+            if (ecC.getAttrLocalName(i).equals("type")) {
+                type = ecC.getAttrValue(i);
+            }
+            if (ecC.getAttrLocalName(i).equals("confidence")) {
+                confidence = Confidence.valueOf(ecC.getAttrValue(i));
+            }
+        }
         SMInputCursor childCursor = ecC.childCursor();
         String source = null;
         String name = null;
@@ -297,61 +320,47 @@ public class ReportParser {
         source = Optional.ofNullable(source).orElseThrow(() -> new ReportParserException("Evidence - source not found"));
         name = Optional.ofNullable(name).orElseThrow(() -> new ReportParserException("Evidence - name not found"));
         value = Optional.ofNullable(value).orElseThrow(() -> new ReportParserException("Evidence - source not found"));
-        return new Evidence(source, name, value);
+        type = Optional.ofNullable(type).orElseThrow(() -> new ReportParserException("Evidence - type not found"));
+        confidence = Optional.ofNullable(confidence).orElseThrow(() -> new ReportParserException("Evidence - confidence not found"));
+        return new Evidence(source, name, value, type, confidence);
     }
 
-    private Collection<Identifier> processIdentifiersCollected(SMInputCursor ifC) throws XMLStreamException, ReportParserException {
-        Collection<Identifier> identifierCollection = new ArrayList<>();
+    private Map<String, Collection<Identifier>> processIdentifiersCollected(SMInputCursor ifC) throws XMLStreamException, ReportParserException {
+        Map<String, Collection<Identifier>> identifierCollection = new HashMap<>();
         SMInputCursor childCursor = ifC.childCursor();
         while (childCursor.getNext() != null) {
-            String nodeName = childCursor.getLocalName();
-            if ("identifier".equals(nodeName)) {
-                identifierCollection.add(processIdentifiers(childCursor));
-            }
-            if ("package".equals(nodeName)) {
-                identifierCollection.add(processIdentifiers(childCursor));
-            }
-            if ("vulnerabilityIds".equals(nodeName)) {
-                identifierCollection.add(processIdentifiers(childCursor));
+            // identifierType can be one of package, vulnerabilityIds, suppressedVulnerabilityIds
+            String identifierType = childCursor.getLocalName();
+            if (StringUtils.isNotBlank(identifierType)) {
+                if (identifierCollection.containsKey(identifierType)) {
+                    identifierCollection.get(identifierType).add(processIdentifiers(childCursor));
+                } else {
+                    Collection<Identifier> list = new LinkedList<>();
+                    list.add(processIdentifiers(childCursor));
+                    identifierCollection.put(identifierType, list);
+                }
             }
         }
         return identifierCollection;
     }
 
     private Identifier processIdentifiers(SMInputCursor ifC) throws XMLStreamException, ReportParserException {
-        String type = null;
         Confidence confidence = null;
-        String name = null;
         String id = null;
         for (int i = 0; i < ifC.getAttrCount(); ++i) {
-            if (ifC.getAttrLocalName(i).equals("type")) {
-                type = ifC.getAttrValue(i);
-            }
-            if (ifC.getAttrLocalName(i).equals("confidence")) {
+            if ("confidence".equals(ifC.getAttrLocalName(i))) {
                 confidence = Confidence.valueOf(ifC.getAttrValue(i));
             }
         }
         SMInputCursor childCursor = ifC.childCursor();
         while (childCursor.getNext() != null) {
             String nodeName = childCursor.getLocalName();
-            if ("name".equals(nodeName)) {
-                name = StringUtils.trim(childCursor.collectDescendantText(false));
-            }
             if ("id".equals(nodeName)) {
                 id = StringUtils.trim(childCursor.collectDescendantText(false));
             }
         }
-        if (type == null && StringUtils.isNotEmpty(id)) {
-            // pkg:maven/struts/struts@1.2.8 -> maven
-            type = StringUtils.substringAfter(StringUtils.substringBefore(id, "/"), "pkg:");
-        }
-        if (name == null && StringUtils.isNotEmpty(id)) {
-            // pkg:maven/struts/struts@1.2.8 -> struts:struts:1.2.8
-            name = StringUtils.substringAfter(id, "/").replace('/', ':').replace('@', ':');
-        }
-        type = Optional.ofNullable(type).orElseThrow(() -> new ReportParserException("Identifier - type not found"));
-        name = Optional.ofNullable(name).orElseThrow(() -> new ReportParserException("Identifier - name not found"));
-        return new Identifier(type, confidence, name);
+        id = Optional.ofNullable(id).orElseThrow(() -> new ReportParserException("Identifier - id not found"));
+        return new Identifier(id, confidence);
     }
 
     private ScanInfo processScanInfo(SMInputCursor siC) throws XMLStreamException, ReportParserException {
@@ -371,7 +380,6 @@ public class ReportParser {
         SMInputCursor childCursor = piC.childCursor();
         String projectName = null;
         String projectReportDate = null;
-        String projectCredits = null;
         while (childCursor.getNext() != null) {
             String nodeName = childCursor.getLocalName();
             if (nodeName == null) {
@@ -384,17 +392,13 @@ public class ReportParser {
             case "reportDate":
                 projectReportDate = StringUtils.trim(childCursor.collectDescendantText(false));
                 break;
-            case "credits":
-                projectCredits = StringUtils.trim(childCursor.collectDescendantText(false));
-                break;
             default:
                 break;
             }
         }
         projectName = Optional.ofNullable(projectName).orElseThrow(() -> new ReportParserException("project - name not found"));
         projectReportDate = Optional.ofNullable(projectReportDate).orElseThrow(() -> new ReportParserException("project - reportDate not found"));
-        projectCredits =  Optional.ofNullable(projectCredits).orElseThrow(() -> new ReportParserException("project - credits not found"));
-        return new ProjectInfo(projectName, projectReportDate, projectCredits);
+        return new ProjectInfo(projectName, projectReportDate);
     }
 
 }

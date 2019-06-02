@@ -21,6 +21,7 @@
         <sonar.host.url>http://localhost:9000/</sonar.host.url>
         <sonar.dependencyCheck.reportPath>${dependency.check.report.dir}/dependency-check-report.xml</sonar.dependencyCheck.reportPath>
         <sonar.dependencyCheck.htmlReportPath>${dependency.check.report.dir}/dependency-check-report.html</sonar.dependencyCheck.htmlReportPath>
+        <sonar.dependencyCheck.jsonReportPath>${dependency.check.report.dir}/dependency-check-report.json</sonar.dependencyCheck.jsonReportPath>
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
     </properties>
@@ -71,7 +72,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>4.0.2</version>
+                <version>5.2.0</version>
                 <configuration>
                     <format>ALL</format>
                     <outputDirectory>${dependency.check.report.dir}</outputDirectory>

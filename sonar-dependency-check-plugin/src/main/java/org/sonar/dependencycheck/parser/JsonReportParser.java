@@ -17,44 +17,25 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.dependencycheck.parser.element;
+package org.sonar.dependencycheck.parser;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
-public class Evidence {
+import org.sonar.dependencycheck.parser.element.Analysis;
 
-    private final String source;
-    private final String name;
-    private final String value;
-    private final String type;
-    private final Confidence confidence;
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 
-    public Evidence(@NonNull String source, @NonNull String name, @NonNull String value, String type, Confidence confidence) {
-        this.source = source;
-        this.name = name;
-        this.value = value;
-        this.type = type;
-        this.confidence = confidence;
+public class JsonReportParser {
+
+    private JsonReportParser() {
+        // do nothing
     }
 
-    public String getSource() {
-        return source;
+    public static Analysis parse(InputStream inputStream) {
+        JsonReader reader = new JsonReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        return new Gson().fromJson(reader, Analysis.class);
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public Confidence getConfidence() {
-        return confidence;
-    }
-
 }

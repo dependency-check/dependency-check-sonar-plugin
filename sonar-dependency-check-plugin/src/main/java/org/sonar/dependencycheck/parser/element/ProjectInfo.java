@@ -25,12 +25,10 @@ public class ProjectInfo {
 
     private final String name;
     private final String reportDate;
-    private final String credits;
 
-    public ProjectInfo(@NonNull String name, @NonNull String reportDate, @NonNull String credits) {
+    public ProjectInfo(@NonNull String name, @NonNull String reportDate) {
         this.name = name;
         this.reportDate = reportDate;
-        this.credits = credits;
     }
 
     public String getName() {
@@ -39,9 +37,5 @@ public class ProjectInfo {
 
     public String getReportDate() {
         return reportDate;
-    }
-
-    public String getCredits() {
-        return credits;
     }
 }

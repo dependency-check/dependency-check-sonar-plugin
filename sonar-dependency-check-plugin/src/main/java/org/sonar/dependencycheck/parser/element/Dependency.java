@@ -23,6 +23,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -30,20 +32,22 @@ public class Dependency {
 
     private final String fileName;
     private final String filePath;
-    private final String md5Hash;
-    private final String sha1Hash;
-    private final Collection<Evidence> evidenceCollected;
-    private final Collection<Identifier> identifiersCollected;
+    private final String md5;
+    private final String sha1;
+    private final Map<String, List<Evidence>> evidenceCollected;
     private final List<Vulnerability> vulnerabilities;
+    private final Collection<Identifier> packages;
+    private final Collection<Identifier> vulnerabilityIds;
 
-    public Dependency(@NonNull String fileName, @NonNull String filePath, @NonNull String md5Hash, @NonNull String sha1Hash, Collection<Evidence> evidenceCollected, Collection<Identifier> identifiersCollected, List<Vulnerability> vulnerabilities) {
+    public Dependency(@NonNull String fileName, @NonNull String filePath, @NonNull String md5Hash, @NonNull String sha1Hash, Map<String, List<Evidence>> evidenceCollected, List<Vulnerability> vulnerabilities, Collection<Identifier> packages, Collection<Identifier> vulnerabilityIds) {
         this.fileName = fileName;
         this.filePath = filePath;
-        this.md5Hash = md5Hash;
-        this.sha1Hash = sha1Hash;
+        this.md5 = md5Hash;
+        this.sha1 = sha1Hash;
         this.evidenceCollected = evidenceCollected;
-        this.identifiersCollected = identifiersCollected;
         this.vulnerabilities = vulnerabilities;
+        this.packages = packages;
+        this.vulnerabilityIds = vulnerabilityIds;
     }
 
     public String getFileName() {
@@ -55,28 +59,32 @@ public class Dependency {
     }
 
     public String getMd5Hash() {
-        return md5Hash;
+        return md5;
     }
 
     public String getSha1Hash() {
-        return sha1Hash;
+        return sha1;
     }
 
-    public Collection<Evidence> getEvidenceCollected() {
+    public Map<String, List<Evidence>> getEvidenceCollected() {
         return evidenceCollected;
     }
 
     public List<Vulnerability> getVulnerabilities() {
-        return vulnerabilities;
-    }
-
-    public Collection<Identifier> getIdentifiersCollected() {
-        return identifiersCollected;
+        return Optional.ofNullable(vulnerabilities).orElse(Collections.emptyList());
     }
 
     public void sortVulnerabilityBycvssScore() {
         final Comparator<Vulnerability> comp = (vul1, vul2) -> Float.compare( vul1.getCvssScore(), vul2.getCvssScore());
         Collections.sort(this.vulnerabilities, comp.reversed());
+    }
+
+    public Collection<Identifier> getPackages() {
+        return packages;
+    }
+
+    public Collection<Identifier> getVulnerabilityIds() {
+        return vulnerabilityIds;
     }
 
 }
