@@ -20,7 +20,11 @@
 
 package org.sonar.dependencycheck.parser.element;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+
 public interface Cvss {
+    @NonNull
     public Float getScore();
+    @NonNull
     public String getSeverity();
 }

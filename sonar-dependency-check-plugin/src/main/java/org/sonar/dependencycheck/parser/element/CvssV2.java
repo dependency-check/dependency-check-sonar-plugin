@@ -35,6 +35,7 @@ public class CvssV2 implements Cvss {
      * @return the score
      */
     @Override
+    @NonNull
     public Float getScore() {
         return score;
     }
@@ -43,6 +44,7 @@ public class CvssV2 implements Cvss {
      * @return the severity
      */
     @Override
+    @NonNull
     public String getSeverity() {
         return severity;
     }

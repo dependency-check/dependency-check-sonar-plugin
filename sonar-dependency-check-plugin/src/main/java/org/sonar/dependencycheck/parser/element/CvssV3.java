@@ -20,6 +20,8 @@
 
 package org.sonar.dependencycheck.parser.element;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+
 public class CvssV3 implements Cvss{
     private final Float baseScore;
     private final String baseSeverity;
@@ -28,19 +30,21 @@ public class CvssV3 implements Cvss{
      * @param baseScore
      * @param baseSeverity
      */
-    public CvssV3(Float baseScore, String baseSeverity) {
+    public CvssV3(@NonNull Float baseScore, @NonNull String baseSeverity) {
         this.baseScore = baseScore;
         this.baseSeverity = baseSeverity;
     }
     /**
      * @return the baseScore
      */
+    @NonNull
     public Float getBaseScore() {
         return baseScore;
     }
     /**
      * @return the baseSeverity
      */
+    @NonNull
     public String getBaseSeverity() {
         return baseSeverity;
     }
