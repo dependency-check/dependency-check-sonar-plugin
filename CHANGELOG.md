@@ -1,5 +1,17 @@
 # Change Log
 
+## [1.1.5](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/tree/1.1.5) (2019-06-04)
+[All Commits](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/compare/1.1.4...1.1.5)
+
+- **[testing]** Switch to openjdk8 and openjdk11 for travis tests ([#153](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/153))
+- **[misc]** Add compatibility table ([#151](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/151) by [Mobrockers](https://github.com/Mobrockers))
+- **[misc]** Use interfaces instead of DefaultIssueLocation ([#150](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/150/files))
+- **[examples]** Correct Copyright in example ([#148](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/148))
+- **[examples]** Add nodejs examples ([#145](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/145) by [thib3113](https://github.com/thib3113))
+- **[parser,new]** Parse reports without score and severity + calculate score from severity ([#144](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/144))
+- **[parser,new]** Read vulnerability source ([#138](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/138))
+- **[testing]** Add test data for node.Js report ([#136](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/136) by [thib3113](https://github.com/thib3113))
+
 ## [1.1.4](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/tree/master) (2018-04-21)
 [All Commits](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/compare/1.1.3...1.1.4)
 
