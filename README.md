@@ -104,6 +104,13 @@ sonar.dependencyCheck.summarize=true
 sonar.dependencyCheck.summarize=false (default)
 ```
 
+If you want skip this plugin, it's possible with following configuration.
+
+```ini
+sonar.dependencyCheck.skip=true
+sonar.dependencyCheck.skip=false (default)
+```
+
 Ecosystem
 -------------------
 

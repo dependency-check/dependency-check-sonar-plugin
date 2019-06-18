@@ -153,4 +153,18 @@ public class DependencyCheckSensorTest {
         sensor.execute(context);
         assertEquals(6, context.allIssues().size());
     }
+
+    @Test
+    public void shouldSkipPlugin() throws URISyntaxException {
+        final SensorContextTester context = SensorContextTester.create(new File(""));
+        // Mock config
+        MapSettings settings = new MapSettings();
+        settings.setProperty(DependencyCheckConstants.REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        settings.setProperty(DependencyCheckConstants.SKIP_PROPERTY, Boolean.TRUE);
+        context.setSettings(settings);
+
+        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
+        sensor.execute(context);
+        assertEquals(0, context.allIssues().size());
+    }
 }

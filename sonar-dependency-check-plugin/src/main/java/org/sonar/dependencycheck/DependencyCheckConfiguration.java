@@ -79,6 +79,13 @@ public class DependencyCheckConfiguration {
                         .description("When enabled we summarize all vulnerabilities per dependency.")
                         .defaultValue(Boolean.toString(DependencyCheckConstants.SUMMARIZE_PROPERTY_DEFAULT))
                         .type(PropertyType.BOOLEAN)
+                        .build(),
+                PropertyDefinition.builder(DependencyCheckConstants.SKIP_PROPERTY)
+                        .subCategory("General")
+                        .name("Skip")
+                        .description("When enabled we skip this plugin.")
+                        .defaultValue(Boolean.toString(DependencyCheckConstants.SKIP_PROPERTY_DEFAULT))
+                        .type(PropertyType.BOOLEAN)
                         .build()
         );
     }
