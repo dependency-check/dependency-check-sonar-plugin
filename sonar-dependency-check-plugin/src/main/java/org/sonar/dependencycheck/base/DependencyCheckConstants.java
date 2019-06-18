@@ -28,6 +28,7 @@ public final class DependencyCheckConstants {
     public static final String SEVERITY_MAJOR = "sonar.dependencyCheck.severity.major";
     public static final String SEVERITY_MINOR = "sonar.dependencyCheck.severity.minor";
     public static final String SUMMARIZE_PROPERTY = "sonar.dependencyCheck.summarize";
+    public static final String SKIP_PROPERTY = "sonar.dependencyCheck.skip";
 
     public static final Float SEVERITY_BLOCKER_DEFAULT = 9.0f;
     public static final Float SEVERITY_CRITICAL_DEFAULT = 7.0f;
@@ -36,6 +37,7 @@ public final class DependencyCheckConstants {
     public static final String REPORT_PATH_DEFAULT = "${WORKSPACE}/dependency-check-report.xml";
     public static final String HTML_REPORT_PATH_DEFAULT = "${WORKSPACE}/dependency-check-report.html";
     public static final Boolean SUMMARIZE_PROPERTY_DEFAULT = Boolean.FALSE;
+    public static final Boolean SKIP_PROPERTY_DEFAULT = Boolean.FALSE;
 
     public static final String REPOSITORY_KEY = "OWASP";
     public static final String LANGUAGE_KEY = "neutral";
