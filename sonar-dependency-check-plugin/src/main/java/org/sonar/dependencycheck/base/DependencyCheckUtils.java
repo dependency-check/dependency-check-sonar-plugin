@@ -147,4 +147,8 @@ public final class DependencyCheckUtils {
         }
         return sb.toString().trim();
     }
+
+    public static Boolean skipPlugin(Configuration config) {
+        return config.getBoolean(DependencyCheckConstants.SKIP_PROPERTY).orElse(DependencyCheckConstants.SKIP_PROPERTY_DEFAULT);
+    }
 }

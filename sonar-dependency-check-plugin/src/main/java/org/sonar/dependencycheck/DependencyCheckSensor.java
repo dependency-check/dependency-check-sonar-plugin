@@ -34,6 +34,7 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.api.utils.log.Profiler;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
+import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.parser.ReportParser;
 import org.sonar.dependencycheck.parser.ReportParserException;
 import org.sonar.dependencycheck.parser.element.Analysis;
@@ -89,22 +90,26 @@ public class DependencyCheckSensor implements ProjectSensor {
     public void execute(SensorContext sensorContext) {
         Profiler profiler = Profiler.create(LOGGER);
         profiler.startInfo("Process Dependency-Check report");
-        try {
-            Analysis analysis = parseAnalysis(sensorContext);
-            DependencyReasonSearcher dependencyReasonSearcher = new DependencyReasonSearcher(sensorContext);
-            dependencyReasonSearcher.addDependenciesToInputComponents(analysis, sensorContext);
-        } catch (FileNotFoundException e) {
-            LOGGER.info("Analysis skipped/aborted due to missing report file");
-            LOGGER.debug(e.getMessage(), e);
-        } catch (IOException e) {
-            LOGGER.warn("Analysis aborted due to: IO Errors", e);
-        } catch (XMLStreamException e) {
-            LOGGER.warn("Analysis aborted due to: XML is not valid", e);
-        } catch (ReportParserException e) {
-            LOGGER.warn("Analysis aborted due to: Mandatory elements are missing. Plugin is compatible to {}", StringUtils.join(XSD, ", "));
-            LOGGER.debug(e.getMessage(), e);
+        if (DependencyCheckUtils.skipPlugin(sensorContext.config()).booleanValue()) {
+            LOGGER.info("Dependency-Check skipped");
+        } else {
+            try {
+                Analysis analysis = parseAnalysis(sensorContext);
+                DependencyReasonSearcher dependencyReasonSearcher = new DependencyReasonSearcher(sensorContext);
+                dependencyReasonSearcher.addDependenciesToInputComponents(analysis, sensorContext);
+            } catch (FileNotFoundException e) {
+                LOGGER.info("Analysis skipped/aborted due to missing report file");
+                LOGGER.debug(e.getMessage(), e);
+            } catch (IOException e) {
+                LOGGER.warn("Analysis aborted due to: IO Errors", e);
+            } catch (XMLStreamException e) {
+                LOGGER.warn("Analysis aborted due to: XML is not valid", e);
+            } catch (ReportParserException e) {
+                LOGGER.warn("Analysis aborted due to: Mandatory elements are missing. Plugin is compatible to {}", StringUtils.join(XSD, ", "));
+                LOGGER.debug(e.getMessage(), e);
+            }
+            uploadHTMLReport(sensorContext);
         }
-        uploadHTMLReport(sensorContext);
         profiler.stopInfo();
     }
 }
