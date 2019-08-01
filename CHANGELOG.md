@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.2.5](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/tree/1.2.5) (2019-08-01)
+[All Commits](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/compare/1.2.4...1.2.5)
+
+- **[new]** Add skip feature ([#157](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/pull/157))
+
 ## [1.2.4](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/tree/1.2.4) (2019-06-04)
 [All Commits](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/compare/1.2.3...1.2.4)
 
