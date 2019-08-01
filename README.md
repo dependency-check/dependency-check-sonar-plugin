@@ -7,8 +7,7 @@ Dependency-Check Plugin for SonarQube 7.x
 
 Integrates [Dependency-Check] reports into SonarQube v7.6 or higher.
 
-Please see the [SonarQube 6.x] branch for SonarQube 6.x LTS support. The project will try to backport all code from master branch, as long as the LTS version is supported.
-Please see the [SonarQube 5.x] branch for older SonarQube 5.x support.
+The project will try to backport all code from master branch to last supported LTS. Please see the [SonarQube 6.x] or [SonarQube 5.x] branch for old supported version.
 
 
 About Dependency-Check
