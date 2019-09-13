@@ -13,9 +13,9 @@
     <url>https://www.owasp.org/index.php/OWASP_Dependency_Check</url>
 
     <scm>
-      <connection>scm:git:https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin</connection>
-      <developerConnection>scm:git:https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin</developerConnection>
-      <url>https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin</url>
+      <connection>scm:git:https://github.com/dependency-check/dependency-check-sonar-plugin</connection>
+      <developerConnection>scm:git:https://github.com/dependency-check/dependency-check-sonar-plugin</developerConnection>
+      <url>https://github.com/dependency-check/dependency-check-sonar-plugin</url>
       <tag>HEAD</tag>
     </scm>
 

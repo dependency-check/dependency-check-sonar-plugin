@@ -11,7 +11,7 @@ assignees: ''
 A clear and concise description of what the bug is.
 
 **To Reproduce**
-It would be helpful when you support us with [example](https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/tree/master/examples) projects.
+It would be helpful when you support us with [example](https://github.com/dependency-check/dependency-check-sonar-plugin/tree/master/examples) projects.
 Steps to reproduce the behavior:
 1. Install '...'
 2. Run '....'

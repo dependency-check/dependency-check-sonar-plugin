@@ -15,7 +15,7 @@ gradle sonarqube
 Copyright & License
 -------------------
 
-Dependency-Check Sonar Plugin is Copyright (c) SonarSecurityCommunity. All Rights Reserved.
+Dependency-Check Sonar Plugin is Copyright (c) dependency-check. All Rights Reserved.
 
 Dependency-Check is Copyright (c) Jeremy Long. All Rights Reserved.
 

@@ -15,7 +15,7 @@
     <inceptionYear>2015</inceptionYear>
 
     <properties>
-        <license.owner>SonarSecurityCommunity</license.owner>
+        <license.owner>dependency-check</license.owner>
         <license.mailto>philipp.dallig@gmail.com</license.mailto>
     </properties>
 
@@ -47,28 +47,28 @@
     </developers>
 
     <scm>
-      <connection>scm:git:https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin</connection>
-      <developerConnection>scm:git:https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin</developerConnection>
-      <url>https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin</url>
+      <connection>scm:git:https://github.com/dependency-check/dependency-check-sonar-plugin</connection>
+      <developerConnection>scm:git:https://github.com/dependency-check/dependency-check-sonar-plugin</developerConnection>
+      <url>https://github.com/dependency-check/dependency-check-sonar-plugin</url>
       <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
       <system>GitHub</system>
-      <url>https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/issues</url>
+      <url>https://github.com/dependency-check/dependency-check-sonar-plugin/issues</url>
     </issueManagement>
 
     <ciManagement>
       <system>Travis CI</system>
-      <url>https://travis-ci.org/SonarSecurityCommunity/dependency-check-sonar-plugin</url>
+      <url>https://travis-ci.org/dependency-check/dependency-check-sonar-plugin</url>
     </ciManagement>
 
     <!-- todo: remove this when SonarSource Forge hosting becomes a reality -->
     <distributionManagement>
         <repository>
-            <id>bintray-sonarsecuritycommunity-owasp</id>
-            <name>sonarsecuritycommunity-owasp</name>
-            <url>https://api.bintray.com/maven/sonarsecuritycommunity/owasp/sonar-dependency-check/;publish=1</url>
+            <id>bintray-dependency-check-owasp</id>
+            <name>dependency-check-owasp</name>
+            <url>https://api.bintray.com/maven/dependency-check/owasp/sonar-dependency-check/;publish=1</url>
         </repository>
     </distributionManagement>
 
