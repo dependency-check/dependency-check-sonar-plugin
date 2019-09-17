@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/dependency-check/dependency-check-sonar-plugin.svg?branch=master)](https://travis-ci.org/dependency-check/dependency-check-sonar-plugin)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/412eb95dd49d47bca70d53b685fb247a)](https://www.codacy.com/app/dependency-check/dependency-check-sonar-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dependency-check/dependency-check-sonar-plugin&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e9cebd3112ec4252804bba68a5b44071)](https://www.codacy.com/manual/philipp.dallig/dependency-check-sonar-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dependency-check/dependency-check-sonar-plugin&amp;utm_campaign=Badge_Grade)
 [![Download](https://api.bintray.com/packages/dependency-check/owasp/sonar-dependency-check/images/download.svg)](https://bintray.com/dependency-check/owasp/sonar-dependency-check/_latestVersion)
 
 Dependency-Check Plugin for SonarQube 7.x
