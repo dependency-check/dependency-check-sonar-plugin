@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.owasp:dependency-check-gradle:4.0.2'
+        classpath 'org.owasp:dependency-check-gradle:5.2.2'
     }
 }
 
@@ -20,7 +20,6 @@ repositories {
 
 dependencies {
     compile 'com.google.guava:guava:21.0'
-    compile 'org.owasp:dependency-check-gradle:4.0.2'
     compile 'org.springframework:spring:2.0'
     testCompile 'junit:junit:4.12'
 }
