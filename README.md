@@ -22,10 +22,10 @@ Dependency-Check supports the identification of project dependencies in a number
 
 The plugin keeps track of a number of statistics including:
 
-- Total number of dependencies scanned
-- Total number of vulnerabilities found across all dependencies
-- Total number of vulnerable components
-- Total number of critical, high, medium, and low severity vulnerabilities
+-   Total number of dependencies scanned
+-   Total number of vulnerabilities found across all dependencies
+-   Total number of vulnerable components
+-   Total number of critical, high, medium, and low severity vulnerabilities
 
 Additionally, the following two metrics are defined:
 
@@ -108,12 +108,12 @@ sonar.dependencyCheck.skip=false (default)
 ## Ecosystem
 
 Dependency-Check is available as a:
-- Command-line utility
-- Ant Task
-- Gradle Plugin
-- Jenkins Plugin
-- Maven Plugin
-- SonarQube Plugin
+-   Command-line utility
+-   Ant Task
+-   Gradle Plugin
+-   Jenkins Plugin
+-   Maven Plugin
+-   SonarQube Plugin
 
 ## Copyright & License
 
