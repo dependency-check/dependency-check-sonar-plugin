@@ -19,14 +19,16 @@
  */
 package org.sonar.dependencycheck.rule;
 
-import org.mockito.InOrder;
-import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.dependencycheck.base.DependencyCheckConstants;
-
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.RETURNS_SMART_NULLS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
+import org.mockito.Mockito;
+import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
 /**
  * @author Gregor Tudan, Cofinpro AG
@@ -46,7 +48,7 @@ public class KnownCveRuleDefinitionTest {
 
         this.rule.define(context);
 
-        InOrder inOrder = inOrder(context, repo);
+        InOrder inOrder = Mockito.inOrder(context, repo);
 
         inOrder.verify(context).createRepository("OWASP","neutral");
         inOrder.verify(repo).createRule(DependencyCheckConstants.RULE_KEY);
