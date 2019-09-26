@@ -321,7 +321,7 @@ public class ReportParserTest {
 
         Collection<Dependency> dependencies = analysis.getDependencies();
         assertEquals(10765, dependencies.size());
-        
+
         for (Dependency dependency : dependencies) {
             //check jquery
             if ( "e0e77771c69fe4acd4cad20a0f20ce7a5086dc56".equals(dependency.getSha1Hash())){
@@ -391,7 +391,7 @@ public class ReportParserTest {
                 Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
                 assertEquals(1, vulnerabilities.size());
                 Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
-                Vulnerability vulnerability = (Vulnerability) vulnIterator.next();;
+                Vulnerability vulnerability = (Vulnerability) vulnIterator.next();
                 assertEquals("786", vulnerability.getName());
                 assertEquals("NPM", vulnerability.getSource());
                 assertEquals(4.0f, vulnerability.getCvssScore(false), 0.0f);
