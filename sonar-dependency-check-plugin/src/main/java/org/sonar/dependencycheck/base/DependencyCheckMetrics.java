@@ -46,7 +46,7 @@ public final class DependencyCheckMetrics implements Metrics {
 
     public static final Metric<Integer> INHERITED_RISK_SCORE = new Metric.Builder(DependencyCheckMetrics.INHERITED_RISK_SCORE_KEY, "Inherited Risk Score", Metric.ValueType.INT)
             .setDescription("Inherited Risk Score")
-            .setDirection(Metric.DIRECTION_BETTER)
+            .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(Boolean.TRUE)
             .setDomain(DependencyCheckMetrics.DOMAIN)
             .setBestValue(0.0)
@@ -54,7 +54,7 @@ public final class DependencyCheckMetrics implements Metrics {
 
     public static final Metric<Double> VULNERABLE_COMPONENT_RATIO = new Metric.Builder(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO_KEY, "Vulnerable Component Ratio", Metric.ValueType.PERCENT)
             .setDescription("Vulnerable Component Ratio")
-            .setDirection(Metric.DIRECTION_BETTER)
+            .setDirection(Metric.DIRECTION_WORST)
             .setQualitative(Boolean.TRUE)
             .setDomain(DependencyCheckMetrics.DOMAIN)
             .setBestValue(0.0)
