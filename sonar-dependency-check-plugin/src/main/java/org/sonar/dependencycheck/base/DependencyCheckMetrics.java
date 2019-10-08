@@ -29,7 +29,7 @@ import org.sonar.api.scanner.ScannerSide;
 @ScannerSide
 public final class DependencyCheckMetrics implements Metrics {
 
-    private static final String DOMAIN = "OWASP-Dependency-Check"; // TODO: I think OWASP needs to stay here in order to keep existing users metrics
+    private static final String DOMAIN = "OWASP-Dependency-Check";
 
     private static final String INHERITED_RISK_SCORE_KEY = "inherited_risk_score";
     private static final String VULNERABLE_COMPONENT_RATIO_KEY = "vulnerable_component_ratio";
