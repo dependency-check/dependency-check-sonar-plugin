@@ -66,4 +66,8 @@ public class Identifier {
     public static boolean isMavenPackage(@NonNull Identifier identifier) {
         return "maven".equals(Identifier.getPackageType(identifier).orElse(""));
     }
+
+    public static boolean isNPMPackage(@NonNull Identifier identifier) {
+        return "npm".equals(Identifier.getPackageType(identifier).orElse(""));
+    }
 }
