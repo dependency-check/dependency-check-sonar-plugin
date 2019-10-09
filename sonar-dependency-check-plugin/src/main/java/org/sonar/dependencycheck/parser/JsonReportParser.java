@@ -17,25 +17,25 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.dependencycheck.parser.element;
+package org.sonar.dependencycheck.parser;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
-public class ProjectInfo {
+import org.sonar.dependencycheck.parser.element.Analysis;
 
-    private final String name;
-    private final String reportDate;
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 
-    public ProjectInfo(@NonNull String name, @NonNull String reportDate) {
-        this.name = name;
-        this.reportDate = reportDate;
+public class JsonReportParser {
+
+    private JsonReportParser() {
+        // do nothing
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getReportDate() {
-        return reportDate;
+    public static Analysis parse(InputStream inputStream) {
+        JsonReader reader = new JsonReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        return new Gson().fromJson(reader, Analysis.class);
     }
 }

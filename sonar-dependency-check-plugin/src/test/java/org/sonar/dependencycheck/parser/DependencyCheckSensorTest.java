@@ -66,10 +66,10 @@ public class DependencyCheckSensorTest {
         settings.setProperty(DependencyCheckConstants.REPORT_PATH_PROPERTY, "dependency-check-report.xml");
         config = settings.asConfig();
         // mock a sample report
-        final URL sampleXmlResourceURI = getClass().getClassLoader().getResource("report/dependency-check-report.xml");
+        final URL sampleXmlResourceURI = getClass().getClassLoader().getResource("reportMultiModuleMavenExample/dependency-check-report.xml");
         assert sampleXmlResourceURI != null;
         this.sampleXmlReport = Paths.get(sampleXmlResourceURI.toURI()).toFile();
-        final URL sampleHtmlResourceURI = getClass().getClassLoader().getResource("report/dependency-check-report.html");
+        final URL sampleHtmlResourceURI = getClass().getClassLoader().getResource("reportMultiModuleMavenExample/dependency-check-report.html");
         assert sampleHtmlResourceURI != null;
         this.sampleHtmlReport = Paths.get(sampleHtmlResourceURI.toURI()).toFile();
     }
@@ -108,7 +108,7 @@ public class DependencyCheckSensorTest {
         context.setSettings(settings);
         when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
         sensor.execute(context);
-        assertEquals(25, context.allIssues().size());
+        assertEquals(42, context.allIssues().size());
     }
 
     @Test

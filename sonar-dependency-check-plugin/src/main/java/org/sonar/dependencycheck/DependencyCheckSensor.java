@@ -24,7 +24,6 @@ import java.io.IOException;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
@@ -35,19 +34,20 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.api.utils.log.Profiler;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
-import org.sonar.dependencycheck.parser.ReportParser;
+import org.sonar.dependencycheck.parser.JsonReportParser;
 import org.sonar.dependencycheck.parser.ReportParserException;
+import org.sonar.dependencycheck.parser.XMLReportParser;
 import org.sonar.dependencycheck.parser.element.Analysis;
 import org.sonar.dependencycheck.reason.DependencyReasonSearcher;
 import org.sonar.dependencycheck.report.HtmlReportFile;
+import org.sonar.dependencycheck.report.JsonReportFile;
 import org.sonar.dependencycheck.report.XmlReportFile;
 
 public class DependencyCheckSensor implements ProjectSensor {
 
     private static final Logger LOGGER = Loggers.get(DependencyCheckSensor.class);
     private static final String SENSOR_NAME = "Dependency-Check";
-    private static final String[] XSD = {"https://jeremylong.github.io/DependencyCheck/dependency-check.1.8.xsd",
-    "https://jeremylong.github.io/DependencyCheck/dependency-check.2.1.xsd"};
+    private static final String XSD = "https://jeremylong.github.io/DependencyCheck/dependency-check.2.2.xsd";
 
     private final FileSystem fileSystem;
     private final PathResolver pathResolver;
@@ -58,8 +58,16 @@ public class DependencyCheckSensor implements ProjectSensor {
     }
 
     private Analysis parseAnalysis(SensorContext context) throws IOException, XMLStreamException, ReportParserException {
+        try {
+            JsonReportFile report = JsonReportFile.getJsonReport(context.config(), fileSystem, this.pathResolver);
+            return JsonReportParser.parse(report.getInputStream());
+        } catch (IOException e ) {
+            LOGGER.info(e.getMessage());
+            LOGGER.debug(e.getMessage(), e);
+        }
+        LOGGER.info("XML-Reportparser is deprecated");
         XmlReportFile report = XmlReportFile.getXmlReport(context.config(), fileSystem, this.pathResolver);
-        return new ReportParser(context).parse(report.getInputStream());
+        return XMLReportParser.parse(report.getInputStream());
     }
 
     private void uploadHTMLReport (SensorContext context){
@@ -105,7 +113,7 @@ public class DependencyCheckSensor implements ProjectSensor {
             } catch (XMLStreamException e) {
                 LOGGER.warn("Analysis aborted due to: XML is not valid", e);
             } catch (ReportParserException e) {
-                LOGGER.warn("Analysis aborted due to: Mandatory elements are missing. Plugin is compatible to {}", StringUtils.join(XSD, ", "));
+                LOGGER.warn("Analysis aborted due to: Mandatory elements are missing. Plugin is compatible to {}", XSD);
                 LOGGER.debug(e.getMessage(), e);
             }
             uploadHTMLReport(sensorContext);

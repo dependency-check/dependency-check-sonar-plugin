@@ -174,12 +174,12 @@ public class DependencyReasonSearcher {
     }
 
     public void addIssueToProject(SensorContext context, Dependency dependency, Vulnerability vulnerability) {
-        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(), context.config());
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(context.config()), context.config());
         NewIssue sonarIssue = context.newIssue();
 
         NewIssueLocation location = sonarIssue.newLocation()
             .on(context.project())
-            .message(DependencyCheckUtils.formatDescription(dependency, vulnerability));
+            .message(DependencyCheckUtils.formatDescription(dependency, vulnerability, context.config()));
 
         sonarIssue
             .at(location)
@@ -190,16 +190,16 @@ public class DependencyReasonSearcher {
     }
 
     private void addIssueToProject(SensorContext context, Dependency dependency) {
-        dependency.sortVulnerabilityBycvssScore();
+        dependency.sortVulnerabilityBycvssScore(context.config());
         List<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
         Vulnerability highestVulnerability = vulnerabilities.get(0);
-        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(highestVulnerability.getCvssScore(), context.config());
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(highestVulnerability.getCvssScore(context.config()), context.config());
 
         NewIssue sonarIssue = context.newIssue();
 
         NewIssueLocation location = sonarIssue.newLocation()
             .on(context.project())
-            .message(DependencyCheckUtils.formatDescription(dependency, vulnerabilities, highestVulnerability));
+            .message(DependencyCheckUtils.formatDescription(dependency, vulnerabilities, highestVulnerability, context.config()));
 
         sonarIssue
             .at(location)

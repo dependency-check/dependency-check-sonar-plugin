@@ -71,10 +71,10 @@ public abstract class DependencyReason {
     public abstract TextRangeConfidence getBestTextRange(Dependency dependency);
 
     public void addIssue(SensorContext context, Dependency dependency) {
-        dependency.sortVulnerabilityBycvssScore();
+        dependency.sortVulnerabilityBycvssScore(context.config());
         List<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
         Vulnerability highestVulnerability = vulnerabilities.get(0);
-        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(highestVulnerability.getCvssScore(), context.config());
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(highestVulnerability.getCvssScore(context.config()), context.config());
 
         TextRangeConfidence textRange = getBestTextRange(dependency);
         InputComponent inputComponent = getInputComponent();
@@ -84,7 +84,7 @@ public abstract class DependencyReason {
         NewIssueLocation location = sonarIssue.newLocation()
             .on(inputComponent)
             .at(textRange.getTextrange())
-            .message(DependencyCheckUtils.formatDescription(dependency, vulnerabilities, highestVulnerability));
+            .message(DependencyCheckUtils.formatDescription(dependency, vulnerabilities, highestVulnerability, context.config()));
 
         sonarIssue
             .at(location)
@@ -95,7 +95,7 @@ public abstract class DependencyReason {
     }
 
     public void addIssue(SensorContext context, Dependency dependency, Vulnerability vulnerability) {
-        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(), context.config());
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(context.config()), context.config());
 
         TextRangeConfidence textRange = getBestTextRange(dependency);
         InputComponent inputComponent = getInputComponent();
@@ -105,7 +105,7 @@ public abstract class DependencyReason {
         NewIssueLocation location = sonarIssue.newLocation()
             .on(inputComponent)
             .at(textRange.getTextrange())
-            .message(DependencyCheckUtils.formatDescription(dependency, vulnerability));
+            .message(DependencyCheckUtils.formatDescription(dependency, vulnerability, context.config()));
 
         sonarIssue
             .at(location)

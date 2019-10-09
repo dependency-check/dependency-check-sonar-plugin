@@ -111,8 +111,8 @@ public final class DependencyCheckUtils {
     }
 
     public static Optional<Identifier> getMavenIdentifier (@NonNull Dependency dependency){
-        for (Identifier identifier : dependency.getIdentifiersCollected()) {
-            if ("maven".equals(identifier.getType())) {
+        for (Identifier identifier : dependency.getPackages()) {
+            if (Identifier.isMavenPackage(identifier)) {
                 return Optional.of(identifier);
             }
         }
@@ -123,27 +123,27 @@ public final class DependencyCheckUtils {
      * TODO: Add Markdown formatting if and when Sonar supports it
      * https://jira.sonarsource.com/browse/SONAR-4161
      */
-    public static String formatDescription(Dependency dependency, Vulnerability vulnerability) {
+    public static String formatDescription(Dependency dependency, Vulnerability vulnerability, Configuration config) {
         StringBuilder sb = new StringBuilder();
         sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
         sb.append("Reference: ").append(vulnerability.getName()).append(" | ");
-        sb.append("CVSS Score: ").append(vulnerability.getCvssScore()).append(" | ");
-        Optional<String> vulnerabilityCwe = vulnerability.getCwe();
+        sb.append("CVSS Score: ").append(vulnerability.getCvssScore(config)).append(" | ");
+        Optional<String[]> vulnerabilityCwe = vulnerability.getCwe();
         if (vulnerabilityCwe.isPresent()) {
-            sb.append("Category: ").append(vulnerabilityCwe.get()).append(" | ");
+            sb.append("Category: ").append(String.join(",", vulnerabilityCwe.get())).append(" | ");
         }
         sb.append(vulnerability.getDescription());
         return sb.toString().trim();
     }
 
-    public static String formatDescription(Dependency dependency, Collection<Vulnerability> vulnerabilities, Vulnerability highestVulnerability) {
+    public static String formatDescription(Dependency dependency, Collection<Vulnerability> vulnerabilities, Vulnerability highestVulnerability, Configuration config) {
         StringBuilder sb = new StringBuilder();
         sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
-        sb.append("Highest CVSS Score: ").append(highestVulnerability.getCvssScore()).append(" | ");
+        sb.append("Highest CVSS Score: ").append(highestVulnerability.getCvssScore(config)).append(" | ");
         sb.append("Amount of CVSS: ").append(vulnerabilities.size()).append(" | ");
         sb.append("References: ");
         for (Vulnerability vulnerability : vulnerabilities) {
-            sb.append(vulnerability.getName()).append(" (").append(vulnerability.getCvssScore()).append(") ");
+            sb.append(vulnerability.getName()).append(" (").append(vulnerability.getCvssScore(config)).append(") ");
         }
         return sb.toString().trim();
     }

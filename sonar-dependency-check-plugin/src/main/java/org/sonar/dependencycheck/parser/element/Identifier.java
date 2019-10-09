@@ -22,24 +22,24 @@ package org.sonar.dependencycheck.parser.element;
 
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
 public class Identifier {
-    private final String type;
+    private final String id;
     private final Confidence confidence;
-    private final String name;
 
-    public Identifier(@NonNull String type, @Nullable Confidence confidence, @NonNull String name) {
-        this.type = type;
+    public Identifier(@NonNull String id, @Nullable Confidence confidence) {
+        this.id = id;
         this.confidence = confidence;
-        this.name = name;
     }
     /**
-     * @return the type
+     * @return the id
      */
-    public String getType() {
-        return type;
+    public String getId() {
+        return id;
     }
 
     /**
@@ -48,12 +48,22 @@ public class Identifier {
     public Optional<Confidence> getConfidence() {
         return Optional.ofNullable(confidence);
     }
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
+    public static Optional<String> getPackageType(@NonNull Identifier identifier) {
+        if (StringUtils.isNotBlank(identifier.getId())) {
+            // pkg:maven/struts/struts@1.2.8 -> maven
+            return Optional.of(StringUtils.substringAfter(StringUtils.substringBefore(identifier.getId(), "/"), "pkg:"));
+        }
+        return Optional.empty();
+    }
+    public static Optional<String> getPackageArtefact(@NonNull Identifier identifier) {
+        if (StringUtils.isNotBlank(identifier.getId())) {
+            // pkg:maven/struts/struts@1.2.8 -> struts/struts@1.2.8
+            return Optional.of(StringUtils.substringAfter(identifier.getId(), "/"));
+        }
+        return Optional.empty();
     }
 
+    public static boolean isMavenPackage(@NonNull Identifier identifier) {
+        return "maven".equals(Identifier.getPackageType(identifier).orElse(""));
+    }
 }

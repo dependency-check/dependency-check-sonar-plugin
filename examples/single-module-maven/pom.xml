@@ -20,6 +20,7 @@
         <sonar.host.url>http://localhost:9000/</sonar.host.url>
         <sonar.dependencyCheck.reportPath>target/dependency-check-report.xml</sonar.dependencyCheck.reportPath>
         <sonar.dependencyCheck.htmlReportPath>target/dependency-check-report.html</sonar.dependencyCheck.htmlReportPath>
+        <sonar.dependencyCheck.jsonReportPath>target/dependency-check-report.json</sonar.dependencyCheck.jsonReportPath>
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
     </properties>

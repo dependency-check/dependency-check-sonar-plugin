@@ -17,25 +17,24 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.dependencycheck.parser.element;
+package org.sonar.dependencycheck.parser;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
+import java.io.InputStream;
+import java.time.Duration;
+import java.time.Instant;
 
-public class ProjectInfo {
+import org.junit.jupiter.api.Test;
+import org.sonar.dependencycheck.parser.element.Analysis;
 
-    private final String name;
-    private final String reportDate;
+public class JsonReportParserTest extends ReportParserTest {
 
-    public ProjectInfo(@NonNull String name, @NonNull String reportDate) {
-        this.name = name;
-        this.reportDate = reportDate;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getReportDate() {
-        return reportDate;
+    @Test
+    public void parseReport() throws Exception {
+        Instant startTime = Instant.now();
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportMultiModuleMavenExample/dependency-check-report.json");
+        Analysis analysis = JsonReportParser.parse(inputStream);
+        Instant endTime = Instant.now();
+        System.out.println("Duration JSON-Report-Parser: " + Duration.between(startTime, endTime));
+        checkAnalyse(analysis);
     }
 }

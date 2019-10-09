@@ -26,11 +26,15 @@ public class Evidence {
     private final String source;
     private final String name;
     private final String value;
+    private final String type;
+    private final Confidence confidence;
 
-    public Evidence(@NonNull String source, @NonNull String name, @NonNull String value) {
+    public Evidence(@NonNull String source, @NonNull String name, @NonNull String value, String type, Confidence confidence) {
         this.source = source;
         this.name = name;
         this.value = value;
+        this.type = type;
+        this.confidence = confidence;
     }
 
     public String getSource() {
@@ -43,6 +47,14 @@ public class Evidence {
 
     public String getValue() {
         return value;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public Confidence getConfidence() {
+        return confidence;
     }
 
 }
