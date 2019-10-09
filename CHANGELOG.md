@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.2.6](https://github.com/dependency-check/dependency-check-sonar-plugin/tree/1.2.6) (2019-10-09)
+[All Commits](https://github.com/dependency-check/dependency-check-sonar-plugin/compare/1.2.5...1.2.6)
+
+-   **misc** - Style Changes ([#177](https://github.com/dependency-check/dependency-check-sonar-plugin/pull/177), [#176](https://github.com/dependency-check/dependency-check-sonar-plugin/pull/176))
+-   **new** - Correct Metric Direction of `Vulnerable Component Ratio` and `Inherited Risk Score`([#180](https://github.com/dependency-check/dependency-check-sonar-plugin/pull/180))
+
 ## [1.2.5](https://github.com/dependency-check/dependency-check-sonar-plugin/tree/1.2.5) (2019-08-01)
 [All Commits](https://github.com/dependency-check/dependency-check-sonar-plugin/compare/1.2.4...1.2.5)
 
