@@ -67,7 +67,7 @@ public class DependencyReasonSearcherTest {
     public void checkForDependencyReasons() throws IOException  {
         SensorContextTester context = SensorContextTester.create(new File(""));
         MapSettings settings = new MapSettings();
-        settings.setProperty(DependencyCheckConstants.REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
         context.setSettings(settings);
         context.fileSystem().add(inputFile("pom.xml"));
         context.fileSystem().add(inputFile("build.gradle"));
@@ -84,7 +84,7 @@ public class DependencyReasonSearcherTest {
     public void checkForDependencyReasonsMaven() throws IOException  {
         SensorContextTester context = SensorContextTester.create(new File(""));
         MapSettings settings = new MapSettings();
-        settings.setProperty(DependencyCheckConstants.REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
         context.setSettings(settings);
         context.fileSystem().add(inputFile("pom.xml"));
         DependencyReasonSearcher searcher = new DependencyReasonSearcher(context);
@@ -127,7 +127,7 @@ public class DependencyReasonSearcherTest {
     public void checkForDependencyReasonsGradle() throws IOException  {
         SensorContextTester context = SensorContextTester.create(new File(""));
         MapSettings settings = new MapSettings();
-        settings.setProperty(DependencyCheckConstants.REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
         settings.setProperty(DependencyCheckConstants.SUMMARIZE_PROPERTY, Boolean.TRUE);
         context.setSettings(settings);
         context.fileSystem().add(inputFile("build.gradle"));

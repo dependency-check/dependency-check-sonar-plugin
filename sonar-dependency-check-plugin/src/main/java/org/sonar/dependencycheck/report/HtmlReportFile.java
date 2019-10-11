@@ -39,7 +39,7 @@ public class HtmlReportFile extends ReportFile {
         return new HtmlReportFile(report);
     }
 
-    public HtmlReportFile(File report) {
+    private HtmlReportFile(File report) {
         super(ReportFormat.HTML, DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY, report);
     }
 }

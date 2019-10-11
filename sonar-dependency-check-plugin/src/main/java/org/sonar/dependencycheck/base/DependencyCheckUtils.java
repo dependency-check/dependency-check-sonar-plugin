@@ -128,7 +128,7 @@ public final class DependencyCheckUtils {
         sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
         sb.append("Reference: ").append(vulnerability.getName()).append(" | ");
         sb.append("CVSS Score: ").append(vulnerability.getCvssScore(config)).append(" | ");
-        Optional<String[]> vulnerabilityCwe = vulnerability.getCwe();
+        Optional<String[]> vulnerabilityCwe = vulnerability.getCwes();
         if (vulnerabilityCwe.isPresent()) {
             sb.append("Category: ").append(String.join(",", vulnerabilityCwe.get())).append(" | ");
         }

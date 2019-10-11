@@ -20,13 +20,19 @@
 
 package org.sonar.dependencycheck.parser.element;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 
+@JsonIgnoreProperties({"accessVector", "accessComplexity", "authenticationr", "confidentialImpact", "integrityImpact", "availabilityImpact"})
 public class CvssV2 implements Cvss {
     private final Float score;
     private final String severity;
-    
-    public CvssV2(@NonNull Float score, @NonNull String severity) {
+    @JsonCreator
+    public CvssV2(@JsonProperty("score") @NonNull Float score,
+                  @JsonProperty("severity") @NonNull String severity) {
         this.score = score;
         this.severity = severity;
     }

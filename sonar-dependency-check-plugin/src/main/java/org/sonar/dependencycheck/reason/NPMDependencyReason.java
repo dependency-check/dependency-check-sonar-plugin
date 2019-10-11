@@ -17,32 +17,37 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.dependencycheck.parser.element;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+package org.sonar.dependencycheck.reason;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
+import org.sonar.api.batch.fs.InputComponent;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.dependencycheck.parser.element.Dependency;
 
-@JsonIgnoreProperties({ "groupID", "artifactID", "version", "credits"})
-public class ProjectInfo {
+public class NPMDependencyReason extends DependencyReason {
 
-    private final String name;
-    private final String reportDate;
-
-    @JsonCreator
-    public ProjectInfo(@JsonProperty("name") @NonNull String name,
-                       @JsonProperty("reportDate")@NonNull String reportDate) {
-        this.name = name;
-        this.reportDate = reportDate;
+    private final InputFile packageLock;
+    
+    public NPMDependencyReason(InputFile packageLock) {
+        super(packageLock);
+        this.packageLock = packageLock;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public boolean isReasonable() {
+        return packageLock != null;
     }
 
-    public String getReportDate() {
-        return reportDate;
+    @Override
+    public InputComponent getInputComponent() {
+        // TODO Auto-generated method stub
+        return null;
     }
+
+    @Override
+    public TextRangeConfidence getBestTextRange(Dependency dependency) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

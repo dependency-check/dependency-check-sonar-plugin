@@ -28,8 +28,13 @@ import java.util.Optional;
 
 import org.sonar.api.config.Configuration;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 
+@JsonIgnoreProperties({"isVirtual", "sha256", "description", "projectReferences", "license"})
 public class Dependency {
 
     private final String fileName;
@@ -41,7 +46,15 @@ public class Dependency {
     private final Collection<Identifier> packages;
     private final Collection<Identifier> vulnerabilityIds;
 
-    public Dependency(@NonNull String fileName, @NonNull String filePath, @NonNull String md5Hash, @NonNull String sha1Hash, Map<String, List<Evidence>> evidenceCollected, List<Vulnerability> vulnerabilities, Collection<Identifier> packages, Collection<Identifier> vulnerabilityIds) {
+    @JsonCreator
+    public Dependency(@JsonProperty("fileName") @NonNull String fileName,
+                      @JsonProperty("filePath") @NonNull String filePath,
+                      @JsonProperty("md5") @NonNull String md5Hash,
+                      @JsonProperty("sha1") @NonNull String sha1Hash,
+                      @JsonProperty("evidenceCollected") Map<String, List<Evidence>> evidenceCollected,
+                      @JsonProperty("vulnerabilities") List<Vulnerability> vulnerabilities,
+                      @JsonProperty("packages") Collection<Identifier> packages,
+                      @JsonProperty("vulnerabilityIds") Collection<Identifier> vulnerabilityIds) {
         this.fileName = fileName;
         this.filePath = filePath;
         this.md5 = md5Hash;

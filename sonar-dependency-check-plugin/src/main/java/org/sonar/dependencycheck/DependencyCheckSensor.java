@@ -21,8 +21,7 @@ package org.sonar.dependencycheck;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import javax.xml.stream.XMLStreamException;
+import java.util.Optional;
 
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -57,17 +56,35 @@ public class DependencyCheckSensor implements ProjectSensor {
         this.pathResolver = pathResolver;
     }
 
-    private Analysis parseAnalysis(SensorContext context) throws IOException, XMLStreamException, ReportParserException {
+    private Optional<Analysis> parseAnalysis(SensorContext context) {
+        LOGGER.info("Using JSON-Reportparser");
         try {
             JsonReportFile report = JsonReportFile.getJsonReport(context.config(), fileSystem, this.pathResolver);
-            return JsonReportParser.parse(report.getInputStream());
-        } catch (IOException e ) {
-            LOGGER.info(e.getMessage());
+            return Optional.of(JsonReportParser.parse(report.getInputStream()));
+        } catch (FileNotFoundException e) {
+            LOGGER.info("JSON-Analysis skipped/aborted due to missing report file");
             LOGGER.debug(e.getMessage(), e);
+        }catch (ReportParserException e) {
+            LOGGER.warn("JSON-Analysis aborted");
+            LOGGER.debug(e.getMessage(), e);
+        } catch (IOException e) {
+            LOGGER.warn("JSON-Analysis aborted due to: IO Errors", e);
         }
-        LOGGER.info("XML-Reportparser is deprecated");
-        XmlReportFile report = XmlReportFile.getXmlReport(context.config(), fileSystem, this.pathResolver);
-        return XMLReportParser.parse(report.getInputStream());
+        LOGGER.info("Using XML-Reportparser");
+        XmlReportFile report;
+        try {
+            report = XmlReportFile.getXmlReport(context.config(), fileSystem, this.pathResolver);
+            return Optional.of(XMLReportParser.parse(report.getInputStream()));
+        } catch (FileNotFoundException e) {
+            LOGGER.info("XML-Analysis skipped/aborted due to missing report file");
+            LOGGER.debug(e.getMessage(), e);
+        } catch (ReportParserException e) {
+            LOGGER.warn("XML-Analysis aborted due to: Mandatory elements are missing. Plugin is compatible to {}", XSD);
+            LOGGER.debug(e.getMessage(), e);
+        } catch (IOException e) {
+            LOGGER.warn("XML-Analysis aborted due to: IO Errors", e);
+        }
+        return Optional.empty();
     }
 
     private void uploadHTMLReport (SensorContext context){
@@ -101,20 +118,10 @@ public class DependencyCheckSensor implements ProjectSensor {
         if (DependencyCheckUtils.skipPlugin(sensorContext.config()).booleanValue()) {
             LOGGER.info("Dependency-Check skipped");
         } else {
-            try {
-                Analysis analysis = parseAnalysis(sensorContext);
+            Optional<Analysis> analysis = parseAnalysis(sensorContext);
+            if (analysis.isPresent()) {
                 DependencyReasonSearcher dependencyReasonSearcher = new DependencyReasonSearcher(sensorContext);
-                dependencyReasonSearcher.addDependenciesToInputComponents(analysis, sensorContext);
-            } catch (FileNotFoundException e) {
-                LOGGER.info("Analysis skipped/aborted due to missing report file");
-                LOGGER.debug(e.getMessage(), e);
-            } catch (IOException e) {
-                LOGGER.warn("Analysis aborted due to: IO Errors", e);
-            } catch (XMLStreamException e) {
-                LOGGER.warn("Analysis aborted due to: XML is not valid", e);
-            } catch (ReportParserException e) {
-                LOGGER.warn("Analysis aborted due to: Mandatory elements are missing. Plugin is compatible to {}", XSD);
-                LOGGER.debug(e.getMessage(), e);
+                dependencyReasonSearcher.addDependenciesToInputComponents(analysis.get(), sensorContext);
             }
             uploadHTMLReport(sensorContext);
         }

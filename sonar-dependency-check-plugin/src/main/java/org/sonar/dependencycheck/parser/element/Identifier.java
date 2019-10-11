@@ -24,14 +24,21 @@ import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
+@JsonIgnoreProperties("url")
 public class Identifier {
     private final String id;
     private final Confidence confidence;
 
-    public Identifier(@NonNull String id, @Nullable Confidence confidence) {
+    @JsonCreator
+    public Identifier(@JsonProperty("id") @NonNull String id,
+                      @JsonProperty("confidence") @Nullable Confidence confidence) {
         this.id = id;
         this.confidence = confidence;
     }

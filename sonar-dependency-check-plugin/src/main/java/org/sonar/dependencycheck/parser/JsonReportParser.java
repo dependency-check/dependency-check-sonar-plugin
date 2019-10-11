@@ -19,14 +19,14 @@
  */
 package org.sonar.dependencycheck.parser;
 
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 
 import org.sonar.dependencycheck.parser.element.Analysis;
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonReportParser {
 
@@ -34,8 +34,16 @@ public class JsonReportParser {
         // do nothing
     }
 
-    public static Analysis parse(InputStream inputStream) {
-        JsonReader reader = new JsonReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        return new Gson().fromJson(reader, Analysis.class);
+    public static Analysis parse(InputStream inputStream) throws ReportParserException {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.readValue(inputStream, Analysis.class);
+        } catch (JsonParseException e) {
+            throw new ReportParserException("Could not parse JSON", e);
+        } catch (JsonMappingException e) {
+            throw new ReportParserException("Problem with JSON-Report-Mapping", e);
+        } catch (IOException e) {
+            throw new ReportParserException("IO Problem in JSON-Reporter", e);
+        }
     }
 }

@@ -24,15 +24,24 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 
+@JsonIgnoreProperties({"reportSchema"})
 public class Analysis {
 
     private final ScanInfo scanInfo;
     private final ProjectInfo projectInfo;
     private final Collection<Dependency> dependencies;
 
-    public Analysis(@NonNull ScanInfo scanInfo, @Nullable ProjectInfo projectInfo, @NonNull Collection<Dependency> dependencies) {
+    @JsonCreator
+    public Analysis(
+        @JsonProperty("scanInfo") @NonNull ScanInfo scanInfo,
+        @JsonProperty("projectInfo") @Nullable ProjectInfo projectInfo,
+        @JsonProperty("dependencies") @NonNull Collection<Dependency> dependencies) {
         this.scanInfo = scanInfo;
         this.projectInfo = projectInfo;
         this.dependencies = dependencies;

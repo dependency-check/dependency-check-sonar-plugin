@@ -19,12 +19,20 @@
  */
 package org.sonar.dependencycheck.parser;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
 import java.time.Instant;
 
 import org.junit.jupiter.api.Test;
 import org.sonar.dependencycheck.parser.element.Analysis;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class JsonReportParserTest extends ReportParserTest {
 
@@ -36,5 +44,26 @@ public class JsonReportParserTest extends ReportParserTest {
         Instant endTime = Instant.now();
         System.out.println("Duration JSON-Report-Parser: " + Duration.between(startTime, endTime));
         checkAnalyse(analysis);
+    }
+
+    @Test
+    public void parseReportJsonParseException() {
+        InputStream inputStream = mock(InputStream.class);
+        doThrow(JsonParseException.class).when(inputStream);
+        assertThrows(ReportParserException.class, () -> JsonReportParser.parse(inputStream), "Could not parse JSON");
+    }
+
+    @Test
+    public void parseReportJsonMappingException() {
+        InputStream inputStream = mock(InputStream.class);
+        doThrow(JsonMappingException.class).when(inputStream);
+        assertThrows(ReportParserException.class, () -> JsonReportParser.parse(inputStream), "Problem with JSON-Report-Mapping");
+    }
+
+    @Test
+    public void parseReportIOException() {
+        InputStream inputStream = mock(InputStream.class);
+        doThrow(IOException.class).when(inputStream);
+        assertThrows(ReportParserException.class, () -> JsonReportParser.parse(inputStream), "IO Problem in JSON-Reporter");
     }
 }

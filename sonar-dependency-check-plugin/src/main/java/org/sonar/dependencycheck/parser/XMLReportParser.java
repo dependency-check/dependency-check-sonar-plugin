@@ -55,30 +55,34 @@ public class XMLReportParser {
     private static final String IDENTIFIER_VULNERABILITY_IDS = "vulnerabilityIds";
     private static final String IDENTIFIER_PACKAGE = "package";
 
-    public static Analysis parse(InputStream inputStream) throws XMLStreamException, ReportParserException {
+    private XMLReportParser() {
+        // do nothing
+    }
 
-        SMInputFactory inputFactory = DependencyCheckUtils.newStaxParser();
-        SMHierarchicCursor rootC = inputFactory.rootElementCursor(inputStream);
-        rootC.advance(); // <analysis>
-
-        SMInputCursor childCursor = rootC.childCursor();
-
-        ScanInfo scanInfo = null;
-        ProjectInfo projectInfo = null;
-        Collection<Dependency> dependencies = Collections.emptyList();
-
-        while (childCursor.getNext() != null) {
-            String nodeName = childCursor.getLocalName();
-            if ("scanInfo".equals(nodeName)) {
-                scanInfo = processScanInfo(childCursor);
-            } else if ("projectInfo".equals(nodeName)) {
-                projectInfo = processProjectInfo(childCursor);
-            } else if ("dependencies".equals(nodeName)) {
-                dependencies = processDependencies(childCursor);
+    public static Analysis parse(InputStream inputStream) throws ReportParserException {
+        try {
+            SMInputFactory inputFactory = DependencyCheckUtils.newStaxParser();
+            SMHierarchicCursor rootC = inputFactory.rootElementCursor(inputStream);
+            rootC.advance(); // <analysis>
+            SMInputCursor childCursor = rootC.childCursor();
+            ScanInfo scanInfo = null;
+            ProjectInfo projectInfo = null;
+            Collection<Dependency> dependencies = Collections.emptyList();
+            while (childCursor.getNext() != null) {
+                String nodeName = childCursor.getLocalName();
+                if ("scanInfo".equals(nodeName)) {
+                    scanInfo = processScanInfo(childCursor);
+                } else if ("projectInfo".equals(nodeName)) {
+                    projectInfo = processProjectInfo(childCursor);
+                } else if ("dependencies".equals(nodeName)) {
+                    dependencies = processDependencies(childCursor);
+                }
             }
+            scanInfo = Optional.ofNullable(scanInfo).orElseThrow(() -> new ReportParserException("Analysis - scanInfo not found"));
+            return new Analysis(scanInfo, projectInfo, dependencies);
+        } catch (XMLStreamException e) {
+            throw new ReportParserException("Analysis aborted due to: XML is not valid", e);
         }
-        scanInfo = Optional.ofNullable(scanInfo).orElseThrow(() -> new ReportParserException("Analysis - scanInfo not found"));
-        return new Analysis(scanInfo, projectInfo, dependencies);
     }
 
     private static Collection<Dependency> processDependencies(SMInputCursor depC) throws XMLStreamException, ReportParserException {
@@ -152,7 +156,7 @@ public class XMLReportParser {
         String source = null;
         String severity = null;
         String description = null;
-        String[] cwe = null;
+        String[] cwes = null;
         CvssV2 cvssV2 = null;
         CvssV3 cvssV3 = null;
         // Attributes
@@ -180,8 +184,8 @@ public class XMLReportParser {
             case "severity":
                 severity = StringUtils.trim(childCursor.collectDescendantText(false));
                 break;
-            case "cwe":
-                //cwe = StringUtils.trim(childCursor.collectDescendantText(false));
+            case "cwes":
+                cwes = processCwes(childCursor);
                 break;
             case "description":
                 description = StringUtils.trim(childCursor.collectDescendantText(false));
@@ -193,7 +197,16 @@ public class XMLReportParser {
         name = Optional.ofNullable(name).orElseThrow(() -> new ReportParserException("Vulnerability - name not found"));
         source = Optional.ofNullable(source).orElseThrow(() -> new ReportParserException("Vulnerability - source not found"));
         description = Optional.ofNullable(description).orElseThrow(() -> new ReportParserException("Vulnerability - description not found"));
-        return new Vulnerability(name, source, description, cwe, cvssV2, cvssV3, severity);
+        return new Vulnerability(name, source, description, cwes, cvssV2, cvssV3, severity);
+    }
+
+    private static String[] processCwes(SMInputCursor cwesC) throws XMLStreamException {
+        List<String> cwes = new ArrayList<>();
+        SMInputCursor cursor = cwesC.childElementCursor("cwe");
+        while (cursor.getNext() != null) {
+            cwes.add(cursor.collectDescendantText(false));
+        }
+        return cwes.toArray(new String[cwes.size()]);
     }
 
     private static CvssV3 processCvssv3(SMInputCursor cvssv3C) throws XMLStreamException, ReportParserException {

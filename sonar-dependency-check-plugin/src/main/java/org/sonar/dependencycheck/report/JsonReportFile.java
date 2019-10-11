@@ -39,7 +39,7 @@ public class JsonReportFile extends ReportFile {
         return new JsonReportFile(report);
     }
 
-    public JsonReportFile(File report) {
+    private JsonReportFile(File report) {
         super(ReportFormat.JSON, DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY, report);
     }
 

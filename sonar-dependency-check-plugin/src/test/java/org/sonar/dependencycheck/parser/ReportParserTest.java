@@ -86,7 +86,9 @@ abstract class ReportParserTest {
         assertEquals("NVD", vulnerability.getSource());
         assertEquals(7.5f, vulnerability.getCvssScore(null), 0.0f);
         assertEquals("HIGH", vulnerability.getSeverity());
-        assertFalse(vulnerability.getCwe().isPresent());
+        assertTrue(vulnerability.getCwes().isPresent());
+        assertEquals("NVD-CWE-Other", vulnerability.getCwes().get()[0]);
+        assertEquals(1, vulnerability.getCwes().get().length);
         assertEquals("Apache Software Foundation (ASF) Struts before 1.2.9 allows remote attackers to bypass validation via a request with a 'org.apache.struts.taglib.html.Constants.CANCEL' parameter, which causes the action to be canceled but would not be detected from applications that do not use the isCancelled check.", vulnerability.getDescription());
 
         vulnerability = (Vulnerability) vulnIterator.next();
@@ -94,7 +96,9 @@ abstract class ReportParserTest {
         assertEquals("NVD", vulnerability.getSource());
         assertEquals(7.8f , vulnerability.getCvssScore(null), 0.0f);
         assertEquals("HIGH", vulnerability.getSeverity());
-        assertFalse(vulnerability.getCwe().isPresent());
+        assertTrue(vulnerability.getCwes().isPresent());
+        assertEquals("NVD-CWE-Other", vulnerability.getCwes().get()[0]);
+        assertEquals(1, vulnerability.getCwes().get().length);
         assertEquals("ActionForm in Apache Software Foundation (ASF) Struts before 1.2.9 with BeanUtils 1.7 allows remote attackers to cause a denial of service via a multipart/form-data encoded form with a parameter name that references the public getMultipartRequestHandler method, which provides further access to elements in the CommonsMultipartRequestHandler implementation and BeanUtils.", vulnerability.getDescription());
 
         // commons-beanutils-1.7.0.jar
