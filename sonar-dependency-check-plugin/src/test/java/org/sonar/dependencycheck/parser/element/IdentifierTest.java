@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 class IdentifierTest {
 
     @Test
-    void testMaven() {
+    public void testMaven() {
         Identifier a = new Identifier("pkg:maven/struts/struts@1.2.8", Confidence.HIGH);
         assertTrue(Identifier.isMavenPackage(a));
         assertFalse(Identifier.isNPMPackage(a));
@@ -37,7 +37,7 @@ class IdentifierTest {
     }
 
     @Test
-    void testNode() {
+    public void testNode() {
         Identifier a = new Identifier("pkg:npm/braces@1.8.5", Confidence.HIGHEST);
         assertFalse(Identifier.isMavenPackage(a));
         assertTrue(Identifier.isNPMPackage(a));

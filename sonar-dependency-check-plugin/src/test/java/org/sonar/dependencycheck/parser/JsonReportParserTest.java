@@ -19,6 +19,7 @@
  */
 package org.sonar.dependencycheck.parser;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -41,6 +42,7 @@ public class JsonReportParserTest extends ReportParserTest {
         Instant startTime = Instant.now();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportMultiModuleMavenExample/dependency-check-report.json");
         Analysis analysis = JsonReportParser.parse(inputStream);
+        assertNotNull(analysis);
         Instant endTime = Instant.now();
         System.out.println("Duration JSON-Report-Parser: " + Duration.between(startTime, endTime));
         checkAnalyse(analysis);

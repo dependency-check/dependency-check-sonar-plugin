@@ -20,6 +20,7 @@
 package org.sonar.dependencycheck.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -46,6 +47,7 @@ public class XMLReportParserTest extends ReportParserTest {
         Instant startTime = Instant.now();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportMultiModuleMavenExample/dependency-check-report.xml");
         Analysis analysis = XMLReportParser.parse(inputStream);
+        assertNotNull(analysis);
         Instant endTime = Instant.now();
         System.out.println("Duration XML-Report-Parser: " + Duration.between(startTime, endTime));
         checkAnalyse(analysis);
@@ -72,7 +74,7 @@ public class XMLReportParserTest extends ReportParserTest {
         Iterator<Dependency> iterator = dependencies.iterator();
 
         // jquery
-        Dependency dependency = (Dependency) iterator.next();
+        Dependency dependency = iterator.next();
 
         assertEquals("jquery.js", dependency.getFileName());
         assertEquals("project/node_modules/moment-duration-format/test/vendor/jquery.js", dependency.getFilePath());
@@ -90,7 +92,7 @@ public class XMLReportParserTest extends ReportParserTest {
         Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
         assertEquals(2, vulnerabilities.size());
         Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
-        Vulnerability vulnerability = (Vulnerability) vulnIterator.next();
+        Vulnerability vulnerability = vulnIterator.next();
         assertEquals("CVE-2015-9251", vulnerability.getName());
         assertEquals("NVD", vulnerability.getSource());
         assertEquals(4.3f, vulnerability.getCvssScore(false, context.config()), 0.0f);
@@ -102,7 +104,7 @@ public class XMLReportParserTest extends ReportParserTest {
             "jQuery before 3.0.0 is vulnerable to Cross-site Scripting (XSS) attacks when a cross-domain Ajax request is performed without the dataType option, causing text/javascript responses to be executed.",
             vulnerability.getDescription());
 
-        vulnerability = (Vulnerability) vulnIterator.next();
+        vulnerability = vulnIterator.next();
         assertEquals("CVE-2019-11358", vulnerability.getName());
         assertEquals("NVD", vulnerability.getSource());
         assertEquals(4.3f, vulnerability.getCvssScore(false, context.config()), 0.0f);
@@ -114,7 +116,7 @@ public class XMLReportParserTest extends ReportParserTest {
             vulnerability.getDescription());
 
         // kind-of -> no vulnerability
-        dependency = (Dependency) iterator.next();
+        dependency = iterator.next();
 
         assertEquals("index.js", dependency.getFileName());
         assertEquals("project/node_modules/jest-config/node_modules/is-number/node_modules/kind-of/index.js", dependency.getFilePath());
@@ -128,7 +130,7 @@ public class XMLReportParserTest extends ReportParserTest {
         assertEquals(0, vulnerabilities.size());
 
         // braces -> vulnerability from NPM
-        dependency = (Dependency) iterator.next();
+        dependency = iterator.next();
 
         assertEquals("braces:1.8.5", dependency.getFileName());
         assertEquals("project/node_modules/braces/package.json", dependency.getFilePath());
@@ -146,7 +148,7 @@ public class XMLReportParserTest extends ReportParserTest {
         vulnerabilities = dependency.getVulnerabilities();
         assertEquals(1, vulnerabilities.size());
         vulnIterator = vulnerabilities.iterator();
-        vulnerability = (Vulnerability) vulnIterator.next();
+        vulnerability = vulnIterator.next();
         assertEquals("786", vulnerability.getName());
         assertEquals("NPM", vulnerability.getSource());
         assertEquals(4.0f, vulnerability.getCvssScore(false, context.config()), 0.0f);
@@ -190,7 +192,7 @@ public class XMLReportParserTest extends ReportParserTest {
                 Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
                 assertEquals(2, vulnerabilities.size());
                 Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
-                Vulnerability vulnerability = (Vulnerability) vulnIterator.next();
+                Vulnerability vulnerability = vulnIterator.next();
                 assertEquals("CVE-2015-9251", vulnerability.getName());
                 assertEquals("NVD", vulnerability.getSource());
                 assertEquals(4.3f, vulnerability.getCvssScore(false, context.config()), 0.0f);
@@ -202,7 +204,7 @@ public class XMLReportParserTest extends ReportParserTest {
                     "jQuery before 3.0.0 is vulnerable to Cross-site Scripting (XSS) attacks when a cross-domain Ajax request is performed without the dataType option, causing text/javascript responses to be executed.",
                     vulnerability.getDescription());
 
-                vulnerability = (Vulnerability) vulnIterator.next();
+                vulnerability = vulnIterator.next();
                 assertEquals("CVE-2019-11358", vulnerability.getName());
                 assertEquals("NVD", vulnerability.getSource());
                 assertEquals(4.3f, vulnerability.getCvssScore(false, context.config()), 0.0f);
@@ -244,8 +246,7 @@ public class XMLReportParserTest extends ReportParserTest {
                 Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
                 assertEquals(1, vulnerabilities.size());
                 Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
-                Vulnerability vulnerability = (Vulnerability) vulnIterator.next();
-                ;
+                Vulnerability vulnerability = vulnIterator.next();
                 assertEquals("786", vulnerability.getName());
                 assertEquals("NPM", vulnerability.getSource());
                 assertEquals(4.0f, vulnerability.getCvssScore(false, context.config()), 0.0f);
