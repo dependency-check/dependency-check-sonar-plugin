@@ -19,18 +19,23 @@
  */
 package org.sonar.dependencycheck.parser.element;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 
+@JsonIgnoreProperties({ "groupID", "artifactID", "version", "credits"})
 public class ProjectInfo {
 
     private final String name;
     private final String reportDate;
-    private final String credits;
 
-    public ProjectInfo(@NonNull String name, @NonNull String reportDate, @NonNull String credits) {
+    @JsonCreator
+    public ProjectInfo(@JsonProperty("name") @NonNull String name,
+                       @JsonProperty("reportDate")@NonNull String reportDate) {
         this.name = name;
         this.reportDate = reportDate;
-        this.credits = credits;
     }
 
     public String getName() {
@@ -39,9 +44,5 @@ public class ProjectInfo {
 
     public String getReportDate() {
         return reportDate;
-    }
-
-    public String getCredits() {
-        return credits;
     }
 }

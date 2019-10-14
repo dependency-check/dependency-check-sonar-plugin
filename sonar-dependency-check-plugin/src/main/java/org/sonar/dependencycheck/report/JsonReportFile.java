@@ -27,19 +27,20 @@ import org.sonar.api.config.Configuration;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
-public class HtmlReportFile extends ReportFile {
+public class JsonReportFile extends ReportFile {
 
-    public static HtmlReportFile getHtmlReport(Configuration config, FileSystem fileSystem, PathResolver pathResolver) throws FileNotFoundException {
-        String path = config.get(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.HTML_REPORT_PATH_DEFAULT);
+    public static JsonReportFile getJsonReport(Configuration config, FileSystem fileSystem, PathResolver pathResolver) throws FileNotFoundException {
+        String path = config.get(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT);
         File report = pathResolver.relativeFile(fileSystem.baseDir(), path);
-        report = checkReport(report, ReportFormat.HTML, DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY);
+        report = checkReport(report, ReportFormat.JSON, DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY);
         if (report == null) {
-            throw new FileNotFoundException("HTML-Dependency-Check report does not exist.");
+            throw new FileNotFoundException("JSON-Dependency-Check report does not exist.");
         }
-        return new HtmlReportFile(report);
+        return new JsonReportFile(report);
     }
 
-    private HtmlReportFile(File report) {
-        super(ReportFormat.HTML, DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY, report);
+    private JsonReportFile(File report) {
+        super(ReportFormat.JSON, DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY, report);
     }
+
 }

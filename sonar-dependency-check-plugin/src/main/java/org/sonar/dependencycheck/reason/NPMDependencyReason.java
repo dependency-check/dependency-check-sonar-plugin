@@ -18,13 +18,36 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package org.sonar.dependencycheck.parser.element;
+package org.sonar.dependencycheck.reason;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
+import org.sonar.api.batch.fs.InputComponent;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.dependencycheck.parser.element.Dependency;
 
-public interface Cvss {
-    @NonNull
-    public Float getScore();
-    @NonNull
-    public String getSeverity();
+public class NPMDependencyReason extends DependencyReason {
+
+    private final InputFile packageLock;
+    
+    public NPMDependencyReason(InputFile packageLock) {
+        super(packageLock);
+        this.packageLock = packageLock;
+    }
+
+    @Override
+    public boolean isReasonable() {
+        return packageLock != null;
+    }
+
+    @Override
+    public InputComponent getInputComponent() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public TextRangeConfidence getBestTextRange(Dependency dependency) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

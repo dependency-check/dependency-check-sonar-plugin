@@ -20,36 +20,34 @@
 
 package org.sonar.dependencycheck.parser.element;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import edu.umd.cs.findbugs.annotations.NonNull;
+
+@JsonIgnoreProperties({"attackVector", "attackComplexity", "privilegesRequired", "userInteraction", "scope", "confidentialityImpact", "integrityImpact", "availabilityImpact"})
 public class CvssV3 implements Cvss{
-    private final Float baseScore;
-    private final String baseSeverity;
+    private final Float score;
+    private final String severity;
 
     /**
      * @param baseScore
      * @param baseSeverity
      */
-    public CvssV3(Float baseScore, String baseSeverity) {
-        this.baseScore = baseScore;
-        this.baseSeverity = baseSeverity;
+    @JsonCreator
+    public CvssV3(@JsonProperty("baseScore") @NonNull Float score,
+                  @JsonProperty("baseSeverity") @NonNull String severity) {
+        this.score = score;
+        this.severity = severity;
     }
-    /**
-     * @return the baseScore
-     */
-    public Float getBaseScore() {
-        return baseScore;
-    }
-    /**
-     * @return the baseSeverity
-     */
-    public String getBaseSeverity() {
-        return baseSeverity;
-    }
+
     @Override
     public Float getScore() {
-        return getBaseScore();
+        return score;
     }
     @Override
     public String getSeverity() {
-        return getBaseSeverity();
+        return severity;
     }
 }

@@ -21,10 +21,8 @@ package org.sonar.dependencycheck;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Optional;
 
-import javax.xml.stream.XMLStreamException;
-
-import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
@@ -35,19 +33,20 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.api.utils.log.Profiler;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
-import org.sonar.dependencycheck.parser.ReportParser;
+import org.sonar.dependencycheck.parser.JsonReportParser;
 import org.sonar.dependencycheck.parser.ReportParserException;
+import org.sonar.dependencycheck.parser.XMLReportParser;
 import org.sonar.dependencycheck.parser.element.Analysis;
 import org.sonar.dependencycheck.reason.DependencyReasonSearcher;
 import org.sonar.dependencycheck.report.HtmlReportFile;
+import org.sonar.dependencycheck.report.JsonReportFile;
 import org.sonar.dependencycheck.report.XmlReportFile;
 
 public class DependencyCheckSensor implements ProjectSensor {
 
     private static final Logger LOGGER = Loggers.get(DependencyCheckSensor.class);
     private static final String SENSOR_NAME = "Dependency-Check";
-    private static final String[] XSD = {"https://jeremylong.github.io/DependencyCheck/dependency-check.1.8.xsd",
-    "https://jeremylong.github.io/DependencyCheck/dependency-check.2.1.xsd"};
+    private static final String XSD = "https://jeremylong.github.io/DependencyCheck/dependency-check.2.2.xsd";
 
     private final FileSystem fileSystem;
     private final PathResolver pathResolver;
@@ -57,9 +56,35 @@ public class DependencyCheckSensor implements ProjectSensor {
         this.pathResolver = pathResolver;
     }
 
-    private Analysis parseAnalysis(SensorContext context) throws IOException, XMLStreamException, ReportParserException {
-        XmlReportFile report = XmlReportFile.getXmlReport(context.config(), fileSystem, this.pathResolver);
-        return new ReportParser(context).parse(report.getInputStream());
+    private Optional<Analysis> parseAnalysis(SensorContext context) {
+        LOGGER.info("Using JSON-Reportparser");
+        try {
+            JsonReportFile report = JsonReportFile.getJsonReport(context.config(), fileSystem, this.pathResolver);
+            return Optional.of(JsonReportParser.parse(report.getInputStream()));
+        } catch (FileNotFoundException e) {
+            LOGGER.info("JSON-Analysis skipped/aborted due to missing report file");
+            LOGGER.debug(e.getMessage(), e);
+        }catch (ReportParserException e) {
+            LOGGER.warn("JSON-Analysis aborted");
+            LOGGER.debug(e.getMessage(), e);
+        } catch (IOException e) {
+            LOGGER.warn("JSON-Analysis aborted due to: IO Errors", e);
+        }
+        LOGGER.info("Using XML-Reportparser");
+        XmlReportFile report;
+        try {
+            report = XmlReportFile.getXmlReport(context.config(), fileSystem, this.pathResolver);
+            return Optional.of(XMLReportParser.parse(report.getInputStream()));
+        } catch (FileNotFoundException e) {
+            LOGGER.info("XML-Analysis skipped/aborted due to missing report file");
+            LOGGER.debug(e.getMessage(), e);
+        } catch (ReportParserException e) {
+            LOGGER.warn("XML-Analysis aborted due to: Mandatory elements are missing. Plugin is compatible to {}", XSD);
+            LOGGER.debug(e.getMessage(), e);
+        } catch (IOException e) {
+            LOGGER.warn("XML-Analysis aborted due to: IO Errors", e);
+        }
+        return Optional.empty();
     }
 
     private void uploadHTMLReport (SensorContext context){
@@ -93,20 +118,10 @@ public class DependencyCheckSensor implements ProjectSensor {
         if (DependencyCheckUtils.skipPlugin(sensorContext.config()).booleanValue()) {
             LOGGER.info("Dependency-Check skipped");
         } else {
-            try {
-                Analysis analysis = parseAnalysis(sensorContext);
+            Optional<Analysis> analysis = parseAnalysis(sensorContext);
+            if (analysis.isPresent()) {
                 DependencyReasonSearcher dependencyReasonSearcher = new DependencyReasonSearcher(sensorContext);
-                dependencyReasonSearcher.addDependenciesToInputComponents(analysis, sensorContext);
-            } catch (FileNotFoundException e) {
-                LOGGER.info("Analysis skipped/aborted due to missing report file");
-                LOGGER.debug(e.getMessage(), e);
-            } catch (IOException e) {
-                LOGGER.warn("Analysis aborted due to: IO Errors", e);
-            } catch (XMLStreamException e) {
-                LOGGER.warn("Analysis aborted due to: XML is not valid", e);
-            } catch (ReportParserException e) {
-                LOGGER.warn("Analysis aborted due to: Mandatory elements are missing. Plugin is compatible to {}", StringUtils.join(XSD, ", "));
-                LOGGER.debug(e.getMessage(), e);
+                dependencyReasonSearcher.addDependenciesToInputComponents(analysis.get(), sensorContext);
             }
             uploadHTMLReport(sensorContext);
         }

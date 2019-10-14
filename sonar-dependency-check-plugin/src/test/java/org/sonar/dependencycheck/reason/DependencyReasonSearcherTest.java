@@ -43,6 +43,7 @@ import org.sonar.api.config.internal.MapSettings;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 import org.sonar.dependencycheck.parser.element.Analysis;
 import org.sonar.dependencycheck.parser.element.Confidence;
+import org.sonar.dependencycheck.parser.element.CvssV2;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Identifier;
 import org.sonar.dependencycheck.parser.element.ProjectInfo;
@@ -66,13 +67,14 @@ public class DependencyReasonSearcherTest {
     public void checkForDependencyReasons() throws IOException  {
         SensorContextTester context = SensorContextTester.create(new File(""));
         MapSettings settings = new MapSettings();
-        settings.setProperty(DependencyCheckConstants.REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
         context.setSettings(settings);
         context.fileSystem().add(inputFile("pom.xml"));
         context.fileSystem().add(inputFile("build.gradle"));
         DependencyReasonSearcher searcher = new DependencyReasonSearcher(context);
         ScanInfo scanInfo = new ScanInfo("testengine");
-        ProjectInfo projectInfo = new ProjectInfo("testproject", "testreportdate", "testcredits");        Collection<Dependency> dependencies = new LinkedList<>();
+        ProjectInfo projectInfo = new ProjectInfo("testproject", "testreportdate");
+        Collection<Dependency> dependencies = new LinkedList<>();
         Analysis analysis = new Analysis(scanInfo, projectInfo, dependencies);
         searcher.addDependenciesToInputComponents(analysis, context);
         assertEquals(2, searcher.getDependencyreasons().size());
@@ -82,30 +84,31 @@ public class DependencyReasonSearcherTest {
     public void checkForDependencyReasonsMaven() throws IOException  {
         SensorContextTester context = SensorContextTester.create(new File(""));
         MapSettings settings = new MapSettings();
-        settings.setProperty(DependencyCheckConstants.REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
         context.setSettings(settings);
         context.fileSystem().add(inputFile("pom.xml"));
         DependencyReasonSearcher searcher = new DependencyReasonSearcher(context);
 
         ScanInfo scanInfo = new ScanInfo("testengine");
-        ProjectInfo projectInfo = new ProjectInfo("testproject", "testreportdate", "testcredits");
+        ProjectInfo projectInfo = new ProjectInfo("testproject", "testreportdate");
         Collection<Dependency> dependencies = new LinkedList<>();
         // First Identifier
-        Identifier identifier1 = new Identifier("maven", Confidence.HIGHEST, "struts:struts:1.2.8");
-        Collection<Identifier> identifiersCollected1 = new ArrayList<>();
-        identifiersCollected1.add(identifier1);
-        Vulnerability vulnerability1 = new Vulnerability("Test name", "NVD", 5.0f, null, "Test description", null);
+        Identifier identifier1 = new Identifier("pkg:maven/struts/struts@1.2.8", Confidence.HIGHEST);
+        Collection<Identifier> packageidentifiers1 = new ArrayList<>();
+        packageidentifiers1.add(identifier1);
+        CvssV2 cvssV2 = new CvssV2(5.0f, "HIGH");
+        Vulnerability vulnerability1 = new Vulnerability("Test name", "NVD", "MyDescription", null, cvssV2, null, null);
         List<Vulnerability> vulnerabilities1 = new ArrayList<>();
         vulnerabilities1.add(vulnerability1);
-        Dependency dependency1 = new Dependency(null, null, null, null, Collections.emptyList(),identifiersCollected1, vulnerabilities1);
+        Dependency dependency1 = new Dependency(null, null, null, null, Collections.emptyMap(), vulnerabilities1, packageidentifiers1, Collections.emptyList());
         // Second Identifier
-        Identifier identifier2 = new Identifier("maven", Confidence.HIGHEST, "org.springframework:spring:2.0.8");
-        Collection<Identifier> identifiersCollected2 = new ArrayList<>();
-        identifiersCollected2.add(identifier2);
-        Vulnerability vulnerability2 = new Vulnerability("Test name", "NVD", 5.0f, null, "Test description", null);
+        Identifier identifier2 = new Identifier("pkg:maven/org.springframework/spring@2.0.8", Confidence.HIGHEST);
+        Collection<Identifier> packageidentifiers2 = new ArrayList<>();
+        packageidentifiers2.add(identifier2);
+        Vulnerability vulnerability2 = new Vulnerability("Test name", "NVD", "MyDescription", null, cvssV2, null, null);
         List<Vulnerability> vulnerabilities2 = new ArrayList<>();
         vulnerabilities2.add(vulnerability2);
-        Dependency dependency2 = new Dependency(null, null, null, null, Collections.emptyList(),identifiersCollected2, vulnerabilities2);
+        Dependency dependency2 = new Dependency(null, null, null, null, Collections.emptyMap(), vulnerabilities1, packageidentifiers2, Collections.emptyList());
 
         // Add dependencies
         dependencies.add(dependency1);
@@ -124,23 +127,24 @@ public class DependencyReasonSearcherTest {
     public void checkForDependencyReasonsGradle() throws IOException  {
         SensorContextTester context = SensorContextTester.create(new File(""));
         MapSettings settings = new MapSettings();
-        settings.setProperty(DependencyCheckConstants.REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
         settings.setProperty(DependencyCheckConstants.SUMMARIZE_PROPERTY, Boolean.TRUE);
         context.setSettings(settings);
         context.fileSystem().add(inputFile("build.gradle"));
         DependencyReasonSearcher searcher = new DependencyReasonSearcher(context);
 
         ScanInfo scanInfo = new ScanInfo("testengine");
-        ProjectInfo projectInfo = new ProjectInfo("testproject", "testreportdate", "testcredits");
+        ProjectInfo projectInfo = new ProjectInfo("testproject", "testreportdate");
         Collection<Dependency> dependencies = new LinkedList<>();
         // Second Identifier
-        Identifier identifier = new Identifier("maven", Confidence.HIGHEST, "org.springframework:spring:2.0");
-        Collection<Identifier> identifiersCollected = new ArrayList<>();
-        identifiersCollected.add(identifier);
-        Vulnerability vulnerability = new Vulnerability("Test name", "NVD", 5.0f, null, "Test description", null);
+        Identifier identifier = new Identifier("pkg:maven/org.springframework/spring@2.0", Confidence.HIGHEST);
+        Collection<Identifier> packageidentifiers = new ArrayList<>();
+        packageidentifiers.add(identifier);
+        CvssV2 cvssV2 = new CvssV2(5.0f, "HIGH");
+        Vulnerability vulnerability = new Vulnerability("Test name", "NVD", "MyDescription", null, cvssV2, null, null);
         List<Vulnerability> vulnerabilities = new ArrayList<>();
         vulnerabilities.add(vulnerability);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyList(),identifiersCollected, vulnerabilities);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),vulnerabilities, packageidentifiers, Collections.emptyList());
 
         // Add dependencies
         dependencies.add(dependency);

@@ -67,14 +67,15 @@ Copy the plugin (jar file) to $SONAR_INSTALL_DIR/extensions/plugins and restart 
 
 ## Using
 
-Create aggregate reports with Dependency-Check. Dependency-Check will output a file named 'dependency-check-report.xml' when asked to output XML. The Dependency-Check SonarQube plugin reads an existing Dependency-Check XML report.
+Create aggregate reports with Dependency-Check. Dependency-Check will output a file named 'dependency-check-report.xml' or 'dependency-check-report.json' . The Dependency-Check SonarQube plugin reads an existing Dependency-Check XML or JSON report.
 
 ## Plugin Configuration
 
 A typical SonarQube configuration will have the following parameter. This example assumes the use of a Jenkins workspace, but can easily be altered for other CI/CD systems.
 
 ```ini
-sonar.dependencyCheck.reportPath=${WORKSPACE}/dependency-check-report.xml
+sonar.dependencyCheck.xmlReportPath=${WORKSPACE}/dependency-check-report.xml
+sonar.dependencyCheck.jsonReportPath=${WORKSPACE}/dependency-check-report.json
 sonar.dependencyCheck.htmlReportPath=${WORKSPACE}/dependency-check-report.html
 ```
 

@@ -19,6 +19,9 @@
  */
 package org.sonar.dependencycheck.parser.element;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class Evidence {
@@ -26,11 +29,20 @@ public class Evidence {
     private final String source;
     private final String name;
     private final String value;
+    private final String type;
+    private final Confidence confidence;
 
-    public Evidence(@NonNull String source, @NonNull String name, @NonNull String value) {
+    @JsonCreator
+    public Evidence(@JsonProperty("source") @NonNull String source,
+                    @JsonProperty("name") @NonNull String name,
+                    @JsonProperty("value") @NonNull String value,
+                    @JsonProperty("type") String type,
+                    @JsonProperty("confidence") Confidence confidence) {
         this.source = source;
         this.name = name;
         this.value = value;
+        this.type = type;
+        this.confidence = confidence;
     }
 
     public String getSource() {
@@ -43,6 +55,14 @@ public class Evidence {
 
     public String getValue() {
         return value;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public Confidence getConfidence() {
+        return confidence;
     }
 
 }

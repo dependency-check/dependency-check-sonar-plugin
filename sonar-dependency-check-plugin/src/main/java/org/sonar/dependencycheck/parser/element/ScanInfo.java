@@ -19,32 +19,23 @@
  */
 package org.sonar.dependencycheck.parser.element;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
+@JsonIgnoreProperties("dataSource")
 public class ScanInfo {
 
     private final String engineVersion;
-    private Collection<DataSource> dataSources = new ArrayList<>();
 
-    public ScanInfo(@NonNull String engineVersion) {
+    @JsonCreator
+    public ScanInfo(@JsonProperty("engineVersion") @NonNull String engineVersion) {
         this.engineVersion = engineVersion;
-        this.dataSources = Collections.emptyList();
     }
 
     public String getEngineVersion() {
         return engineVersion;
     }
-
-    public Collection<DataSource> getDataSources() {
-        return dataSources;
-    }
-
-    public void setDataSources(Collection<DataSource> dataSources) {
-        this.dataSources = dataSources;
-    }
-
 }

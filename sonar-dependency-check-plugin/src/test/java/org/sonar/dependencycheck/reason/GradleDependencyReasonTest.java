@@ -43,7 +43,6 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
-import org.sonar.dependencycheck.parser.element.Evidence;
 import org.sonar.dependencycheck.parser.element.Identifier;
 
 public class GradleDependencyReasonTest {
@@ -88,38 +87,27 @@ public class GradleDependencyReasonTest {
     public void foundDependency() throws IOException {
         GradleDependencyReason gradle = new GradleDependencyReason(inputFile("build.gradle"));
         // Create Dependency
-        Identifier identifier = new Identifier("maven", Confidence.HIGHEST, "org.springframework:spring:2.0");
+        Identifier identifier = new Identifier("pkg:maven/org.springframework/spring@2.0", Confidence.HIGHEST);
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyList(),identifiersCollected, Collections.emptyList());
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList());
         assertNotNull(gradle.getBestTextRange(dependency));
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(gradle.getBestTextRange(dependency), gradle.getBestTextRange(dependency));
+        assertEquals(24, gradle.getBestTextRange(dependency).getTextrange().start().line());
     }
 
     @Test
     public void foundNoDependency() throws IOException {
         GradleDependencyReason gradle = new GradleDependencyReason(inputFile("build.gradle"));
         // Create Dependency
-        Evidence evidence = new Evidence("pom", "artifactid", "xyz");
-        Collection<Evidence> evidences = new ArrayList<>();
-        evidences.add(evidence);
-        Dependency dependency = new Dependency(null, null, null, null, evidences, Collections.emptyList(), Collections.emptyList());
+        Identifier identifier = new Identifier("pkg:maven/myvendor/myartefact@2.0", Confidence.HIGHEST);
+        Collection<Identifier> identifiersCollected = new ArrayList<>();
+        identifiersCollected.add(identifier);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList());
         assertNotNull(gradle.getBestTextRange(dependency));
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(gradle.getBestTextRange(dependency), gradle.getBestTextRange(dependency));
-    }
-
-    @Test
-    public void noArtefactid() throws IOException {
-        GradleDependencyReason gradle = new GradleDependencyReason(inputFile("build.gradle"));
-        // Create Dependency
-        Evidence evidence = new Evidence("xyz", "artifactid", "spring");
-        Collection<Evidence> evidences = new ArrayList<>();
-        evidences.add(evidence);
-        Dependency dependency = new Dependency(null, null, null, null, evidences, Collections.emptyList(), Collections.emptyList());
-        assertNotNull(gradle.getBestTextRange(dependency));
-        // verify that same dependency points to the same TextRange, use of HashMap
-        assertEquals(gradle.getBestTextRange(dependency), gradle.getBestTextRange(dependency));
+        assertEquals(1, gradle.getBestTextRange(dependency).getTextrange().start().line());
     }
 }

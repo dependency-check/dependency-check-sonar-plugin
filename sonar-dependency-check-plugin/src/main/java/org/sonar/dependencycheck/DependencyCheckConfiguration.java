@@ -33,11 +33,11 @@ public class DependencyCheckConfiguration {
     }
     public static List<PropertyDefinition> getPropertyDefinitions() {
         return Arrays.asList(
-                PropertyDefinition.builder(DependencyCheckConstants.REPORT_PATH_PROPERTY)
+                PropertyDefinition.builder(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY)
                         .subCategory("Paths")
                         .name("Dependency-Check report path")
                         .description("path to the 'dependency-check-report.xml' file")
-                        .defaultValue(DependencyCheckConstants.REPORT_PATH_DEFAULT)
+                        .defaultValue(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY)
                         .subCategory("Paths")

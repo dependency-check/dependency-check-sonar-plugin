@@ -30,17 +30,17 @@ import org.sonar.dependencycheck.base.DependencyCheckConstants;
 public class XmlReportFile extends ReportFile {
 
     public static XmlReportFile getXmlReport(Configuration config, FileSystem fileSystem, PathResolver pathResolver) throws FileNotFoundException {
-        String path = config.get(DependencyCheckConstants.REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.REPORT_PATH_DEFAULT);
+        String path = config.get(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT);
         File report = pathResolver.relativeFile(fileSystem.baseDir(), path);
-        report = checkReport(report, ReportFormat.XML, DependencyCheckConstants.REPORT_PATH_PROPERTY);
+        report = checkReport(report, ReportFormat.XML, DependencyCheckConstants.XML_REPORT_PATH_PROPERTY);
         if (report == null) {
             throw new FileNotFoundException("XML-Dependency-Check report does not exist.");
         }
         return new XmlReportFile(report);
     }
 
-    public XmlReportFile(File report) {
-        super(ReportFormat.XML, DependencyCheckConstants.REPORT_PATH_PROPERTY, report);
+    private XmlReportFile(File report) {
+        super(ReportFormat.XML, DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, report);
     }
 
 }
