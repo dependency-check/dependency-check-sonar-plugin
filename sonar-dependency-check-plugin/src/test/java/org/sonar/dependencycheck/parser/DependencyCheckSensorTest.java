@@ -91,6 +91,7 @@ public class DependencyCheckSensorTest {
         context.setSettings(settings);
         when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
         sensor.execute(context);
+        assertEquals(42, context.allIssues().size());
     }
 
     @Test
