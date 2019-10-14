@@ -19,19 +19,24 @@
  */
 package org.sonar.dependencycheck;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import org.sonar.api.Plugin;
+import org.sonar.api.SonarQubeSide;
+import org.sonar.api.SonarRuntime;
+import org.sonar.api.internal.PluginContextImpl;
+import org.sonar.api.internal.SonarRuntimeImpl;
+import org.sonar.api.utils.Version;
 
 public class DependencyCheckPluginTest {
 
     @Test
-    public void test_extensions() {
-        final Plugin.Context context = mock(Plugin.Context.class);
+    public void testExtensions() {
+        SonarRuntime runtime = SonarRuntimeImpl.forSonarQube(Version.create(7, 6), SonarQubeSide.SCANNER);
+        Plugin.Context context = new PluginContextImpl.Builder().setSonarRuntime(runtime).build();
         DependencyCheckPlugin plugin = new DependencyCheckPlugin();
-        assertNotNull(plugin);
         plugin.define(context);
+        assertEquals(15, context.getExtensions().size());
     }
 }
