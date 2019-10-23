@@ -41,7 +41,7 @@ public class JsonReportParserTest extends ReportParserTest {
     public void parseReport() throws Exception {
         Instant startTime = Instant.now();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportMultiModuleMavenExample/dependency-check-report.json");
-        Analysis analysis = JsonReportParser.parse(inputStream);
+        Analysis analysis = JsonReportParserHelper.parse(inputStream);
         assertNotNull(analysis);
         Instant endTime = Instant.now();
         System.out.println("Duration JSON-Report-Parser: " + Duration.between(startTime, endTime));
@@ -52,20 +52,20 @@ public class JsonReportParserTest extends ReportParserTest {
     public void parseReportJsonParseException() {
         InputStream inputStream = mock(InputStream.class);
         doThrow(JsonParseException.class).when(inputStream);
-        assertThrows(ReportParserException.class, () -> JsonReportParser.parse(inputStream), "Could not parse JSON");
+        assertThrows(ReportParserException.class, () -> JsonReportParserHelper.parse(inputStream), "Could not parse JSON");
     }
 
     @Test
     public void parseReportJsonMappingException() {
         InputStream inputStream = mock(InputStream.class);
         doThrow(JsonMappingException.class).when(inputStream);
-        assertThrows(ReportParserException.class, () -> JsonReportParser.parse(inputStream), "Problem with JSON-Report-Mapping");
+        assertThrows(ReportParserException.class, () -> JsonReportParserHelper.parse(inputStream), "Problem with JSON-Report-Mapping");
     }
 
     @Test
     public void parseReportIOException() {
         InputStream inputStream = mock(InputStream.class);
         doThrow(IOException.class).when(inputStream);
-        assertThrows(ReportParserException.class, () -> JsonReportParser.parse(inputStream), "IO Problem in JSON-Reporter");
+        assertThrows(ReportParserException.class, () -> JsonReportParserHelper.parse(inputStream), "IO Problem in JSON-Reporter");
     }
 }

@@ -29,9 +29,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
-public class XMLReportParser {
+public class XMLReportParserHelper {
 
-    private XMLReportParser() {
+    private XMLReportParserHelper() {
         // do nothing
     }
 

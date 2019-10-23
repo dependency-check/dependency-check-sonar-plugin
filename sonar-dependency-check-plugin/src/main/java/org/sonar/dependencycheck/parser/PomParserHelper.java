@@ -17,33 +17,35 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package org.sonar.dependencycheck.parser;
 
 import java.io.IOException;
-import java.io.InputStream;
 
-import org.sonar.dependencycheck.parser.element.Analysis;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.dependencycheck.reason.maven.MavenPomModel;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
-public class JsonReportParser {
+public class PomParserHelper {
 
-    private JsonReportParser() {
-        // do nothing
+    private PomParserHelper() {
+        // Do nothing
     }
 
-    public static Analysis parse(InputStream inputStream) throws ReportParserException {
-        ObjectMapper mapper = new ObjectMapper();
+    public static MavenPomModel parse(InputFile pom) throws ReportParserException {
+        ObjectMapper mapper = new XmlMapper();
         try {
-            return mapper.readValue(inputStream, Analysis.class);
+            return mapper.readValue(pom.inputStream(), MavenPomModel.class);
         } catch (JsonParseException e) {
-            throw new ReportParserException("Could not parse JSON", e);
+            throw new ReportParserException("Could not parse pom.xml", e);
         } catch (JsonMappingException e) {
-            throw new ReportParserException("Problem with JSON-Report-Mapping", e);
+            throw new ReportParserException("Problem with pom.xml-Mapping", e);
         } catch (IOException e) {
-            throw new ReportParserException("IO Problem in JSON-Reporter", e);
+            throw new ReportParserException("IO Problem in pom.xml parser", e);
         }
     }
 }

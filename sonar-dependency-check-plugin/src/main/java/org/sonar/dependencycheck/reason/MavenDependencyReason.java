@@ -30,7 +30,7 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
-import org.sonar.dependencycheck.parser.PomParser;
+import org.sonar.dependencycheck.parser.PomParserHelper;
 import org.sonar.dependencycheck.parser.ReportParserException;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
@@ -56,7 +56,7 @@ public class MavenDependencyReason extends DependencyReason {
         dependencyMap = new HashMap<>();
         pomModel = null;
         try {
-            pomModel = PomParser.parse(pom);
+            pomModel = PomParserHelper.parse(pom);
         } catch (ReportParserException e) {
             LOGGER.warn("Parsing {} failed", pom);
             LOGGER.debug(e.getMessage(), e);

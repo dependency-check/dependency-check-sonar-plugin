@@ -47,7 +47,7 @@ public class XMLReportParserTest extends ReportParserTest {
     public void parseReport() throws Exception {
         Instant startTime = Instant.now();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportMultiModuleMavenExample/dependency-check-report.xml");
-        Analysis analysis = XMLReportParser.parse(inputStream);
+        Analysis analysis = XMLReportParserHelper.parse(inputStream);
         assertNotNull(analysis);
         Instant endTime = Instant.now();
         System.out.println("Duration XML-Report-Parser: " + Duration.between(startTime, endTime));
@@ -58,14 +58,14 @@ public class XMLReportParserTest extends ReportParserTest {
     public void parseReportXMLStreamException() throws IOException {
         InputStream inputStream = mock(InputStream.class);
         when(inputStream.read()).thenThrow(IOException.class);
-        assertThrows(ReportParserException.class, () -> XMLReportParser.parse(inputStream), "Analysis aborted due to: XML is not valid");
+        assertThrows(ReportParserException.class, () -> XMLReportParserHelper.parse(inputStream), "Analysis aborted due to: XML is not valid");
     }
 
     @Test
     public void parseReportNode500() throws Exception {
         SensorContextTester context = SensorContextTester.create(new File(""));
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportNode.js/dependency-check-report.xml");
-        Analysis analysis = XMLReportParser.parse(inputStream);
+        Analysis analysis = XMLReportParserHelper.parse(inputStream);
         assertEquals("5.0.0-M2", analysis.getScanInfo().getEngineVersion());
         assertEquals("project", analysis.getProjectInfo().get().getName());
         assertEquals("2019-04-23T22:43:06.450+0000", analysis.getProjectInfo().get().getReportDate());
@@ -168,7 +168,7 @@ public class XMLReportParserTest extends ReportParserTest {
     public void parseBigReportNode500() throws Exception {
         SensorContextTester context = SensorContextTester.create(new File(""));
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportNode.js/big-dependency-check-report.xml");
-        Analysis analysis = XMLReportParser.parse(inputStream);
+        Analysis analysis = XMLReportParserHelper.parse(inputStream);
         assertEquals("5.0.0-M2", analysis.getScanInfo().getEngineVersion());
         assertEquals("project", analysis.getProjectInfo().get().getName());
         assertEquals("2019-04-23T22:43:06.450+0000", analysis.getProjectInfo().get().getReportDate());
