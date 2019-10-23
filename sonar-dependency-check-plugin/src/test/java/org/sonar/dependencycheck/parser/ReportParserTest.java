@@ -46,42 +46,41 @@ abstract class ReportParserTest {
         Collection<Dependency> dependencies = analysis.getDependencies();
         assertEquals(34, dependencies.size());
         Iterator<Dependency> iterator = dependencies.iterator();
-        Dependency dependency = (Dependency) iterator.next();
+        Dependency dependency = iterator.next();
 
         assertEquals("struts-1.2.8.jar", dependency.getFileName());
         assertEquals("/to/path/struts/struts/1.2.8/struts-1.2.8.jar", dependency.getFilePath());
         assertEquals("8af31c3a406cfbfd991a6946102d583a", dependency.getMd5Hash());
         assertEquals("5919caff42c3f42fb251fd82a58af4a7880826dd", dependency.getSha1Hash());
 
-         Map<String,List<Evidence>> evidenceCollected = dependency.getEvidenceCollected();
-         assertEquals(3, evidenceCollected.size());
-         List<Evidence> vendorEvidences = evidenceCollected.get("vendorEvidence");
-         assertEquals(14, vendorEvidences.size());
-         for (Evidence evidence : vendorEvidences) {
-             assertFalse(evidence.getSource().isEmpty());
-             assertFalse(evidence.getName().isEmpty());
-             assertFalse(evidence.getValue().isEmpty());
-         }
-         List<Evidence> productEvidences = evidenceCollected.get("productEvidence");
-         assertEquals(13, productEvidences.size());
-         for (Evidence evidence : productEvidences) {
-             assertFalse(evidence.getSource().isEmpty());
-             assertFalse(evidence.getName().isEmpty());
-             assertFalse(evidence.getValue().isEmpty());
-         }
-         List<Evidence> versionEvidences = evidenceCollected.get("versionEvidence");
-         assertEquals(3, versionEvidences.size());
-         for (Evidence evidence : versionEvidences) {
-             assertFalse(evidence.getSource().isEmpty());
-             assertFalse(evidence.getName().isEmpty());
-             assertFalse(evidence.getValue().isEmpty());
-         }
-
+        Map<String, List<Evidence>> evidenceCollected = dependency.getEvidenceCollected();
+        assertEquals(3, evidenceCollected.size());
+        List<Evidence> vendorEvidences = evidenceCollected.get("vendorEvidence");
+        assertEquals(14, vendorEvidences.size());
+        for (Evidence evidence : vendorEvidences) {
+            assertFalse(evidence.getSource().isEmpty());
+            assertFalse(evidence.getName().isEmpty());
+            assertFalse(evidence.getValue().isEmpty());
+        }
+        List<Evidence> productEvidences = evidenceCollected.get("productEvidence");
+        assertEquals(13, productEvidences.size());
+        for (Evidence evidence : productEvidences) {
+            assertFalse(evidence.getSource().isEmpty());
+            assertFalse(evidence.getName().isEmpty());
+            assertFalse(evidence.getValue().isEmpty());
+        }
+        List<Evidence> versionEvidences = evidenceCollected.get("versionEvidence");
+        assertEquals(3, versionEvidences.size());
+        for (Evidence evidence : versionEvidences) {
+            assertFalse(evidence.getSource().isEmpty());
+            assertFalse(evidence.getName().isEmpty());
+            assertFalse(evidence.getValue().isEmpty());
+        }
 
         Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
         assertEquals(25, vulnerabilities.size());
         Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
-        Vulnerability vulnerability = (Vulnerability) vulnIterator.next();
+        Vulnerability vulnerability = vulnIterator.next();
         assertEquals("CVE-2006-1546", vulnerability.getName());
         assertEquals("NVD", vulnerability.getSource());
         assertEquals(7.5f, vulnerability.getCvssScore(null), 0.0f);
@@ -89,20 +88,24 @@ abstract class ReportParserTest {
         assertTrue(vulnerability.getCwes().isPresent());
         assertEquals("NVD-CWE-Other", vulnerability.getCwes().get()[0]);
         assertEquals(1, vulnerability.getCwes().get().length);
-        assertEquals("Apache Software Foundation (ASF) Struts before 1.2.9 allows remote attackers to bypass validation via a request with a 'org.apache.struts.taglib.html.Constants.CANCEL' parameter, which causes the action to be canceled but would not be detected from applications that do not use the isCancelled check.", vulnerability.getDescription());
+        assertEquals(
+            "Apache Software Foundation (ASF) Struts before 1.2.9 allows remote attackers to bypass validation via a request with a 'org.apache.struts.taglib.html.Constants.CANCEL' parameter, which causes the action to be canceled but would not be detected from applications that do not use the isCancelled check.",
+            vulnerability.getDescription());
 
-        vulnerability = (Vulnerability) vulnIterator.next();
+        vulnerability = vulnIterator.next();
         assertEquals("CVE-2006-1547", vulnerability.getName());
         assertEquals("NVD", vulnerability.getSource());
-        assertEquals(7.8f , vulnerability.getCvssScore(null), 0.0f);
+        assertEquals(7.8f, vulnerability.getCvssScore(null), 0.0f);
         assertEquals("HIGH", vulnerability.getSeverity());
         assertTrue(vulnerability.getCwes().isPresent());
         assertEquals("NVD-CWE-Other", vulnerability.getCwes().get()[0]);
         assertEquals(1, vulnerability.getCwes().get().length);
-        assertEquals("ActionForm in Apache Software Foundation (ASF) Struts before 1.2.9 with BeanUtils 1.7 allows remote attackers to cause a denial of service via a multipart/form-data encoded form with a parameter name that references the public getMultipartRequestHandler method, which provides further access to elements in the CommonsMultipartRequestHandler implementation and BeanUtils.", vulnerability.getDescription());
+        assertEquals(
+            "ActionForm in Apache Software Foundation (ASF) Struts before 1.2.9 with BeanUtils 1.7 allows remote attackers to cause a denial of service via a multipart/form-data encoded form with a parameter name that references the public getMultipartRequestHandler method, which provides further access to elements in the CommonsMultipartRequestHandler implementation and BeanUtils.",
+            vulnerability.getDescription());
 
         // commons-beanutils-1.7.0.jar
-        dependency = (Dependency) iterator.next();
+        dependency = iterator.next();
         assertEquals(3, dependency.getEvidenceCollected().size());
         assertEquals(9, dependency.getEvidenceCollected().get("vendorEvidence").size());
         assertEquals(9, dependency.getEvidenceCollected().get("productEvidence").size());
@@ -110,7 +113,7 @@ abstract class ReportParserTest {
         assertEquals(1, dependency.getVulnerabilities().size());
 
         // commons-digester-1.6.jar
-        dependency = (Dependency) iterator.next();
+        dependency = iterator.next();
         assertEquals(3, dependency.getEvidenceCollected().size());
         assertEquals(9, dependency.getEvidenceCollected().get("vendorEvidence").size());
         assertEquals(9, dependency.getEvidenceCollected().get("productEvidence").size());
@@ -118,7 +121,7 @@ abstract class ReportParserTest {
         assertTrue(dependency.getVulnerabilities().isEmpty());
 
         // commons-collections-2.1.jar
-        dependency = (Dependency) iterator.next();
+        dependency = iterator.next();
         assertEquals("commons-collections-2.1.jar", dependency.getFileName());
         assertEquals(3, dependency.getEvidenceCollected().size());
         assertEquals(10, dependency.getEvidenceCollected().get("vendorEvidence").size());
@@ -135,13 +138,13 @@ abstract class ReportParserTest {
         vulnerabilities = dependency.getVulnerabilities();
         assertEquals(2, vulnerabilities.size());
         vulnIterator = vulnerabilities.iterator();
-        vulnerability = (Vulnerability) vulnIterator.next();
+        vulnerability = vulnIterator.next();
         assertEquals("CVE-2015-6420", vulnerability.getName());
         assertEquals("NVD", vulnerability.getSource());
         assertEquals(7.5f, vulnerability.getCvssScore(null), 0.0f);
 
         // xml-apis-1.0.b2.jar
-        dependency = (Dependency) iterator.next();
+        dependency = iterator.next();
         assertEquals("xml-apis-1.0.b2.jar", dependency.getFileName());
         assertEquals(3, evidenceCollected.size());
         evidenceCollected = dependency.getEvidenceCollected();
