@@ -100,6 +100,7 @@ public class XMLReportParserTest extends ReportParserTest {
         assertEquals("MEDIUM", vulnerability.getSeverity());
         assertEquals("MEDIUM", vulnerability.getSeverity(false));
         assertTrue(vulnerability.getCwes().isPresent());
+        assertEquals("CWE-79", vulnerability.getCwes().get()[0]);
         assertEquals(
             "jQuery before 3.0.0 is vulnerable to Cross-site Scripting (XSS) attacks when a cross-domain Ajax request is performed without the dataType option, causing text/javascript responses to be executed.",
             vulnerability.getDescription());
@@ -111,6 +112,7 @@ public class XMLReportParserTest extends ReportParserTest {
         assertEquals(6.1f, vulnerability.getCvssScore(context.config()), 0.0f);
         assertEquals("MEDIUM", vulnerability.getSeverity());
         assertTrue(vulnerability.getCwes().isPresent());
+        assertEquals("CWE-79", vulnerability.getCwes().get()[0]);
         assertEquals(
             "jQuery before 3.4.0, as used in Drupal, Backdrop CMS, and other products, mishandles jQuery.extend(true, {}, ...) because of Object.prototype pollution. If an unsanitized source object contained an enumerable __proto__ property, it could extend the native Object.prototype.",
             vulnerability.getDescription());
@@ -200,6 +202,7 @@ public class XMLReportParserTest extends ReportParserTest {
                 assertEquals("MEDIUM", vulnerability.getSeverity());
                 assertEquals("MEDIUM", vulnerability.getSeverity(false));
                 assertTrue(vulnerability.getCwes().isPresent());
+                assertEquals("CWE-79", vulnerability.getCwes().get()[0]);
                 assertEquals(
                     "jQuery before 3.0.0 is vulnerable to Cross-site Scripting (XSS) attacks when a cross-domain Ajax request is performed without the dataType option, causing text/javascript responses to be executed.",
                     vulnerability.getDescription());
@@ -211,6 +214,7 @@ public class XMLReportParserTest extends ReportParserTest {
                 assertEquals(6.1f, vulnerability.getCvssScore(context.config()), 0.0f);
                 assertEquals("MEDIUM", vulnerability.getSeverity());
                 assertTrue(vulnerability.getCwes().isPresent());
+                assertEquals("CWE-79", vulnerability.getCwes().get()[0]);
                 assertEquals(
                     "jQuery before 3.4.0, as used in Drupal, Backdrop CMS, and other products, mishandles jQuery.extend(true, {}, ...) because of Object.prototype pollution. If an unsanitized source object contained an enumerable __proto__ property, it could extend the native Object.prototype.",
                     vulnerability.getDescription());
