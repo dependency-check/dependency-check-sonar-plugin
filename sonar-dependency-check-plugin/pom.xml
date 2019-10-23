@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.sonarsource.owasp</groupId>
@@ -13,10 +14,10 @@
     <url>https://www.owasp.org/index.php/OWASP_Dependency_Check</url>
 
     <scm>
-      <connection>scm:git:https://github.com/dependency-check/dependency-check-sonar-plugin</connection>
-      <developerConnection>scm:git:https://github.com/dependency-check/dependency-check-sonar-plugin</developerConnection>
-      <url>https://github.com/dependency-check/dependency-check-sonar-plugin</url>
-      <tag>HEAD</tag>
+        <connection>scm:git:https://github.com/dependency-check/dependency-check-sonar-plugin</connection>
+        <developerConnection>scm:git:https://github.com/dependency-check/dependency-check-sonar-plugin</developerConnection>
+        <url>https://github.com/dependency-check/dependency-check-sonar-plugin</url>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
@@ -84,7 +85,7 @@
         </dependency>
     </dependencies>
     <build>
-       <plugins>
+        <plugins>
             <plugin>
                 <groupId>de.jutzig</groupId>
                 <artifactId>github-release-plugin</artifactId>
