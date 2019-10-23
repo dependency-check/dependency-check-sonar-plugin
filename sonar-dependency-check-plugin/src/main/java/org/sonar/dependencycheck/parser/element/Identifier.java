@@ -37,8 +37,8 @@ public class Identifier {
     private final Confidence confidence;
 
     @JsonCreator
-    public Identifier(@JsonProperty("id") @NonNull String id,
-                      @JsonProperty("confidence") @Nullable Confidence confidence) {
+    public Identifier(@JsonProperty(value = "id", required = true) @NonNull String id,
+                      @JsonProperty(value = "confidence") @Nullable Confidence confidence) {
         this.id = id;
         this.confidence = confidence;
     }

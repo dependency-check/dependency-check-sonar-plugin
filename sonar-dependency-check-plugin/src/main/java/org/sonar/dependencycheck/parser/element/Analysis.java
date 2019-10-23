@@ -39,9 +39,9 @@ public class Analysis {
 
     @JsonCreator
     public Analysis(
-        @JsonProperty("scanInfo") @NonNull ScanInfo scanInfo,
-        @JsonProperty("projectInfo") @Nullable ProjectInfo projectInfo,
-        @JsonProperty("dependencies") @NonNull Collection<Dependency> dependencies) {
+        @JsonProperty(value = "scanInfo", required = true) @NonNull ScanInfo scanInfo,
+        @JsonProperty(value = "projectInfo") @Nullable ProjectInfo projectInfo,
+        @JsonProperty(value = "dependencies", required = true) @NonNull Collection<Dependency> dependencies) {
         this.scanInfo = scanInfo;
         this.projectInfo = projectInfo;
         this.dependencies = dependencies;

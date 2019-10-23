@@ -90,7 +90,7 @@ public class GradleDependencyReasonTest {
         Identifier identifier = new Identifier("pkg:maven/org.springframework/spring@2.0", Confidence.HIGHEST);
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList());
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
         assertNotNull(gradle.getBestTextRange(dependency));
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(gradle.getBestTextRange(dependency), gradle.getBestTextRange(dependency));
@@ -104,7 +104,7 @@ public class GradleDependencyReasonTest {
         Identifier identifier = new Identifier("pkg:maven/myvendor/myartefact@2.0", Confidence.HIGHEST);
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList());
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
         assertNotNull(gradle.getBestTextRange(dependency));
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(gradle.getBestTextRange(dependency), gradle.getBestTextRange(dependency));

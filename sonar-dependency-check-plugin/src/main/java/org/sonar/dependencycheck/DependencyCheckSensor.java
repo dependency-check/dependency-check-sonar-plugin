@@ -33,9 +33,9 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.api.utils.log.Profiler;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
-import org.sonar.dependencycheck.parser.JsonReportParser;
+import org.sonar.dependencycheck.parser.JsonReportParserHelper;
 import org.sonar.dependencycheck.parser.ReportParserException;
-import org.sonar.dependencycheck.parser.XMLReportParser;
+import org.sonar.dependencycheck.parser.XMLReportParserHelper;
 import org.sonar.dependencycheck.parser.element.Analysis;
 import org.sonar.dependencycheck.reason.DependencyReasonSearcher;
 import org.sonar.dependencycheck.report.HtmlReportFile;
@@ -60,7 +60,7 @@ public class DependencyCheckSensor implements ProjectSensor {
         LOGGER.info("Using JSON-Reportparser");
         try {
             JsonReportFile report = JsonReportFile.getJsonReport(context.config(), fileSystem, this.pathResolver);
-            return Optional.of(JsonReportParser.parse(report.getInputStream()));
+            return Optional.of(JsonReportParserHelper.parse(report.getInputStream()));
         } catch (FileNotFoundException e) {
             LOGGER.info("JSON-Analysis skipped/aborted due to missing report file");
             LOGGER.debug(e.getMessage(), e);
@@ -74,7 +74,7 @@ public class DependencyCheckSensor implements ProjectSensor {
         XmlReportFile report;
         try {
             report = XmlReportFile.getXmlReport(context.config(), fileSystem, this.pathResolver);
-            return Optional.of(XMLReportParser.parse(report.getInputStream()));
+            return Optional.of(XMLReportParserHelper.parse(report.getInputStream()));
         } catch (FileNotFoundException e) {
             LOGGER.info("XML-Analysis skipped/aborted due to missing report file");
             LOGGER.debug(e.getMessage(), e);

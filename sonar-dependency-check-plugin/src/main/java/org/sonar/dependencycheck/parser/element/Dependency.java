@@ -19,6 +19,7 @@
  */
 package org.sonar.dependencycheck.parser.element;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,14 +28,18 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.sonar.api.config.Configuration;
+import org.sonar.dependencycheck.parser.deserializer.EvidenceDeserializer;
+import org.sonar.dependencycheck.parser.deserializer.IdentifierDeserializer;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
-@JsonIgnoreProperties({"isVirtual", "sha256", "description", "projectReferences", "license"})
+@JsonIgnoreProperties({"isVirtual", "sha256", "description", "projectReferences", "license", "relatedDependencies"})
 public class Dependency {
 
     private final String fileName;
@@ -47,22 +52,39 @@ public class Dependency {
     private final Collection<Identifier> vulnerabilityIds;
 
     @JsonCreator
-    public Dependency(@JsonProperty("fileName") @NonNull String fileName,
-                      @JsonProperty("filePath") @NonNull String filePath,
-                      @JsonProperty("md5") @NonNull String md5Hash,
-                      @JsonProperty("sha1") @NonNull String sha1Hash,
-                      @JsonProperty("evidenceCollected") Map<String, List<Evidence>> evidenceCollected,
-                      @JsonProperty("vulnerabilities") List<Vulnerability> vulnerabilities,
-                      @JsonProperty("packages") Collection<Identifier> packages,
-                      @JsonProperty("vulnerabilityIds") Collection<Identifier> vulnerabilityIds) {
+    public Dependency(@JsonProperty(value = "fileName", required = true) @NonNull String fileName,
+                      @JsonProperty(value = "filePath", required = true) @NonNull String filePath,
+                      @JsonProperty(value = "md5", required = true) @NonNull String md5Hash,
+                      @JsonProperty(value = "sha1", required = true) @NonNull String sha1Hash,
+                      @JsonProperty(value = "evidenceCollected") @JsonDeserialize(using = EvidenceDeserializer.class ) Map<String, List<Evidence>> evidenceCollected,
+                      @JsonProperty(value = "vulnerabilities") List<Vulnerability> vulnerabilities,
+                      // For JSON
+                      @JsonProperty(value = "packages") @Nullable Collection<Identifier> packages,
+                      @JsonProperty(value = "vulnerabilityIds") @Nullable Collection<Identifier> vulnerabilityIds,
+                      // For XML
+                      @JsonProperty(value = "identifiers") @JsonDeserialize(using = IdentifierDeserializer.class ) @Nullable Map<String, Collection<Identifier>> identifiers) {
         this.fileName = fileName;
         this.filePath = filePath;
         this.md5 = md5Hash;
         this.sha1 = sha1Hash;
         this.evidenceCollected = evidenceCollected;
         this.vulnerabilities = vulnerabilities;
-        this.packages = packages;
-        this.vulnerabilityIds = vulnerabilityIds;
+        List<Identifier> packagesComplete = new ArrayList<>();
+        if (packages != null) {
+            packagesComplete.addAll(packages);
+        }
+        if (identifiers != null && !identifiers.isEmpty() && identifiers.containsKey("package")) {
+            packagesComplete.addAll(identifiers.get("package"));
+        }
+        this.packages = packagesComplete;
+        List<Identifier> vulnerabilityIdsComplete = new ArrayList<>();
+        if (vulnerabilityIds != null) {
+            vulnerabilityIdsComplete.addAll(vulnerabilityIds);
+        }
+        if (identifiers != null && !identifiers.isEmpty() && identifiers.containsKey("vulnerabilityIds")) {
+            vulnerabilityIdsComplete.addAll(identifiers.get("vulnerabilityIds"));
+        }
+        this.vulnerabilityIds = vulnerabilityIdsComplete;
     }
 
     public String getFileName() {

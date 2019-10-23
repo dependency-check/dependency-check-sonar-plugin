@@ -31,7 +31,7 @@ public class ScanInfo {
     private final String engineVersion;
 
     @JsonCreator
-    public ScanInfo(@JsonProperty("engineVersion") @NonNull String engineVersion) {
+    public ScanInfo(@JsonProperty(value = "engineVersion", required = true) @NonNull String engineVersion) {
         this.engineVersion = engineVersion;
     }
 

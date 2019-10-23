@@ -22,11 +22,7 @@ package org.sonar.dependencycheck.base;
 import java.util.Collection;
 import java.util.Optional;
 
-import javax.xml.stream.FactoryConfigurationError;
-import javax.xml.stream.XMLInputFactory;
-
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.staxmate.SMInputFactory;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.config.Configuration;
 import org.sonar.dependencycheck.parser.element.Dependency;
@@ -44,15 +40,6 @@ public final class DependencyCheckUtils {
     private static final String LOW = "low";
 
     private DependencyCheckUtils() {
-    }
-
-    public static SMInputFactory newStaxParser() throws FactoryConfigurationError {
-        XMLInputFactory xmlFactory = XMLInputFactory.newInstance();
-        xmlFactory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);
-        xmlFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.FALSE);
-        xmlFactory.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.FALSE);
-        xmlFactory.setProperty(XMLInputFactory.IS_VALIDATING, Boolean.FALSE);
-        return new SMInputFactory(xmlFactory);
     }
 
     public static Severity cvssToSonarQubeSeverity(Float cvssScore, Float blocker, Float critical, Float major, Float minor) {

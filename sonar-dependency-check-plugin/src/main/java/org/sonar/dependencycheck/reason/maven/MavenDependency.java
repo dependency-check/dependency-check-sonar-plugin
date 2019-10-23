@@ -20,25 +20,23 @@
 
 package org.sonar.dependencycheck.reason.maven;
 
-import javax.annotation.Nullable;
-
-import org.sonar.api.batch.fs.TextRange;
-
 public class MavenDependency {
 
     private final String groupId;
     private final String artifactId;
-    private final TextRange textRange;
+    private final int startLineNr;
+    private final int endLineNr;
 
     /**
      * @param groupId
      * @param artifactId
      * @param textRange
      */
-    public MavenDependency(String groupId, String artifactId, @Nullable TextRange textRange) {
+    public MavenDependency(String groupId, String artifactId, int startLineNr, int endLineNr) {
         this.groupId = groupId;
         this.artifactId = artifactId;
-        this.textRange = textRange;
+        this.startLineNr = startLineNr;
+        this.endLineNr = endLineNr;
     }
 
     /**
@@ -56,9 +54,16 @@ public class MavenDependency {
     }
 
     /**
-     * @return the textRange
+     * @return the startLineNr
      */
-    public TextRange getTextRange() {
-        return textRange;
+    public int getStartLineNr() {
+        return startLineNr;
+    }
+
+    /**
+     * @return the endLineNr
+     */
+    public int getEndLineNr() {
+        return endLineNr;
     }
 }

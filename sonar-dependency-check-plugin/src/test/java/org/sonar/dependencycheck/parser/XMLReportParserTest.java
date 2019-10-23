@@ -20,6 +20,7 @@
 package org.sonar.dependencycheck.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -46,7 +47,7 @@ public class XMLReportParserTest extends ReportParserTest {
     public void parseReport() throws Exception {
         Instant startTime = Instant.now();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportMultiModuleMavenExample/dependency-check-report.xml");
-        Analysis analysis = XMLReportParser.parse(inputStream);
+        Analysis analysis = XMLReportParserHelper.parse(inputStream);
         assertNotNull(analysis);
         Instant endTime = Instant.now();
         System.out.println("Duration XML-Report-Parser: " + Duration.between(startTime, endTime));
@@ -57,14 +58,14 @@ public class XMLReportParserTest extends ReportParserTest {
     public void parseReportXMLStreamException() throws IOException {
         InputStream inputStream = mock(InputStream.class);
         when(inputStream.read()).thenThrow(IOException.class);
-        assertThrows(ReportParserException.class, () -> XMLReportParser.parse(inputStream), "Analysis aborted due to: XML is not valid");
+        assertThrows(ReportParserException.class, () -> XMLReportParserHelper.parse(inputStream), "Analysis aborted due to: XML is not valid");
     }
 
     @Test
     public void parseReportNode500() throws Exception {
         SensorContextTester context = SensorContextTester.create(new File(""));
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportNode.js/dependency-check-report.xml");
-        Analysis analysis = XMLReportParser.parse(inputStream);
+        Analysis analysis = XMLReportParserHelper.parse(inputStream);
         assertEquals("5.0.0-M2", analysis.getScanInfo().getEngineVersion());
         assertEquals("project", analysis.getProjectInfo().get().getName());
         assertEquals("2019-04-23T22:43:06.450+0000", analysis.getProjectInfo().get().getReportDate());
@@ -157,7 +158,7 @@ public class XMLReportParserTest extends ReportParserTest {
         assertEquals(4.0f, vulnerability.getCvssScore(context.config()), 0.0f);
         assertEquals("MEDIUM", vulnerability.getSeverity());
         assertEquals("MEDIUM", vulnerability.getSeverity(false));
-        assertTrue(vulnerability.getCwes().isPresent());
+        assertFalse(vulnerability.getCwes().isPresent());
         assertEquals("Versions of `braces` prior to 2.3.1 are vulnerable to Regular Expression Denial of\n" +
             "                        Service (ReDoS). Untrusted input may cause catastrophic backtracking while matching regular\n" +
             "                        expressions. This can cause the application to be unresponsive leading to Denial of Service.", vulnerability.getDescription());
@@ -167,7 +168,7 @@ public class XMLReportParserTest extends ReportParserTest {
     public void parseBigReportNode500() throws Exception {
         SensorContextTester context = SensorContextTester.create(new File(""));
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportNode.js/big-dependency-check-report.xml");
-        Analysis analysis = XMLReportParser.parse(inputStream);
+        Analysis analysis = XMLReportParserHelper.parse(inputStream);
         assertEquals("5.0.0-M2", analysis.getScanInfo().getEngineVersion());
         assertEquals("project", analysis.getProjectInfo().get().getName());
         assertEquals("2019-04-23T22:43:06.450+0000", analysis.getProjectInfo().get().getReportDate());
@@ -257,7 +258,7 @@ public class XMLReportParserTest extends ReportParserTest {
                 assertEquals(4.0f, vulnerability.getCvssScore(context.config()), 0.0f);
                 assertEquals("MEDIUM", vulnerability.getSeverity());
                 assertEquals("MEDIUM", vulnerability.getSeverity(false));
-                assertTrue(vulnerability.getCwes().isPresent());
+                assertFalse(vulnerability.getCwes().isPresent());
                 assertEquals(
                     "Versions of `braces` prior to 2.3.1 are vulnerable to Regular Expression Denial of Service (ReDoS). Untrusted input may cause catastrophic backtracking while matching regular expressions. This can cause the application to be unresponsive leading to Denial of Service.",
                     vulnerability.getDescription());
