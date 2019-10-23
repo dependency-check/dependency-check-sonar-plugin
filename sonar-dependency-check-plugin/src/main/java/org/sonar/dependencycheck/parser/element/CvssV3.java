@@ -36,8 +36,8 @@ public class CvssV3 implements Cvss{
      * @param baseSeverity
      */
     @JsonCreator
-    public CvssV3(@JsonProperty("baseScore") @NonNull Float score,
-                  @JsonProperty("baseSeverity") @NonNull String severity) {
+    public CvssV3(@JsonProperty(value = "baseScore", required = true) @NonNull Float score,
+                  @JsonProperty(value = "baseSeverity", required = true) @NonNull String severity) {
         this.score = score;
         this.severity = severity;
     }

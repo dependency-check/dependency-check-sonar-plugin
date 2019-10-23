@@ -32,8 +32,8 @@ public class ProjectInfo {
     private final String reportDate;
 
     @JsonCreator
-    public ProjectInfo(@JsonProperty("name") @NonNull String name,
-                       @JsonProperty("reportDate")@NonNull String reportDate) {
+    public ProjectInfo(@JsonProperty(value = "name", required = true) @NonNull String name,
+                       @JsonProperty(value = "reportDate", required = true)@NonNull String reportDate) {
         this.name = name;
         this.reportDate = reportDate;
     }

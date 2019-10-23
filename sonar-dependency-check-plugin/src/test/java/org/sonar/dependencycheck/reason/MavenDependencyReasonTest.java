@@ -90,12 +90,15 @@ public class MavenDependencyReasonTest {
         Identifier identifier1 = new Identifier("pkg:maven/struts/struts@1.2.8", Confidence.HIGHEST);
         Collection<Identifier> packageidentifiers1 = new ArrayList<>();
         packageidentifiers1.add(identifier1);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList());
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
         assertTrue(maven.isReasonable());
         assertNotNull(maven.getBestTextRange(dependency));
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
-        assertEquals(43, maven.getBestTextRange(dependency).getTextrange().start().line());
+        assertEquals(41, maven.getBestTextRange(dependency).getTextrange().start().line());
+        assertEquals(0, maven.getBestTextRange(dependency).getTextrange().start().lineOffset());
+        assertEquals(45, maven.getBestTextRange(dependency).getTextrange().end().line());
+        assertEquals(21, maven.getBestTextRange(dependency).getTextrange().end().lineOffset());
     }
 
     @Test
@@ -105,7 +108,7 @@ public class MavenDependencyReasonTest {
         Identifier identifier1 = new Identifier("pkg:maven/myvendor/myartefact@1.2.8", Confidence.HIGHEST);
         Collection<Identifier> packageidentifiers1 = new ArrayList<>();
         packageidentifiers1.add(identifier1);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList());
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
         TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
         // Check for default location, first line in file with low confidence
         assertNotNull(textRangeConfidence);

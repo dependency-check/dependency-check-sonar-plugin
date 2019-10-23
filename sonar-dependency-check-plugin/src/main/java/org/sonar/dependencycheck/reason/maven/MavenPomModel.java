@@ -25,6 +25,14 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import org.sonar.dependencycheck.parser.deserializer.MavenDependencyDeserializer;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MavenPomModel {
     private final List<MavenDependency> dependencies;
     private final MavenParent parent;
@@ -33,7 +41,9 @@ public class MavenPomModel {
      * @param dependencies
      * @param parent
      */
-    public MavenPomModel(List<MavenDependency> dependencies, @Nullable MavenParent parent) {
+    @JsonCreator
+    public MavenPomModel(@JsonProperty(value = "dependencies") @JsonDeserialize(using = MavenDependencyDeserializer.class ) List<MavenDependency> dependencies,
+                         @JsonProperty(value = "parent") @Nullable MavenParent parent) {
         this.dependencies = dependencies;
         this.parent = parent;
     }

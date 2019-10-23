@@ -20,6 +20,7 @@
 package org.sonar.dependencycheck.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -157,7 +158,7 @@ public class XMLReportParserTest extends ReportParserTest {
         assertEquals(4.0f, vulnerability.getCvssScore(context.config()), 0.0f);
         assertEquals("MEDIUM", vulnerability.getSeverity());
         assertEquals("MEDIUM", vulnerability.getSeverity(false));
-        assertTrue(vulnerability.getCwes().isPresent());
+        assertFalse(vulnerability.getCwes().isPresent());
         assertEquals("Versions of `braces` prior to 2.3.1 are vulnerable to Regular Expression Denial of\n" +
             "                        Service (ReDoS). Untrusted input may cause catastrophic backtracking while matching regular\n" +
             "                        expressions. This can cause the application to be unresponsive leading to Denial of Service.", vulnerability.getDescription());
@@ -257,7 +258,7 @@ public class XMLReportParserTest extends ReportParserTest {
                 assertEquals(4.0f, vulnerability.getCvssScore(context.config()), 0.0f);
                 assertEquals("MEDIUM", vulnerability.getSeverity());
                 assertEquals("MEDIUM", vulnerability.getSeverity(false));
-                assertTrue(vulnerability.getCwes().isPresent());
+                assertFalse(vulnerability.getCwes().isPresent());
                 assertEquals(
                     "Versions of `braces` prior to 2.3.1 are vulnerable to Regular Expression Denial of Service (ReDoS). Untrusted input may cause catastrophic backtracking while matching regular expressions. This can cause the application to be unresponsive leading to Denial of Service.",
                     vulnerability.getDescription());

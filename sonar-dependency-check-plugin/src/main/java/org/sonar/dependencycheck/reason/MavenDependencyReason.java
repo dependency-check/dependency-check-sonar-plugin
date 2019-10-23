@@ -20,12 +20,9 @@
 
 package org.sonar.dependencycheck.reason;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import javax.xml.stream.XMLStreamException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.batch.fs.InputComponent;
@@ -34,6 +31,7 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.parser.PomParser;
+import org.sonar.dependencycheck.parser.ReportParserException;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Identifier;
@@ -57,10 +55,9 @@ public class MavenDependencyReason extends DependencyReason {
         this.pom = pom;
         dependencyMap = new HashMap<>();
         pomModel = null;
-        PomParser parser = new PomParser(pom);
         try {
-            pomModel = parser.parse();
-        } catch (XMLStreamException | IOException e) {
+            pomModel = PomParser.parse(pom);
+        } catch (ReportParserException e) {
             LOGGER.warn("Parsing {} failed", pom);
             LOGGER.debug(e.getMessage(), e);
         }
@@ -117,15 +114,15 @@ public class MavenDependencyReason extends DependencyReason {
             if (StringUtils.equals(artefactId, dependency.getArtifactId())
                     && StringUtils.equals(groupId, dependency.getGroupId())) {
                 LOGGER.debug("Found a artefactid and groupid match in {}", pom);
-                return Optional.of(new TextRangeConfidence(dependency.getTextRange(), Confidence.HIGHEST));
+                return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(dependency.getStartLineNr()).start(), pom.selectLine(dependency.getEndLineNr()).end()), Confidence.HIGHEST));
             }
             if (StringUtils.equals(artefactId, dependency.getArtifactId())) {
                 LOGGER.debug("Found a artefactid match in {} for {}", pom, artefactId);
-                return Optional.of(new TextRangeConfidence(dependency.getTextRange(), Confidence.HIGH));
+                return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(dependency.getStartLineNr()).start(), pom.selectLine(dependency.getEndLineNr()).end()), Confidence.HIGH));
             }
             if (StringUtils.equals(groupId, dependency.getGroupId())) {
                 LOGGER.debug("Found a groupId match in {} for {}", pom, groupId);
-                return Optional.of(new TextRangeConfidence(dependency.getTextRange(), Confidence.MEDIUM));
+                return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(dependency.getStartLineNr()).start(), pom.selectLine(dependency.getEndLineNr()).end()), Confidence.MEDIUM));
             }
         }
         return Optional.empty();

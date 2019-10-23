@@ -31,8 +31,8 @@ public class CvssV2 implements Cvss {
     private final Float score;
     private final String severity;
     @JsonCreator
-    public CvssV2(@JsonProperty("score") @NonNull Float score,
-                  @JsonProperty("severity") @NonNull String severity) {
+    public CvssV2(@JsonProperty(value = "score", required = true) @NonNull Float score,
+                  @JsonProperty(value = "severity", required = true) @NonNull String severity) {
         this.score = score;
         this.severity = severity;
     }

@@ -100,7 +100,7 @@ public class DependencyReasonSearcherTest {
         Vulnerability vulnerability1 = new Vulnerability("Test name", "NVD", "MyDescription", null, cvssV2, null, null);
         List<Vulnerability> vulnerabilities1 = new ArrayList<>();
         vulnerabilities1.add(vulnerability1);
-        Dependency dependency1 = new Dependency(null, null, null, null, Collections.emptyMap(), vulnerabilities1, packageidentifiers1, Collections.emptyList());
+        Dependency dependency1 = new Dependency(null, null, null, null, Collections.emptyMap(), vulnerabilities1, packageidentifiers1, Collections.emptyList(), null);
         // Second Identifier
         Identifier identifier2 = new Identifier("pkg:maven/org.springframework/spring@2.0.8", Confidence.HIGHEST);
         Collection<Identifier> packageidentifiers2 = new ArrayList<>();
@@ -108,7 +108,7 @@ public class DependencyReasonSearcherTest {
         Vulnerability vulnerability2 = new Vulnerability("Test name", "NVD", "MyDescription", null, cvssV2, null, null);
         List<Vulnerability> vulnerabilities2 = new ArrayList<>();
         vulnerabilities2.add(vulnerability2);
-        Dependency dependency2 = new Dependency(null, null, null, null, Collections.emptyMap(), vulnerabilities1, packageidentifiers2, Collections.emptyList());
+        Dependency dependency2 = new Dependency(null, null, null, null, Collections.emptyMap(), vulnerabilities1, packageidentifiers2, Collections.emptyList(), null);
 
         // Add dependencies
         dependencies.add(dependency1);
@@ -119,8 +119,10 @@ public class DependencyReasonSearcherTest {
         assertEquals(2, context.allIssues().size());
         assertEquals(1, searcher.getDependencyreasons().size());
 
-        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 53));
-        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 43));
+        // check for org.springframework - spring dependency
+        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 51 && i.primaryLocation().textRange().end().line() == 55));
+        // check for struts - struts dependency
+        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 41 && i.primaryLocation().textRange().end().line() == 45));
     }
 
     @Test
@@ -144,7 +146,7 @@ public class DependencyReasonSearcherTest {
         Vulnerability vulnerability = new Vulnerability("Test name", "NVD", "MyDescription", null, cvssV2, null, null);
         List<Vulnerability> vulnerabilities = new ArrayList<>();
         vulnerabilities.add(vulnerability);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),vulnerabilities, packageidentifiers, Collections.emptyList());
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),vulnerabilities, packageidentifiers, Collections.emptyList(), null);
 
         // Add dependencies
         dependencies.add(dependency);
