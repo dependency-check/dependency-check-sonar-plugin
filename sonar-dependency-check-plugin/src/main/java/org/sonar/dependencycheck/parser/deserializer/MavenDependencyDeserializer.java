@@ -58,7 +58,7 @@ public class MavenDependencyDeserializer extends StdDeserializer<List<MavenDepen
                 // We found a dependency
                 String groupId = "";
                 String artifactId = "";
-                int startLineNr = jsonParser.getCurrentLocation().getLineNr();;
+                int startLineNr = jsonParser.getCurrentLocation().getLineNr();
                 while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
                     if (StringUtils.equalsIgnoreCase("artifactId", jsonParser.getCurrentName())) {
                         artifactId = jsonParser.getValueAsString();
