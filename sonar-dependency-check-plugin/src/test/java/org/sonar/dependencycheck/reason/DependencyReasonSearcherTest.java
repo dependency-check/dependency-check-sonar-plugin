@@ -128,15 +128,17 @@ public class DependencyReasonSearcherTest {
 
     @Test
     public void checkForDependencyReasonsGradle() throws IOException  {
-        checkForDependencyReasonsGradleAbstract(inputFile("build.gradle"), 24);
+        SensorContextTester context = checkForDependencyReasonsGradleAbstract(inputFile("build.gradle"));
+        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 24));
     }
 
     @Test
     public void checkForDependencyReasonsGradleKotlinDsl() throws IOException  {
-        checkForDependencyReasonsGradleAbstract(inputFile("build.gradle.kts"), 15);
+        SensorContextTester context = checkForDependencyReasonsGradleAbstract(inputFile("build.gradle.kts"));
+        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 15));
     }
 
-    public void checkForDependencyReasonsGradleAbstract(InputFile inputFile, int assertLine) {
+    public SensorContextTester checkForDependencyReasonsGradleAbstract(InputFile inputFile) {
         SensorContextTester context = SensorContextTester.create(new File(""));
         MapSettings settings = new MapSettings();
         settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
@@ -165,6 +167,7 @@ public class DependencyReasonSearcherTest {
         searcher.addDependenciesToInputComponents(analysis, context);
         assertEquals(1, context.allIssues().size());
         assertEquals(1, searcher.getDependencyreasons().size());
-        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == assertLine));
+
+        return context;
     }
 }
