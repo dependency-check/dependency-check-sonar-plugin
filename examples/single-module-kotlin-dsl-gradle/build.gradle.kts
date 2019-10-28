@@ -1,6 +1,8 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
-    java
     application
+    kotlin("jvm") version "1.3.50"
     id("org.sonarqube") version "2.6.2"
     id("org.owasp.dependencycheck") version "5.2.2"
 }
@@ -14,12 +16,13 @@ dependencies {
     compile("org.owasp:dependency-check-gradle:5.2.2")
     compile("org.springframework:spring:2.0")
     testCompile("junit:junit:4.12")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 apply(plugin= "org.owasp.dependencycheck")
 
 application {
-    mainClassName = "com.example.HelloWorld"
+    mainClassName = "com.example.HelloWorldKt"
 }
 
 dependencyCheck {
@@ -31,5 +34,11 @@ sonarqube {
         property("sonar.dependencyCheck.reportPath", "build/reports/dependency-check-report.xml")
         property("sonar.dependencyCheck.htmlReportPath", "build/reports/dependency-check-report.html")
         property("sonar.sources", "${properties["sonar.sources"].toString()},build.gradle.kts")
+    }
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
