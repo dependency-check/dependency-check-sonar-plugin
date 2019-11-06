@@ -60,7 +60,8 @@ public class DependencyReasonSearcher {
                 LOGGER.debug("Found unreasonable pom.xml file {}", pom);
             }
         }
-        Iterable<InputFile> buildGradles = context.fileSystem().inputFiles(context.fileSystem().predicates().matchesPathPattern("**/build.gradle"));
+        String[] gradlePathPatterns = {"**/build.gradle", "**/build.gradle.kts"};
+        Iterable<InputFile> buildGradles = context.fileSystem().inputFiles(context.fileSystem().predicates().matchesPathPatterns(gradlePathPatterns));
         for (InputFile buildGradle : buildGradles) {
             DependencyReason gradleReason = new GradleDependencyReason(buildGradle);
             if (gradleReason.isReasonable()) {

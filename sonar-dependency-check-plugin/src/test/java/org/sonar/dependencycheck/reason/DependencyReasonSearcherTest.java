@@ -71,13 +71,14 @@ public class DependencyReasonSearcherTest {
         context.setSettings(settings);
         context.fileSystem().add(inputFile("pom.xml"));
         context.fileSystem().add(inputFile("build.gradle"));
+        context.fileSystem().add(inputFile("build.gradle.kts"));
         DependencyReasonSearcher searcher = new DependencyReasonSearcher(context);
         ScanInfo scanInfo = new ScanInfo("testengine");
         ProjectInfo projectInfo = new ProjectInfo("testproject", "testreportdate");
         Collection<Dependency> dependencies = new LinkedList<>();
         Analysis analysis = new Analysis(scanInfo, projectInfo, dependencies);
         searcher.addDependenciesToInputComponents(analysis, context);
-        assertEquals(2, searcher.getDependencyreasons().size());
+        assertEquals(3, searcher.getDependencyreasons().size());
     }
 
     @Test
@@ -127,12 +128,23 @@ public class DependencyReasonSearcherTest {
 
     @Test
     public void checkForDependencyReasonsGradle() throws IOException  {
+        SensorContextTester context = checkForDependencyReasonsGradleAbstract(inputFile("build.gradle"));
+        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 24));
+    }
+
+    @Test
+    public void checkForDependencyReasonsGradleKotlinDsl() throws IOException  {
+        SensorContextTester context = checkForDependencyReasonsGradleAbstract(inputFile("build.gradle.kts"));
+        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 15));
+    }
+
+    public SensorContextTester checkForDependencyReasonsGradleAbstract(InputFile inputFile) {
         SensorContextTester context = SensorContextTester.create(new File(""));
         MapSettings settings = new MapSettings();
         settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
         settings.setProperty(DependencyCheckConstants.SUMMARIZE_PROPERTY, Boolean.TRUE);
         context.setSettings(settings);
-        context.fileSystem().add(inputFile("build.gradle"));
+        context.fileSystem().add(inputFile);
         DependencyReasonSearcher searcher = new DependencyReasonSearcher(context);
 
         ScanInfo scanInfo = new ScanInfo("testengine");
@@ -155,7 +167,7 @@ public class DependencyReasonSearcherTest {
         searcher.addDependenciesToInputComponents(analysis, context);
         assertEquals(1, context.allIssues().size());
         assertEquals(1, searcher.getDependencyreasons().size());
-        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 24));
-    }
 
+        return context;
+    }
 }
