@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     application
     kotlin("jvm") version "1.3.50"
-    id("org.sonarqube") version "2.6.2"
+    id("org.sonarqube") version "2.8"
     id("org.owasp.dependencycheck") version "5.2.2"
 }
 
@@ -31,9 +31,9 @@ dependencyCheck {
 
 sonarqube {
     properties {
-        property("sonar.dependencyCheck.reportPath", "build/reports/dependency-check-report.xml")
+        property("sonar.dependencyCheck.xmlReportPath", "build/reports/dependency-check-report.xml")
         property("sonar.dependencyCheck.htmlReportPath", "build/reports/dependency-check-report.html")
-        property("sonar.sources", "${properties["sonar.sources"].toString()},build.gradle.kts")
+        property("sonar.sources", "src,build.gradle.kts")
     }
 }
 
