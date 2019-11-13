@@ -59,7 +59,7 @@ public class DependencyCheckSensor implements ProjectSensor {
     private Optional<Analysis> parseAnalysis(SensorContext context) {
         LOGGER.info("Using JSON-Reportparser");
         try {
-            JsonReportFile report = JsonReportFile.getJsonReport(context.config(), fileSystem, this.pathResolver);
+            JsonReportFile report = JsonReportFile.getJsonReport(context.config(), fileSystem, pathResolver);
             return Optional.of(JsonReportParserHelper.parse(report.getInputStream()));
         } catch (FileNotFoundException e) {
             LOGGER.info("JSON-Analysis skipped/aborted due to missing report file");
@@ -73,7 +73,7 @@ public class DependencyCheckSensor implements ProjectSensor {
         LOGGER.info("Using XML-Reportparser");
         XmlReportFile report;
         try {
-            report = XmlReportFile.getXmlReport(context.config(), fileSystem, this.pathResolver);
+            report = XmlReportFile.getXmlReport(context.config(), fileSystem, pathResolver);
             return Optional.of(XMLReportParserHelper.parse(report.getInputStream()));
         } catch (FileNotFoundException e) {
             LOGGER.info("XML-Analysis skipped/aborted due to missing report file");
