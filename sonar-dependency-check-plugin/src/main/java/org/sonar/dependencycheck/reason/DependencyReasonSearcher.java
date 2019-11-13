@@ -115,7 +115,7 @@ public class DependencyReasonSearcher {
 
     public void addDependenciesToInputComponents(@NonNull Analysis analysis,@NonNull SensorContext context) {
         if (analysis.getDependencies() == null) {
-            LOGGER.info("Analyse doesn't report any Dependency");
+            LOGGER.info("Analyse doesn't report any Dependencies");
             return;
         }
         if (dependencyreasons.isEmpty()) {
