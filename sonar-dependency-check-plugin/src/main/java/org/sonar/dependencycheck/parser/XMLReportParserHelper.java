@@ -40,11 +40,11 @@ public class XMLReportParserHelper {
         try {
             return mapper.readValue(inputStream, Analysis.class);
         } catch (JsonParseException e) {
-            throw new ReportParserException("Could not parse JSON", e);
+            throw new ReportParserException("Could not parse XML", e);
         } catch (JsonMappingException e) {
-            throw new ReportParserException("Problem with JSON-Report-Mapping", e);
+            throw new ReportParserException("Problem with XML-Report-Mapping", e);
         } catch (IOException e) {
-            throw new ReportParserException("IO Problem in JSON-Reporter", e);
+            throw new ReportParserException("IO Problem in XML-Reporter", e);
         }
     }
 }

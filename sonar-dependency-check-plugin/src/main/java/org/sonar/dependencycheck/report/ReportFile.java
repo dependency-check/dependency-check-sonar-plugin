@@ -45,7 +45,7 @@ public abstract class ReportFile {
     }
 
     public InputStream getInputStream() throws IOException {
-        return Files.newInputStream(this.report.toPath());
+        return Files.newInputStream(report.toPath());
     }
 
     @CheckForNull

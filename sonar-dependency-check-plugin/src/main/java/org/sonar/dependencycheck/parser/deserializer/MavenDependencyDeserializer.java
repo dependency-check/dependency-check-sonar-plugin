@@ -36,7 +36,6 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 
 public class MavenDependencyDeserializer extends StdDeserializer<List<MavenDependency>>{
 
-
     /**
      *
      */
