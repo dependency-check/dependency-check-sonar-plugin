@@ -8,4 +8,4 @@ addons:
     token:
       secure: DoKbTc6euo/1GBD6u2pVzOhK4v9gf8ZJacsQaSU4zbnL5uYTknTBO+x+8eNGBLtoLHx28Rk5HPrZDK4ADZch1Zzy92qxV0A8/m7zJcZQQlK2Mb1TohOtCEA7ACnf53xUAH+XpSdAfgKLLk7gl8Q2B3rOaDG5uxPciUg5jqfuWV4=
 script:
-- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=dependency-check_dependency-check-sonar-plugin
+- mvn clean install sonar:sonar -Dsonar.projectKey=dependency-check_dependency-check-sonar-plugin
