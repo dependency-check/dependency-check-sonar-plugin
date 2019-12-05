@@ -7,7 +7,7 @@ addons:
   sonarcloud:
     organization: "dependency-check"
     token:
-      secure: "NB/SFFmRdaiAPxdFqduOGBrzqaGG+Oju3yU9QpawSK0L14x63Z8GidnCZ9VvAHRTVJExzapXM1zmUleaXS8t1LtwRxqN2gg9/WBGomdGQ7THftKObhnL9+Ov38tVsZbAxe0N16ggkX4bmP6IGVcA3+NUvPNTtL4N8W6qVU5OulE="
+      secure: "kUkQFSN7vbCJCtFKC5SJnNaf3WVZ3B7XE9TEiTD/bpXcHM+bSPdH2vvKqhzwDph2yQYdOBNiW0TlS0pb9P+jEbP3q7V8DT5oP/qtZFe/eObriEyM/XsweJ4DJV2Z3PEkjVWBWxARo0yva76CGagJNKj2LCysmR1CVT6EcnAklPM="
 
 
 script:
