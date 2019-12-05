@@ -1,14 +1,11 @@
 language: java
 jdk:
-  - openjdk8
-  - openjdk11
-
+- openjdk8
+- openjdk11
 addons:
   sonarcloud:
-    organization: "dependency-check"
+    organization: dependency-check
     token:
-      secure: "kUkQFSN7vbCJCtFKC5SJnNaf3WVZ3B7XE9TEiTD/bpXcHM+bSPdH2vvKqhzwDph2yQYdOBNiW0TlS0pb9P+jEbP3q7V8DT5oP/qtZFe/eObriEyM/XsweJ4DJV2Z3PEkjVWBWxARo0yva76CGagJNKj2LCysmR1CVT6EcnAklPM="
-
-
+      secure: DoKbTc6euo/1GBD6u2pVzOhK4v9gf8ZJacsQaSU4zbnL5uYTknTBO+x+8eNGBLtoLHx28Rk5HPrZDK4ADZch1Zzy92qxV0A8/m7zJcZQQlK2Mb1TohOtCEA7ACnf53xUAH+XpSdAfgKLLk7gl8Q2B3rOaDG5uxPciUg5jqfuWV4=
 script:
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=dependency-check_dependency-check-sonar-plugin
+- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=dependency-check_dependency-check-sonar-plugin
