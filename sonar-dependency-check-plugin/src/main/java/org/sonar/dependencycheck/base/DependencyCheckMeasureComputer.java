@@ -23,7 +23,6 @@ package org.sonar.dependencycheck.base;
 import org.sonar.api.ce.measure.Component.Type;
 import org.sonar.api.ce.measure.Measure;
 import org.sonar.api.ce.measure.MeasureComputer;
-import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 
 /**
  * This implementation of {@link MeasureComputer} will aggregate the metrics
