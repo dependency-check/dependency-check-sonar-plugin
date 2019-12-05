@@ -2,6 +2,8 @@ language: java
 jdk:
 - openjdk8
 - openjdk11
+git:
+  depth: false
 addons:
   sonarcloud:
     organization: dependency-check
