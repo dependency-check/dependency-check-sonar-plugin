@@ -20,17 +20,20 @@
 
 package org.sonar.dependencycheck.reason.maven;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
-
 import org.sonar.dependencycheck.parser.deserializer.MavenDependencyDeserializer;
+import org.sonar.dependencycheck.parser.deserializer.MavenParentDeserializer;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MavenPomModel {
@@ -42,12 +45,13 @@ public class MavenPomModel {
      * @param parent
      */
     @JsonCreator
-    public MavenPomModel(@JsonProperty(value = "dependencies") @JsonDeserialize(using = MavenDependencyDeserializer.class ) List<MavenDependency> dependencies,
-                         @JsonProperty(value = "parent") @Nullable MavenParent parent) {
-        this.dependencies = dependencies;
+    public MavenPomModel(@JsonProperty(value = "dependencies") @JsonDeserialize(using = MavenDependencyDeserializer.class ) @Nullable List<MavenDependency> dependencies,
+                         @JsonProperty(value = "parent") @JsonDeserialize(using = MavenParentDeserializer.class ) @Nullable MavenParent parent) {
+        this.dependencies = dependencies == null ? Collections.emptyList() : dependencies;
         this.parent = parent;
     }
 
+    @NonNull
     public List<MavenDependency> getDependencies() {
         return dependencies;
     }

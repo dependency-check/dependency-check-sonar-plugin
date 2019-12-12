@@ -20,38 +20,18 @@
 
 package org.sonar.dependencycheck.reason.maven;
 
-public class MavenParent {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-    private final String groupId;
-    private final int startLineNr;
-    private final int endLineNr;
-    /**
-     * @param groupId
-     * @param startLineNr
-     * @param endLineNr
-     */
-    public MavenParent(String groupId ,int startLineNr, int endLineNr) {
-        this.groupId = groupId;
-        this.startLineNr = startLineNr;
-        this.endLineNr = endLineNr;
-    }
-    /**
-     * @return the groupId
-     */
-    public String getGroupId() {
-        return groupId;
-    }
-    /**
-     * @return the startLineNr
-     */
-    public int getStartLineNr() {
-        return startLineNr;
-    }
-    /**
-     * @return the endLineNr
-     */
-    public int getEndLineNr() {
-        return endLineNr;
+import java.util.Collections;
+
+import org.junit.jupiter.api.Test;
+
+class MavenPomModelTest {
+
+    @Test
+    public void dependenciesAreNotNull() {
+        MavenPomModel model = new MavenPomModel(null, null);
+        assertEquals(Collections.emptyList(), model.getDependencies());
     }
 
 }

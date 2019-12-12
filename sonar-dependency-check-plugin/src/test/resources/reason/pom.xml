@@ -14,6 +14,11 @@
     <organization>
         <name>OWASP</name>
     </organization>
+    <parent>
+        <groupId>dummy-parent</groupId>
+        <artifactId>dummy-parent-artifact</artifactId>
+        <version>1.0</version>
+    </parent>
 
     <properties>
         <dependency.check.report.dir>${project.build.directory}/dependency-check</dependency.check.report.dir>

@@ -137,7 +137,7 @@ public class MavenDependencyReason extends DependencyReason {
             String groupId = mavenIdentifierSplit[0];
             if (StringUtils.equals(groupId, parent.getGroupId())) {
                 LOGGER.debug("Found a groupId match in {} for {}", pom, groupId);
-                return Optional.of(new TextRangeConfidence(parent.getTextRange(), Confidence.MEDIUM));
+                return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(parent.getStartLineNr()).start(), pom.selectLine(parent.getEndLineNr()).end()), Confidence.MEDIUM));
             }
         }
         return Optional.empty();

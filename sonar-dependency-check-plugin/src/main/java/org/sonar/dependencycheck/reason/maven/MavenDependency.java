@@ -30,7 +30,8 @@ public class MavenDependency {
     /**
      * @param groupId
      * @param artifactId
-     * @param textRange
+     * @param startLineNr
+     * @param endLineNr
      */
     public MavenDependency(String groupId, String artifactId, int startLineNr, int endLineNr) {
         this.groupId = groupId;
