@@ -95,10 +95,28 @@ public class MavenDependencyReasonTest {
         assertNotNull(maven.getBestTextRange(dependency));
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
-        assertEquals(41, maven.getBestTextRange(dependency).getTextrange().start().line());
+        assertEquals(46, maven.getBestTextRange(dependency).getTextrange().start().line());
         assertEquals(0, maven.getBestTextRange(dependency).getTextrange().start().lineOffset());
-        assertEquals(45, maven.getBestTextRange(dependency).getTextrange().end().line());
+        assertEquals(50, maven.getBestTextRange(dependency).getTextrange().end().line());
         assertEquals(21, maven.getBestTextRange(dependency).getTextrange().end().lineOffset());
+    }
+
+    @Test
+    public void foundParent() throws IOException {
+        MavenDependencyReason maven = new MavenDependencyReason(inputFile("pom.xml"));
+        // Create Dependency
+        Identifier identifier1 = new Identifier("pkg:maven/dummy-parent/fake-artifact@1.0.0", Confidence.HIGHEST);
+        Collection<Identifier> packageidentifiers1 = new ArrayList<>();
+        packageidentifiers1.add(identifier1);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
+        assertTrue(maven.isReasonable());
+        assertNotNull(maven.getBestTextRange(dependency));
+        // verify that same dependency points to the same TextRange, use of HashMap
+        assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
+        assertEquals(18, maven.getBestTextRange(dependency).getTextrange().start().line());
+        assertEquals(0, maven.getBestTextRange(dependency).getTextrange().start().lineOffset());
+        assertEquals(21, maven.getBestTextRange(dependency).getTextrange().end().line());
+        assertEquals(13, maven.getBestTextRange(dependency).getTextrange().end().lineOffset());
     }
 
     @Test
