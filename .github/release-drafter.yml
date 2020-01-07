@@ -1,5 +1,7 @@
 name-template: 'sonar-dependency-check-$NEXT_PATCH_VERSION'
 tag-template: '$NEXT_PATCH_VERSION'
+exclude-labels:
+  - 'skip-changelog'
 categories:
   - title: '🚀 New features and improvements'
     labels:
