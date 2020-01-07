@@ -1,0 +1,19 @@
+name-template: 'sonar-dependency-check-$NEXT_PATCH_VERSION'
+tag-template: '$NEXT_PATCH_VERSION'
+categories:
+  - title: '🚀 New features and improvements'
+    labels:
+      - 'feature'
+      - 'enhancement'
+  - title: '🐛 Bug Fixes'
+    labels:
+      - 'fix'
+      - 'bugfix'
+      - 'bug'
+  - title: '🧰 Maintenance'
+    label: 'chore'
+change-template: '- $TITLE (#$NUMBER by @$AUTHOR)'
+template: |
+  ## Changes
+
+  $CHANGES
