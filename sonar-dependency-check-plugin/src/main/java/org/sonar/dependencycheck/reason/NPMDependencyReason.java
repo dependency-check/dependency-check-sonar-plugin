@@ -20,34 +20,84 @@
 
 package org.sonar.dependencycheck.reason;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
+import org.sonar.dependencycheck.base.DependencyCheckUtils;
+import org.sonar.dependencycheck.parser.PackageLockParserHelper;
+import org.sonar.dependencycheck.parser.ReportParserException;
+import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
+import org.sonar.dependencycheck.parser.element.Identifier;
+import org.sonar.dependencycheck.reason.npm.PackageLockModel;
+
+import edu.umd.cs.findbugs.annotations.CheckForNull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class NPMDependencyReason extends DependencyReason {
 
     private final InputFile packageLock;
-    
+    private PackageLockModel packageLockModel;
+    private final Map<Dependency, TextRangeConfidence> dependencyMap;
+
+    private static final Logger LOGGER = Loggers.get(NPMDependencyReason.class);
+
     public NPMDependencyReason(InputFile packageLock) {
         super(packageLock);
         this.packageLock = packageLock;
+        dependencyMap = new HashMap<>();
+        packageLockModel = null;
+        try {
+            packageLockModel = PackageLockParserHelper.parse(packageLock.inputStream());
+        } catch (ReportParserException | IOException e) {
+            LOGGER.warn("Parsing {} failed", packageLock);
+            LOGGER.debug(e.getMessage(), e);
+        }
     }
 
     @Override
     public boolean isReasonable() {
-        return packageLock != null;
+        return packageLock != null && packageLockModel != null;
     }
 
     @Override
+    @CheckForNull
     public InputComponent getInputComponent() {
-        // TODO Auto-generated method stub
-        return null;
+        return packageLock;
     }
 
     @Override
     public TextRangeConfidence getBestTextRange(Dependency dependency) {
-        // TODO Auto-generated method stub
-        return null;
+        if (!dependencyMap.containsKey(dependency)) {
+            Optional<Identifier> javaScriptIdentifier = DependencyCheckUtils.getJavaScriptIdentifier(dependency);
+            if (javaScriptIdentifier.isPresent()) {
+                fillArtifactMatch(dependency, javaScriptIdentifier.get());
+            } else {
+                LOGGER.debug("No Identifier with type javascript found for Dependency {}", dependency.getFileName());
+            }
+            Optional<Identifier> NpmIdentifier = DependencyCheckUtils.getJavaScriptIdentifier(dependency);
+            if (NpmIdentifier.isPresent()) {
+                fillArtifactMatch(dependency, NpmIdentifier.get());
+            } else {
+                LOGGER.debug("No Identifier with type javascript found for Dependency {}", dependency.getFileName());
+            }
+            if (!dependencyMap.containsKey(dependency) || dependencyMap.get(dependency) == null) {
+                LOGGER.debug("We doesn't find a TextRange for {} in {}. We link to first line with {} confidence",
+                        dependency.getFileName(), packageLock, Confidence.LOW);
+                dependencyMap.put(dependency, new TextRangeConfidence(packageLock.selectLine(1), Confidence.LOW));
+            }
+        }
+        return dependencyMap.get(dependency);
+    }
+
+    private void fillArtifactMatch(@NonNull Dependency dependency, Identifier mavenIdentifier) {
+        // TODO: Implement this
     }
 
 }

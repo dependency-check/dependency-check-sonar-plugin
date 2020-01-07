@@ -106,6 +106,24 @@ public final class DependencyCheckUtils {
         return Optional.empty();
     }
 
+    public static Optional<Identifier> getNPMIdentifier (@NonNull Dependency dependency){
+        for (Identifier identifier : dependency.getPackages()) {
+            if (Identifier.isNPMPackage(identifier)) {
+                return Optional.of(identifier);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public static Optional<Identifier> getJavaScriptIdentifier (@NonNull Dependency dependency){
+        for (Identifier identifier : dependency.getPackages()) {
+            if (Identifier.isJavaScriptPackage(identifier)) {
+                return Optional.of(identifier);
+            }
+        }
+        return Optional.empty();
+    }
+
     /**
      * TODO: Add Markdown formatting if and when Sonar supports it
      * https://jira.sonarsource.com/browse/SONAR-4161

@@ -32,6 +32,7 @@ class IdentifierTest {
         Identifier a = new Identifier("pkg:maven/struts/struts@1.2.8", Confidence.HIGH);
         assertTrue(Identifier.isMavenPackage(a));
         assertFalse(Identifier.isNPMPackage(a));
+        assertFalse(Identifier.isJavaScriptPackage(a));
         assertEquals("struts/struts@1.2.8", Identifier.getPackageArtifact(a).get());
         assertEquals("maven", Identifier.getPackageType(a).get());
     }
@@ -41,8 +42,18 @@ class IdentifierTest {
         Identifier a = new Identifier("pkg:npm/braces@1.8.5", Confidence.HIGHEST);
         assertFalse(Identifier.isMavenPackage(a));
         assertTrue(Identifier.isNPMPackage(a));
+        assertFalse(Identifier.isJavaScriptPackage(a));
         assertEquals("braces@1.8.5", Identifier.getPackageArtifact(a).get());
         assertEquals("npm", Identifier.getPackageType(a).get());
     }
 
+    @Test
+    public void testJavaScript() {
+        Identifier a = new Identifier("pkg:javascript/jquery@2.2.0", Confidence.HIGHEST);
+        assertFalse(Identifier.isMavenPackage(a));
+        assertFalse(Identifier.isNPMPackage(a));
+        assertTrue(Identifier.isJavaScriptPackage(a));
+        assertEquals("jquery@2.2.0", Identifier.getPackageArtifact(a).get());
+        assertEquals("javascript", Identifier.getPackageType(a).get());
+    }
 }
