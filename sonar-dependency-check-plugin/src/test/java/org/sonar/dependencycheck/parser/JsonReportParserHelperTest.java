@@ -19,6 +19,7 @@
  */
 package org.sonar.dependencycheck.parser;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
@@ -52,20 +53,23 @@ public class JsonReportParserHelperTest extends ReportParserTest {
     public void parseReportJsonParseException() {
         InputStream inputStream = mock(InputStream.class);
         doThrow(JsonParseException.class).when(inputStream);
-        assertThrows(ReportParserException.class, () -> JsonReportParserHelper.parse(inputStream), "Could not parse JSON");
+        ReportParserException exception = assertThrows(ReportParserException.class, () -> JsonReportParserHelper.parse(inputStream), "No JsonParseException thrown");
+        assertEquals("Could not parse JSON", exception.getMessage());
     }
 
     @Test
     public void parseReportJsonMappingException() {
         InputStream inputStream = mock(InputStream.class);
         doThrow(JsonMappingException.class).when(inputStream);
-        assertThrows(ReportParserException.class, () -> JsonReportParserHelper.parse(inputStream), "Problem with JSON-Report-Mapping");
+        ReportParserException exception = assertThrows(ReportParserException.class, () -> JsonReportParserHelper.parse(inputStream), "No JsonMappingException thrown");
+        assertEquals("Problem with JSON-Report-Mapping", exception.getMessage());
     }
 
     @Test
-    public void parseReportIOException() {
+    public void parseReportJsonIOException() {
         InputStream inputStream = mock(InputStream.class);
         doThrow(IOException.class).when(inputStream);
-        assertThrows(ReportParserException.class, () -> JsonReportParserHelper.parse(inputStream), "IO Problem in JSON-Reporter");
+        ReportParserException exception = assertThrows(ReportParserException.class, () -> JsonReportParserHelper.parse(inputStream), "No IOException thrown");
+        assertEquals("IO Problem with JSON-Report", exception.getMessage());
     }
 }
