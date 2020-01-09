@@ -41,7 +41,7 @@ import org.sonar.dependencycheck.parser.element.Analysis;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
 
-public class XMLReportParserTest extends ReportParserTest {
+public class XMLReportParserHelperTest extends ReportParserTest {
 
     @Test
     public void parseReport() throws Exception {

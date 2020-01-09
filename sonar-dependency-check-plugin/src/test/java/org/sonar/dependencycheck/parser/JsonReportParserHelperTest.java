@@ -35,7 +35,7 @@ import org.sonar.dependencycheck.parser.element.Analysis;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-public class JsonReportParserTest extends ReportParserTest {
+public class JsonReportParserHelperTest extends ReportParserTest {
 
     @Test
     public void parseReport() throws Exception {
