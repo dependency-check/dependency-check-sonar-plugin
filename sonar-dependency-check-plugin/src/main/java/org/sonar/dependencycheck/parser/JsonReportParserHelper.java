@@ -43,7 +43,7 @@ public class JsonReportParserHelper {
         } catch (JsonMappingException e) {
             throw new ReportParserException("Problem with JSON-Report-Mapping", e);
         } catch (IOException e) {
-            throw new ReportParserException("IO Problem in JSON-Reporter", e);
+            throw new ReportParserException("IO Problem with JSON-Report", e);
         }
     }
 }

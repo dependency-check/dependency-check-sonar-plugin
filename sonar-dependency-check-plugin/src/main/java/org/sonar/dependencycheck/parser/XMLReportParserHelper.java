@@ -44,7 +44,7 @@ public class XMLReportParserHelper {
         } catch (JsonMappingException e) {
             throw new ReportParserException("Problem with XML-Report-Mapping", e);
         } catch (IOException e) {
-            throw new ReportParserException("IO Problem in XML-Reporter", e);
+            throw new ReportParserException("IO Problem with XML-Report", e);
         }
     }
 }

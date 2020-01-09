@@ -24,8 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +41,7 @@ import org.sonar.dependencycheck.parser.element.Analysis;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
 
-public class XMLReportParserTest extends ReportParserTest {
+public class XMLReportParserHelperTest extends ReportParserTest {
 
     @Test
     public void parseReport() throws Exception {
@@ -55,10 +55,11 @@ public class XMLReportParserTest extends ReportParserTest {
     }
 
     @Test
-    public void parseReportXMLStreamException() throws IOException {
+    public void parseReportXMLIOException() {
         InputStream inputStream = mock(InputStream.class);
-        when(inputStream.read()).thenThrow(IOException.class);
-        assertThrows(ReportParserException.class, () -> XMLReportParserHelper.parse(inputStream), "Analysis aborted due to: XML is not valid");
+        doThrow(IOException.class).when(inputStream);
+        ReportParserException exception = assertThrows(ReportParserException.class, () -> XMLReportParserHelper.parse(inputStream), "No IOException thrown");
+        assertEquals("IO Problem with XML-Report", exception.getMessage());
     }
 
     @Test
