@@ -28,35 +28,18 @@ import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Identifier;
 
-public class MavenDependencyReasonTest {
-
-    private static final File TEST_DIR = new File("src/test/resources/reason");
-
-    private DefaultInputFile inputFile(String fileName) throws IOException {
-        File file = new File(TEST_DIR, fileName);
-        String content = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
-
-        return TestInputFileBuilder.create("key", fileName).setModuleBaseDir(Paths.get(TEST_DIR.getAbsolutePath()))
-                .setType(InputFile.Type.MAIN).setLanguage("mytest").setCharset(StandardCharsets.UTF_8)
-                .initMetadata(content).build();
-    }
+public class MavenDependencyReasonTest extends DependencyReasonTestHelper {
 
     @Test
     public void isReasonable() throws IOException {
@@ -91,14 +74,56 @@ public class MavenDependencyReasonTest {
         Collection<Identifier> packageidentifiers1 = new ArrayList<>();
         packageidentifiers1.add(identifier1);
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
+        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
         assertTrue(maven.isReasonable());
-        assertNotNull(maven.getBestTextRange(dependency));
+        assertNotNull(textRangeConfidence);
+        assertEquals(46, textRangeConfidence.getTextrange().start().line());
+        assertEquals(0, textRangeConfidence.getTextrange().start().lineOffset());
+        assertEquals(50, textRangeConfidence.getTextrange().end().line());
+        assertEquals(21, textRangeConfidence.getTextrange().end().lineOffset());
+        assertEquals(Confidence.HIGHEST, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
-        assertEquals(46, maven.getBestTextRange(dependency).getTextrange().start().line());
-        assertEquals(0, maven.getBestTextRange(dependency).getTextrange().start().lineOffset());
-        assertEquals(50, maven.getBestTextRange(dependency).getTextrange().end().line());
-        assertEquals(21, maven.getBestTextRange(dependency).getTextrange().end().lineOffset());
+    }
+
+    @Test
+    public void foundDependencyOnlyWithArtifactID() throws IOException {
+        MavenDependencyReason maven = new MavenDependencyReason(inputFile("pom.xml"));
+        // Create Dependency
+        Identifier identifier1 = new Identifier("pkg:maven/dummy/struts@1.2.8", Confidence.HIGHEST);
+        Collection<Identifier> packageidentifiers1 = new ArrayList<>();
+        packageidentifiers1.add(identifier1);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
+        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
+        assertTrue(maven.isReasonable());
+        assertNotNull(textRangeConfidence);
+        assertEquals(46, textRangeConfidence.getTextrange().start().line());
+        assertEquals(0, textRangeConfidence.getTextrange().start().lineOffset());
+        assertEquals(50, textRangeConfidence.getTextrange().end().line());
+        assertEquals(21, textRangeConfidence.getTextrange().end().lineOffset());
+        assertEquals(Confidence.HIGH, textRangeConfidence.getConfidence());
+        // verify that same dependency points to the same TextRange, use of HashMap
+        assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
+    }
+
+    @Test
+    public void foundDependencyOnlyWithGroupID() throws IOException {
+        MavenDependencyReason maven = new MavenDependencyReason(inputFile("pom.xml"));
+        // Create Dependency
+        Identifier identifier1 = new Identifier("pkg:maven/struts/dummy@1.2.8", Confidence.HIGHEST);
+        Collection<Identifier> packageidentifiers1 = new ArrayList<>();
+        packageidentifiers1.add(identifier1);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
+        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
+        assertTrue(maven.isReasonable());
+        assertNotNull(textRangeConfidence);
+        assertEquals(46, textRangeConfidence.getTextrange().start().line());
+        assertEquals(0, textRangeConfidence.getTextrange().start().lineOffset());
+        assertEquals(50, textRangeConfidence.getTextrange().end().line());
+        assertEquals(21, textRangeConfidence.getTextrange().end().lineOffset());
+        assertEquals(Confidence.MEDIUM, textRangeConfidence.getConfidence());
+        // verify that same dependency points to the same TextRange, use of HashMap
+        assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
     }
 
     @Test
@@ -109,31 +134,33 @@ public class MavenDependencyReasonTest {
         Collection<Identifier> packageidentifiers1 = new ArrayList<>();
         packageidentifiers1.add(identifier1);
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
+        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
         assertTrue(maven.isReasonable());
-        assertNotNull(maven.getBestTextRange(dependency));
+        assertNotNull(textRangeConfidence);
+        assertEquals(18, textRangeConfidence.getTextrange().start().line());
+        assertEquals(0, textRangeConfidence.getTextrange().start().lineOffset());
+        assertEquals(21, textRangeConfidence.getTextrange().end().line());
+        assertEquals(13, textRangeConfidence.getTextrange().end().lineOffset());
+        assertEquals(Confidence.MEDIUM, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
-        assertEquals(18, maven.getBestTextRange(dependency).getTextrange().start().line());
-        assertEquals(0, maven.getBestTextRange(dependency).getTextrange().start().lineOffset());
-        assertEquals(21, maven.getBestTextRange(dependency).getTextrange().end().line());
-        assertEquals(13, maven.getBestTextRange(dependency).getTextrange().end().lineOffset());
+
     }
 
     @Test
     public void foundNoDependency() throws IOException {
         MavenDependencyReason maven = new MavenDependencyReason(inputFile("pom.xml"));
         // Create Dependency
-        Identifier identifier1 = new Identifier("pkg:maven/myvendor/myartefact@1.2.8", Confidence.HIGHEST);
+        Identifier identifier1 = new Identifier("pkg:maven/myvendor/myartifact@1.2.8", Confidence.HIGHEST);
         Collection<Identifier> packageidentifiers1 = new ArrayList<>();
         packageidentifiers1.add(identifier1);
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
         TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
         // Check for default location, first line in file with low confidence
         assertNotNull(textRangeConfidence);
-        assertEquals(1, textRangeConfidence.getTextrange().start().line());
+        assertEquals(LINE_NOT_FOUND, textRangeConfidence.getTextrange().start().line());
         assertEquals(Confidence.LOW, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
-        assertEquals(1, maven.getBestTextRange(dependency).getTextrange().start().line());
     }
 }

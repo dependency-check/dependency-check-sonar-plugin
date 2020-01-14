@@ -28,35 +28,18 @@ import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Identifier;
 
-public class GradleDependencyReasonTest {
-
-    private static final File TEST_DIR = new File("src/test/resources/reason");
-
-    private DefaultInputFile inputFile(String fileName) throws IOException {
-        File file = new File(TEST_DIR, fileName);
-        String content = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
-
-        return TestInputFileBuilder.create("key", fileName).setModuleBaseDir(Paths.get(TEST_DIR.getAbsolutePath()))
-                .setType(InputFile.Type.MAIN).setLanguage("mytest").setCharset(StandardCharsets.UTF_8)
-                .initMetadata(content).build();
-    }
+public class GradleDependencyReasonTest extends DependencyReasonTestHelper {
 
     @Test
     public void isReasonable() throws IOException {
@@ -91,23 +74,30 @@ public class GradleDependencyReasonTest {
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
-        assertNotNull(gradle.getBestTextRange(dependency));
+        TextRangeConfidence textRangeConfidence = gradle.getBestTextRange(dependency);
+        assertNotNull(textRangeConfidence);
+        assertEquals(Confidence.MEDIUM, textRangeConfidence.getConfidence());
+        assertEquals(24, textRangeConfidence.getTextrange().start().line());
+        assertEquals(0, textRangeConfidence.getTextrange().start().lineOffset());
+        assertEquals(24, textRangeConfidence.getTextrange().end().line());
+        assertEquals(44, textRangeConfidence.getTextrange().end().lineOffset());
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(gradle.getBestTextRange(dependency), gradle.getBestTextRange(dependency));
-        assertEquals(24, gradle.getBestTextRange(dependency).getTextrange().start().line());
     }
 
     @Test
     public void foundNoDependency() throws IOException {
         GradleDependencyReason gradle = new GradleDependencyReason(inputFile("build.gradle"));
         // Create Dependency
-        Identifier identifier = new Identifier("pkg:maven/myvendor/myartefact@2.0", Confidence.HIGHEST);
+        Identifier identifier = new Identifier("pkg:maven/myvendor/myartifact@2.0", Confidence.HIGHEST);
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
-        assertNotNull(gradle.getBestTextRange(dependency));
+        TextRangeConfidence textRangeConfidence = gradle.getBestTextRange(dependency);
+        assertNotNull(textRangeConfidence);
+        assertEquals(LINE_NOT_FOUND, textRangeConfidence.getTextrange().start().line());
+        assertEquals(Confidence.LOW, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(gradle.getBestTextRange(dependency), gradle.getBestTextRange(dependency));
-        assertEquals(1, gradle.getBestTextRange(dependency).getTextrange().start().line());
     }
 }
