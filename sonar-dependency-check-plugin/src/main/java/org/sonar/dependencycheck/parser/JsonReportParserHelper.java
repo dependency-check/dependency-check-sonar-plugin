@@ -39,7 +39,7 @@ public class JsonReportParserHelper {
         try {
             return mapper.readValue(inputStream, Analysis.class);
         } catch (JsonParseException e) {
-            throw new ReportParserException("Could not parse JSON", e);
+            throw new ReportParserException("Could not parse JSON-Report", e);
         } catch (JsonMappingException e) {
             throw new ReportParserException("Problem with JSON-Report-Mapping", e);
         } catch (IOException e) {

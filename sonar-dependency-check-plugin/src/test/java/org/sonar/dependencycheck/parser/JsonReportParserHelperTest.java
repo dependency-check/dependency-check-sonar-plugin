@@ -54,7 +54,7 @@ public class JsonReportParserHelperTest extends ReportParserTest {
         InputStream inputStream = mock(InputStream.class);
         doThrow(JsonParseException.class).when(inputStream);
         ReportParserException exception = assertThrows(ReportParserException.class, () -> JsonReportParserHelper.parse(inputStream), "No JsonParseException thrown");
-        assertEquals("Could not parse JSON", exception.getMessage());
+        assertEquals("Could not parse JSON-Report", exception.getMessage());
     }
 
     @Test
