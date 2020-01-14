@@ -71,6 +71,17 @@ public class DependencyReasonSearcher {
                 LOGGER.debug("Found unreasonable gradle file {}", buildGradle);
             }
         }
+        String[] npmPathPatterns = {"**/package-lock.json"};
+        Iterable<InputFile> packageLocks = context.fileSystem().inputFiles(context.fileSystem().predicates().matchesPathPatterns(npmPathPatterns));
+        for (InputFile packageLock : packageLocks) {
+            DependencyReason npmReason = new NPMDependencyReason(packageLock);
+            if (npmReason.isReasonable()) {
+                dependencyreasons.add(npmReason);
+                LOGGER.debug("Found reasonable npm file {}", npmReason);
+            } else {
+                LOGGER.debug("Found unreasonable npm file {}", npmReason);
+            }
+        }
     }
 
     /**
@@ -119,7 +130,7 @@ public class DependencyReasonSearcher {
             return;
         }
         if (dependencyreasons.isEmpty()) {
-            LOGGER.info("We doesn't found any Project configuration file e.g. pom.xml, gradle.build and can not link dependencies");
+            LOGGER.info("We doesn't found any Project configuration file e.g. pom.xml, gradle.build, build.gradle.kts, package-lock.json and can not link dependencies");
             linkIssuesToProject(analysis, context);
             LOGGER.debug("Saving Metrics to project {}", projectMetric.toString());
             projectMetric.saveMeasures(context);
