@@ -40,7 +40,6 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.scan.filesystem.PathResolver;
-import org.sonar.dependencycheck.DependencyCheckSensor;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 

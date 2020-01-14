@@ -62,7 +62,7 @@ public class Identifier {
         }
         return Optional.empty();
     }
-    public static Optional<String> getPackageArtefact(@NonNull Identifier identifier) {
+    public static Optional<String> getPackageArtifact(@NonNull Identifier identifier) {
         if (StringUtils.isNotBlank(identifier.getId())) {
             // pkg:maven/struts/struts@1.2.8 -> struts/struts@1.2.8
             return Optional.of(StringUtils.substringAfter(identifier.getId(), "/"));
