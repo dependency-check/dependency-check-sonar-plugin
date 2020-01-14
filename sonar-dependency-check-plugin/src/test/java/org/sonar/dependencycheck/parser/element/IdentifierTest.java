@@ -32,7 +32,7 @@ class IdentifierTest {
         Identifier a = new Identifier("pkg:maven/struts/struts@1.2.8", Confidence.HIGH);
         assertTrue(Identifier.isMavenPackage(a));
         assertFalse(Identifier.isNPMPackage(a));
-        assertEquals("struts/struts@1.2.8", Identifier.getPackageArtefact(a).get());
+        assertEquals("struts/struts@1.2.8", Identifier.getPackageArtifact(a).get());
         assertEquals("maven", Identifier.getPackageType(a).get());
     }
 
@@ -41,7 +41,7 @@ class IdentifierTest {
         Identifier a = new Identifier("pkg:npm/braces@1.8.5", Confidence.HIGHEST);
         assertFalse(Identifier.isMavenPackage(a));
         assertTrue(Identifier.isNPMPackage(a));
-        assertEquals("braces@1.8.5", Identifier.getPackageArtefact(a).get());
+        assertEquals("braces@1.8.5", Identifier.getPackageArtifact(a).get());
         assertEquals("npm", Identifier.getPackageType(a).get());
     }
 
