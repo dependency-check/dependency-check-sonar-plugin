@@ -35,7 +35,7 @@ import org.sonar.dependencycheck.parser.element.Evidence;
 import org.sonar.dependencycheck.parser.element.Identifier;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
 
-abstract class ReportParserTest {
+public abstract class ReportParserTest {
 
     public void checkAnalyse(Analysis analysis) {
         assertEquals("5.2.0", analysis.getScanInfo().getEngineVersion());

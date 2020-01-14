@@ -58,6 +58,8 @@ public class Identifier {
     public static Optional<String> getPackageType(@NonNull Identifier identifier) {
         if (StringUtils.isNotBlank(identifier.getId())) {
             // pkg:maven/struts/struts@1.2.8 -> maven
+            // pkg:javascript/jquery@2.2.0 -> javascript
+            // pkg:npm/arr-flatten@1.1.0 -> npm
             return Optional.of(StringUtils.substringAfter(StringUtils.substringBefore(identifier.getId(), "/"), "pkg:"));
         }
         return Optional.empty();
@@ -65,6 +67,8 @@ public class Identifier {
     public static Optional<String> getPackageArtifact(@NonNull Identifier identifier) {
         if (StringUtils.isNotBlank(identifier.getId())) {
             // pkg:maven/struts/struts@1.2.8 -> struts/struts@1.2.8
+            // pkg:javascript/jquery@2.2.0 -> jquery@2.2.0
+            // pkg:npm/arr-flatten@1.1.0 -> arr-flatten@1.1.0
             return Optional.of(StringUtils.substringAfter(identifier.getId(), "/"));
         }
         return Optional.empty();
@@ -76,5 +80,9 @@ public class Identifier {
 
     public static boolean isNPMPackage(@NonNull Identifier identifier) {
         return "npm".equals(Identifier.getPackageType(identifier).orElse(""));
+    }
+
+    public static boolean isJavaScriptPackage(@NonNull Identifier identifier) {
+        return "javascript".equals(Identifier.getPackageType(identifier).orElse(""));
     }
 }

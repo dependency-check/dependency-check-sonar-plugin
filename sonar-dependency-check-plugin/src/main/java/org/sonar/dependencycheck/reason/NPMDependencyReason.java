@@ -20,34 +20,110 @@
 
 package org.sonar.dependencycheck.reason;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
+import org.sonar.dependencycheck.base.DependencyCheckUtils;
+import org.sonar.dependencycheck.parser.PackageLockParserHelper;
+import org.sonar.dependencycheck.parser.ReportParserException;
+import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
+import org.sonar.dependencycheck.parser.element.Identifier;
+import org.sonar.dependencycheck.reason.npm.NPMDependency;
+import org.sonar.dependencycheck.reason.npm.PackageLockModel;
+
+import edu.umd.cs.findbugs.annotations.CheckForNull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class NPMDependencyReason extends DependencyReason {
 
     private final InputFile packageLock;
-    
+    private PackageLockModel packageLockModel;
+    private final Map<Dependency, TextRangeConfidence> dependencyMap;
+
+    private static final Logger LOGGER = Loggers.get(NPMDependencyReason.class);
+
     public NPMDependencyReason(InputFile packageLock) {
         super(packageLock);
         this.packageLock = packageLock;
+        dependencyMap = new HashMap<>();
+        packageLockModel = null;
+        try {
+            packageLockModel = PackageLockParserHelper.parse(packageLock.inputStream());
+        } catch (ReportParserException | IOException e) {
+            LOGGER.warn("Parsing {} failed", packageLock);
+            LOGGER.debug(e.getMessage(), e);
+        }
     }
 
     @Override
     public boolean isReasonable() {
-        return packageLock != null;
+        return packageLock != null && packageLockModel != null;
     }
 
     @Override
+    @CheckForNull
     public InputComponent getInputComponent() {
-        // TODO Auto-generated method stub
-        return null;
+        return packageLock;
     }
 
     @Override
     public TextRangeConfidence getBestTextRange(Dependency dependency) {
-        // TODO Auto-generated method stub
-        return null;
+        if (!dependencyMap.containsKey(dependency)) {
+            Optional<Identifier> javaScriptIdentifier = DependencyCheckUtils.getJavaScriptIdentifier(dependency);
+            if (javaScriptIdentifier.isPresent()) {
+                fillArtifactMatch(dependency, javaScriptIdentifier.get());
+            } else {
+                LOGGER.debug("No Identifier with type javascript found for Dependency {}", dependency.getFileName());
+            }
+            Optional<Identifier> npmIdentifier = DependencyCheckUtils.getNPMIdentifier(dependency);
+            if (npmIdentifier.isPresent()) {
+                fillArtifactMatch(dependency, npmIdentifier.get());
+            } else {
+                LOGGER.debug("No Identifier with type npm found for Dependency {}", dependency.getFileName());
+            }
+            if (!dependencyMap.containsKey(dependency) || dependencyMap.get(dependency) == null) {
+                LOGGER.debug("We doesn't find a TextRange for {} in {}. We link to first line with {} confidence",
+                        dependency.getFileName(), packageLock, Confidence.LOW);
+                dependencyMap.put(dependency, new TextRangeConfidence(packageLock.selectLine(1), Confidence.LOW));
+            }
+        }
+        return dependencyMap.get(dependency);
+    }
+
+    private void fillArtifactMatch(@NonNull Dependency dependency, Identifier npmIdentifier) {
+        Optional<String> packageArtifact = Identifier.getPackageArtifact(npmIdentifier);
+        if (packageArtifact.isPresent()) {
+            // packageArtifact has something like jquery@2.2.0
+            String[] npmIdentifierSplit = packageArtifact.get().split("@");
+            String name = npmIdentifierSplit[0];
+            String version = npmIdentifierSplit[1];
+            // Try to find in <dependency>
+            for (NPMDependency npmDependency : packageLockModel.getDependencies()) {
+                checkNPMDependency(name, version , npmDependency)
+                        .ifPresent(textrange -> dependencyMap.put(dependency, textrange));
+            }
+        }
+    }
+
+    private Optional<TextRangeConfidence> checkNPMDependency(String name, String version, NPMDependency dependency) {
+        if (StringUtils.equals(name, dependency.getName())
+                && StringUtils.equals(version, dependency.getVersion())) {
+            LOGGER.debug("Found a name and version match in {}", packageLock);
+            return Optional.of(new TextRangeConfidence(packageLock.newRange(packageLock.selectLine(dependency.getStartLineNr()).start(), packageLock.selectLine(dependency.getEndLineNr()).end()), Confidence.HIGHEST));
+        }
+        if (StringUtils.equals(name, dependency.getName())) {
+            LOGGER.debug("Found a name match in {} for {}", packageLock, name);
+            return Optional.of(new TextRangeConfidence(packageLock.newRange(packageLock.selectLine(dependency.getStartLineNr()).start(), packageLock.selectLine(dependency.getEndLineNr()).end()), Confidence.HIGH));
+        }
+        return Optional.empty();
     }
 
 }
