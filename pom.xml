@@ -63,7 +63,6 @@
       <url>https://travis-ci.org/dependency-check/dependency-check-sonar-plugin</url>
     </ciManagement>
 
-    <!-- todo: remove this when SonarSource Forge hosting becomes a reality -->
     <distributionManagement>
         <repository>
             <id>bintray-dependency-check-owasp</id>
@@ -76,7 +75,6 @@
         <module>sonar-dependency-check-plugin</module>
     </modules>
 
-    <!-- todo: remove this when SonarSource Forge hosting becomes a reality -->
     <build>
         <plugins>
             <plugin>

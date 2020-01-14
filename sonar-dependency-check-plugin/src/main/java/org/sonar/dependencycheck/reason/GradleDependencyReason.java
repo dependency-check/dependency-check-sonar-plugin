@@ -44,7 +44,7 @@ public class GradleDependencyReason extends DependencyReason {
     private String content;
     private Map<Dependency, TextRangeConfidence> dependencyMap;
 
-    private static final Logger LOGGER = Loggers.get(MavenDependencyReason.class);
+    private static final Logger LOGGER = Loggers.get(GradleDependencyReason.class);
 
     public GradleDependencyReason(@NonNull InputFile buildGradle) {
         super(buildGradle);

@@ -55,26 +55,30 @@ public class PackageLockDependencyDeserializer extends StdDeserializer<List<NPMD
             if (JsonToken.START_OBJECT.equals(jsonParser.currentToken())) {
                 String name = jsonParser.getCurrentName();
                 int startLineNr = jsonParser.getCurrentLocation().getLineNr();
-                String version = "";
-                int depth = 0;
-                // Scan whole whole dependency
-                while (!JsonToken.END_OBJECT.equals(jsonParser.nextToken()) || depth > 0) {
-                    // Check for version only at first level
-                    if (StringUtils.equalsIgnoreCase("version", jsonParser.getCurrentName()) && depth == 0) {
-                        version = jsonParser.getValueAsString();
-                    }
-                    if (JsonToken.END_OBJECT.equals(jsonParser.getCurrentToken())) {
-                        --depth;
-                    }
-                    if (JsonToken.START_OBJECT.equals(jsonParser.getCurrentToken())) {
-                        ++depth;
-                    }
-                }
+                String version = scanWholeDependencyForVersion(jsonParser);
                 int endLineNr = jsonParser.getCurrentLocation().getLineNr();
                 npmDependencies.add(new NPMDependency(name, version, startLineNr, endLineNr));
             }
         }
         return npmDependencies;
+    }
+
+    private String scanWholeDependencyForVersion(JsonParser jsonParser) throws IOException {
+        String version = "";
+        int depth = 0;
+        while (!JsonToken.END_OBJECT.equals(jsonParser.nextToken()) || depth > 0) {
+            // Check for version only at first level
+            if (StringUtils.equalsIgnoreCase("version", jsonParser.getCurrentName()) && depth == 0) {
+                version = jsonParser.getValueAsString();
+            }
+            if (JsonToken.END_OBJECT.equals(jsonParser.getCurrentToken())) {
+                --depth;
+            }
+            if (JsonToken.START_OBJECT.equals(jsonParser.getCurrentToken())) {
+                ++depth;
+            }
+        }
+        return version;
     }
 
 }
