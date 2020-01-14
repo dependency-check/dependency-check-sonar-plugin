@@ -20,6 +20,7 @@
 
 package org.sonar.dependencycheck.reason;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -56,8 +57,8 @@ public class MavenDependencyReason extends DependencyReason {
         dependencyMap = new HashMap<>();
         pomModel = null;
         try {
-            pomModel = PomParserHelper.parse(pom);
-        } catch (ReportParserException e) {
+            pomModel = PomParserHelper.parse(pom.inputStream());
+        } catch (ReportParserException | IOException e) {
             LOGGER.warn("Parsing {} failed", pom);
             LOGGER.debug(e.getMessage(), e);
         }

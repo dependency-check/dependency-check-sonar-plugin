@@ -21,8 +21,8 @@
 package org.sonar.dependencycheck.parser;
 
 import java.io.IOException;
+import java.io.InputStream;
 
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.dependencycheck.reason.maven.MavenPomModel;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -36,16 +36,16 @@ public class PomParserHelper {
         // Do nothing
     }
 
-    public static MavenPomModel parse(InputFile pom) throws ReportParserException {
+    public static MavenPomModel parse(InputStream pom) throws ReportParserException {
         ObjectMapper mapper = new XmlMapper();
         try {
-            return mapper.readValue(pom.inputStream(), MavenPomModel.class);
+            return mapper.readValue(pom, MavenPomModel.class);
         } catch (JsonParseException e) {
             throw new ReportParserException("Could not parse pom.xml", e);
         } catch (JsonMappingException e) {
             throw new ReportParserException("Problem with pom.xml-Mapping", e);
         } catch (IOException e) {
-            throw new ReportParserException("IO Problem in pom.xml parser", e);
+            throw new ReportParserException("IO Problem with pom.xml", e);
         }
     }
 }
