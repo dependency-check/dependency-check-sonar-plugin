@@ -7,5 +7,6 @@ target/
 .DS_Store
 .gradle
 build/
-node_modules/
-package-lock.json
+examples/single-module-nodejs/node_modules
+examples/single-module-nodejs/reports
+examples/single-module-nodejs/package-lock.json
