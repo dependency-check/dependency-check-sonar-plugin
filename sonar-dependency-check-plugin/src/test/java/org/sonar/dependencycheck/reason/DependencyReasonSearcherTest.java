@@ -72,13 +72,14 @@ public class DependencyReasonSearcherTest {
         context.fileSystem().add(inputFile("pom.xml"));
         context.fileSystem().add(inputFile("build.gradle"));
         context.fileSystem().add(inputFile("build.gradle.kts"));
+        context.fileSystem().add(inputFile("package-lock.json"));
         DependencyReasonSearcher searcher = new DependencyReasonSearcher(context);
         ScanInfo scanInfo = new ScanInfo("testengine");
         ProjectInfo projectInfo = new ProjectInfo("testproject", "testreportdate");
         Collection<Dependency> dependencies = new LinkedList<>();
         Analysis analysis = new Analysis(scanInfo, projectInfo, dependencies);
         searcher.addDependenciesToInputComponents(analysis, context);
-        assertEquals(3, searcher.getDependencyreasons().size());
+        assertEquals(4, searcher.getDependencyreasons().size());
     }
 
     @Test
