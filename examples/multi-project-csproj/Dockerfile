@@ -41,7 +41,7 @@ COPY ExampleApp2 ./ExampleApp2
 RUN /usr/bin/dependency-check.sh -f XML -f HTML -s . -o .
 RUN dotnet sonarscanner begin /k:exampleCSproj \
     /d:sonar.host.url=${sonarHost}  \
-    /d:sonar.dependencyCheck.reportPath="/app/dependency-check-report.xml" \
+    /d:sonar.dependencyCheck.xmlReportPath="/app/dependency-check-report.xml" \
     /d:sonar.dependencyCheck.htmlReportPath="/app/dependency-check-report.html" && \
     dotnet build && \
     dotnet sonarscanner end
