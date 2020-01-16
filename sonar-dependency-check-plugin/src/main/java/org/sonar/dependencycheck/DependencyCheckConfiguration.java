@@ -27,20 +27,27 @@ import org.sonar.api.config.PropertyDefinition;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
 public class DependencyCheckConfiguration {
-    
+
     private DependencyCheckConfiguration() {
         // do nothing
     }
     public static List<PropertyDefinition> getPropertyDefinitions() {
         return Arrays.asList(
                 PropertyDefinition.builder(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY)
-                        .subCategory("Paths")
-                        .name("Dependency-Check report path")
+                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_PATHS)
+                        .name("Dependency-Check XML report path")
                         .description("path to the 'dependency-check-report.xml' file")
                         .defaultValue(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)
+                        .deprecatedKey(DependencyCheckConstants.DEPRECTED_XML_REPORT_PATH_PROPERTY)
+                        .build(),
+                PropertyDefinition.builder(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY)
+                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_PATHS)
+                        .name("Dependency-Check JSON report path")
+                        .description("path to the 'dependency-check-report.json' file")
+                        .defaultValue(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY)
-                        .subCategory("Paths")
+                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_PATHS)
                         .name("Dependency-Check HTML report path")
                         .description("path to the 'dependency-check-report.html' file")
                         .defaultValue(DependencyCheckConstants.HTML_REPORT_PATH_DEFAULT)

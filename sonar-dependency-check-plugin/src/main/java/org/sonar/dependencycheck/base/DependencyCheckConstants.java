@@ -22,6 +22,7 @@ package org.sonar.dependencycheck.base;
 public final class DependencyCheckConstants {
 
     public static final String XML_REPORT_PATH_PROPERTY = "sonar.dependencyCheck.xmlReportPath";
+    public static final String DEPRECTED_XML_REPORT_PATH_PROPERTY = "sonar.dependencyCheck.reportPath";
     public static final String JSON_REPORT_PATH_PROPERTY = "sonar.dependencyCheck.jsonReportPath";
     public static final String HTML_REPORT_PATH_PROPERTY = "sonar.dependencyCheck.htmlReportPath";
     public static final String SEVERITY_BLOCKER = "sonar.dependencyCheck.severity.blocker";
@@ -45,6 +46,7 @@ public final class DependencyCheckConstants {
     public static final String LANGUAGE_KEY = "neutral";
     public static final String RULE_KEY = "UsingComponentWithKnownVulnerability";
     public static final String SUB_CATEGORY_SEVERITIES = "Severities";
+    public static final String SUB_CATEGORY_PATHS = "Paths";
 
     private DependencyCheckConstants() {
     }
