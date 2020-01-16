@@ -38,6 +38,7 @@ public class DependencyCheckConfiguration {
                         .name("Dependency-Check report path")
                         .description("path to the 'dependency-check-report.xml' file")
                         .defaultValue(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)
+                        .deprecatedKey(DependencyCheckConstants.DEPRECTED_XML_REPORT_PATH_PROPERTY)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY)
                         .subCategory("Paths")
