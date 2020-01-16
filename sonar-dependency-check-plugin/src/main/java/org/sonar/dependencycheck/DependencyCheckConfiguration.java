@@ -34,14 +34,14 @@ public class DependencyCheckConfiguration {
     public static List<PropertyDefinition> getPropertyDefinitions() {
         return Arrays.asList(
                 PropertyDefinition.builder(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY)
-                        .subCategory("Paths")
+                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_PATHS)
                         .name("Dependency-Check report path")
                         .description("path to the 'dependency-check-report.xml' file")
                         .defaultValue(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)
                         .deprecatedKey(DependencyCheckConstants.DEPRECTED_XML_REPORT_PATH_PROPERTY)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY)
-                        .subCategory("Paths")
+                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_PATHS)
                         .name("Dependency-Check HTML report path")
                         .description("path to the 'dependency-check-report.html' file")
                         .defaultValue(DependencyCheckConstants.HTML_REPORT_PATH_DEFAULT)

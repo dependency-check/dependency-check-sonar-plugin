@@ -46,6 +46,7 @@ public final class DependencyCheckConstants {
     public static final String LANGUAGE_KEY = "neutral";
     public static final String RULE_KEY = "UsingComponentWithKnownVulnerability";
     public static final String SUB_CATEGORY_SEVERITIES = "Severities";
+    public static final String SUB_CATEGORY_PATHS = "Paths";
 
     private DependencyCheckConstants() {
     }
