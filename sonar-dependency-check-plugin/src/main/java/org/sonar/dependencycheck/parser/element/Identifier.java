@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
-@JsonIgnoreProperties("url")
+@JsonIgnoreProperties({"url", "description","notes"})
 public class Identifier {
     private final String id;
     private final Confidence confidence;
