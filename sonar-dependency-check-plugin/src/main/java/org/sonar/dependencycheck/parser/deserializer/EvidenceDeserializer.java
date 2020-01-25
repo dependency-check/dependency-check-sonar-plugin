@@ -57,6 +57,7 @@ public class EvidenceDeserializer extends StdDeserializer<Map<String, List<Evide
         ArrayList<Evidence> evidences = new ArrayList<>();
         while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
             JsonToken jsonToken = jsonParser.currentToken();
+            // For JSON
             if (JsonToken.START_ARRAY.equals(jsonToken)) {
                 String fieldName = jsonParser.getCurrentName();
                 if (StringUtils.equalsAnyIgnoreCase(fieldName, "vendorEvidence", "productEvidence", "versionEvidence")) {
@@ -66,6 +67,7 @@ public class EvidenceDeserializer extends StdDeserializer<Map<String, List<Evide
                     }
                 }
             }
+            // For XML
             if(JsonToken.START_OBJECT.equals(jsonToken)){
                 String fieldName = jsonParser.getCurrentName();
                 if (StringUtils.equalsIgnoreCase("evidence", fieldName)) {
