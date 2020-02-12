@@ -5,7 +5,7 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=dependency-check_dependency-check-sonar-plugin&metric=coverage)](https://sonarcloud.io/dashboard?id=dependency-check_dependency-check-sonar-plugin)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=dependency-check_dependency-check-sonar-plugin&metric=security_rating)](https://sonarcloud.io/dashboard?id=dependency-check_dependency-check-sonar-plugin)
 
-# Dependency-Check Plugin for SonarQube 7.x
+# Dependency-Check Plugin for SonarQube 7.x and 8.x
 
 Integrates [Dependency-Check][] reports into SonarQube v7.6 or higher.
 
@@ -19,7 +19,7 @@ Dependency-Check supports the identification of project dependencies in a number
 
 ## Note
 
-**This SonarQube plugin does not perform analysis**, rather, it reads existing Dependency-Check reports. Use one of the other available methods to scan project dependencies and generate the necessary XML report which can then be consumed by this plugin. Refer to the [Dependency-Check project](https://github.com/jeremylong/DependencyCheck) for relevant [documentation](https://jeremylong.github.io/DependencyCheck/).
+**This SonarQube plugin does not perform analysis**, rather, it reads existing Dependency-Check reports. Use one of the other available methods to scan project dependencies and generate the necessary JSON or XML report which can then be consumed by this plugin. Refer to the [Dependency-Check project](https://github.com/jeremylong/DependencyCheck) for relevant [documentation](https://jeremylong.github.io/DependencyCheck/).
 
 ## Metrics
 
@@ -58,19 +58,19 @@ Ready to use binaries are available from [GitHub][] and [bintray][].
 
 Please use the newest minor version. Keep in mind, that SonarQube 5.6 LTS is not supported anymore.
 
-| Plugin Version | SonarQube version    |
-|--------------- | ---------------------|
-| 1.2.x          | SonarQube 7.6 and up |
-| 1.1.x          | SonarQube 6.7 LTS    |
-| 1.0.3          | SonarQube 5.6 LTS    |
+| Plugin Version  | SonarQube version    |
+|-----------------|----------------------|
+| 1.2.x and 2.x.y | SonarQube 7.6 and up |
+| 1.1.x           | SonarQube 6.7 LTS    |
+| 1.0.3           | SonarQube 5.6 LTS    |
 
 ## Installation
 
-Copy the plugin (jar file) to $SONAR_INSTALL_DIR/extensions/plugins and restart SonarQube.
+Copy the plugin (jar file) to $SONAR_INSTALL_DIR/extensions/plugins and restart SonarQube or install via SonarQube Marketplace.
 
 ## Using
 
-Create aggregate reports with Dependency-Check. Dependency-Check will output a file named 'dependency-check-report.xml' or 'dependency-check-report.json' . The Dependency-Check SonarQube plugin reads an existing Dependency-Check XML or JSON report.
+Create aggregate reports with Dependency-Check. Dependency-Check will output a file named 'dependency-check-report.json' or 'dependency-check-report.xml'. The Dependency-Check SonarQube plugin reads an existing Dependency-Check JSON or XML report.
 
 ## Plugin Configuration
 
@@ -82,9 +82,9 @@ sonar.dependencyCheck.jsonReportPath=${WORKSPACE}/dependency-check-report.json
 sonar.dependencyCheck.htmlReportPath=${WORKSPACE}/dependency-check-report.html
 ```
 
-In this example, both the XML and HTML reports are specified. Only the XML report is required, however, if the HTML
-report is also available, it greatly enhances the usability of the SonarQube plugin by incorporating the actual
-Dependency-Check HTML report in the SonarQube project.
+In this example, all supported reports (JSON, XML and HTML) are specified. This plugin prefers the JSON over the XML report. At the moment the XML report isn't deprecated, but that might be an option in future. Only the JSON/XML report is required, however, if the HTML report is also available, it greatly enhances the usability of the SonarQube plugin by incorporating the actual Dependency-Check HTML report in the SonarQube project.
+
+This plugin tries to add SonarQube issues to your project configuration files (e.g. pom.xml, *.gradle, package-json.lock). Please make sure, that these files are part of `sonar.sources`.
 
 To configure the severity of the created issues you can optionally specify the minimum score for each severity with the following parameter. Specify a score of `-1` to completely disable a severity.
 
