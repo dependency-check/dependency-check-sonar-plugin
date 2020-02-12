@@ -66,7 +66,7 @@ Please use the newest minor version. Keep in mind, that SonarQube 5.6 LTS is not
 
 ## Installation
 
-Copy the plugin (jar file) to $SONAR_INSTALL_DIR/extensions/plugins and restart SonarQube or install via Sonarqube Marketplace.
+Copy the plugin (jar file) to $SONAR_INSTALL_DIR/extensions/plugins and restart SonarQube or install via SonarQube Marketplace.
 
 ## Using
 
@@ -82,9 +82,9 @@ sonar.dependencyCheck.jsonReportPath=${WORKSPACE}/dependency-check-report.json
 sonar.dependencyCheck.htmlReportPath=${WORKSPACE}/dependency-check-report.html
 ```
 
-In this example, all supported reports (JSON, XML and HTML) are specified. This plugin prefer the JSON over the XML report. At the moment the XML report isn't deprecated, but that might be an option in future. Only the JSON/XML report is required, however, if the HTML report is also available, it greatly enhances the usability of the SonarQube plugin by incorporating the actual Dependency-Check HTML report in the SonarQube project.
+In this example, all supported reports (JSON, XML and HTML) are specified. This plugin prefers the JSON over the XML report. At the moment the XML report isn't deprecated, but that might be an option in future. Only the JSON/XML report is required, however, if the HTML report is also available, it greatly enhances the usability of the SonarQube plugin by incorporating the actual Dependency-Check HTML report in the SonarQube project.
 
-The plugin tries to add Sonarqube-Issues to your project configuration files (e.g. pom.xml, *.gradle, package-json.lock). Please make sure, that this files are part of `sonar.sources`.
+This plugin tries to add SonarQube issues to your project configuration files (e.g. pom.xml, *.gradle, package-json.lock). Please make sure, that these files are part of `sonar.sources`.
 
 To configure the severity of the created issues you can optionally specify the minimum score for each severity with the following parameter. Specify a score of `-1` to completely disable a severity.
 
