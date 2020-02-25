@@ -17,22 +17,12 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.dependencycheck.page;
+import React from "react";
+import DependencyCheckReportApp from "./components/DependencyCheckReportApp";
 
-import org.sonar.api.web.page.Context;
-import org.sonar.api.web.page.Page;
-import org.sonar.api.web.page.Page.Scope;
-import org.sonar.api.web.page.PageDefinition;
+// This creates a page for dependencycheck, which shows a html report
 
-public class DependencyCheckReportPage implements PageDefinition {
-
-    @Override
-    public void define(Context context) {
-        context.addPage(
-            Page.builder("dependencycheck/report_page")
-                .setScope(Scope.COMPONENT)
-                .setComponentQualifiers(Page.Qualifier.PROJECT, Page.Qualifier.MODULE)
-                .setName("Dependency-Check")
-                .setAdmin(false).build());
-    }
-}
+//  You can access it at /project/extension/dependencycheck/report_page?id={PORTFOLIO_ID}&qualifier=VW
+window.registerExtension("dependencycheck/report_page", options => {
+  return <DependencyCheckReportApp project={options.component} />;
+});

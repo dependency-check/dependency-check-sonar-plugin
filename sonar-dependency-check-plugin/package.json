@@ -1,0 +1,86 @@
+{
+  "name": "sonar-custom-plugin-example",
+  "license": "LGPL-3.0",
+  "version": "7.0.0",
+  "devDependencies": {
+    "autoprefixer": "6.2.2",
+    "babel-core": "6.14.0",
+    "babel-jest": "18.0.0",
+    "babel-loader": "6.2.5",
+    "babel-preset-react-app": "0.2.1",
+    "cross-env": "2.0.0",
+    "cross-spawn": "4.0.0",
+    "css-loader": "0.23.1",
+    "detect-port": "1.0.0",
+    "dotenv": "2.0.0",
+    "enzyme": "2.6.0",
+    "enzyme-to-json": "1.4.5",
+    "expose-loader": "0.7.1",
+    "express": "4.13.4",
+    "express-http-proxy": "0.6.0",
+    "filesize": "3.3.0",
+    "find-cache-dir": "0.1.1",
+    "gzip-size": "3.0.0",
+    "imports-loader": "0.6.5",
+    "jest": "18.0.0",
+    "json-loader": "0.5.4",
+    "path-exists": "2.1.0",
+    "postcss-loader": "0.8.0",
+    "prettier": "0.22.0",
+    "react": "15.6.2",
+    "react-addons-shallow-compare": "15.6.2",
+    "react-addons-test-utils": "15.6.2",
+    "react-dev-utils": "0.2.1",
+    "react-dom": "15.6.2",
+    "react-router": "3.0.2",
+    "react-transform-hmr": "1.0.4",
+    "recursive-readdir": "2.1.0",
+    "rimraf": "2.5.4",
+    "script-loader": "0.6.1",
+    "strip-ansi": "3.0.1",
+    "style-loader": "0.13.0",
+    "webpack": "1.13.2",
+    "webpack-dev-server": "1.16.1"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "start": "node scripts/start.js"
+  },
+  "babel": {
+    "presets": [
+      "react-app"
+    ]
+  },
+  "jest": {
+    "coverageDirectory": "<rootDir>/target/coverage",
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/node_modules",
+      "<rootDir>/tests"
+    ],
+    "moduleFileExtensions": [
+      "jsx",
+      "js",
+      "json"
+    ],
+    "moduleNameMapper": {
+      "^.+\\.(hbs|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/conf/jest/FileStub.js",
+      "^.+\\.css$": "<rootDir>/conf/jest/CSSStub.js"
+    },
+    "setupFiles": [
+      "<rootDir>/conf/jest/SetupTestEnvironment.js"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules",
+      "<rootDir>/scripts",
+      "<rootDir>/conf"
+    ]
+  },
+  "dependencies": {
+    "backbone": "^1.4.0",
+    "jquery": "^1.11.0",
+    "underscore": "^1.9.1"
+  }
+}
