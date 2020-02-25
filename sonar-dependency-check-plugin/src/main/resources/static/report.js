@@ -31,7 +31,7 @@ window.registerExtension("dependencycheck/report", function(options) {
 	}
 	
 	window.SonarRequest.getJSON("/api/measures/component", {
-		componentKey : options.component.key,
+		component : options.component.key,
 		metricKeys : "report"
 	}).then(function(response) {
 		if (isDisplayed) {
