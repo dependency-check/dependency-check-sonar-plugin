@@ -31,6 +31,13 @@ export default class DependencyCheckReportApp extends React.PureComponent {
 
   componentDidMount() {
     findDependencyCheckReport(this.props.project).then(data => {
+      // Add javascript components manual, because dangerouslySetInnerHTML ignores them. See: https://github.com/facebook/react/issues/8838
+      var parser = new DOMParser();
+      var parsedDocument = parser.parseFromString(data, 'text/html');
+      var scripts = parsedDocument.getElementsByTagName('script');
+      for (var i = 0; i < scripts.length; i++) {
+        window.eval(scripts[i].innerHTML);
+      }
       this.setState({
         loading: false,
         data
