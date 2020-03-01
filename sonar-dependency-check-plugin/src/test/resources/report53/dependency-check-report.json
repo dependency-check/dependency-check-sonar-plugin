@@ -1,0 +1,1752 @@
+{
+  "reportSchema": "1.1",
+  "scanInfo": {
+    "engineVersion": "5.3.0",
+    "dataSource": [
+      {
+        "name": "NVD CVE Checked",
+        "timestamp": "2020-03-01T19:18:25"
+      },
+      {
+        "name": "NVD CVE Modified",
+        "timestamp": "2020-03-01T18:01:48"
+      },
+      {
+        "name": "VersionCheckOn",
+        "timestamp": "2020-03-01T19:18:25"
+      }
+    ]
+  },
+  "projectInfo": {
+    "name": "Example of multi-module Maven project",
+    "groupID": "org.sonarqube",
+    "artifactID": "sonarscanner-maven-aggregate",
+    "version": "1.0-SNAPSHOT",
+    "reportDate": "2020-03-01T18:20:05.416Z",
+    "credits": {
+      "NVD": "This report contains data retrieved from the National Vulnerability Database: http://nvd.nist.gov",
+      "NPM": "This report may contain data retrieved from the NPM Public Advisories: https://www.npmjs.com/advisories",
+      "RETIREJS": "This report may contain data retrieved from the RetireJS community: https://retirejs.github.io/retire.js/",
+      "OSSINDEX": "This report may contain data retrieved from the Sonatype OSS Index: https://ossindex.sonatype.org"
+    }
+  },
+  "dependencies": [
+    {
+      "isVirtual": false,
+      "fileName": "guava-27.1-jre.jar",
+      "filePath": "/m2repo/com/google/guava/guava/27.1-jre/guava-27.1-jre.jar",
+      "md5": "1a986c6fa05685f173ad9340b6ab6454",
+      "sha1": "e47b59c893079b87743cdcfb6f17ca95c08c592c",
+      "sha256": "4a5aa70cc968a4d137e599ad37553e5cfeed2265e8c193476d7119036c536fe7",
+      "description": "\n    Guava is a suite of core and expanded libraries that include\n    utility classes, google's collections, io classes, and much\n    much more.\n  ",
+      "license": "http://www.apache.org/licenses/LICENSE-2.0.txt",
+      "projectReferences": [
+        "Module 1:compile",
+        "Example of multi-module Maven project:compile",
+        "Tests:compile",
+        "Module 2:compile"
+      ],
+      "evidenceCollected": {
+        "vendorEvidence": [
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "common"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "google.guava"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "Manifest",
+            "name": "require-capability",
+            "value": "osgi.ee;filter:=\"(&(osgi.ee=JavaSE)(version=1.8))\""
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "guava"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "Guava: Google Core Libraries for Java"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "com.google.guava"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "guava"
+          },
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "Manifest",
+            "name": "bundle-symbolicname",
+            "value": "com.google.guava"
+          },
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "pom",
+            "name": "parent-groupid",
+            "value": "com.google.guava"
+          },
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "Manifest",
+            "name": "automatic-module-name",
+            "value": "com.google.common"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "parent-artifactid",
+            "value": "guava-parent"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "Manifest",
+            "name": "bundle-docurl",
+            "value": "https://github.com/google/guava/"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "google"
+          }
+        ],
+        "productEvidence": [
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "common"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "guava"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "Manifest",
+            "name": "require-capability",
+            "value": "osgi.ee;filter:=\"(&(osgi.ee=JavaSE)(version=1.8))\""
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "Guava: Google Core Libraries for Java"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "groupid",
+            "value": "google.guava"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "guava"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "Manifest",
+            "name": "bundle-symbolicname",
+            "value": "com.google.guava"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "parent-groupid",
+            "value": "com.google.guava"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "Manifest",
+            "name": "automatic-module-name",
+            "value": "com.google.common"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "Manifest",
+            "name": "Bundle-Name",
+            "value": "Guava: Google Core Libraries for Java"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "Manifest",
+            "name": "bundle-docurl",
+            "value": "https://github.com/google/guava/"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "google"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "pom",
+            "name": "parent-artifactid",
+            "value": "guava-parent"
+          }
+        ],
+        "versionEvidence": [
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "version",
+            "value": "27.1-jre"
+          }
+        ]
+      },
+      "packages": [
+        {
+          "id": "pkg:maven/com.google.guava/guava@27.1-jre",
+          "confidence": "HIGH",
+          "url": "https://ossindex.sonatype.org/component/pkg:maven/com.google.guava/guava@27.1-jre"
+        }
+      ],
+      "vulnerabilityIds": [
+        {
+          "id": "cpe:2.3:a:google:guava:27.1:*:*:*:*:*:*:*",
+          "confidence": "HIGHEST",
+          "url": "https://nvd.nist.gov/vuln/search/results?form_type=Advanced&results_type=overview&search_type=all&cpe_vendor=cpe%3A%2F%3Agoogle&cpe_product=cpe%3A%2F%3Agoogle%3Aguava&cpe_version=cpe%3A%2F%3Agoogle%3Aguava%3A27.1"
+        }
+      ]
+    },
+    {
+      "isVirtual": false,
+      "fileName": "failureaccess-1.0.1.jar",
+      "filePath": "/m2repo/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar",
+      "md5": "091883993ef5bfa91da01dcc8fc52236",
+      "sha1": "1dcf1de382a0bf95a3d8b0849546c88bac1292c9",
+      "sha256": "a171ee4c734dd2da837e4b16be9df4661afab72a41adaf31eb84dfdaf936ca26",
+      "description": "\n    Contains\n    com.google.common.util.concurrent.internal.InternalFutureFailureAccess and\n    InternalFutures. Most users will never need to use this artifact. Its\n    classes is conceptually a part of Guava, but they're in this separate\n    artifact so that Android libraries can use them without pulling in all of\n    Guava (just as they can use ListenableFuture by depending on the\n    listenablefuture artifact).\n  ",
+      "license": "http://www.apache.org/licenses/LICENSE-2.0.txt",
+      "projectReferences": [
+        "Module 1:compile",
+        "Example of multi-module Maven project:compile",
+        "Tests:compile",
+        "Module 2:compile"
+      ],
+      "evidenceCollected": {
+        "vendorEvidence": [
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "common"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "util"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "google.guava"
+          },
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "Manifest",
+            "name": "bundle-symbolicname",
+            "value": "com.google.guava.failureaccess"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "failureaccess"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "Guava InternalFutureFailureAccess and InternalFutures"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "Manifest",
+            "name": "require-capability",
+            "value": "osgi.ee;filter:=\"(&(osgi.ee=JavaSE)(version=1.7))\""
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "com.google.guava"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "failureaccess"
+          },
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "pom",
+            "name": "parent-groupid",
+            "value": "com.google.guava"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "parent-artifactid",
+            "value": "guava-parent"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "Manifest",
+            "name": "bundle-docurl",
+            "value": "https://github.com/google/guava/"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "google"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "concurrent"
+          }
+        ],
+        "productEvidence": [
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "common"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "failureaccess"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "util"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "Manifest",
+            "name": "bundle-symbolicname",
+            "value": "com.google.guava.failureaccess"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "Guava InternalFutureFailureAccess and InternalFutures"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "Manifest",
+            "name": "require-capability",
+            "value": "osgi.ee;filter:=\"(&(osgi.ee=JavaSE)(version=1.7))\""
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "Manifest",
+            "name": "Bundle-Name",
+            "value": "Guava InternalFutureFailureAccess and InternalFutures"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "groupid",
+            "value": "google.guava"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "failureaccess"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "parent-groupid",
+            "value": "com.google.guava"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "Manifest",
+            "name": "bundle-docurl",
+            "value": "https://github.com/google/guava/"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "google"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "concurrent"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "pom",
+            "name": "parent-artifactid",
+            "value": "guava-parent"
+          }
+        ],
+        "versionEvidence": [
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "version",
+            "value": "1.0.1"
+          },
+          {
+            "type": "version",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "parent-version",
+            "value": "1.0.1"
+          },
+          {
+            "type": "version",
+            "confidence": "HIGH",
+            "source": "Manifest",
+            "name": "Bundle-Version",
+            "value": "1.0.1"
+          },
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "file",
+            "name": "version",
+            "value": "1.0.1"
+          }
+        ]
+      },
+      "packages": [
+        {
+          "id": "pkg:maven/com.google.guava/failureaccess@1.0.1",
+          "confidence": "HIGH",
+          "url": "https://ossindex.sonatype.org/component/pkg:maven/com.google.guava/failureaccess@1.0.1"
+        }
+      ],
+      "vulnerabilityIds": [
+        {
+          "id": "cpe:2.3:a:google:guava:1.0.1:*:*:*:*:*:*:*",
+          "confidence": "HIGH",
+          "url": "https://nvd.nist.gov/vuln/search/results?form_type=Advanced&results_type=overview&search_type=all&cpe_vendor=cpe%3A%2F%3Agoogle&cpe_product=cpe%3A%2F%3Agoogle%3Aguava&cpe_version=cpe%3A%2F%3Agoogle%3Aguava%3A1.0.1"
+        }
+      ]
+    },
+    {
+      "isVirtual": false,
+      "fileName": "listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar",
+      "filePath": "/m2repo/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar",
+      "md5": "d094c22570d65e132c19cea5d352e381",
+      "sha1": "b421526c5f297295adef1c886e5246c39d4ac629",
+      "sha256": "b372a037d4230aa57fbeffdef30fd6123f9c0c2db85d0aced00c91b974f33f99",
+      "description": "\n    An empty artifact that Guava depends on to signal that it is providing\n    ListenableFuture -- but is also available in a second \"version\" that\n    contains com.google.common.util.concurrent.ListenableFuture class, without\n    any other Guava classes. The idea is:\n\n    - If users want only ListenableFuture, they depend on listenablefuture-1.0.\n\n    - If users want all of Guava, they depend on guava, which, as of Guava\n    27.0, depends on\n    listenablefuture-9999.0-empty-to-avoid-conflict-with-guava. The 9999.0-...\n    version number is enough for some build systems (notably, Gradle) to select\n    that empty artifact over the \"real\" listenablefuture-1.0 -- avoiding a\n    conflict with the copy of ListenableFuture in guava itself. If users are\n    using an older version of Guava or a build system other than Gradle, they\n    may see class conflicts. If so, they can solve them by manually excluding\n    the listenablefuture artifact or manually forcing their build systems to\n    use 9999.0-....\n  ",
+      "projectReferences": [
+        "Module 1:compile",
+        "Example of multi-module Maven project:compile",
+        "Tests:compile",
+        "Module 2:compile"
+      ],
+      "evidenceCollected": {
+        "vendorEvidence": [
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "pom",
+            "name": "parent-groupid",
+            "value": "com.google.guava"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "google.guava"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "listenablefuture"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "parent-artifactid",
+            "value": "guava-parent"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "com.google.guava"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "Guava ListenableFuture only"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "listenablefuture"
+          }
+        ],
+        "productEvidence": [
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "listenablefuture"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "parent-groupid",
+            "value": "com.google.guava"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "Guava ListenableFuture only"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "groupid",
+            "value": "google.guava"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "listenablefuture"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "pom",
+            "name": "parent-artifactid",
+            "value": "guava-parent"
+          }
+        ],
+        "versionEvidence": [
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "version",
+            "value": "9999.0-empty-to-avoid-conflict-with-guava"
+          },
+          {
+            "type": "version",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "parent-version",
+            "value": "9999.0-empty-to-avoid-conflict-with-guava"
+          }
+        ]
+      },
+      "packages": [
+        {
+          "id": "pkg:maven/com.google.guava/listenablefuture@9999.0-empty-to-avoid-conflict-with-guava",
+          "confidence": "HIGH",
+          "url": "https://ossindex.sonatype.org/component/pkg:maven/com.google.guava/listenablefuture@9999.0-empty-to-avoid-conflict-with-guava"
+        }
+      ],
+      "vulnerabilityIds": [
+        {
+          "id": "cpe:2.3:a:google:guava:9999.0:*:*:*:*:*:*:*",
+          "confidence": "HIGH",
+          "url": "https://nvd.nist.gov/vuln/search/results?form_type=Advanced&results_type=overview&search_type=all&cpe_vendor=cpe%3A%2F%3Agoogle&cpe_product=cpe%3A%2F%3Agoogle%3Aguava&cpe_version=cpe%3A%2F%3Agoogle%3Aguava%3A9999.0"
+        }
+      ]
+    },
+    {
+      "isVirtual": false,
+      "fileName": "jsr305-3.0.2.jar",
+      "filePath": "/m2repo/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar",
+      "md5": "dd83accb899363c32b07d7a1b2e4ce40",
+      "sha1": "25ea2e8b0c338a877313bd4672d3fe056ea78f0d",
+      "sha256": "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7",
+      "description": "JSR305 Annotations for Findbugs",
+      "license": "The Apache Software License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0.txt",
+      "projectReferences": [
+        "Module 1:compile",
+        "Example of multi-module Maven project:compile",
+        "Tests:compile",
+        "Module 2:compile"
+      ],
+      "evidenceCollected": {
+        "vendorEvidence": [
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "Manifest",
+            "name": "bundle-symbolicname",
+            "value": "org.jsr-305"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "FindBugs-jsr305"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "google.code.findbugs"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "com.google.code.findbugs"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "jsr305"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "jsr305"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "url",
+            "value": "http://findbugs.sourceforge.net/"
+          }
+        ],
+        "productEvidence": [
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "Manifest",
+            "name": "Bundle-Name",
+            "value": "FindBugs-jsr305"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "Manifest",
+            "name": "bundle-symbolicname",
+            "value": "org.jsr-305"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "FindBugs-jsr305"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "jsr305"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "pom",
+            "name": "url",
+            "value": "http://findbugs.sourceforge.net/"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "groupid",
+            "value": "google.code.findbugs"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "jsr305"
+          }
+        ],
+        "versionEvidence": [
+          {
+            "type": "version",
+            "confidence": "HIGH",
+            "source": "Manifest",
+            "name": "Bundle-Version",
+            "value": "3.0.2"
+          },
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "version",
+            "value": "3.0.2"
+          },
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "file",
+            "name": "version",
+            "value": "3.0.2"
+          }
+        ]
+      },
+      "packages": [
+        {
+          "id": "pkg:maven/com.google.code.findbugs/jsr305@3.0.2",
+          "confidence": "HIGH",
+          "url": "https://ossindex.sonatype.org/component/pkg:maven/com.google.code.findbugs/jsr305@3.0.2"
+        }
+      ]
+    },
+    {
+      "isVirtual": false,
+      "fileName": "checker-qual-2.5.2.jar",
+      "filePath": "/m2repo/org/checkerframework/checker-qual/2.5.2/checker-qual-2.5.2.jar",
+      "md5": "04acc78b24bbd365423da357da003cf0",
+      "sha1": "cea74543d5904a30861a61b4643a5f2bb372efc4",
+      "sha256": "64b02691c8b9d4e7700f8ee2e742dce7ea2c6e81e662b7522c9ee3bf568c040a",
+      "description": "\n        Checker Qual is the set of annotations (qualifiers) and supporting classes\n        used by the Checker Framework to type check Java source code.  Please\n        see artifact:\n        org.checkerframework:checker\n    ",
+      "license": "The MIT License: http://opensource.org/licenses/MIT",
+      "projectReferences": [
+        "Module 1:compile",
+        "Example of multi-module Maven project:compile",
+        "Tests:compile",
+        "Module 2:compile"
+      ],
+      "evidenceCollected": {
+        "vendorEvidence": [
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "org.checkerframework"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "qual"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "checker-qual"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "framework"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "Manifest",
+            "name": "implementation-url",
+            "value": "https://checkerframework.org"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "checkerframework"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "checker"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "checker-qual"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "Checker Qual"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "url",
+            "value": "https://checkerframework.org"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "checkerframework"
+          }
+        ],
+        "productEvidence": [
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "checker-qual"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "qual"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "framework"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "Manifest",
+            "name": "implementation-url",
+            "value": "https://checkerframework.org"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "checkerframework"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "checker"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "checker-qual"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "Checker Qual"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "groupid",
+            "value": "checkerframework"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "pom",
+            "name": "url",
+            "value": "https://checkerframework.org"
+          }
+        ],
+        "versionEvidence": [
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "version",
+            "value": "2.5.2"
+          },
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "file",
+            "name": "version",
+            "value": "2.5.2"
+          },
+          {
+            "type": "version",
+            "confidence": "HIGH",
+            "source": "Manifest",
+            "name": "Implementation-Version",
+            "value": "2.5.2"
+          }
+        ]
+      },
+      "packages": [
+        {
+          "id": "pkg:maven/org.checkerframework/checker-qual@2.5.2",
+          "confidence": "HIGH",
+          "url": "https://ossindex.sonatype.org/component/pkg:maven/org.checkerframework/checker-qual@2.5.2"
+        }
+      ]
+    },
+    {
+      "isVirtual": false,
+      "fileName": "error_prone_annotations-2.2.0.jar",
+      "filePath": "/m2repo/com/google/errorprone/error_prone_annotations/2.2.0/error_prone_annotations-2.2.0.jar",
+      "md5": "416757b9e6ba0563368ab59e668b3225",
+      "sha1": "88e3c593e9b3586e1c6177f89267da6fc6986f0c",
+      "sha256": "6ebd22ca1b9d8ec06d41de8d64e0596981d9607b42035f9ed374f9de271a481a",
+      "license": "Apache 2.0: http://www.apache.org/licenses/LICENSE-2.0.txt",
+      "projectReferences": [
+        "Module 1:compile",
+        "Example of multi-module Maven project:compile",
+        "Tests:compile",
+        "Module 2:compile"
+      ],
+      "evidenceCollected": {
+        "vendorEvidence": [
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "com.google.errorprone"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "error-prone annotations"
+          },
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "pom",
+            "name": "parent-groupid",
+            "value": "com.google.errorprone"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "error_prone_annotations"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "annotations"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "google.errorprone"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "error_prone_annotations"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "annotations"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "errorprone"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "parent-artifactid",
+            "value": "error_prone_parent"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "errorprone"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "google"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "google"
+          }
+        ],
+        "productEvidence": [
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "annotations"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "groupid",
+            "value": "google.errorprone"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "annotations"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "pom",
+            "name": "parent-artifactid",
+            "value": "error_prone_parent"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "error-prone annotations"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "errorprone"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "errorprone"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "google"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "error_prone_annotations"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "error_prone_annotations"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "parent-groupid",
+            "value": "com.google.errorprone"
+          }
+        ],
+        "versionEvidence": [
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "file",
+            "name": "version",
+            "value": "2.2.0"
+          },
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "version",
+            "value": "2.2.0"
+          }
+        ]
+      },
+      "packages": [
+        {
+          "id": "pkg:maven/com.google.errorprone/error_prone_annotations@2.2.0",
+          "confidence": "HIGH",
+          "url": "https://ossindex.sonatype.org/component/pkg:maven/com.google.errorprone/error_prone_annotations@2.2.0"
+        }
+      ]
+    },
+    {
+      "isVirtual": false,
+      "fileName": "j2objc-annotations-1.1.jar",
+      "filePath": "/m2repo/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar",
+      "md5": "9b806ea001e354d4e05f29c62b949e20",
+      "sha1": "976d8d30bebc251db406f2bdb3eb01962b5685b3",
+      "sha256": "40ceb7157feb263949e0f503fe5f71689333a621021aa20ce0d0acee3badaa0f",
+      "description": "\n    A set of annotations that provide additional information to the J2ObjC\n    translator to modify the result of translation.\n  ",
+      "license": "The Apache Software License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0.txt",
+      "projectReferences": [
+        "Module 1:compile",
+        "Example of multi-module Maven project:compile",
+        "Tests:compile",
+        "Module 2:compile"
+      ],
+      "evidenceCollected": {
+        "vendorEvidence": [
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "com.google.j2objc"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "j2objc-annotations"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "url",
+            "value": "google/j2objc/"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "j2objc-annotations"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "j2objc"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "google.j2objc"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "J2ObjC Annotations"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "j2objc"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "annotations"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "annotations"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "google"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "google"
+          }
+        ],
+        "productEvidence": [
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "annotations"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "j2objc-annotations"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "groupid",
+            "value": "google.j2objc"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "annotations"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "j2objc-annotations"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "google"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "j2objc"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "J2ObjC Annotations"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "j2objc"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "url",
+            "value": "google/j2objc/"
+          }
+        ],
+        "versionEvidence": [
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "version",
+            "value": "1.1"
+          },
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "file",
+            "name": "version",
+            "value": "1.1"
+          }
+        ]
+      },
+      "packages": [
+        {
+          "id": "pkg:maven/com.google.j2objc/j2objc-annotations@1.1",
+          "confidence": "HIGH",
+          "url": "https://ossindex.sonatype.org/component/pkg:maven/com.google.j2objc/j2objc-annotations@1.1"
+        }
+      ]
+    },
+    {
+      "isVirtual": false,
+      "fileName": "animal-sniffer-annotations-1.17.jar",
+      "filePath": "/m2repo/org/codehaus/mojo/animal-sniffer-annotations/1.17/animal-sniffer-annotations-1.17.jar",
+      "md5": "7ca108b790cf6ab5dbf5422cc79f0d89",
+      "sha1": "f97ce6decaea32b36101e37979f8b647f00681fb",
+      "sha256": "92654f493ecfec52082e76354f0ebf87648dc3d5cec2e3c3cdb947c016747a53",
+      "projectReferences": [
+        "Module 1:compile",
+        "Example of multi-module Maven project:compile",
+        "Tests:compile",
+        "Module 2:compile"
+      ],
+      "evidenceCollected": {
+        "vendorEvidence": [
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "mojo"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "mojo"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "org.codehaus.mojo"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "animal-sniffer-annotations"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "codehaus"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "parent-artifactid",
+            "value": "animal-sniffer-parent"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "codehaus"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "animal_sniffer"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "Animal Sniffer Annotations"
+          },
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "pom",
+            "name": "parent-groupid",
+            "value": "org.codehaus.mojo"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "animal-sniffer-annotations"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "codehaus.mojo"
+          }
+        ],
+        "productEvidence": [
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "mojo"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "mojo"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "codehaus"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "animal_sniffer"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "ignorejrerequirement"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "groupid",
+            "value": "codehaus.mojo"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "parent-groupid",
+            "value": "org.codehaus.mojo"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "animal-sniffer-annotations"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "Animal Sniffer Annotations"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "animal-sniffer-annotations"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "pom",
+            "name": "parent-artifactid",
+            "value": "animal-sniffer-parent"
+          }
+        ],
+        "versionEvidence": [
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "version",
+            "value": "1.17"
+          },
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "file",
+            "name": "version",
+            "value": "1.17"
+          }
+        ]
+      },
+      "packages": [
+        {
+          "id": "pkg:maven/org.codehaus.mojo/animal-sniffer-annotations@1.17",
+          "confidence": "HIGH",
+          "url": "https://ossindex.sonatype.org/component/pkg:maven/org.codehaus.mojo/animal-sniffer-annotations@1.17"
+        }
+      ]
+    },
+    {
+      "isVirtual": true,
+      "fileName": "org.sonarqube:module1:1.0-SNAPSHOT",
+      "filePath": "/tmp/sonar-scanning-examples/sonarqube-scanner-maven/maven-multimodule/module1/pom.xml",
+      "evidenceCollected": {
+        "vendorEvidence": [
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "project",
+            "name": "groupid",
+            "value": "org.sonarqube"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "pom"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "project",
+            "name": "artifactid",
+            "value": "module1"
+          }
+        ],
+        "productEvidence": [
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "project",
+            "name": "artifactid",
+            "value": "module1"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "project",
+            "name": "groupid",
+            "value": "org.sonarqube"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "pom"
+          }
+        ],
+        "versionEvidence": []
+      },
+      "packages": [
+        {
+          "id": "pkg:maven/org.sonarqube/module1@1.0-SNAPSHOT",
+          "confidence": "HIGHEST",
+          "url": "https://ossindex.sonatype.org/component/pkg:maven/org.sonarqube/module1@1.0-SNAPSHOT"
+        }
+      ]
+    },
+    {
+      "isVirtual": true,
+      "fileName": "org.sonarqube:module2:1.0-SNAPSHOT",
+      "filePath": "/tmp/sonar-scanning-examples/sonarqube-scanner-maven/maven-multimodule/module2/pom.xml",
+      "evidenceCollected": {
+        "vendorEvidence": [
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "project",
+            "name": "groupid",
+            "value": "org.sonarqube"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "pom"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "project",
+            "name": "artifactid",
+            "value": "module2"
+          }
+        ],
+        "productEvidence": [
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "project",
+            "name": "artifactid",
+            "value": "module2"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "project",
+            "name": "groupid",
+            "value": "org.sonarqube"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "pom"
+          }
+        ],
+        "versionEvidence": []
+      },
+      "packages": [
+        {
+          "id": "pkg:maven/org.sonarqube/module2@1.0-SNAPSHOT",
+          "confidence": "HIGHEST",
+          "url": "https://ossindex.sonatype.org/component/pkg:maven/org.sonarqube/module2@1.0-SNAPSHOT"
+        }
+      ]
+    }
+  ]
+}

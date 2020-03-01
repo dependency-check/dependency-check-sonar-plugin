@@ -160,6 +160,52 @@ public abstract class ReportParserTest {
         versionEvidences = evidenceCollected.get("versionEvidence");
         assertEquals(3, versionEvidences.size());
         assertTrue(dependency.getVulnerabilities().isEmpty());
+    }
 
+    @Test
+    public void parseReport53() throws Exception {
+        Analysis analysis  = parseReport("report53");
+
+        assertEquals("5.3.0", analysis.getScanInfo().getEngineVersion());
+        assertEquals("Example of multi-module Maven project", analysis.getProjectInfo().get().getName());
+        assertEquals("2020-03-01T18:20:05.416Z", analysis.getProjectInfo().get().getReportDate());
+
+        Collection<Dependency> dependencies = analysis.getDependencies();
+        assertEquals(10, dependencies.size());
+        Iterator<Dependency> iterator = dependencies.iterator();
+
+        // struts-1.2.8.jar
+        Dependency dependency = iterator.next();
+        assertEquals("guava-27.1-jre.jar", dependency.getFileName());
+        assertEquals("/m2repo/com/google/guava/guava/27.1-jre/guava-27.1-jre.jar", dependency.getFilePath());
+        assertEquals("1a986c6fa05685f173ad9340b6ab6454", dependency.getMd5Hash());
+        assertEquals("e47b59c893079b87743cdcfb6f17ca95c08c592c", dependency.getSha1Hash());
+
+        Map<String, List<Evidence>> evidenceCollected = dependency.getEvidenceCollected();
+        assertEquals(3, evidenceCollected.size());
+        List<Evidence> vendorEvidences = evidenceCollected.get("vendorEvidence");
+        assertEquals(13, vendorEvidences.size());
+        for (Evidence evidence : vendorEvidences) {
+            assertFalse(evidence.getSource().isEmpty());
+            assertFalse(evidence.getName().isEmpty());
+            assertFalse(evidence.getValue().isEmpty());
+        }
+        List<Evidence> productEvidences = evidenceCollected.get("productEvidence");
+        assertEquals(13, productEvidences.size());
+        for (Evidence evidence : productEvidences) {
+            assertFalse(evidence.getSource().isEmpty());
+            assertFalse(evidence.getName().isEmpty());
+            assertFalse(evidence.getValue().isEmpty());
+        }
+        List<Evidence> versionEvidences = evidenceCollected.get("versionEvidence");
+        assertEquals(1, versionEvidences.size());
+        for (Evidence evidence : versionEvidences) {
+            assertFalse(evidence.getSource().isEmpty());
+            assertFalse(evidence.getName().isEmpty());
+            assertFalse(evidence.getValue().isEmpty());
+        }
+
+        Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
+        assertEquals(0, vulnerabilities.size());
     }
 }

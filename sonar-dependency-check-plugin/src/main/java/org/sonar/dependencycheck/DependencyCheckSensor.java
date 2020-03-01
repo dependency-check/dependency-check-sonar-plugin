@@ -46,7 +46,6 @@ public class DependencyCheckSensor implements ProjectSensor {
 
     private static final Logger LOGGER = Loggers.get(DependencyCheckSensor.class);
     private static final String SENSOR_NAME = "Dependency-Check";
-    private static final String XSD = "https://jeremylong.github.io/DependencyCheck/dependency-check.2.2.xsd";
 
     private final FileSystem fileSystem;
     private final PathResolver pathResolver;
@@ -79,7 +78,7 @@ public class DependencyCheckSensor implements ProjectSensor {
             LOGGER.info("XML-Analysis skipped/aborted due to missing report file");
             LOGGER.debug(e.getMessage(), e);
         } catch (ReportParserException e) {
-            LOGGER.warn("XML-Analysis aborted due to: Mandatory elements are missing. Plugin is compatible to {}", XSD);
+            LOGGER.warn("XML-Analysis aborted due to: Mandatory elements are missing. Plugin is compatible to DependencyCheck 5.1-5.3");
             LOGGER.debug(e.getMessage(), e);
         } catch (IOException e) {
             LOGGER.warn("XML-Analysis aborted due to: IO Errors", e);

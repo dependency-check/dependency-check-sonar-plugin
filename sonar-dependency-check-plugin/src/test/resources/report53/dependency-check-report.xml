@@ -1,0 +1,1298 @@
+<?xml version="1.0"?>
+<analysis xmlns="https://jeremylong.github.io/DependencyCheck/dependency-check.2.3.xsd">
+  <scanInfo>
+    <engineVersion>5.3.0</engineVersion>
+    <dataSource>
+      <name>NVD CVE Checked</name>
+      <timestamp>2020-03-01T19:18:25</timestamp>
+    </dataSource>
+    <dataSource>
+      <name>NVD CVE Modified</name>
+      <timestamp>2020-03-01T18:01:48</timestamp>
+    </dataSource>
+    <dataSource>
+      <name>VersionCheckOn</name>
+      <timestamp>2020-03-01T19:18:25</timestamp>
+    </dataSource>
+  </scanInfo>
+  <projectInfo>
+    <name>Example of multi-module Maven project</name>
+    <groupID>org.sonarqube</groupID>
+    <artifactID>sonarscanner-maven-aggregate</artifactID>
+    <version>1.0-SNAPSHOT</version>
+    <reportDate>2020-03-01T18:20:05.416Z</reportDate>
+    <credits>This report contains data retrieved from the National Vulnerability Database: https://nvd.nist.gov, NPM Public Advisories: https://www.npmjs.com/advisories, and the RetireJS community.</credits>
+  </projectInfo>
+  <dependencies>
+    <dependency isVirtual="false">
+      <fileName>guava-27.1-jre.jar</fileName>
+      <filePath>/m2repo/com/google/guava/guava/27.1-jre/guava-27.1-jre.jar</filePath>
+      <md5>1a986c6fa05685f173ad9340b6ab6454</md5>
+      <sha1>e47b59c893079b87743cdcfb6f17ca95c08c592c</sha1>
+      <sha256>4a5aa70cc968a4d137e599ad37553e5cfeed2265e8c193476d7119036c536fe7</sha256>
+      <description>
+    Guava is a suite of core and expanded libraries that include
+    utility classes, google's collections, io classes, and much
+    much more.
+  </description>
+      <license>http://www.apache.org/licenses/LICENSE-2.0.txt</license>
+      <projectReferences>
+        <projectReference>Module 1:compile</projectReference>
+        <projectReference>Example of multi-module Maven project:compile</projectReference>
+        <projectReference>Tests:compile</projectReference>
+        <projectReference>Module 2:compile</projectReference>
+      </projectReferences>
+      <evidenceCollected>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>common</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>google.guava</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>Manifest</source>
+          <name>require-capability</name>
+          <value>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=1.8))"</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>pom</source>
+          <name>artifactid</name>
+          <value>guava</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>pom</source>
+          <name>name</name>
+          <value>Guava: Google Core Libraries for Java</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>com.google.guava</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>guava</value>
+        </evidence>
+        <evidence type="vendor" confidence="MEDIUM">
+          <source>Manifest</source>
+          <name>bundle-symbolicname</name>
+          <value>com.google.guava</value>
+        </evidence>
+        <evidence type="vendor" confidence="MEDIUM">
+          <source>pom</source>
+          <name>parent-groupid</name>
+          <value>com.google.guava</value>
+        </evidence>
+        <evidence type="vendor" confidence="MEDIUM">
+          <source>Manifest</source>
+          <name>automatic-module-name</name>
+          <value>com.google.common</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>pom</source>
+          <name>parent-artifactid</name>
+          <value>guava-parent</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>Manifest</source>
+          <name>bundle-docurl</name>
+          <value>https://github.com/google/guava/</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>google</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>common</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>pom</source>
+          <name>artifactid</name>
+          <value>guava</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>Manifest</source>
+          <name>require-capability</name>
+          <value>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=1.8))"</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>pom</source>
+          <name>name</name>
+          <value>Guava: Google Core Libraries for Java</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>google.guava</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>guava</value>
+        </evidence>
+        <evidence type="product" confidence="MEDIUM">
+          <source>Manifest</source>
+          <name>bundle-symbolicname</name>
+          <value>com.google.guava</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>pom</source>
+          <name>parent-groupid</name>
+          <value>com.google.guava</value>
+        </evidence>
+        <evidence type="product" confidence="MEDIUM">
+          <source>Manifest</source>
+          <name>automatic-module-name</name>
+          <value>com.google.common</value>
+        </evidence>
+        <evidence type="product" confidence="MEDIUM">
+          <source>Manifest</source>
+          <name>Bundle-Name</name>
+          <value>Guava: Google Core Libraries for Java</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>Manifest</source>
+          <name>bundle-docurl</name>
+          <value>https://github.com/google/guava/</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>google</value>
+        </evidence>
+        <evidence type="product" confidence="MEDIUM">
+          <source>pom</source>
+          <name>parent-artifactid</name>
+          <value>guava-parent</value>
+        </evidence>
+        <evidence type="version" confidence="HIGHEST">
+          <source>pom</source>
+          <name>version</name>
+          <value>27.1-jre</value>
+        </evidence>
+      </evidenceCollected>
+      <identifiers>
+        <package confidence="HIGH">
+          <id>pkg:maven/com.google.guava/guava@27.1-jre</id>
+          <url>https://ossindex.sonatype.org/component/pkg:maven/com.google.guava/guava@27.1-jre</url>
+        </package>
+        <vulnerabilityIds confidence="HIGHEST">
+          <id>cpe:2.3:a:google:guava:27.1:*:*:*:*:*:*:*</id>
+          <url>https://nvd.nist.gov/vuln/search/results?form_type=Advanced&amp;results_type=overview&amp;search_type=all&amp;cpe_vendor=cpe%3A%2F%3Agoogle&amp;cpe_product=cpe%3A%2F%3Agoogle%3Aguava&amp;cpe_version=cpe%3A%2F%3Agoogle%3Aguava%3A27.1</url>
+        </vulnerabilityIds>
+      </identifiers>
+    </dependency>
+    <dependency isVirtual="false">
+      <fileName>failureaccess-1.0.1.jar</fileName>
+      <filePath>/m2repo/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar</filePath>
+      <md5>091883993ef5bfa91da01dcc8fc52236</md5>
+      <sha1>1dcf1de382a0bf95a3d8b0849546c88bac1292c9</sha1>
+      <sha256>a171ee4c734dd2da837e4b16be9df4661afab72a41adaf31eb84dfdaf936ca26</sha256>
+      <description>
+    Contains
+    com.google.common.util.concurrent.internal.InternalFutureFailureAccess and
+    InternalFutures. Most users will never need to use this artifact. Its
+    classes is conceptually a part of Guava, but they're in this separate
+    artifact so that Android libraries can use them without pulling in all of
+    Guava (just as they can use ListenableFuture by depending on the
+    listenablefuture artifact).
+  </description>
+      <license>http://www.apache.org/licenses/LICENSE-2.0.txt</license>
+      <projectReferences>
+        <projectReference>Module 1:compile</projectReference>
+        <projectReference>Example of multi-module Maven project:compile</projectReference>
+        <projectReference>Tests:compile</projectReference>
+        <projectReference>Module 2:compile</projectReference>
+      </projectReferences>
+      <evidenceCollected>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>common</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>util</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>google.guava</value>
+        </evidence>
+        <evidence type="vendor" confidence="MEDIUM">
+          <source>Manifest</source>
+          <name>bundle-symbolicname</name>
+          <value>com.google.guava.failureaccess</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>pom</source>
+          <name>artifactid</name>
+          <value>failureaccess</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>pom</source>
+          <name>name</name>
+          <value>Guava InternalFutureFailureAccess and InternalFutures</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>Manifest</source>
+          <name>require-capability</name>
+          <value>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=1.7))"</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>com.google.guava</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>failureaccess</value>
+        </evidence>
+        <evidence type="vendor" confidence="MEDIUM">
+          <source>pom</source>
+          <name>parent-groupid</name>
+          <value>com.google.guava</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>pom</source>
+          <name>parent-artifactid</name>
+          <value>guava-parent</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>Manifest</source>
+          <name>bundle-docurl</name>
+          <value>https://github.com/google/guava/</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>google</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>concurrent</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>common</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>pom</source>
+          <name>artifactid</name>
+          <value>failureaccess</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>util</value>
+        </evidence>
+        <evidence type="product" confidence="MEDIUM">
+          <source>Manifest</source>
+          <name>bundle-symbolicname</name>
+          <value>com.google.guava.failureaccess</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>pom</source>
+          <name>name</name>
+          <value>Guava InternalFutureFailureAccess and InternalFutures</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>Manifest</source>
+          <name>require-capability</name>
+          <value>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=1.7))"</value>
+        </evidence>
+        <evidence type="product" confidence="MEDIUM">
+          <source>Manifest</source>
+          <name>Bundle-Name</name>
+          <value>Guava InternalFutureFailureAccess and InternalFutures</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>google.guava</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>failureaccess</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>pom</source>
+          <name>parent-groupid</name>
+          <value>com.google.guava</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>Manifest</source>
+          <name>bundle-docurl</name>
+          <value>https://github.com/google/guava/</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>google</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>concurrent</value>
+        </evidence>
+        <evidence type="product" confidence="MEDIUM">
+          <source>pom</source>
+          <name>parent-artifactid</name>
+          <value>guava-parent</value>
+        </evidence>
+        <evidence type="version" confidence="HIGHEST">
+          <source>pom</source>
+          <name>version</name>
+          <value>1.0.1</value>
+        </evidence>
+        <evidence type="version" confidence="LOW">
+          <source>pom</source>
+          <name>parent-version</name>
+          <value>1.0.1</value>
+        </evidence>
+        <evidence type="version" confidence="HIGH">
+          <source>Manifest</source>
+          <name>Bundle-Version</name>
+          <value>1.0.1</value>
+        </evidence>
+        <evidence type="version" confidence="HIGHEST">
+          <source>file</source>
+          <name>version</name>
+          <value>1.0.1</value>
+        </evidence>
+      </evidenceCollected>
+      <identifiers>
+        <package confidence="HIGH">
+          <id>pkg:maven/com.google.guava/failureaccess@1.0.1</id>
+          <url>https://ossindex.sonatype.org/component/pkg:maven/com.google.guava/failureaccess@1.0.1</url>
+        </package>
+        <vulnerabilityIds confidence="HIGH">
+          <id>cpe:2.3:a:google:guava:1.0.1:*:*:*:*:*:*:*</id>
+          <url>https://nvd.nist.gov/vuln/search/results?form_type=Advanced&amp;results_type=overview&amp;search_type=all&amp;cpe_vendor=cpe%3A%2F%3Agoogle&amp;cpe_product=cpe%3A%2F%3Agoogle%3Aguava&amp;cpe_version=cpe%3A%2F%3Agoogle%3Aguava%3A1.0.1</url>
+        </vulnerabilityIds>
+      </identifiers>
+    </dependency>
+    <dependency isVirtual="false">
+      <fileName>listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar</fileName>
+      <filePath>/m2repo/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar</filePath>
+      <md5>d094c22570d65e132c19cea5d352e381</md5>
+      <sha1>b421526c5f297295adef1c886e5246c39d4ac629</sha1>
+      <sha256>b372a037d4230aa57fbeffdef30fd6123f9c0c2db85d0aced00c91b974f33f99</sha256>
+      <description>
+    An empty artifact that Guava depends on to signal that it is providing
+    ListenableFuture -- but is also available in a second "version" that
+    contains com.google.common.util.concurrent.ListenableFuture class, without
+    any other Guava classes. The idea is:
+
+    - If users want only ListenableFuture, they depend on listenablefuture-1.0.
+
+    - If users want all of Guava, they depend on guava, which, as of Guava
+    27.0, depends on
+    listenablefuture-9999.0-empty-to-avoid-conflict-with-guava. The 9999.0-...
+    version number is enough for some build systems (notably, Gradle) to select
+    that empty artifact over the "real" listenablefuture-1.0 -- avoiding a
+    conflict with the copy of ListenableFuture in guava itself. If users are
+    using an older version of Guava or a build system other than Gradle, they
+    may see class conflicts. If so, they can solve them by manually excluding
+    the listenablefuture artifact or manually forcing their build systems to
+    use 9999.0-....
+  </description>
+      <projectReferences>
+        <projectReference>Module 1:compile</projectReference>
+        <projectReference>Example of multi-module Maven project:compile</projectReference>
+        <projectReference>Tests:compile</projectReference>
+        <projectReference>Module 2:compile</projectReference>
+      </projectReferences>
+      <evidenceCollected>
+        <evidence type="vendor" confidence="MEDIUM">
+          <source>pom</source>
+          <name>parent-groupid</name>
+          <value>com.google.guava</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>google.guava</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>pom</source>
+          <name>artifactid</name>
+          <value>listenablefuture</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>pom</source>
+          <name>parent-artifactid</name>
+          <value>guava-parent</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>com.google.guava</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>pom</source>
+          <name>name</name>
+          <value>Guava ListenableFuture only</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>listenablefuture</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>pom</source>
+          <name>artifactid</name>
+          <value>listenablefuture</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>pom</source>
+          <name>parent-groupid</name>
+          <value>com.google.guava</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>pom</source>
+          <name>name</name>
+          <value>Guava ListenableFuture only</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>google.guava</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>listenablefuture</value>
+        </evidence>
+        <evidence type="product" confidence="MEDIUM">
+          <source>pom</source>
+          <name>parent-artifactid</name>
+          <value>guava-parent</value>
+        </evidence>
+        <evidence type="version" confidence="HIGHEST">
+          <source>pom</source>
+          <name>version</name>
+          <value>9999.0-empty-to-avoid-conflict-with-guava</value>
+        </evidence>
+        <evidence type="version" confidence="LOW">
+          <source>pom</source>
+          <name>parent-version</name>
+          <value>9999.0-empty-to-avoid-conflict-with-guava</value>
+        </evidence>
+      </evidenceCollected>
+      <identifiers>
+        <package confidence="HIGH">
+          <id>pkg:maven/com.google.guava/listenablefuture@9999.0-empty-to-avoid-conflict-with-guava</id>
+          <url>https://ossindex.sonatype.org/component/pkg:maven/com.google.guava/listenablefuture@9999.0-empty-to-avoid-conflict-with-guava</url>
+        </package>
+        <vulnerabilityIds confidence="HIGH">
+          <id>cpe:2.3:a:google:guava:9999.0:*:*:*:*:*:*:*</id>
+          <url>https://nvd.nist.gov/vuln/search/results?form_type=Advanced&amp;results_type=overview&amp;search_type=all&amp;cpe_vendor=cpe%3A%2F%3Agoogle&amp;cpe_product=cpe%3A%2F%3Agoogle%3Aguava&amp;cpe_version=cpe%3A%2F%3Agoogle%3Aguava%3A9999.0</url>
+        </vulnerabilityIds>
+      </identifiers>
+    </dependency>
+    <dependency isVirtual="false">
+      <fileName>jsr305-3.0.2.jar</fileName>
+      <filePath>/m2repo/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar</filePath>
+      <md5>dd83accb899363c32b07d7a1b2e4ce40</md5>
+      <sha1>25ea2e8b0c338a877313bd4672d3fe056ea78f0d</sha1>
+      <sha256>766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7</sha256>
+      <description>JSR305 Annotations for Findbugs</description>
+      <license>The Apache Software License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0.txt</license>
+      <projectReferences>
+        <projectReference>Module 1:compile</projectReference>
+        <projectReference>Example of multi-module Maven project:compile</projectReference>
+        <projectReference>Tests:compile</projectReference>
+        <projectReference>Module 2:compile</projectReference>
+      </projectReferences>
+      <evidenceCollected>
+        <evidence type="vendor" confidence="MEDIUM">
+          <source>Manifest</source>
+          <name>bundle-symbolicname</name>
+          <value>org.jsr-305</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>pom</source>
+          <name>name</name>
+          <value>FindBugs-jsr305</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>google.code.findbugs</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>com.google.code.findbugs</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>pom</source>
+          <name>artifactid</name>
+          <value>jsr305</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>jsr305</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>url</name>
+          <value>http://findbugs.sourceforge.net/</value>
+        </evidence>
+        <evidence type="product" confidence="MEDIUM">
+          <source>Manifest</source>
+          <name>Bundle-Name</name>
+          <value>FindBugs-jsr305</value>
+        </evidence>
+        <evidence type="product" confidence="MEDIUM">
+          <source>Manifest</source>
+          <name>bundle-symbolicname</name>
+          <value>org.jsr-305</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>pom</source>
+          <name>name</name>
+          <value>FindBugs-jsr305</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>jsr305</value>
+        </evidence>
+        <evidence type="product" confidence="MEDIUM">
+          <source>pom</source>
+          <name>url</name>
+          <value>http://findbugs.sourceforge.net/</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>google.code.findbugs</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>pom</source>
+          <name>artifactid</name>
+          <value>jsr305</value>
+        </evidence>
+        <evidence type="version" confidence="HIGH">
+          <source>Manifest</source>
+          <name>Bundle-Version</name>
+          <value>3.0.2</value>
+        </evidence>
+        <evidence type="version" confidence="HIGHEST">
+          <source>pom</source>
+          <name>version</name>
+          <value>3.0.2</value>
+        </evidence>
+        <evidence type="version" confidence="HIGHEST">
+          <source>file</source>
+          <name>version</name>
+          <value>3.0.2</value>
+        </evidence>
+      </evidenceCollected>
+      <identifiers>
+        <package confidence="HIGH">
+          <id>pkg:maven/com.google.code.findbugs/jsr305@3.0.2</id>
+          <url>https://ossindex.sonatype.org/component/pkg:maven/com.google.code.findbugs/jsr305@3.0.2</url>
+        </package>
+      </identifiers>
+    </dependency>
+    <dependency isVirtual="false">
+      <fileName>checker-qual-2.5.2.jar</fileName>
+      <filePath>/m2repo/org/checkerframework/checker-qual/2.5.2/checker-qual-2.5.2.jar</filePath>
+      <md5>04acc78b24bbd365423da357da003cf0</md5>
+      <sha1>cea74543d5904a30861a61b4643a5f2bb372efc4</sha1>
+      <sha256>64b02691c8b9d4e7700f8ee2e742dce7ea2c6e81e662b7522c9ee3bf568c040a</sha256>
+      <description>
+        Checker Qual is the set of annotations (qualifiers) and supporting classes
+        used by the Checker Framework to type check Java source code.  Please
+        see artifact:
+        org.checkerframework:checker
+    </description>
+      <license>The MIT License: http://opensource.org/licenses/MIT</license>
+      <projectReferences>
+        <projectReference>Module 1:compile</projectReference>
+        <projectReference>Example of multi-module Maven project:compile</projectReference>
+        <projectReference>Tests:compile</projectReference>
+        <projectReference>Module 2:compile</projectReference>
+      </projectReferences>
+      <evidenceCollected>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>org.checkerframework</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>qual</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>pom</source>
+          <name>artifactid</name>
+          <value>checker-qual</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>framework</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>Manifest</source>
+          <name>implementation-url</name>
+          <value>https://checkerframework.org</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>checkerframework</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>checker</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>checker-qual</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>pom</source>
+          <name>name</name>
+          <value>Checker Qual</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>url</name>
+          <value>https://checkerframework.org</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>checkerframework</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>pom</source>
+          <name>artifactid</name>
+          <value>checker-qual</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>qual</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>framework</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>Manifest</source>
+          <name>implementation-url</name>
+          <value>https://checkerframework.org</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>checkerframework</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>checker</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>checker-qual</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>pom</source>
+          <name>name</name>
+          <value>Checker Qual</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>checkerframework</value>
+        </evidence>
+        <evidence type="product" confidence="MEDIUM">
+          <source>pom</source>
+          <name>url</name>
+          <value>https://checkerframework.org</value>
+        </evidence>
+        <evidence type="version" confidence="HIGHEST">
+          <source>pom</source>
+          <name>version</name>
+          <value>2.5.2</value>
+        </evidence>
+        <evidence type="version" confidence="HIGHEST">
+          <source>file</source>
+          <name>version</name>
+          <value>2.5.2</value>
+        </evidence>
+        <evidence type="version" confidence="HIGH">
+          <source>Manifest</source>
+          <name>Implementation-Version</name>
+          <value>2.5.2</value>
+        </evidence>
+      </evidenceCollected>
+      <identifiers>
+        <package confidence="HIGH">
+          <id>pkg:maven/org.checkerframework/checker-qual@2.5.2</id>
+          <url>https://ossindex.sonatype.org/component/pkg:maven/org.checkerframework/checker-qual@2.5.2</url>
+        </package>
+      </identifiers>
+    </dependency>
+    <dependency isVirtual="false">
+      <fileName>error_prone_annotations-2.2.0.jar</fileName>
+      <filePath>/m2repo/com/google/errorprone/error_prone_annotations/2.2.0/error_prone_annotations-2.2.0.jar</filePath>
+      <md5>416757b9e6ba0563368ab59e668b3225</md5>
+      <sha1>88e3c593e9b3586e1c6177f89267da6fc6986f0c</sha1>
+      <sha256>6ebd22ca1b9d8ec06d41de8d64e0596981d9607b42035f9ed374f9de271a481a</sha256>
+      <license>Apache 2.0: http://www.apache.org/licenses/LICENSE-2.0.txt</license>
+      <projectReferences>
+        <projectReference>Module 1:compile</projectReference>
+        <projectReference>Example of multi-module Maven project:compile</projectReference>
+        <projectReference>Tests:compile</projectReference>
+        <projectReference>Module 2:compile</projectReference>
+      </projectReferences>
+      <evidenceCollected>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>com.google.errorprone</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>pom</source>
+          <name>name</name>
+          <value>error-prone annotations</value>
+        </evidence>
+        <evidence type="vendor" confidence="MEDIUM">
+          <source>pom</source>
+          <name>parent-groupid</name>
+          <value>com.google.errorprone</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>error_prone_annotations</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>jar</source>
+          <name>package name</name>
+          <value>annotations</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>google.errorprone</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>pom</source>
+          <name>artifactid</name>
+          <value>error_prone_annotations</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>annotations</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>errorprone</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>pom</source>
+          <name>parent-artifactid</name>
+          <value>error_prone_parent</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>jar</source>
+          <name>package name</name>
+          <value>errorprone</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>google</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>jar</source>
+          <name>package name</name>
+          <value>google</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>jar</source>
+          <name>package name</name>
+          <value>annotations</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>google.errorprone</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>annotations</value>
+        </evidence>
+        <evidence type="product" confidence="MEDIUM">
+          <source>pom</source>
+          <name>parent-artifactid</name>
+          <value>error_prone_parent</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>pom</source>
+          <name>name</name>
+          <value>error-prone annotations</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>errorprone</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>jar</source>
+          <name>package name</name>
+          <value>errorprone</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>google</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>pom</source>
+          <name>artifactid</name>
+          <value>error_prone_annotations</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>error_prone_annotations</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>pom</source>
+          <name>parent-groupid</name>
+          <value>com.google.errorprone</value>
+        </evidence>
+        <evidence type="version" confidence="HIGHEST">
+          <source>file</source>
+          <name>version</name>
+          <value>2.2.0</value>
+        </evidence>
+        <evidence type="version" confidence="HIGHEST">
+          <source>pom</source>
+          <name>version</name>
+          <value>2.2.0</value>
+        </evidence>
+      </evidenceCollected>
+      <identifiers>
+        <package confidence="HIGH">
+          <id>pkg:maven/com.google.errorprone/error_prone_annotations@2.2.0</id>
+          <url>https://ossindex.sonatype.org/component/pkg:maven/com.google.errorprone/error_prone_annotations@2.2.0</url>
+        </package>
+      </identifiers>
+    </dependency>
+    <dependency isVirtual="false">
+      <fileName>j2objc-annotations-1.1.jar</fileName>
+      <filePath>/m2repo/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar</filePath>
+      <md5>9b806ea001e354d4e05f29c62b949e20</md5>
+      <sha1>976d8d30bebc251db406f2bdb3eb01962b5685b3</sha1>
+      <sha256>40ceb7157feb263949e0f503fe5f71689333a621021aa20ce0d0acee3badaa0f</sha256>
+      <description>
+    A set of annotations that provide additional information to the J2ObjC
+    translator to modify the result of translation.
+  </description>
+      <license>The Apache Software License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0.txt</license>
+      <projectReferences>
+        <projectReference>Module 1:compile</projectReference>
+        <projectReference>Example of multi-module Maven project:compile</projectReference>
+        <projectReference>Tests:compile</projectReference>
+        <projectReference>Module 2:compile</projectReference>
+      </projectReferences>
+      <evidenceCollected>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>com.google.j2objc</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>pom</source>
+          <name>artifactid</name>
+          <value>j2objc-annotations</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>url</name>
+          <value>google/j2objc/</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>j2objc-annotations</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>j2objc</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>google.j2objc</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>pom</source>
+          <name>name</name>
+          <value>J2ObjC Annotations</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>jar</source>
+          <name>package name</name>
+          <value>j2objc</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>jar</source>
+          <name>package name</name>
+          <value>annotations</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>annotations</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>google</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>jar</source>
+          <name>package name</name>
+          <value>google</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>jar</source>
+          <name>package name</name>
+          <value>annotations</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>pom</source>
+          <name>artifactid</name>
+          <value>j2objc-annotations</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>google.j2objc</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>annotations</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>j2objc-annotations</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>google</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>j2objc</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>pom</source>
+          <name>name</name>
+          <value>J2ObjC Annotations</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>jar</source>
+          <name>package name</name>
+          <value>j2objc</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>pom</source>
+          <name>url</name>
+          <value>google/j2objc/</value>
+        </evidence>
+        <evidence type="version" confidence="HIGHEST">
+          <source>pom</source>
+          <name>version</name>
+          <value>1.1</value>
+        </evidence>
+        <evidence type="version" confidence="HIGHEST">
+          <source>file</source>
+          <name>version</name>
+          <value>1.1</value>
+        </evidence>
+      </evidenceCollected>
+      <identifiers>
+        <package confidence="HIGH">
+          <id>pkg:maven/com.google.j2objc/j2objc-annotations@1.1</id>
+          <url>https://ossindex.sonatype.org/component/pkg:maven/com.google.j2objc/j2objc-annotations@1.1</url>
+        </package>
+      </identifiers>
+    </dependency>
+    <dependency isVirtual="false">
+      <fileName>animal-sniffer-annotations-1.17.jar</fileName>
+      <filePath>/m2repo/org/codehaus/mojo/animal-sniffer-annotations/1.17/animal-sniffer-annotations-1.17.jar</filePath>
+      <md5>7ca108b790cf6ab5dbf5422cc79f0d89</md5>
+      <sha1>f97ce6decaea32b36101e37979f8b647f00681fb</sha1>
+      <sha256>92654f493ecfec52082e76354f0ebf87648dc3d5cec2e3c3cdb947c016747a53</sha256>
+      <projectReferences>
+        <projectReference>Module 1:compile</projectReference>
+        <projectReference>Example of multi-module Maven project:compile</projectReference>
+        <projectReference>Tests:compile</projectReference>
+        <projectReference>Module 2:compile</projectReference>
+      </projectReferences>
+      <evidenceCollected>
+        <evidence type="vendor" confidence="LOW">
+          <source>jar</source>
+          <name>package name</name>
+          <value>mojo</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>mojo</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>org.codehaus.mojo</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>pom</source>
+          <name>artifactid</name>
+          <value>animal-sniffer-annotations</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>jar</source>
+          <name>package name</name>
+          <value>codehaus</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>pom</source>
+          <name>parent-artifactid</name>
+          <value>animal-sniffer-parent</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>codehaus</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>jar</source>
+          <name>package name</name>
+          <value>animal_sniffer</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>pom</source>
+          <name>name</name>
+          <value>Animal Sniffer Annotations</value>
+        </evidence>
+        <evidence type="vendor" confidence="MEDIUM">
+          <source>pom</source>
+          <name>parent-groupid</name>
+          <value>org.codehaus.mojo</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>animal-sniffer-annotations</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>codehaus.mojo</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>jar</source>
+          <name>package name</name>
+          <value>mojo</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>mojo</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>jar</source>
+          <name>package name</name>
+          <value>codehaus</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>jar</source>
+          <name>package name</name>
+          <value>animal_sniffer</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>jar</source>
+          <name>package name</name>
+          <value>ignorejrerequirement</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>pom</source>
+          <name>groupid</name>
+          <value>codehaus.mojo</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>pom</source>
+          <name>parent-groupid</name>
+          <value>org.codehaus.mojo</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>pom</source>
+          <name>artifactid</name>
+          <value>animal-sniffer-annotations</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>pom</source>
+          <name>name</name>
+          <value>Animal Sniffer Annotations</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>animal-sniffer-annotations</value>
+        </evidence>
+        <evidence type="product" confidence="MEDIUM">
+          <source>pom</source>
+          <name>parent-artifactid</name>
+          <value>animal-sniffer-parent</value>
+        </evidence>
+        <evidence type="version" confidence="HIGHEST">
+          <source>pom</source>
+          <name>version</name>
+          <value>1.17</value>
+        </evidence>
+        <evidence type="version" confidence="HIGHEST">
+          <source>file</source>
+          <name>version</name>
+          <value>1.17</value>
+        </evidence>
+      </evidenceCollected>
+      <identifiers>
+        <package confidence="HIGH">
+          <id>pkg:maven/org.codehaus.mojo/animal-sniffer-annotations@1.17</id>
+          <url>https://ossindex.sonatype.org/component/pkg:maven/org.codehaus.mojo/animal-sniffer-annotations@1.17</url>
+        </package>
+      </identifiers>
+    </dependency>
+    <dependency isVirtual="true">
+      <fileName>org.sonarqube:module1:1.0-SNAPSHOT</fileName>
+      <filePath>/tmp/sonar-scanning-examples/sonarqube-scanner-maven/maven-multimodule/module1/pom.xml</filePath>
+      <md5/>
+      <sha1/>
+      <sha256/>
+      <evidenceCollected>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>project</source>
+          <name>groupid</name>
+          <value>org.sonarqube</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>pom</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>project</source>
+          <name>artifactid</name>
+          <value>module1</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>project</source>
+          <name>artifactid</name>
+          <value>module1</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>project</source>
+          <name>groupid</name>
+          <value>org.sonarqube</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>pom</value>
+        </evidence>
+      </evidenceCollected>
+      <identifiers>
+        <package confidence="HIGHEST">
+          <id>pkg:maven/org.sonarqube/module1@1.0-SNAPSHOT</id>
+          <url>https://ossindex.sonatype.org/component/pkg:maven/org.sonarqube/module1@1.0-SNAPSHOT</url>
+        </package>
+      </identifiers>
+    </dependency>
+    <dependency isVirtual="true">
+      <fileName>org.sonarqube:module2:1.0-SNAPSHOT</fileName>
+      <filePath>/tmp/sonar-scanning-examples/sonarqube-scanner-maven/maven-multimodule/module2/pom.xml</filePath>
+      <md5/>
+      <sha1/>
+      <sha256/>
+      <evidenceCollected>
+        <evidence type="vendor" confidence="HIGHEST">
+          <source>project</source>
+          <name>groupid</name>
+          <value>org.sonarqube</value>
+        </evidence>
+        <evidence type="vendor" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>pom</value>
+        </evidence>
+        <evidence type="vendor" confidence="LOW">
+          <source>project</source>
+          <name>artifactid</name>
+          <value>module2</value>
+        </evidence>
+        <evidence type="product" confidence="HIGHEST">
+          <source>project</source>
+          <name>artifactid</name>
+          <value>module2</value>
+        </evidence>
+        <evidence type="product" confidence="LOW">
+          <source>project</source>
+          <name>groupid</name>
+          <value>org.sonarqube</value>
+        </evidence>
+        <evidence type="product" confidence="HIGH">
+          <source>file</source>
+          <name>name</name>
+          <value>pom</value>
+        </evidence>
+      </evidenceCollected>
+      <identifiers>
+        <package confidence="HIGHEST">
+          <id>pkg:maven/org.sonarqube/module2@1.0-SNAPSHOT</id>
+          <url>https://ossindex.sonatype.org/component/pkg:maven/org.sonarqube/module2@1.0-SNAPSHOT</url>
+        </package>
+      </identifiers>
+    </dependency>
+  </dependencies>
+</analysis>

@@ -55,8 +55,8 @@ public class Dependency {
     @JsonCreator
     public Dependency(@JsonProperty(value = "fileName", required = true) @NonNull String fileName,
                       @JsonProperty(value = "filePath", required = true) @NonNull String filePath,
-                      @JsonProperty(value = "md5", required = true) @NonNull String md5Hash,
-                      @JsonProperty(value = "sha1", required = true) @NonNull String sha1Hash,
+                      @JsonProperty(value = "md5") @NonNull String md5Hash,
+                      @JsonProperty(value = "sha1") @NonNull String sha1Hash,
                       @JsonProperty(value = "evidenceCollected") @JsonDeserialize(using = EvidenceDeserializer.class ) Map<String, List<Evidence>> evidenceCollected,
                       @JsonProperty(value = "vulnerabilities") @JsonDeserialize(using = VulnarabilitiesDeserializer.class) List<Vulnerability> vulnerabilities,
                       // For JSON
