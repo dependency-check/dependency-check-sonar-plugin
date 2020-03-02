@@ -20,7 +20,9 @@
 package org.sonar.dependencycheck;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -30,7 +32,10 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -50,6 +55,7 @@ public class DependencyCheckSensorTest {
 
     private File sampleXmlReport;
     private File sampleHtmlReport;
+    private File sampleXMLExceptionReport;
 
     private Configuration config;
     private MapSettings settings;
@@ -58,7 +64,7 @@ public class DependencyCheckSensorTest {
     public void init() throws URISyntaxException {
         FileSystem fileSystem = mock(FileSystem.class, RETURNS_DEEP_STUBS);
         this.pathResolver = mock(PathResolver.class);
-        this.sensor = new DependencyCheckSensor(fileSystem, this.pathResolver);
+        this.sensor = new DependencyCheckSensor(fileSystem, this.pathResolver, null);
 
         // Mock config
         settings = new MapSettings();
@@ -66,11 +72,14 @@ public class DependencyCheckSensorTest {
         config = settings.asConfig();
         // mock a sample report
         final URL sampleXmlResourceURI = getClass().getClassLoader().getResource("reportMultiModuleMavenExample/dependency-check-report.xml");
-        assert sampleXmlResourceURI != null;
+        assertNotNull(sampleXmlResourceURI);
         this.sampleXmlReport = Paths.get(sampleXmlResourceURI.toURI()).toFile();
         final URL sampleHtmlResourceURI = getClass().getClassLoader().getResource("reportMultiModuleMavenExample/dependency-check-report.html");
-        assert sampleHtmlResourceURI != null;
+        assertNotNull(sampleHtmlResourceURI);
         this.sampleHtmlReport = Paths.get(sampleHtmlResourceURI.toURI()).toFile();
+        final URL sampleExceptionResourceURI = getClass().getClassLoader().getResource("reportWithExceptions/dependency-check-report.xml");
+        assertNotNull(sampleExceptionResourceURI);
+        this.sampleXMLExceptionReport = Paths.get(sampleExceptionResourceURI.toURI()).toFile();
     }
 
     @Test
@@ -166,5 +175,26 @@ public class DependencyCheckSensorTest {
         when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
         sensor.execute(context);
         assertEquals(0, context.allIssues().size());
+    }
+
+    @Test
+    public void shouldAddWarningsPlugin() throws URISyntaxException {
+        final SensorContextTester context = SensorContextTester.create(new File(""));
+        // Mock config
+        MapSettings settings = new MapSettings();
+        settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        context.setSettings(settings);
+
+        // Sensor with analysisWarnings
+        FileSystem fileSystem = mock(FileSystem.class, RETURNS_DEEP_STUBS);
+        List<String> analysisWarnings = new ArrayList<>();
+        sensor = new DependencyCheckSensor(fileSystem, this.pathResolver, analysisWarnings::add);
+
+        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)))).thenReturn(sampleXMLExceptionReport);
+        sensor.execute(context);
+        assertTrue(StringUtils.contains(analysisWarnings.get(0), "Dependency-Check - "));
+        assertTrue(StringUtils.contains(analysisWarnings.get(1),"Dependency-Check - "));
+        assertFalse(StringUtils.equals(analysisWarnings.get(0), analysisWarnings.get(1)));
+        assertEquals(2, analysisWarnings.size());
     }
 }

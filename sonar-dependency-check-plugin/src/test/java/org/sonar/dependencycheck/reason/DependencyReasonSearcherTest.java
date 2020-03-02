@@ -74,7 +74,7 @@ public class DependencyReasonSearcherTest {
         context.fileSystem().add(inputFile("build.gradle.kts"));
         context.fileSystem().add(inputFile("package-lock.json"));
         DependencyReasonSearcher searcher = new DependencyReasonSearcher(context);
-        ScanInfo scanInfo = new ScanInfo("testengine");
+        ScanInfo scanInfo = new ScanInfo("testengine", null);
         ProjectInfo projectInfo = new ProjectInfo("testproject", "testreportdate");
         Collection<Dependency> dependencies = new LinkedList<>();
         Analysis analysis = new Analysis(scanInfo, projectInfo, dependencies);
@@ -91,7 +91,7 @@ public class DependencyReasonSearcherTest {
         context.fileSystem().add(inputFile("pom.xml"));
         DependencyReasonSearcher searcher = new DependencyReasonSearcher(context);
 
-        ScanInfo scanInfo = new ScanInfo("testengine");
+        ScanInfo scanInfo = new ScanInfo("testengine", null);
         ProjectInfo projectInfo = new ProjectInfo("testproject", "testreportdate");
         Collection<Dependency> dependencies = new LinkedList<>();
         // First Identifier
@@ -148,7 +148,7 @@ public class DependencyReasonSearcherTest {
         context.fileSystem().add(inputFile);
         DependencyReasonSearcher searcher = new DependencyReasonSearcher(context);
 
-        ScanInfo scanInfo = new ScanInfo("testengine");
+        ScanInfo scanInfo = new ScanInfo("testengine", null);
         ProjectInfo projectInfo = new ProjectInfo("testproject", "testreportdate");
         Collection<Dependency> dependencies = new LinkedList<>();
         // Second Identifier
