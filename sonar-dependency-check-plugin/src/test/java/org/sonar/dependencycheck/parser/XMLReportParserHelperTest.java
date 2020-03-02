@@ -43,15 +43,14 @@ import org.sonar.dependencycheck.parser.element.Vulnerability;
 
 public class XMLReportParserHelperTest extends ReportParserTest {
 
-    @Test
-    public void parseReport() throws Exception {
+    public Analysis parseReport(String dir) throws Exception {
         Instant startTime = Instant.now();
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportMultiModuleMavenExample/dependency-check-report.xml");
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dir + "/dependency-check-report.xml");
         Analysis analysis = XMLReportParserHelper.parse(inputStream);
         assertNotNull(analysis);
         Instant endTime = Instant.now();
         System.out.println("Duration XML-Report-Parser: " + Duration.between(startTime, endTime));
-        checkAnalyse(analysis);
+        return analysis;
     }
 
     @Test

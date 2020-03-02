@@ -27,7 +27,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
+import org.junit.jupiter.api.Test;
 import org.sonar.dependencycheck.parser.element.Analysis;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
@@ -37,17 +37,22 @@ import org.sonar.dependencycheck.parser.element.Vulnerability;
 
 public abstract class ReportParserTest {
 
-    public void checkAnalyse(Analysis analysis) {
+    abstract Analysis parseReport(String dir) throws Exception;
+
+    @Test
+    public void parseReportMultiModuleMavenExample() throws Exception {
+        Analysis analysis = parseReport("reportMultiModuleMavenExample");
+
         assertEquals("5.2.0", analysis.getScanInfo().getEngineVersion());
         assertEquals("Multi-Module Maven Example", analysis.getProjectInfo().get().getName());
         assertEquals("2019-07-26T12:37:05.863Z", analysis.getProjectInfo().get().getReportDate());
 
-        // struts-1.2.8.jar
         Collection<Dependency> dependencies = analysis.getDependencies();
         assertEquals(34, dependencies.size());
         Iterator<Dependency> iterator = dependencies.iterator();
-        Dependency dependency = iterator.next();
 
+        // struts-1.2.8.jar
+        Dependency dependency = iterator.next();
         assertEquals("struts-1.2.8.jar", dependency.getFileName());
         assertEquals("/to/path/struts/struts/1.2.8/struts-1.2.8.jar", dependency.getFilePath());
         assertEquals("8af31c3a406cfbfd991a6946102d583a", dependency.getMd5Hash());

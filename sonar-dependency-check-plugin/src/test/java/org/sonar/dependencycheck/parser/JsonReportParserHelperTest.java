@@ -38,15 +38,14 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class JsonReportParserHelperTest extends ReportParserTest {
 
-    @Test
-    public void parseReport() throws Exception {
+    public Analysis parseReport(String dir) throws Exception {
         Instant startTime = Instant.now();
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportMultiModuleMavenExample/dependency-check-report.json");
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dir + "/dependency-check-report.json");
         Analysis analysis = JsonReportParserHelper.parse(inputStream);
         assertNotNull(analysis);
         Instant endTime = Instant.now();
         System.out.println("Duration JSON-Report-Parser: " + Duration.between(startTime, endTime));
-        checkAnalyse(analysis);
+        return analysis;
     }
 
     @Test
