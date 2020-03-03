@@ -55,8 +55,8 @@ public class Dependency {
     @JsonCreator
     public Dependency(@JsonProperty(value = "fileName", required = true) @NonNull String fileName,
                       @JsonProperty(value = "filePath", required = true) @NonNull String filePath,
-                      @JsonProperty(value = "md5", required = true) @NonNull String md5Hash,
-                      @JsonProperty(value = "sha1", required = true) @NonNull String sha1Hash,
+                      @JsonProperty(value = "md5") @Nullable String md5Hash,
+                      @JsonProperty(value = "sha1") @Nullable String sha1Hash,
                       @JsonProperty(value = "evidenceCollected") @JsonDeserialize(using = EvidenceDeserializer.class ) Map<String, List<Evidence>> evidenceCollected,
                       @JsonProperty(value = "vulnerabilities") @JsonDeserialize(using = VulnarabilitiesDeserializer.class) List<Vulnerability> vulnerabilities,
                       // For JSON
@@ -96,12 +96,12 @@ public class Dependency {
         return filePath;
     }
 
-    public String getMd5Hash() {
-        return md5;
+    public Optional<String> getMd5Hash() {
+        return Optional.ofNullable(md5);
     }
 
-    public String getSha1Hash() {
-        return sha1;
+    public Optional<String> getSha1Hash() {
+        return Optional.ofNullable(sha1);
     }
 
     public Map<String, List<Evidence>> getEvidenceCollected() {

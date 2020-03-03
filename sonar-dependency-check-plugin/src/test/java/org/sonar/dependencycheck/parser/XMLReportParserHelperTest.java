@@ -80,8 +80,8 @@ public class XMLReportParserHelperTest extends ReportParserTest {
 
         assertEquals("jquery.js", dependency.getFileName());
         assertEquals("project/node_modules/moment-duration-format/test/vendor/jquery.js", dependency.getFilePath());
-        assertEquals("cc41e74189d44a6169f56655e44ef69d", dependency.getMd5Hash());
-        assertEquals("e0e77771c69fe4acd4cad20a0f20ce7a5086dc56", dependency.getSha1Hash());
+        assertEquals("cc41e74189d44a6169f56655e44ef69d", dependency.getMd5Hash().get());
+        assertEquals("e0e77771c69fe4acd4cad20a0f20ce7a5086dc56", dependency.getSha1Hash().get());
 
         // Collection<Evidence> evidenceCollected = dependency.getEvidenceCollected();
         // assertEquals(2, evidenceCollected.size());
@@ -124,8 +124,8 @@ public class XMLReportParserHelperTest extends ReportParserTest {
 
         assertEquals("index.js", dependency.getFileName());
         assertEquals("project/node_modules/jest-config/node_modules/is-number/node_modules/kind-of/index.js", dependency.getFilePath());
-        assertEquals("974e0c2803e83c5bf65de52b98bf4f55", dependency.getMd5Hash());
-        assertEquals("f9e8418f23f97452410088786d5e0c7a981ced74", dependency.getSha1Hash());
+        assertEquals("974e0c2803e83c5bf65de52b98bf4f55", dependency.getMd5Hash().get());
+        assertEquals("f9e8418f23f97452410088786d5e0c7a981ced74", dependency.getSha1Hash().get());
 
         // evidenceCollected = dependency.getEvidenceCollected();
         // assertEquals(0, evidenceCollected.size());
@@ -138,8 +138,8 @@ public class XMLReportParserHelperTest extends ReportParserTest {
 
         assertEquals("braces:1.8.5", dependency.getFileName());
         assertEquals("project/node_modules/braces/package.json", dependency.getFilePath());
-        assertEquals("a5663cea473ad651ac4a00a504883a22", dependency.getMd5Hash());
-        assertEquals("8082af62f94236e20503e76f0c94b0cf38bf0824", dependency.getSha1Hash());
+        assertEquals("a5663cea473ad651ac4a00a504883a22", dependency.getMd5Hash().get());
+        assertEquals("8082af62f94236e20503e76f0c94b0cf38bf0824", dependency.getSha1Hash().get());
 
         // evidenceCollected = dependency.getEvidenceCollected();
         // assertEquals(6, evidenceCollected.size());
@@ -179,11 +179,11 @@ public class XMLReportParserHelperTest extends ReportParserTest {
 
         for (Dependency dependency : dependencies) {
             // check jquery
-            if ("e0e77771c69fe4acd4cad20a0f20ce7a5086dc56".equals(dependency.getSha1Hash())) {
+            if ("e0e77771c69fe4acd4cad20a0f20ce7a5086dc56".equals(dependency.getSha1Hash().orElse(""))) {
                 assertEquals("jquery.js", dependency.getFileName());
                 assertEquals("project/node_modules/moment-duration-format/test/vendor/jquery.js", dependency.getFilePath());
-                assertEquals("cc41e74189d44a6169f56655e44ef69d", dependency.getMd5Hash());
-                assertEquals("e0e77771c69fe4acd4cad20a0f20ce7a5086dc56", dependency.getSha1Hash());
+                assertEquals("cc41e74189d44a6169f56655e44ef69d", dependency.getMd5Hash().get());
+                assertEquals("e0e77771c69fe4acd4cad20a0f20ce7a5086dc56", dependency.getSha1Hash().get());
 
                 // Collection<Evidence> evidenceCollected = dependency.getEvidenceCollected();
                 // assertEquals(2, evidenceCollected.size());
@@ -222,11 +222,11 @@ public class XMLReportParserHelperTest extends ReportParserTest {
                     vulnerability.getDescription());
             }
             // check kind-of
-            if ("f9e8418f23f97452410088786d5e0c7a981ced74".equals(dependency.getSha1Hash())) {
+            if ("f9e8418f23f97452410088786d5e0c7a981ced74".equals(dependency.getSha1Hash().orElse(""))) {
                 assertEquals("index.js", dependency.getFileName());
                 assertEquals("project/node_modules/jest-config/node_modules/is-number/node_modules/kind-of/index.js", dependency.getFilePath());
-                assertEquals("974e0c2803e83c5bf65de52b98bf4f55", dependency.getMd5Hash());
-                assertEquals("f9e8418f23f97452410088786d5e0c7a981ced74", dependency.getSha1Hash());
+                assertEquals("974e0c2803e83c5bf65de52b98bf4f55", dependency.getMd5Hash().get());
+                assertEquals("f9e8418f23f97452410088786d5e0c7a981ced74", dependency.getSha1Hash().get());
 
                 // Collection<Evidence> evidenceCollected = dependency.getEvidenceCollected();
                 // assertEquals(0, evidenceCollected.size());
@@ -235,11 +235,11 @@ public class XMLReportParserHelperTest extends ReportParserTest {
                 assertEquals(0, vulnerabilities.size());
             }
             // check brace:1.8.5 => NPM
-            if ("8082af62f94236e20503e76f0c94b0cf38bf0824".equals(dependency.getSha1Hash())) {
+            if ("8082af62f94236e20503e76f0c94b0cf38bf0824".equals(dependency.getSha1Hash().orElse(""))) {
                 assertEquals("braces:1.8.5", dependency.getFileName());
                 assertEquals("project/node_modules/braces/package.json", dependency.getFilePath());
-                assertEquals("a5663cea473ad651ac4a00a504883a22", dependency.getMd5Hash());
-                assertEquals("8082af62f94236e20503e76f0c94b0cf38bf0824", dependency.getSha1Hash());
+                assertEquals("a5663cea473ad651ac4a00a504883a22", dependency.getMd5Hash().get());
+                assertEquals("8082af62f94236e20503e76f0c94b0cf38bf0824", dependency.getSha1Hash().get());
 
                 // Collection<Evidence> evidenceCollected = dependency.getEvidenceCollected();
                 // assertEquals(6, evidenceCollected.size());
