@@ -31,13 +31,6 @@ export default class DependencyCheckReportApp extends React.PureComponent {
 
   componentDidMount() {
     findDependencyCheckReport(this.props.project).then(data => {
-      // Add javascript components manual, because dangerouslySetInnerHTML ignores them. See: https://github.com/facebook/react/issues/8838
-      var parser = new DOMParser();
-      var parsedDocument = parser.parseFromString(data, 'text/html');
-      var scripts = parsedDocument.getElementsByTagName('script');
-      for (var i = 0; i < scripts.length; i++) {
-        window.eval(scripts[i].innerHTML);
-      }
       this.setState({
         loading: false,
         data
@@ -50,11 +43,7 @@ export default class DependencyCheckReportApp extends React.PureComponent {
       return <div className="page page-limited"><DeferredSpinner /></div>;
     }
 
-    var __html = this.state.data
-    var template = { __html: __html };
-    return (
-      <div dangerouslySetInnerHTML={template} />
-    )
+    return (<div><iframe srcdoc={this.state.data} style={{border: 'none'}} height="600px" width="100%"/></div>);
   }
 }
 export function findDependencyCheckReport(project) {
