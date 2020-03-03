@@ -22,36 +22,25 @@ package org.sonar.dependencycheck.parser.element;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.stream.Collectors;
 
-@JsonIgnoreProperties("dataSource")
-public class ScanInfo {
+@JsonIgnoreProperties("stackTrace")
+public class AnalysisException {
 
-    private final String engineVersion;
-    private final Collection<AnalysisException> exceptions;
+    private final String message;
+    private final AnalysisException cause;
 
     @JsonCreator
-    public ScanInfo(@JsonProperty(value = "engineVersion", required = true) @NonNull String engineVersion,
-                    @JsonProperty(value = "analysisExceptions") @Nullable Collection<MaybeAnalysisException> exceptions) {
-        this.engineVersion = engineVersion;
-        if (exceptions != null) {
-        this.exceptions = exceptions.stream()
-            .map(MaybeAnalysisException::getException)
-            .collect(Collectors.toList());
-        } else {
-            this.exceptions = Collections.emptyList();
-        }
+    public AnalysisException(@JsonProperty(value = "message") String message,
+                     @JsonProperty(value = "cause") AnalysisException cause) {
+        this.message = message;
+        this.cause = cause;
     }
 
-    public String getEngineVersion() {
-        return engineVersion;
+    public String getMessage() {
+        return message;
     }
 
-    public Collection<AnalysisException> getExceptions() {
-        return exceptions;
+    public AnalysisException getCause() {
+        return cause;
     }
 }

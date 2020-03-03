@@ -30,7 +30,8 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -58,7 +59,8 @@ public class DependencyCheckSensorTest {
     public void init() throws URISyntaxException {
         FileSystem fileSystem = mock(FileSystem.class, RETURNS_DEEP_STUBS);
         this.pathResolver = mock(PathResolver.class);
-        this.sensor = new DependencyCheckSensor(fileSystem, this.pathResolver);
+        List<String> analysisWarnings = new ArrayList<>();
+        this.sensor = new DependencyCheckSensor(fileSystem, this.pathResolver, analysisWarnings::add);
 
         // Mock config
         settings = new MapSettings();

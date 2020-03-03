@@ -1,0 +1,834 @@
+{
+  "reportSchema": "1.1",
+  "scanInfo": {
+    "engineVersion": "5.2.4",
+    "dataSource": [
+      {
+        "name": "NVD CVE Checked",
+        "timestamp": "2020-03-02T15:36:41"
+      },
+      {
+        "name": "NVD CVE Modified",
+        "timestamp": "2020-03-02T02:01:46"
+      }
+    ],
+    "analysisExceptions": [
+      {
+        "exception": {
+          "message": "org.owasp.dependencycheck.analyzer.exception.AnalysisException: Failed to request component-reports",
+          "stackTrace": [
+            "org.owasp.dependencycheck.analyzer.OssIndexAnalyzer.analyzeDependency(OssIndexAnalyzer.java:164)",
+            "org.owasp.dependencycheck.analyzer.AbstractAnalyzer.analyze(AbstractAnalyzer.java:131)",
+            "org.owasp.dependencycheck.AnalysisTask.call(AnalysisTask.java:88)",
+            "org.owasp.dependencycheck.AnalysisTask.call(AnalysisTask.java:37)",
+            "java.util.concurrent.FutureTask.run(FutureTask.java:266)",
+            "java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)",
+            "java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)",
+            "java.lang.Thread.run(Thread.java:748)"
+          ],
+          "cause": {
+            "message": "java.net.SocketTimeoutException: connect timed out",
+            "stackTrace": [
+              "java.net.DualStackPlainSocketImpl.waitForConnect(Native Method)",
+              "java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:85)",
+              "java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)",
+              "java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)",
+              "java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)",
+              "java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)",
+              "java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)",
+              "java.net.Socket.connect(Socket.java:589)",
+              "sun.net.NetworkClient.doConnect(NetworkClient.java:175)",
+              "sun.net.www.http.HttpClient.openServer(HttpClient.java:463)",
+              "sun.net.www.http.HttpClient.openServer(HttpClient.java:558)",
+              "sun.net.www.protocol.https.HttpsClient.<init>(HttpsClient.java:264)",
+              "sun.net.www.protocol.https.HttpsClient.New(HttpsClient.java:367)",
+              "sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.getNewHttpClient(AbstractDelegateHttpsURLConnection.java:191)",
+              "sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1138)",
+              "sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:1032)",
+              "sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:177)",
+              "sun.net.www.protocol.http.HttpURLConnection.getOutputStream0(HttpURLConnection.java:1316)",
+              "sun.net.www.protocol.http.HttpURLConnection.getOutputStream(HttpURLConnection.java:1291)",
+              "sun.net.www.protocol.https.HttpsURLConnectionImpl.getOutputStream(HttpsURLConnectionImpl.java:250)",
+              "org.sonatype.ossindex.service.client.transport.HttpUrlConnectionTransport.post(HttpUrlConnectionTransport.java:90)",
+              "org.sonatype.ossindex.service.client.internal.OssindexClientImpl.doRequestComponentReports(OssindexClientImpl.java:204)",
+              "org.sonatype.ossindex.service.client.internal.OssindexClientImpl.requestComponentReports(OssindexClientImpl.java:170)",
+              "org.owasp.dependencycheck.analyzer.OssIndexAnalyzer.requestReports(OssIndexAnalyzer.java:217)",
+              "org.owasp.dependencycheck.analyzer.OssIndexAnalyzer.analyzeDependency(OssIndexAnalyzer.java:153)",
+              "org.owasp.dependencycheck.analyzer.AbstractAnalyzer.analyze(AbstractAnalyzer.java:131)",
+              "org.owasp.dependencycheck.AnalysisTask.call(AnalysisTask.java:88)",
+              "org.owasp.dependencycheck.AnalysisTask.call(AnalysisTask.java:37)",
+              "java.util.concurrent.FutureTask.run(FutureTask.java:266)",
+              "java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)",
+              "java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)",
+              "java.lang.Thread.run(Thread.java:748)"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "projectInfo": {
+    "name": "tmp",
+    "groupID": "tmp",
+    "artifactID": "tmp",
+    "version": "1-SNAPSHOT",
+    "reportDate": "2020-03-02T18:05:01.979Z",
+    "credits": {
+      "NVD": "This report contains data retrieved from the National Vulnerability Database: http://nvd.nist.gov",
+      "NPM": "This report may contain data retrieved from the NPM Public Advisories: https://www.npmjs.com/advisories",
+      "RETIREJS": "This report may contain data retrieved from the RetireJS community: https://retirejs.github.io/retire.js/",
+      "OSSINDEX": "This report may contain data retrieved from the Sonatype OSS Index: https://ossindex.sonatype.org"
+    }
+  },
+  "dependencies": [
+    {
+      "isVirtual": false,
+      "fileName": "dom4j-1.6.1.jar",
+      "filePath": "/.m2/repository/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar",
+      "md5": "4d8f51d3fe3900efc6e395be48030d6d",
+      "sha1": "5d3ccc056b6f056dbf0dddfdf43894b9065a8f94",
+      "sha256": "593552ffea3c5823c6602478b5002a7c525fd904a3c44f1abe4065c22edfac73",
+      "description": "dom4j: the flexible XML framework for Java",
+      "projectReferences": [
+        "tmp:compile"
+      ],
+      "evidenceCollected": {
+        "vendorEvidence": [
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "dom4j"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "Manifest",
+            "name": "Implementation-Vendor",
+            "value": "MetaStuff Ltd."
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "dom4j"
+          },
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "pom",
+            "name": "organization url",
+            "value": "http://sourceforge.net/projects/dom4j"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "Manifest",
+            "name": "specification-vendor",
+            "value": "MetaStuff Ltd."
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "url",
+            "value": "http://dom4j.org"
+          },
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "Manifest",
+            "name": "extension-name",
+            "value": "dom4j"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "dom4j"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "dom4j"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "dom4j"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "organization name",
+            "value": "MetaStuff Ltd."
+          }
+        ],
+        "productEvidence": [
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "organization name",
+            "value": "MetaStuff Ltd."
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "pom",
+            "name": "url",
+            "value": "http://dom4j.org"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "dom4j"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "Manifest",
+            "name": "Implementation-Title",
+            "value": "org.dom4j"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "Manifest",
+            "name": "specification-title",
+            "value": "dom4j : XML framework for Java"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "Manifest",
+            "name": "extension-name",
+            "value": "dom4j"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "groupid",
+            "value": "dom4j"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "organization url",
+            "value": "http://sourceforge.net/projects/dom4j"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "dom4j"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "dom4j"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "dom4j"
+          }
+        ],
+        "versionEvidence": [
+          {
+            "type": "version",
+            "confidence": "HIGH",
+            "source": "Manifest",
+            "name": "Implementation-Version",
+            "value": "1.6.1"
+          },
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "version",
+            "value": "1.6.1"
+          },
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "file",
+            "name": "version",
+            "value": "1.6.1"
+          }
+        ]
+      },
+      "packages": [
+        {
+          "id": "pkg:maven/dom4j/dom4j@1.6.1",
+          "confidence": "HIGH"
+        }
+      ],
+      "vulnerabilityIds": [
+        {
+          "id": "cpe:2.3:a:dom4j_project:dom4j:1.6.1:*:*:*:*:*:*:*",
+          "confidence": "HIGHEST",
+          "url": "https://nvd.nist.gov/vuln/search/results?form_type=Advanced&results_type=overview&search_type=all&cpe_vendor=cpe%3A%2F%3Adom4j_project&cpe_product=cpe%3A%2F%3Adom4j_project%3Adom4j&cpe_version=cpe%3A%2F%3Adom4j_project%3Adom4j%3A1.6.1"
+        }
+      ],
+      "vulnerabilities": [
+        {
+          "source": "NVD",
+          "name": "CVE-2018-1000632",
+          "severity": "HIGH",
+          "cvssv2": {
+            "score": 6.4,
+            "accessVector": "NETWORK",
+            "accessComplexity": "LOW",
+            "authenticationr": "NONE",
+            "confidentialImpact": "NONE",
+            "integrityImpact": "NONE",
+            "availabilityImpact": "PARTIAL",
+            "severity": "MEDIUM"
+          },
+          "cvssv3": {
+            "baseScore": 7.5,
+            "attackVector": "NETWORK",
+            "attackComplexity": "LOW",
+            "privilegesRequired": "NONE",
+            "userInteraction": "NONE",
+            "scope": "UNCHANGED",
+            "confidentialityImpact": "NONE",
+            "integrityImpact": "HIGH",
+            "availabilityImpact": "NONE",
+            "baseSeverity": "HIGH"
+          },
+          "cwes": [
+            "CWE-91"
+          ],
+          "description": "dom4j version prior to version 2.1.1 contains a CWE-91: XML Injection vulnerability in Class: Element. Methods: addElement, addAttribute that can result in an attacker tampering with XML documents through XML injection. This attack appear to be exploitable via an attacker specifying attributes or elements in the XML document. This vulnerability appears to have been fixed in 2.1.1 or later.",
+          "notes": "",
+          "references": [
+            {
+              "source": "MLIST",
+              "url": "https://lists.apache.org/thread.html/9d4c1af6f702c3d6d6f229de57112ddccac8ce44446a01b7937ab9e0@%3Ccommits.maven.apache.org%3E",
+              "name": "[maven-commits] 20190604 [maven-archetype] branch master updated: ARCHETYPE-567: switch to dom4j 2.1.1 (and Java 8) dom4j 2.1.1 requires Java 8 dom4j 2.0.2 would retain Java 7 but is vulnerable to CVE-2018-1000632 dom4j 2.0.3 fixes CVE-2018-1000632 but has been pending for ~1 year"
+            },
+            {
+              "source": "CONFIRM",
+              "url": "https://security.netapp.com/advisory/ntap-20190530-0001/",
+              "name": "https://security.netapp.com/advisory/ntap-20190530-0001/"
+            },
+            {
+              "source": "REDHAT",
+              "url": "https://access.redhat.com/errata/RHSA-2019:1161",
+              "name": "RHSA-2019:1161"
+            },
+            {
+              "source": "MLIST",
+              "url": "https://lists.apache.org/thread.html/5a020ecaa3c701f408f612f7ba2ee37a021644c4a39da2079ed3ddbc@%3Ccommits.maven.apache.org%3E",
+              "name": "[maven-commits] 20190531 [maven-archetype] 01/01: ARCHETYPE-567: switch to dom4j 2.1.1 (and Java 8) dom4j 2.1.1 requires Java 8 dom4j 2.0.2 would retain Java 7 but is vulnerable to CVE-2018-1000632 dom4j 2.0.3 fixes CVE-2018-1000632 but has been pending for ~1 year"
+            },
+            {
+              "source": "REDHAT",
+              "url": "https://access.redhat.com/errata/RHSA-2019:0380",
+              "name": "RHSA-2019:0380"
+            },
+            {
+              "source": "MLIST",
+              "url": "https://lists.apache.org/thread.html/708d94141126eac03011144a971a6411fcac16d9c248d1d535a39451@%3Csolr-user.lucene.apache.org%3E",
+              "name": "[lucene-solr-user] 20190104 Re: SOLR v7 Security Issues Caused Denial of Use - Sonatype Application Composition Report"
+            },
+            {
+              "source": "REDHAT",
+              "url": "https://access.redhat.com/errata/RHSA-2019:1159",
+              "name": "RHSA-2019:1159"
+            },
+            {
+              "source": "REDHAT",
+              "url": "https://access.redhat.com/errata/RHSA-2019:1162",
+              "name": "RHSA-2019:1162"
+            },
+            {
+              "source": "REDHAT",
+              "url": "https://access.redhat.com/errata/RHSA-2019:3172",
+              "name": "RHSA-2019:3172"
+            },
+            {
+              "source": "REDHAT",
+              "url": "https://access.redhat.com/errata/RHSA-2019:0365",
+              "name": "RHSA-2019:0365"
+            },
+            {
+              "source": "MISC",
+              "url": "https://ihacktoprotect.com/post/dom4j-xml-injection/",
+              "name": "https://ihacktoprotect.com/post/dom4j-xml-injection/"
+            },
+            {
+              "source": "REDHAT",
+              "url": "https://access.redhat.com/errata/RHSA-2019:0364",
+              "name": "RHSA-2019:0364"
+            },
+            {
+              "source": "MLIST",
+              "url": "https://lists.debian.org/debian-lts-announce/2018/09/msg00028.html",
+              "name": "[debian-lts-announce] 20180924 [SECURITY] [DLA 1517-1] dom4j security update"
+            },
+            {
+              "source": "REDHAT",
+              "url": "https://access.redhat.com/errata/RHSA-2019:1160",
+              "name": "RHSA-2019:1160"
+            },
+            {
+              "source": "CONFIRM",
+              "url": "https://github.com/dom4j/dom4j/issues/48",
+              "name": "https://github.com/dom4j/dom4j/issues/48"
+            },
+            {
+              "source": "MLIST",
+              "url": "https://lists.apache.org/thread.html/00571f362a7a2470fba50a31282c65637c40d2e21ebe6ee535a4ed74@%3Ccommits.maven.apache.org%3E",
+              "name": "[maven-commits] 20190601 [maven-archetype] 01/01: ARCHETYPE-567: switch to dom4j 2.1.1 (and Java 8) dom4j 2.1.1 requires Java 8 dom4j 2.0.2 would retain Java 7 but is vulnerable to CVE-2018-1000632 dom4j 2.0.3 fixes CVE-2018-1000632 but has been pending for ~1 year"
+            },
+            {
+              "source": "MLIST",
+              "url": "https://lists.apache.org/thread.html/4a77652531d62299a30815cf5f233af183425db8e3c9a824a814e768@%3Cdev.maven.apache.org%3E",
+              "name": "[maven-dev] 20190531 Re: proposal for maven-archetype to switch to dom4j 2.1.1 (and Java 8)"
+            },
+            {
+              "source": "MLIST",
+              "url": "https://lists.apache.org/thread.html/7f6e120e6ed473f4e00dde4c398fc6698eb383bd7857d20513e989ce@%3Cdev.maven.apache.org%3E",
+              "name": "[maven-dev] 20190531 proposal for maven-archetype to switch to dom4j 2.1.1 (and Java 8)"
+            },
+            {
+              "source": "REDHAT",
+              "url": "https://access.redhat.com/errata/RHSA-2019:0362",
+              "name": "RHSA-2019:0362"
+            },
+            {
+              "source": "MLIST",
+              "url": "https://lists.apache.org/thread.html/d7d960b2778e35ec9b4d40c8efd468c7ce7163bcf6489b633491c89f@%3Cdev.maven.apache.org%3E",
+              "name": "[maven-dev] 20190603 Re: proposal for maven-archetype to switch to dom4j 2.1.1 (and Java 8)"
+            },
+            {
+              "source": "MLIST",
+              "url": "https://lists.apache.org/thread.html/7e9e78f0e4288fac6591992836d2a80d4df19161e54bd71ab4b8e458@%3Cdev.maven.apache.org%3E",
+              "name": "[maven-dev] 20190610 Re: proposal for maven-archetype to switch to dom4j 2.1.1 (and Java 8)"
+            },
+            {
+              "source": "CONFIRM",
+              "url": "https://www.oracle.com/technetwork/security-advisory/cpujan2019-5072801.html",
+              "name": "https://www.oracle.com/technetwork/security-advisory/cpujan2019-5072801.html"
+            },
+            {
+              "source": "CONFIRM",
+              "url": "https://github.com/dom4j/dom4j/commit/e598eb43d418744c4dbf62f647dd2381c9ce9387",
+              "name": "https://github.com/dom4j/dom4j/commit/e598eb43d418744c4dbf62f647dd2381c9ce9387"
+            }
+          ],
+          "vulnerableSoftware": [
+            {
+              "software": {
+                "id": "cpe:2.3:a:oracle:flexcube_investor_servicing:12.1.0:*:*:*:*:*:*:*"
+              }
+            },
+            {
+              "software": {
+                "id": "cpe:2.3:a:oracle:flexcube_investor_servicing:12.3.0:*:*:*:*:*:*:*"
+              }
+            },
+            {
+              "software": {
+                "id": "cpe:2.3:a:oracle:flexcube_investor_servicing:12.4.0:*:*:*:*:*:*:*"
+              }
+            },
+            {
+              "software": {
+                "id": "cpe:2.3:a:oracle:flexcube_investor_servicing:12.0.4:*:*:*:*:*:*:*"
+              }
+            },
+            {
+              "software": {
+                "id": "cpe:2.3:a:oracle:flexcube_investor_servicing:14.0.0:*:*:*:*:*:*:*"
+              }
+            },
+            {
+              "software": {
+                "id": "cpe:2.3:a:dom4j_project:dom4j:*:*:*:*:*:*:*:*",
+                "vulnerabilityIdMatched": "true",
+                "versionEndExcluding": "2.1.1"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "isVirtual": false,
+      "fileName": "xml-apis-1.0.b2.jar",
+      "filePath": "/.m2/repository/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar",
+      "md5": "458715c0f7646a56b1c6ad3138098beb",
+      "sha1": "3136ca936f64c9d68529f048c2618bd356bf85c9",
+      "sha256": "8232f3482c346d843e5e3fb361055771c1acc105b6d8a189eb9018c55948cf9f",
+      "description": "xml-commons provides an Apache-hosted set of DOM, SAX, and \n    JAXP interfaces for use in other xml-based projects. Our hope is that we \n    can standardize on both a common version and packaging scheme for these \n    critical XML standards interfaces to make the lives of both our developers \n    and users easier. The External Components portion of xml-commons contains \n    interfaces that are defined by external standards organizations. For DOM, \n    that's the W3C; for SAX it's David Megginson and sax.sourceforge.net; for \n    JAXP it's Sun.",
+      "license": "The Apache Software License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0.txt",
+      "projectReferences": [
+        "tmp:compile"
+      ],
+      "evidenceCollected": {
+        "vendorEvidence": [
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "apache"
+          },
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "manifest: org/xml/sax/",
+            "name": "Implementation-Vendor",
+            "value": "David Megginson"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "groupid",
+            "value": "xml-apis"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "XML Commons External Components XML APIs"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "xml-apis"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "xml"
+          },
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "pom",
+            "name": "organization url",
+            "value": "http://www.apache.org/"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "sax"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "w3c"
+          },
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "manifest: javax/xml/parsers/",
+            "name": "Implementation-Vendor",
+            "value": "Sun Microsystems Inc."
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "dom"
+          },
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "manifest: org/w3c/dom/",
+            "name": "Implementation-Vendor",
+            "value": "World Wide Web Consortium"
+          },
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "manifest: javax/xml/transform/",
+            "name": "Implementation-Vendor",
+            "value": "Sun Microsystems Inc."
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "xml-apis"
+          },
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "manifest: org/apache/xmlcommons/Version",
+            "name": "Implementation-Vendor",
+            "value": "Apache Software Foundation"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "organization name",
+            "value": "Apache Software Foundation"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "version"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "url",
+            "value": "http://xml.apache.org/commons/#external"
+          }
+        ],
+        "productEvidence": [
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "javax"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "manifest: org/w3c/dom/",
+            "name": "Implementation-Title",
+            "value": "org.w3c.dom"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "apache"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "organization url",
+            "value": "http://www.apache.org/"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "manifest: javax/xml/transform/",
+            "name": "Specification-Title",
+            "value": "Java API for XML Processing"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "document"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "groupid",
+            "value": "xml-apis"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "artifactid",
+            "value": "xml-apis"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "pom",
+            "name": "name",
+            "value": "XML Commons External Components XML APIs"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "xml-apis"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "xml"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "manifest: javax/xml/parsers/",
+            "name": "Specification-Title",
+            "value": "Java API for XML Processing"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "pom",
+            "name": "organization name",
+            "value": "Apache Software Foundation"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "manifest: org/xml/sax/",
+            "name": "Implementation-Title",
+            "value": "org.xml.sax"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "manifest: org/xml/sax/",
+            "name": "Specification-Title",
+            "value": "Simple API for XML"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "manifest: org/w3c/dom/",
+            "name": "Specification-Title",
+            "value": "Document Object Model, Level 2 Core"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "xmlcommons"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "pom",
+            "name": "url",
+            "value": "http://xml.apache.org/commons/#external"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "manifest: org/apache/xmlcommons/Version",
+            "name": "Implementation-Title",
+            "value": "org.apache.xmlcommons.Version"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "w3c"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "sax"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "manifest: javax/xml/parsers/",
+            "name": "Implementation-Title",
+            "value": "javax.xml.transform"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "manifest: javax/xml/transform/",
+            "name": "Implementation-Title",
+            "value": "javax.xml.transform"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "dom"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "transform"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "version"
+          }
+        ],
+        "versionEvidence": [
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "file",
+            "name": "version",
+            "value": "1.0.b2"
+          },
+          {
+            "type": "version",
+            "confidence": "HIGHEST",
+            "source": "pom",
+            "name": "version",
+            "value": "1.0.b2"
+          },
+          {
+            "type": "version",
+            "confidence": "MEDIUM",
+            "source": "manifest: org/apache/xmlcommons/Version",
+            "name": "Implementation-Version",
+            "value": "1.0.b2"
+          }
+        ]
+      },
+      "packages": [
+        {
+          "id": "pkg:maven/xml-apis/xml-apis@1.0.b2",
+          "confidence": "HIGH"
+        }
+      ]
+    }
+  ]
+}

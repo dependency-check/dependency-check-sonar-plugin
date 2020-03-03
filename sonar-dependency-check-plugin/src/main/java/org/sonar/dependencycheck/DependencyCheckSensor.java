@@ -21,11 +21,12 @@ package org.sonar.dependencycheck;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Optional;
-
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.notifications.AnalysisWarnings;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.api.scanner.sensor.ProjectSensor;
 import org.sonar.api.utils.log.Logger;
@@ -37,6 +38,7 @@ import org.sonar.dependencycheck.parser.JsonReportParserHelper;
 import org.sonar.dependencycheck.parser.ReportParserException;
 import org.sonar.dependencycheck.parser.XMLReportParserHelper;
 import org.sonar.dependencycheck.parser.element.Analysis;
+import org.sonar.dependencycheck.parser.element.AnalysisException;
 import org.sonar.dependencycheck.reason.DependencyReasonSearcher;
 import org.sonar.dependencycheck.report.HtmlReportFile;
 import org.sonar.dependencycheck.report.JsonReportFile;
@@ -50,10 +52,12 @@ public class DependencyCheckSensor implements ProjectSensor {
 
     private final FileSystem fileSystem;
     private final PathResolver pathResolver;
+    private final AnalysisWarnings analysisWarnings;
 
-    public DependencyCheckSensor(FileSystem fileSystem, PathResolver pathResolver) {
+    public DependencyCheckSensor(FileSystem fileSystem, PathResolver pathResolver, AnalysisWarnings analysisWarnings) {
         this.fileSystem = fileSystem;
         this.pathResolver = pathResolver;
+        this.analysisWarnings = analysisWarnings;
     }
 
     private Optional<Analysis> parseAnalysis(SensorContext context) {
@@ -101,6 +105,13 @@ public class DependencyCheckSensor implements ProjectSensor {
         }
     }
 
+    private void addWarnings(Analysis analysis) {
+        Collection<AnalysisException> exceptions = analysis.getScanInfo().getExceptions();
+        for (AnalysisException exception: exceptions) {
+            analysisWarnings.addUnique(exception.getMessage());
+        }
+    }
+
     @Override
     public String toString() {
         return SENSOR_NAME;
@@ -122,7 +133,9 @@ public class DependencyCheckSensor implements ProjectSensor {
             if (analysis.isPresent()) {
                 DependencyReasonSearcher dependencyReasonSearcher = new DependencyReasonSearcher(sensorContext);
                 dependencyReasonSearcher.addDependenciesToInputComponents(analysis.get(), sensorContext);
+                addWarnings(analysis.get());
             }
+            sensorContext.newAnalysisError();
             uploadHTMLReport(sensorContext);
         }
         profiler.stopInfo();

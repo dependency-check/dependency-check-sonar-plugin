@@ -21,6 +21,7 @@ package org.sonar.dependencycheck.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.sonar.dependencycheck.parser.element.Analysis;
+import org.sonar.dependencycheck.parser.element.AnalysisException;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Evidence;
@@ -161,5 +163,30 @@ public abstract class ReportParserTest {
         assertEquals(3, versionEvidences.size());
         assertTrue(dependency.getVulnerabilities().isEmpty());
 
+    }
+
+    @Test
+    public void parseReportWithExceptions() throws Exception {
+        Analysis analysis = parseReport("reportWithExceptions");
+
+        assertEquals("5.2.4", analysis.getScanInfo().getEngineVersion());
+
+        Collection<AnalysisException> analysisExceptions = analysis.getScanInfo().getExceptions();
+        assertEquals(1, analysisExceptions.size());
+        AnalysisException analysisException = analysisExceptions.iterator().next();
+        assertEquals("org.owasp.dependencycheck.analyzer.exception.AnalysisException: Failed to request component-reports", analysisException
+            .getMessage());
+        analysisException = analysisException.getCause();
+        assertEquals("java.net.SocketTimeoutException: connect timed out", analysisException.getMessage());
+        assertNull(analysisException.getCause());
+
+        Collection<Dependency> dependencies = analysis.getDependencies();
+        assertEquals(2, dependencies.size());
+        Iterator<Dependency> iterator = dependencies.iterator();
+
+        Dependency dependency = iterator.next();
+        assertEquals("dom4j-1.6.1.jar", dependency.getFileName());
+        dependency = iterator.next();
+        assertEquals("xml-apis-1.0.b2.jar", dependency.getFileName());
     }
 }
