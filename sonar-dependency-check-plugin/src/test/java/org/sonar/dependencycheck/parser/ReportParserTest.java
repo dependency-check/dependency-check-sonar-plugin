@@ -50,8 +50,8 @@ public abstract class ReportParserTest {
 
         assertEquals("struts-1.2.8.jar", dependency.getFileName());
         assertEquals("/to/path/struts/struts/1.2.8/struts-1.2.8.jar", dependency.getFilePath());
-        assertEquals("8af31c3a406cfbfd991a6946102d583a", dependency.getMd5Hash());
-        assertEquals("5919caff42c3f42fb251fd82a58af4a7880826dd", dependency.getSha1Hash());
+        assertEquals("8af31c3a406cfbfd991a6946102d583a", dependency.getMd5Hash().get());
+        assertEquals("5919caff42c3f42fb251fd82a58af4a7880826dd", dependency.getSha1Hash().get());
 
         Map<String, List<Evidence>> evidenceCollected = dependency.getEvidenceCollected();
         assertEquals(3, evidenceCollected.size());
