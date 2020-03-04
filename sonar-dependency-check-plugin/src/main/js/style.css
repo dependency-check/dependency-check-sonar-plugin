@@ -17,13 +17,12 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-import React from "react";
-import DependencyCheckReportApp from "./components/DependencyCheckReportApp";
-import '../style.css';
+.dependency-check-report-content {
+    flex: 1 1 auto;
+}
 
-// This creates a page for dependencycheck, which shows a html report
-
-//  You can access it at /project/extension/dependencycheck/report_page?id={PORTFOLIO_ID}&qualifier=VW
-window.registerExtension("dependencycheck/report_page", options => {
-  return <DependencyCheckReportApp options={options} />;
-});
+.dependency-check-report-container {
+    display: flex;
+    flex-direction: column;
+    height: 720px;
+}

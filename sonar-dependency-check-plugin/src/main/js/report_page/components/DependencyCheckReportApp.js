@@ -43,7 +43,10 @@ export default class DependencyCheckReportApp extends React.PureComponent {
       return <div className="page page-limited"><DeferredSpinner /></div>;
     }
 
-    return (<div><iframe srcdoc={this.state.data} style={{border: 'none'}} height="600px" width="100%"/></div>);
+
+    return (<div className="page dependency-check-report-container dependency-check-report-content" >
+              <iframe classsandbox="allow-scripts allow-same-origin" srcdoc={this.state.data} style={{border: 'none', flex: '1 1 auto'}} />
+            </div>);
   }
 }
 export function findDependencyCheckReport(options) {
