@@ -6,7 +6,7 @@ Integrates [Dependency-Check][] analysis and reporting into SonarQube v6.7 or hi
 
 -   [npm][]
 -   [dependency-check-cli][]
--   [sonar-runner][]
+-   [sonar-scanner][]
 
 ## Usage
 
@@ -17,8 +17,8 @@ npm install
 mkdir -p reports/dependency-check
 # Run Dependency-Check
 dependency-check.sh --format ALL -s . --out reports/dependency-check --project "nodejs example"
-# Invoke Sonar-Runner. This reads from sonar-project.properties
-sonar-runner
+# Invoke SonarScanner. This reads from sonar-project.properties
+sonar-scanner
 ```
 
 ## Dependencies with vulnerabilities
@@ -41,4 +41,4 @@ Permission to modify and redistribute is granted under the terms of the [LGPLv3]
   [dependency-check]: https://www.owasp.org/index.php/OWASP_Dependency_Check
   [npm]: https://www.npmjs.com/get-npm
   [dependency-check-cli]: https://jeremylong.github.io/DependencyCheck/dependency-check-cli/index.html
-  [sonar-runner]: https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner
+  [sonar-scanner]: https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner

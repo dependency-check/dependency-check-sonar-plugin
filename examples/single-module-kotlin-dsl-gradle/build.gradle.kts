@@ -4,7 +4,7 @@ plugins {
     application
     kotlin("jvm") version "1.3.50"
     id("org.sonarqube") version "2.8"
-    id("org.owasp.dependencycheck") version "5.2.2"
+    id("org.owasp.dependencycheck") version "5.3.0"
 }
 
 repositories {
@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
     compile("com.google.guava:guava:21.0")
-    compile("org.owasp:dependency-check-gradle:5.2.2")
+    compile("org.owasp:dependency-check-gradle:5.3.0")
     compile("org.springframework:spring:2.0")
     testCompile("junit:junit:4.12")
     implementation(kotlin("stdlib-jdk8"))

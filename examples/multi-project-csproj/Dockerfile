@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:2.2
 ARG sonarHost
 
 ENV NODEREPO=node_10.x \
-    DEPENDENCY_CHECK=5.2.1 \
+    DEPENDENCY_CHECK=5.3.0 \
     PATH="$PATH:/root/.dotnet/tools"
 
 RUN /usr/bin/apt-get update && \
@@ -12,7 +12,7 @@ RUN /usr/bin/apt-get update && \
     dotnet tool install --global dotnet-sonarscanner && \
     # Install dependency-check
     /usr/bin/wget -q -O /opt/dependency-check-${DEPENDENCY_CHECK}-release.zip https://dl.bintray.com/jeremy-long/owasp/dependency-check-${DEPENDENCY_CHECK}-release.zip && \
-    /usr/bin/wget -q -O /opt/dependency-check-${DEPENDENCY_CHECK}-release.zip.asc https://dl.bintray.com/jeremy-long/owasp/dependency-check-5.2.1-release.zip.asc && \
+    /usr/bin/wget -q -O /opt/dependency-check-${DEPENDENCY_CHECK}-release.zip.asc https://dl.bintray.com/jeremy-long/owasp/dependency-check-${DEPENDENCY_CHECK}-release.zip.asc && \
     /usr/bin/gpg --batch --keyserver keyserver.ubuntu.com --recv-keys F9514E84AE3708288374BBBE097586CFEA37F9A6 && \
     /usr/bin/gpg --batch --verify /opt/dependency-check-${DEPENDENCY_CHECK}-release.zip.asc /opt/dependency-check-${DEPENDENCY_CHECK}-release.zip && \
     /usr/bin/unzip /opt/dependency-check-${DEPENDENCY_CHECK}-release.zip -d /opt && \
