@@ -30,7 +30,7 @@ export default class DependencyCheckReportApp extends React.PureComponent {
   };
 
   componentDidMount() {
-    findDependencyCheckReport(this.props.project).then(data => {
+    findDependencyCheckReport(this.props.options).then(data => {
       this.setState({
         loading: false,
         data
@@ -46,9 +46,9 @@ export default class DependencyCheckReportApp extends React.PureComponent {
     return (<div><iframe srcdoc={this.state.data} style={{border: 'none'}} height="600px" width="100%"/></div>);
   }
 }
-export function findDependencyCheckReport(project) {
+export function findDependencyCheckReport(options) {
   return getJSON("/api/measures/component", {
-      component : project.key,
+      component : options.component.key,
       metricKeys : "report"
     }).then(function(response) {
     var report = response.component.measures.filter(measure => measure.metric === "report")[0];

@@ -24,5 +24,5 @@ import DependencyCheckReportApp from "./components/DependencyCheckReportApp";
 
 //  You can access it at /project/extension/dependencycheck/report_page?id={PORTFOLIO_ID}&qualifier=VW
 window.registerExtension("dependencycheck/report_page", options => {
-  return <DependencyCheckReportApp project={options.component} />;
+  return <DependencyCheckReportApp options={options} />;
 });
