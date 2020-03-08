@@ -54,7 +54,7 @@ export function findDependencyCheckReport(options) {
       component : options.component.key,
       metricKeys : "report"
     }).then(function(response) {
-    var report = response.component.measures.filter(measure => measure.metric === "report")[0];
+    var report = response.component.measures.find(measure => measure.metric === "report");
     if (report !== undefined) {
       return report.value
     } else {
