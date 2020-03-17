@@ -26,7 +26,8 @@ import { getJSON } from "sonar-request";
 export default class DependencyCheckReportApp extends React.PureComponent {
   state = {
     loading: true,
-    data: []
+    data: [],
+    height: 0,
   };
 
   componentDidMount() {
@@ -36,6 +37,26 @@ export default class DependencyCheckReportApp extends React.PureComponent {
         data
       });
     });
+    /**
+    * Add event listener
+    */
+    this.updateDimensions();
+    window.addEventListener("resize", this.updateDimensions.bind(this));
+  }
+
+  /**
+   * Remove event listener
+   */
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateDimensions.bind(this));
+  }
+
+  updateDimensions() {
+    // 72px SonarQube common pane
+    // 72px SonarQube project pane
+    // 145,5 SonarQube footer
+    let update_height = window.innerHeight - (72 + 48 + 145.5);
+    this.setState({ height: update_height });
   }
 
   render() {
@@ -43,9 +64,8 @@ export default class DependencyCheckReportApp extends React.PureComponent {
       return <div className="page page-limited"><DeferredSpinner /></div>;
     }
 
-
-    return (<div className="page dependency-check-report-container dependency-check-report-content" >
-              <iframe classsandbox="allow-scripts allow-same-origin" srcdoc={this.state.data} style={{border: 'none', flex: '1 1 auto'}} />
+    return (<div className="page dependency-check-report-container" >
+              <iframe classsandbox="allow-scripts allow-same-origin" height={this.state.height} srcdoc={this.state.data} style={{border: 'none'}} />
             </div>);
   }
 }
