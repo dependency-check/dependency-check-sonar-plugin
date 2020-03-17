@@ -10,6 +10,8 @@ const config = require("./webpack.config");
 
 config.devtool = "eval";
 
+config.mode = 'development';
+
 config.output.publicPath = "/static/dependencycheck/";
 
 config.output.pathinfo = true;

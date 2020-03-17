@@ -11,7 +11,7 @@ process.env.NODE_ENV = 'development';
 // if this file is missing. dotenv will never modify any environment variables
 // that have already been set.
 // https://github.com/motdotla/dotenv
-require('dotenv').config({ silent: true });
+require('dotenv').config();
 
 const chalk = require('chalk');
 const webpack = require('webpack');
@@ -20,7 +20,6 @@ const httpProxyMiddleware = require('http-proxy-middleware');
 const detect = require('detect-port');
 const clearConsole = require('react-dev-utils/clearConsole');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
-const prompt = require('react-dev-utils/prompt');
 const config = require('../conf/webpack/webpack.config.dev.js');
 
 // Tools like Cloud9 rely on this.
@@ -222,18 +221,10 @@ function run(port) {
 // We attempt to use the default port but if it is busy, we offer the user to
 // run on a different port. `detect()` Promise resolves to the next free port.
 detect(DEFAULT_PORT).then(port => {
-  if (port === DEFAULT_PORT) {
+  if (port == DEFAULT_PORT) {
     run(port);
     return;
   }
 
-  clearConsole();
-  const question = chalk.yellow('Something is already running on port ' + DEFAULT_PORT + '.') +
-    '\n\nWould you like to run the app on another port instead?';
-
-  prompt(question, true).then(shouldChangePort => {
-    if (shouldChangePort) {
-      run(port);
-    }
-  });
+  console.log(chalk.yellow('Something is already running on port ' + DEFAULT_PORT + '.'));
 });
