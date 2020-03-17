@@ -123,26 +123,29 @@
                 <executions>
                     <execution>
                         <phase>generate-resources</phase>
-                        <id>install node and yarn</id>
+                        <id>install node and npm </id>
                         <goals>
-                            <goal>install-node-and-yarn</goal>
+                            <goal>install-node-and-npm</goal>
                         </goals>
                         <configuration>
-                            <nodeVersion>v8.5.0</nodeVersion>
-                            <yarnVersion>v1.1.0</yarnVersion>
+                            <nodeVersion>v12.16.1</nodeVersion>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>yarn install</id>
+                        <phase>generate-resources</phase>
+                        <id>npm install</id>
                         <goals>
-                            <goal>yarn</goal>
+                            <goal>npm</goal>
                         </goals>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
                     </execution>
                     <execution>
                         <phase>generate-resources</phase>
-                        <id>yarn run script</id>
+                        <id>npm run script</id>
                         <goals>
-                            <goal>yarn</goal>
+                            <goal>npm</goal>
                         </goals>
                         <configuration>
                             <arguments>run build</arguments>
