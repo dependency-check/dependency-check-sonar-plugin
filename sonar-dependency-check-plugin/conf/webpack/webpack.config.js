@@ -6,7 +6,6 @@
  * mailto:info AT sonarsource DOT com
  */
 const path = require("path");
-const autoprefixer = require("autoprefixer");
 
 module.exports = {
   // Define the entry points here. They MUST have the same name as the page_id
@@ -22,7 +21,10 @@ module.exports = {
     filename: "[name].js"
   },
   resolve: {
-    root: path.join(__dirname, "src/main/js")
+    modules: [
+      path.join(__dirname, "src/main/js"),
+      "node_modules"
+    ]
   },
   externals: {
     // React 16.8 ships with SonarQube, and should be re-used to avoid
@@ -41,30 +43,29 @@ module.exports = {
   },
   module: {
     // Our example uses Babel to transpile our code.
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        loader: "babel",
-        exclude: /(node_modules)/
+        use: [
+          "babel-loader",
+        ],
+        exclude: /(node_modules|bower_components)/,
       },
       {
         test: /\.css/,
-        loader: "style-loader!css-loader!postcss-loader"
-      },
-      { test: /\.json$/, loader: "json" }
+        use: [
+          { loader: 'style-loader'},
+          { loader: 'css-loader'},
+          { loader: 'postcss-loader',
+            options: {
+              ident: 'postcss',
+              plugins: [
+                require('autoprefixer'),
+              ]
+            }
+          }
+        ],
+      }
     ]
-  },
-  postcss() {
-    return [
-      autoprefixer({
-        browsers: [
-          "last 3 Chrome versions",
-          "last 3 Firefox versions",
-          "last 3 Safari versions",
-          "last 3 Edge versions",
-          "IE 11"
-        ]
-      })
-    ];
   }
 };
