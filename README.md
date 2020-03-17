@@ -50,6 +50,10 @@ This is simply a measurement of the number of vulnerabilities to the vulnerable 
 
 > $ mvn clean package
 
+### Working with NodeJS
+
+This plugin used the same project setup as [sonar-custom-plugin-example][]. Checkout this project to get informations to work with NodeJS components.
+
 ## Distribution
 
 Ready to use binaries are available from [GitHub][] and [bintray][].
@@ -133,3 +137,4 @@ Permission to modify and redistribute is granted under the terms of the [LGPLv3]
 [sonarqube 5.x]: https://github.com/dependency-check/dependency-check-sonar-plugin/tree/SonarQube_5.x
 [sonarqube 6.x]: https://github.com/dependency-check/dependency-check-sonar-plugin/tree/SonarQube_6.x
 [bintray]: https://bintray.com/dependency-check/owasp/sonar-dependency-check
+[sonar-custom-plugin-example]: https://github.com/SonarSource/sonar-custom-plugin-example

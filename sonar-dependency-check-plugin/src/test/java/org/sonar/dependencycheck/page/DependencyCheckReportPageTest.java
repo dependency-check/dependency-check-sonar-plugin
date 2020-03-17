@@ -19,20 +19,25 @@
  */
 package org.sonar.dependencycheck.page;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import org.junit.jupiter.api.Test;
 import org.sonar.api.web.page.Context;
 import org.sonar.api.web.page.Page;
-import org.sonar.api.web.page.Page.Scope;
-import org.sonar.api.web.page.PageDefinition;
 
-public class DependencyCheckReportPage implements PageDefinition {
+class DependencyCheckReportPageTest {
 
-    @Override
-    public void define(Context context) {
-        context.addPage(
-            Page.builder("dependencycheck/report_page")
-                .setScope(Scope.COMPONENT)
-                .setComponentQualifiers(Page.Qualifier.PROJECT, Page.Qualifier.MODULE)
-                .setName("Dependency-Check")
-                .setAdmin(false).build());
+    @Test
+    public void testPage() {
+        DependencyCheckReportPage reportPage = new DependencyCheckReportPage();
+        Context context = new Context();
+        reportPage.define(context);
+        System.out.println(context.getPages().size());
+        Page report_page = context.getPages().iterator().next();
+        assertEquals("Dependency-Check", report_page.getName());
+        assertEquals("dependencycheck/report_page", report_page.getKey());
+        assertFalse(report_page.isAdmin());
     }
+
 }
