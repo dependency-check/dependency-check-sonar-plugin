@@ -1,4 +1,8 @@
+/* eslint-disable */
+
 /*
+ * Copy from https://github.com/SonarSource/sonar-custom-plugin-example/blob/7.x/conf/env.js
+ *
  * Copyright (C) 2017-2017 SonarSource SA
  * All rights reserved
  * mailto:info AT sonarsource DOT com
