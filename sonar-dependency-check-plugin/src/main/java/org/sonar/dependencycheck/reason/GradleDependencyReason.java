@@ -68,7 +68,7 @@ public class GradleDependencyReason extends DependencyReason {
             if (gradleIdentifier.isPresent()) {
                 tryArtifactMatch(gradleIdentifier.get()).ifPresent(textrange -> dependencyMap.put(dependency, textrange));
             } else {
-                LOGGER.warn("No artifactId found for Dependency {}", dependency.getFileName());
+                LOGGER.debug("No artifactId found for Dependency {}", dependency.getFileName());
             }
             if (!dependencyMap.containsKey(dependency) || dependencyMap.get(dependency) == null) {
                 LOGGER.debug("We doesn't find a TextRange for {} in {}. We link to first line with {} confidence", dependency.getFileName(), buildGradle, Confidence.LOW);
