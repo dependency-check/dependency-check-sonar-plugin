@@ -19,11 +19,11 @@
  */
 import React from "react";
 import DependencyCheckReportApp from "./components/DependencyCheckReportApp";
-import '../style.css';
+import "../style.css";
 
 // This creates a page for dependencycheck, which shows a html report
 
 //  You can access it at /project/extension/dependencycheck/report_page?id={PORTFOLIO_ID}&qualifier=VW
-window.registerExtension("dependencycheck/report_page", options => {
+window.registerExtension("dependencycheck/report_page", (options) => {
   return <DependencyCheckReportApp options={options} />;
 });

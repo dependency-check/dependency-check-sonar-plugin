@@ -23,15 +23,31 @@ import React from "react";
 import { DeferredSpinner } from "sonar-components";
 import { getJSON } from "sonar-request";
 
+export function findDependencyCheckReport(options) {
+  return getJSON("/api/measures/component", {
+      component : options.component.key,
+      metricKeys : "report"
+    }).then(function(response) {
+    var report = response.component.measures.find((measure) => {
+      return measure.metric === "report";
+    });
+    if (typeof report  === "undefined") {
+      return "<center><h2>No HTML-Report found. Please check property sonar.dependencyCheck.htmlReportPath</h2></center>";
+    } else {
+      return report.value;
+    }
+  });
+}
+
 export default class DependencyCheckReportApp extends React.PureComponent {
   state = {
     loading: true,
-    data: [],
+    data: "",
     height: 0,
   };
 
   componentDidMount() {
-    findDependencyCheckReport(this.props.options).then(data => {
+    findDependencyCheckReport(this.props.options).then((data) => {
       this.setState({
         loading: false,
         data
@@ -55,8 +71,8 @@ export default class DependencyCheckReportApp extends React.PureComponent {
     // 72px SonarQube common pane
     // 72px SonarQube project pane
     // 145,5 SonarQube footer
-    let update_height = window.innerHeight - (72 + 48 + 145.5);
-    this.setState({ height: update_height });
+    let updateHeight = window.innerHeight - (72 + 48 + 145.5);
+    this.setState({ height: updateHeight });
   }
 
   render() {
@@ -65,20 +81,7 @@ export default class DependencyCheckReportApp extends React.PureComponent {
     }
 
     return (<div className="page dependency-check-report-container" >
-              <iframe classsandbox="allow-scripts allow-same-origin" height={this.state.height} srcdoc={this.state.data} style={{border: 'none'}} />
+              <iframe classsandbox="allow-scripts allow-same-origin" height={this.state.height} srcdoc={this.state.data} style={{border: "none"}} />
             </div>);
   }
-}
-export function findDependencyCheckReport(options) {
-  return getJSON("/api/measures/component", {
-      component : options.component.key,
-      metricKeys : "report"
-    }).then(function(response) {
-    var report = response.component.measures.find(measure => measure.metric === "report");
-    if (report !== undefined) {
-      return report.value
-    } else {
-      return "<center><h2>No HTML-Report found. Please check property sonar.dependencyCheck.htmlReportPath</h2></center>"
-    }
-  });
 }
