@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 /*
  * Copy from https://github.com/SonarSource/sonar-custom-plugin-example/blob/7.x/conf/env.js
  *

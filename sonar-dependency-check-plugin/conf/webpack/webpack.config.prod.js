@@ -1,5 +1,4 @@
 /*
- * eslint-disable
  * Copy from https://github.com/SonarSource/sonar-custom-plugin-example/blob/7.x/conf/webpack/webpack.config.prod.js
  *
  * Copyright (C) 2017-2017 SonarSource SA

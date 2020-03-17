@@ -1,4 +1,6 @@
 /*
+ * Copy from https://github.com/SonarSource/sonar-custom-plugin-example/blob/7.x/scripts/start.js
+ *
  * Copyright (C) 2017-2017 SonarSource SA
  * All rights reserved
  * mailto:info AT sonarsource DOT com

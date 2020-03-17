@@ -40,13 +40,18 @@ export function findDependencyCheckReport(options) {
 }
 
 export default class DependencyCheckReportApp extends React.PureComponent {
-  state = {
-    loading: true,
-    data: "",
-    height: 0,
-  };
+  constructor() {
+    super();
+    this.state = {
+      loading: true,
+      data: "",
+      height: 0,
+    };
+  }
+
 
   componentDidMount() {
+    // eslint-disable-next-line react/prop-types
     findDependencyCheckReport(this.props.options).then((data) => {
       this.setState({
         loading: false,
@@ -81,7 +86,7 @@ export default class DependencyCheckReportApp extends React.PureComponent {
     }
 
     return (<div className="page dependency-check-report-container" >
-              <iframe classsandbox="allow-scripts allow-same-origin" height={this.state.height} srcdoc={this.state.data} style={{border: "none"}} />
+              <iframe classsandbox="allow-scripts allow-same-origin" height={this.state.height} srcDoc={this.state.data} style={{border: "none"}} />
             </div>);
   }
 }
