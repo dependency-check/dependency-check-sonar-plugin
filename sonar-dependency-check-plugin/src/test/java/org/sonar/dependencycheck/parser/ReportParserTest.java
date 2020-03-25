@@ -53,30 +53,7 @@ public abstract class ReportParserTest {
         assertEquals("8af31c3a406cfbfd991a6946102d583a", dependency.getMd5Hash().get());
         assertEquals("5919caff42c3f42fb251fd82a58af4a7880826dd", dependency.getSha1Hash().get());
 
-        Map<String, List<Evidence>> evidenceCollected = dependency.getEvidenceCollected();
-        assertEquals(3, evidenceCollected.size());
-        List<Evidence> vendorEvidences = evidenceCollected.get("vendorEvidence");
-        assertEquals(14, vendorEvidences.size());
-        for (Evidence evidence : vendorEvidences) {
-            assertFalse(evidence.getSource().isEmpty());
-            assertFalse(evidence.getName().isEmpty());
-            assertFalse(evidence.getValue().isEmpty());
-        }
-        List<Evidence> productEvidences = evidenceCollected.get("productEvidence");
-        assertEquals(13, productEvidences.size());
-        for (Evidence evidence : productEvidences) {
-            assertFalse(evidence.getSource().isEmpty());
-            assertFalse(evidence.getName().isEmpty());
-            assertFalse(evidence.getValue().isEmpty());
-        }
-        List<Evidence> versionEvidences = evidenceCollected.get("versionEvidence");
-        assertEquals(3, versionEvidences.size());
-        for (Evidence evidence : versionEvidences) {
-            assertFalse(evidence.getSource().isEmpty());
-            assertFalse(evidence.getName().isEmpty());
-            assertFalse(evidence.getValue().isEmpty());
-        }
-
+        checkEvidence(dependency.getEvidenceCollected(), 14, 13, 3);
         Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
         assertEquals(25, vulnerabilities.size());
         Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
@@ -106,27 +83,18 @@ public abstract class ReportParserTest {
 
         // commons-beanutils-1.7.0.jar
         dependency = iterator.next();
-        assertEquals(3, dependency.getEvidenceCollected().size());
-        assertEquals(9, dependency.getEvidenceCollected().get("vendorEvidence").size());
-        assertEquals(9, dependency.getEvidenceCollected().get("productEvidence").size());
-        assertEquals(2, dependency.getEvidenceCollected().get("versionEvidence").size());
+        checkEvidence(dependency.getEvidenceCollected(), 9, 9, 2);
         assertEquals(1, dependency.getVulnerabilities().size());
 
         // commons-digester-1.6.jar
         dependency = iterator.next();
-        assertEquals(3, dependency.getEvidenceCollected().size());
-        assertEquals(9, dependency.getEvidenceCollected().get("vendorEvidence").size());
-        assertEquals(9, dependency.getEvidenceCollected().get("productEvidence").size());
-        assertEquals(2, dependency.getEvidenceCollected().get("versionEvidence").size());
+        checkEvidence(dependency.getEvidenceCollected(), 9, 9, 2);
         assertTrue(dependency.getVulnerabilities().isEmpty());
 
         // commons-collections-2.1.jar
         dependency = iterator.next();
         assertEquals("commons-collections-2.1.jar", dependency.getFileName());
-        assertEquals(3, dependency.getEvidenceCollected().size());
-        assertEquals(10, dependency.getEvidenceCollected().get("vendorEvidence").size());
-        assertEquals(8, dependency.getEvidenceCollected().get("productEvidence").size());
-        assertEquals(3, dependency.getEvidenceCollected().get("versionEvidence").size());
+        checkEvidence(dependency.getEvidenceCollected(), 10, 8, 3);
         assertEquals(2, dependency.getVulnerabilities().size());
         assertEquals(1, dependency.getPackages().size());
         assertEquals(1, dependency.getVulnerabilityIds().size());
@@ -146,15 +114,32 @@ public abstract class ReportParserTest {
         // xml-apis-1.0.b2.jar
         dependency = iterator.next();
         assertEquals("xml-apis-1.0.b2.jar", dependency.getFileName());
-        assertEquals(3, evidenceCollected.size());
-        evidenceCollected = dependency.getEvidenceCollected();
-        vendorEvidences = evidenceCollected.get("vendorEvidence");
-        assertEquals(18, vendorEvidences.size());
-        productEvidences = evidenceCollected.get("productEvidence");
-        assertEquals(26, productEvidences.size());
-        versionEvidences = evidenceCollected.get("versionEvidence");
-        assertEquals(3, versionEvidences.size());
+        checkEvidence(dependency.getEvidenceCollected(), 18, 26, 3);
         assertTrue(dependency.getVulnerabilities().isEmpty());
+    }
 
+    private void checkEvidence(Map<String, List<Evidence>> evidenceCollected, int vendorEvidence, int productEvidence, int versionEvidence) {
+        assertEquals(3, evidenceCollected.size());
+        List<Evidence> vendorEvidences = evidenceCollected.get("vendorEvidence");
+        assertEquals(vendorEvidence, vendorEvidences.size());
+        for (Evidence evidence : vendorEvidences) {
+            assertFalse(evidence.getSource().isEmpty());
+            assertFalse(evidence.getName().isEmpty());
+            assertFalse(evidence.getValue().isEmpty());
+        }
+        List<Evidence> productEvidences = evidenceCollected.get("productEvidence");
+        assertEquals(productEvidence, productEvidences.size());
+        for (Evidence evidence : productEvidences) {
+            assertFalse(evidence.getSource().isEmpty());
+            assertFalse(evidence.getName().isEmpty());
+            assertFalse(evidence.getValue().isEmpty());
+        }
+        List<Evidence> versionEvidences = evidenceCollected.get("versionEvidence");
+        assertEquals(versionEvidence, versionEvidences.size());
+        for (Evidence evidence : versionEvidences) {
+            assertFalse(evidence.getSource().isEmpty());
+            assertFalse(evidence.getName().isEmpty());
+            assertFalse(evidence.getValue().isEmpty());
+        }
     }
 }
