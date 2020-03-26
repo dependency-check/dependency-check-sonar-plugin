@@ -22,33 +22,15 @@ package org.sonar.dependencycheck.parser.element;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
-import java.util.List;
-import java.util.Optional;
+@JsonIgnoreProperties("stackTrace")
+public class AnalysisException extends Exception{
 
-import org.sonar.dependencycheck.parser.deserializer.AnalysisExceptionDeserializer;
-
-@JsonIgnoreProperties("dataSource")
-public class ScanInfo {
-
-    private final String engineVersion;
-    private final List<AnalysisException> exceptions;
+    private static final long serialVersionUID = 1444677757100744831L;
 
     @JsonCreator
-    public ScanInfo(@JsonProperty(value = "engineVersion", required = true) @NonNull String engineVersion,
-                    @JsonProperty(value = "analysisExceptions") @JsonDeserialize(using = AnalysisExceptionDeserializer.class ) @Nullable List<AnalysisException> exceptions) {
-        this.engineVersion = engineVersion;
-        this.exceptions = exceptions;
-    }
-
-    public String getEngineVersion() {
-        return engineVersion;
-    }
-
-    public Optional<List<AnalysisException>> getExceptions() {
-        return Optional.ofNullable(exceptions);
+    public AnalysisException(@JsonProperty(value = "message") String message,
+                             @JsonProperty(value = "cause") AnalysisException cause) {
+        super(message, cause);
     }
 }
