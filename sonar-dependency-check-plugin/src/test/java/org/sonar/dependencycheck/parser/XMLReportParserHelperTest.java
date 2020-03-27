@@ -58,7 +58,7 @@ public class XMLReportParserHelperTest extends ReportParserTest {
         InputStream inputStream = mock(InputStream.class);
         doThrow(IOException.class).when(inputStream);
         ReportParserException exception = assertThrows(ReportParserException.class, () -> XMLReportParserHelper.parse(inputStream), "No IOException thrown");
-        assertEquals("IO Problem with XML-Report", exception.getMessage());
+        assertEquals("Could not parse XML", exception.getMessage());
     }
 
     @Test

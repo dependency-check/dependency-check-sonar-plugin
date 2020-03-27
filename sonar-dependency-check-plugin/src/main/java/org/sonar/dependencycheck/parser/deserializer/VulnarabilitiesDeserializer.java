@@ -53,16 +53,25 @@ public class VulnarabilitiesDeserializer extends StdDeserializer<List<Vulnerabil
     @Override
     public List<Vulnerability> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         ArrayList<Vulnerability> vulnerabilities = new ArrayList<>();
-        while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
-            JsonToken jsonToken = jsonParser.currentToken();
-            if (JsonToken.START_OBJECT.equals(jsonToken)) {
-                String fieldName = jsonParser.getCurrentName();
-                Vulnerability vul = jsonParser.readValueAs(Vulnerability.class);
-                // fieldName == null with JSON
-                // fieldName == vulnerability with XML
-                // fieldName == suppressedVulnerabilities with XML but skip it
-                if (fieldName == null || StringUtils.equals(fieldName, "vulnerability")) {
+        // for JSON
+        if (JsonToken.START_ARRAY.equals(jsonParser.currentToken())) {
+            while (!JsonToken.END_ARRAY.equals(jsonParser.nextToken())) {
+                JsonToken jsonToken = jsonParser.currentToken();
+                if (JsonToken.START_OBJECT.equals(jsonToken)) {
+                    Vulnerability vul = jsonParser.readValueAs(Vulnerability.class);
                     vulnerabilities.add(vul);
+                }
+            }
+        }
+        // For XML
+        else if (JsonToken.START_OBJECT.equals(jsonParser.currentToken())) {
+            while (!JsonToken.END_OBJECT.equals(jsonParser.nextToken())) {
+                if (JsonToken.START_OBJECT.equals(jsonParser.currentToken())) {
+                    Vulnerability vul = jsonParser.readValueAs(Vulnerability.class);
+                    // skip suppressedVulnerabilities
+                    if (StringUtils.equals(jsonParser.getCurrentName(), "vulnerability")) {
+                        vulnerabilities.add(vul);
+                    }
                 }
             }
         }
