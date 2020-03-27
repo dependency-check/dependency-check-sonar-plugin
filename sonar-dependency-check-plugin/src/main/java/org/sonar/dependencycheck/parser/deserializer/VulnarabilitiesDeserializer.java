@@ -55,26 +55,34 @@ public class VulnarabilitiesDeserializer extends StdDeserializer<List<Vulnerabil
         ArrayList<Vulnerability> vulnerabilities = new ArrayList<>();
         // for JSON
         if (JsonToken.START_ARRAY.equals(jsonParser.currentToken())) {
-            while (!JsonToken.END_ARRAY.equals(jsonParser.nextToken())) {
-                JsonToken jsonToken = jsonParser.currentToken();
-                if (JsonToken.START_OBJECT.equals(jsonToken)) {
-                    Vulnerability vul = jsonParser.readValueAs(Vulnerability.class);
+            parseJson(jsonParser, vulnerabilities);
+        }
+        // For XML
+        else if (JsonToken.START_OBJECT.equals(jsonParser.currentToken())) {
+            parseXML(jsonParser, vulnerabilities);
+        }
+        return vulnerabilities;
+    }
+
+    private void parseXML(JsonParser jsonParser, List<Vulnerability> vulnerabilities) throws IOException {
+        while (!JsonToken.END_OBJECT.equals(jsonParser.nextToken())) {
+            if (JsonToken.START_OBJECT.equals(jsonParser.currentToken())) {
+                Vulnerability vul = jsonParser.readValueAs(Vulnerability.class);
+                // skip suppressedVulnerabilities
+                if (StringUtils.equals(jsonParser.getCurrentName(), "vulnerability")) {
                     vulnerabilities.add(vul);
                 }
             }
         }
-        // For XML
-        else if (JsonToken.START_OBJECT.equals(jsonParser.currentToken())) {
-            while (!JsonToken.END_OBJECT.equals(jsonParser.nextToken())) {
-                if (JsonToken.START_OBJECT.equals(jsonParser.currentToken())) {
-                    Vulnerability vul = jsonParser.readValueAs(Vulnerability.class);
-                    // skip suppressedVulnerabilities
-                    if (StringUtils.equals(jsonParser.getCurrentName(), "vulnerability")) {
-                        vulnerabilities.add(vul);
-                    }
-                }
+    }
+
+    private void parseJson(JsonParser jsonParser, List<Vulnerability> vulnerabilities) throws IOException {
+        while (!JsonToken.END_ARRAY.equals(jsonParser.nextToken())) {
+            JsonToken jsonToken = jsonParser.currentToken();
+            if (JsonToken.START_OBJECT.equals(jsonToken)) {
+                Vulnerability vul = jsonParser.readValueAs(Vulnerability.class);
+                vulnerabilities.add(vul);
             }
         }
-        return vulnerabilities;
     }
 }
