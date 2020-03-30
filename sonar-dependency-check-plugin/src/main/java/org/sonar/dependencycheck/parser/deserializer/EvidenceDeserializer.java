@@ -54,21 +54,19 @@ public class EvidenceDeserializer extends StdDeserializer<Map<String, List<Evide
 
     @Override
     public Map<String, List<Evidence>> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-        ArrayList<Evidence> evidences = new ArrayList<>();
-        while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
+        List<Evidence> evidences = new ArrayList<>();
+        // empty evidenceCollected in XML
+        if (StringUtils.equals(jsonParser.getCurrentName(), "evidenceCollected") && JsonToken.VALUE_STRING.equals(jsonParser.getCurrentToken())) {
+            return buildFinalEvidences(evidences);
+        }
+        while (!JsonToken.END_OBJECT.equals(jsonParser.nextToken())) {
             JsonToken jsonToken = jsonParser.currentToken();
             // For JSON
             if (JsonToken.START_ARRAY.equals(jsonToken)) {
-                String fieldName = jsonParser.getCurrentName();
-                if (StringUtils.equalsAnyIgnoreCase(fieldName, "vendorEvidence", "productEvidence", "versionEvidence")) {
-                    while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                        Evidence ev = jsonParser.readValueAs(Evidence.class);
-                        evidences.add(ev);
-                    }
-                }
+                parseJson(jsonParser, evidences);
             }
             // For XML
-            if(JsonToken.START_OBJECT.equals(jsonToken)){
+            else if(JsonToken.START_OBJECT.equals(jsonToken)){
                 String fieldName = jsonParser.getCurrentName();
                 if (StringUtils.equalsIgnoreCase("evidence", fieldName)) {
                     evidences.add(jsonParser.readValueAs(Evidence.class));
@@ -76,6 +74,16 @@ public class EvidenceDeserializer extends StdDeserializer<Map<String, List<Evide
             }
         }
         return buildFinalEvidences(evidences);
+    }
+
+    private void parseJson(JsonParser jsonParser, List<Evidence> evidences) throws IOException {
+        String fieldName = jsonParser.getCurrentName();
+        if (StringUtils.equalsAnyIgnoreCase(fieldName, "vendorEvidence", "productEvidence", "versionEvidence")) {
+            while (!JsonToken.END_ARRAY.equals(jsonParser.nextToken())) {
+                Evidence ev = jsonParser.readValueAs(Evidence.class);
+                evidences.add(ev);
+            }
+        }
     }
 
     private Map<String, List<Evidence>> buildFinalEvidences(List<Evidence> evidences) {

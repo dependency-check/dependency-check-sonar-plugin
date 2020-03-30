@@ -74,7 +74,7 @@ public class PomParserHelperTest {
         InputStream inputStream = mock(InputStream.class);
         doThrow(IOException.class).when(inputStream);
         ReportParserException exception = assertThrows(ReportParserException.class, () -> PomParserHelper.parse(inputStream), "No IOException thrown");
-        assertEquals("IO Problem with pom.xml", exception.getMessage());
+        assertEquals("Could not parse pom.xml", exception.getMessage());
     }
 
 }
