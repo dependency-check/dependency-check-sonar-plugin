@@ -60,6 +60,7 @@ public class Identifier {
             // pkg:maven/struts/struts@1.2.8 -> maven
             // pkg:javascript/jquery@2.2.0 -> javascript
             // pkg:npm/arr-flatten@1.1.0 -> npm
+            // pkg:npm/mime -> npm
             return Optional.of(StringUtils.substringAfter(StringUtils.substringBefore(identifier.getId(), "/"), "pkg:"));
         }
         return Optional.empty();
@@ -69,6 +70,7 @@ public class Identifier {
             // pkg:maven/struts/struts@1.2.8 -> struts/struts@1.2.8
             // pkg:javascript/jquery@2.2.0 -> jquery@2.2.0
             // pkg:npm/arr-flatten@1.1.0 -> arr-flatten@1.1.0
+            // pkg:npm/mime -> mime
             return Optional.of(StringUtils.substringAfter(identifier.getId(), "/"));
         }
         return Optional.empty();

@@ -48,6 +48,16 @@ class IdentifierTest {
     }
 
     @Test
+    public void testNodeWithOutVersion() {
+        Identifier a = new Identifier("pkg:npm/mime", Confidence.HIGHEST);
+        assertFalse(Identifier.isMavenPackage(a));
+        assertTrue(Identifier.isNPMPackage(a));
+        assertFalse(Identifier.isJavaScriptPackage(a));
+        assertEquals("mime", Identifier.getPackageArtifact(a).get());
+        assertEquals("npm", Identifier.getPackageType(a).get());
+    }
+
+    @Test
     public void testJavaScript() {
         Identifier a = new Identifier("pkg:javascript/jquery@2.2.0", Confidence.HIGHEST);
         assertFalse(Identifier.isMavenPackage(a));

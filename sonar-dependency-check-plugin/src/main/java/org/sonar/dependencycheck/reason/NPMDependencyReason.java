@@ -41,6 +41,7 @@ import org.sonar.dependencycheck.reason.npm.PackageLockModel;
 
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 public class NPMDependencyReason extends DependencyReason {
 
@@ -99,12 +100,22 @@ public class NPMDependencyReason extends DependencyReason {
     }
 
     private void fillArtifactMatch(@NonNull Dependency dependency, Identifier npmIdentifier) {
-        Optional<String> packageArtifact = Identifier.getPackageArtifact(npmIdentifier);
-        if (packageArtifact.isPresent()) {
-            // packageArtifact has something like jquery@2.2.0
-            String[] npmIdentifierSplit = packageArtifact.get().split("@");
-            String name = npmIdentifierSplit[0];
-            String version = npmIdentifierSplit[1];
+        String packageArtifact = Identifier.getPackageArtifact(npmIdentifier).orElse(null);
+        if (StringUtils.isNotBlank(packageArtifact)) {
+            String name;
+            String version;
+            if (packageArtifact.contains("@")) {
+                // packageArtifact is something like jquery@2.2.0
+                String[] npmIdentifierSplit = packageArtifact.split("@");
+                name = npmIdentifierSplit[0];
+                version = npmIdentifierSplit[1];
+            } else {
+                // It happens, that packageArtifact doesn't contain a version
+                // https://github.com/dependency-check/dependency-check-sonar-plugin/issues/242#issuecomment-605521827
+                name = packageArtifact;
+                version = null;
+            }
+
             // Try to find in <dependency>
             for (NPMDependency npmDependency : packageLockModel.getDependencies()) {
                 checkNPMDependency(name, version , npmDependency)
@@ -113,7 +124,7 @@ public class NPMDependencyReason extends DependencyReason {
         }
     }
 
-    private Optional<TextRangeConfidence> checkNPMDependency(String name, String version, NPMDependency dependency) {
+    private Optional<TextRangeConfidence> checkNPMDependency(String name, @Nullable String version, NPMDependency dependency) {
         if (StringUtils.equals(name, dependency.getName())
                 && StringUtils.equals(version, dependency.getVersion())) {
             LOGGER.debug("Found a name and version match in {}", packageLock);

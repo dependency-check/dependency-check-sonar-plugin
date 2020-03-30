@@ -127,6 +127,26 @@ public class NPMDependencyReasonTest extends DependencyReasonTestHelper {
     }
 
     @Test
+    public void foundDependencyNPMWithoutVersion() throws IOException {
+        NPMDependencyReason npm = new NPMDependencyReason(inputFile("package-lock.json"));
+        // Create Dependency
+        Identifier identifier = new Identifier("pkg:npm/arr-flatten", Confidence.HIGHEST);
+        Collection<Identifier> identifiersCollected = new ArrayList<>();
+        identifiersCollected.add(identifier);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
+        TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency);
+        assertTrue(npm.isReasonable());
+        assertNotNull(textRangeConfidence);
+        assertEquals(7, textRangeConfidence.getTextrange().start().line());
+        assertEquals(0, textRangeConfidence.getTextrange().start().lineOffset());
+        assertEquals(11, textRangeConfidence.getTextrange().end().line());
+        assertEquals(6, textRangeConfidence.getTextrange().end().lineOffset());
+        assertEquals(Confidence.HIGH, textRangeConfidence.getConfidence());
+        // verify that same dependency points to the same TextRange, use of HashMap
+        assertEquals(npm.getBestTextRange(dependency), npm.getBestTextRange(dependency));
+    }
+
+    @Test
     public void foundNoDependency() throws IOException {
         NPMDependencyReason npm = new NPMDependencyReason(inputFile("package-lock.json"));
         // Create Dependency
