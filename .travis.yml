@@ -1,7 +1,4 @@
 language: java
-jdk:
-- openjdk8
-- openjdk11
 git:
   depth: false
 addons:
@@ -9,5 +6,15 @@ addons:
     organization: dependency-check
     token:
       secure: DoKbTc6euo/1GBD6u2pVzOhK4v9gf8ZJacsQaSU4zbnL5uYTknTBO+x+8eNGBLtoLHx28Rk5HPrZDK4ADZch1Zzy92qxV0A8/m7zJcZQQlK2Mb1TohOtCEA7ACnf53xUAH+XpSdAfgKLLk7gl8Q2B3rOaDG5uxPciUg5jqfuWV4=
-script:
-- mvn clean verify sonar:sonar -Dsonar.projectKey=dependency-check_dependency-check-sonar-plugin
+jobs:
+  include:
+    - name: OpenJDK 11 with SonarQube
+      language: java
+      jdk: openjdk11
+      script:
+        - mvn clean verify sonar:sonar -Dsonar.projectKey=dependency-check_dependency-check-sonar-plugin
+    - name: OpenJDK 8
+      language: java
+      jdk: openjdk8
+      script:
+        - mvn clean verify
