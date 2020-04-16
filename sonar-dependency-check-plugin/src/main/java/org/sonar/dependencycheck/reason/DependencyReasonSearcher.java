@@ -130,7 +130,7 @@ public class DependencyReasonSearcher {
             return;
         }
         if (dependencyreasons.isEmpty()) {
-            LOGGER.info("We doesn't found any Project configuration file e.g. pom.xml, gradle.build, build.gradle.kts, package-lock.json and can not link dependencies");
+            LOGGER.info("We doesn't found any Project configuration file e.g. pom.xml, *.gradle, *.gradle.kts, package-lock.json and can not link dependencies");
             linkIssuesToProject(analysis, context);
             LOGGER.debug("Saving Metrics to project {}", projectMetric.toString());
             projectMetric.saveMeasures(context);
