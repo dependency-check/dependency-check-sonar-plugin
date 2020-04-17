@@ -64,6 +64,13 @@ public final class DependencyCheckUtils {
         return DependencyCheckUtils.cvssToSonarQubeSeverity(cvssScore, severityBlocker ,severityCritical, severityMajor, severityMinor);
     }
 
+    public static String getRuleKey(Configuration config) {
+        return config.getBoolean(DependencyCheckConstants.SECURITY_HOTSPOT)
+                .orElse(DependencyCheckConstants.SECURITY_HOTSPOT_DEFAULT)
+                        ? DependencyCheckConstants.RULE_KEY_WITH_SECURITY_HOTSPOT
+                        : DependencyCheckConstants.RULE_KEY;
+    }
+
     /**
      * We are using following sources for score calculation
      * https://nvd.nist.gov/vuln-metrics/cvss

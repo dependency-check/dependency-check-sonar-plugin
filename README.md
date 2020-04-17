@@ -113,6 +113,13 @@ sonar.dependencyCheck.skip=true
 sonar.dependencyCheck.skip=false (default)
 ```
 
+If you want to work with [Security-Hotspots][Security-Hotspot] to enable a review process in your team, use the following configuration.
+
+```ini
+sonar.dependencyCheck.securityHotspot=true
+sonar.dependencyCheck.securityHotspot=false (default)
+```
+
 ## Ecosystem
 
 Dependency-Check is available as a:
@@ -138,3 +145,4 @@ Permission to modify and redistribute is granted under the terms of the [LGPLv3]
 [sonarqube 6.x]: https://github.com/dependency-check/dependency-check-sonar-plugin/tree/SonarQube_6.x
 [bintray]: https://bintray.com/dependency-check/owasp/sonar-dependency-check
 [sonar-custom-plugin-example]: https://github.com/SonarSource/sonar-custom-plugin-example
+[security-hotspot]: https://docs.sonarqube.org/latest/user-guide/security-hotspots/
