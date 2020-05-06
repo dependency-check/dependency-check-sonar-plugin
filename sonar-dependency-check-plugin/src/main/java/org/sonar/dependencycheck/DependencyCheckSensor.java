@@ -144,7 +144,7 @@ public class DependencyCheckSensor implements ProjectSensor {
     public void execute(SensorContext sensorContext) {
         Profiler profiler = Profiler.create(LOGGER);
         profiler.startInfo("Process Dependency-Check report");
-        if (DependencyCheckUtils.skipPlugin(sensorContext.config()).booleanValue()) {
+        if (DependencyCheckUtils.skipPlugin(sensorContext.config())) {
             LOGGER.info("Dependency-Check skipped");
         } else {
             Optional<Analysis> analysis = parseAnalysis(sensorContext);

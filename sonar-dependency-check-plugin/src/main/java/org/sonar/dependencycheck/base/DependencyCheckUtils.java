@@ -23,11 +23,13 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.config.Configuration;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Identifier;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
+import org.sonar.dependencycheck.reason.DependencyReason;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -153,7 +155,33 @@ public final class DependencyCheckUtils {
         return sb.toString().trim();
     }
 
-    public static Boolean skipPlugin(Configuration config) {
+    public static boolean skipPlugin(Configuration config) {
         return config.getBoolean(DependencyCheckConstants.SKIP_PROPERTY).orElse(DependencyCheckConstants.SKIP_PROPERTY_DEFAULT);
+    }
+
+    public static boolean summarizeVulnerabilities(Configuration config) {
+        return config.getBoolean(DependencyCheckConstants.SUMMARIZE_PROPERTY)
+                .orElse(DependencyCheckConstants.SUMMARIZE_PROPERTY_DEFAULT);
+    }
+
+    /**
+     * @param dependencyreasons
+     * @return dedependencyreason, which is near the workspace root
+     */
+    public static Optional<DependencyReason> getRootConfigurationFile(Collection<DependencyReason> dependencyreasons) {
+        Optional<DependencyReason> root = Optional.empty();
+        for (DependencyReason dependencyReason : dependencyreasons) {
+            if (!root.isPresent()) {
+                root = Optional.of(dependencyReason);
+            } else if (root.get().getInputComponent().isFile() && dependencyReason.getInputComponent().isFile()) {
+                // Simple length check, submodules are often in subfolders
+                InputFile file1 = (InputFile) root.get().getInputComponent();
+                InputFile file2 = (InputFile) dependencyReason.getInputComponent();
+                if (file1.toString().length() > file2.toString().length()) {
+                    root = Optional.of(dependencyReason);
+                }
+            }
+        }
+        return root;
     }
 }
