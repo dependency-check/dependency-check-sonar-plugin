@@ -47,7 +47,7 @@ public class GradleDependencyReason extends DependencyReason {
     private static final Logger LOGGER = Loggers.get(GradleDependencyReason.class);
 
     public GradleDependencyReason(@NonNull InputFile buildGradle) {
-        super(buildGradle);
+        super(buildGradle, Language.JAVA);
         this.buildGradle = buildGradle;
         dependencyMap = new HashMap<>();
         content = "";

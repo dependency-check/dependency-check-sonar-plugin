@@ -52,7 +52,7 @@ public class MavenDependencyReason extends DependencyReason {
     private static final Logger LOGGER = Loggers.get(MavenDependencyReason.class);
 
     public MavenDependencyReason(@NonNull InputFile pom) {
-        super(pom);
+        super(pom, Language.JAVA);
         this.pom = pom;
         dependencyMap = new HashMap<>();
         pomModel = null;

@@ -52,7 +52,7 @@ public class NPMDependencyReason extends DependencyReason {
     private static final Logger LOGGER = Loggers.get(NPMDependencyReason.class);
 
     public NPMDependencyReason(InputFile packageLock) {
-        super(packageLock);
+        super(packageLock, Language.JAVASCRIPT);
         this.packageLock = packageLock;
         dependencyMap = new HashMap<>();
         packageLockModel = null;

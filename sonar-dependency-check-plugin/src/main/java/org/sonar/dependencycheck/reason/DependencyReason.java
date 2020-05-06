@@ -39,9 +39,11 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 public abstract class DependencyReason {
 
     private final DependencyCheckMetric metrics;
+    private final Language language;
 
-    public DependencyReason(InputComponent inputComponent) {
+    public DependencyReason(InputComponent inputComponent, Language language) {
         metrics = new DependencyCheckMetric(inputComponent);
+        this.language = language;
     }
     /**
      * @return true or false if this component is the reason for your dependency
@@ -59,6 +61,13 @@ public abstract class DependencyReason {
      */
     public DependencyCheckMetric getMetrics() {
         return metrics;
+    }
+
+    /**
+     * @return language
+     */
+    public Language getLanguage() {
+        return language;
     }
 
     /**
@@ -113,9 +122,5 @@ public abstract class DependencyReason {
             .overrideSeverity(severity)
             .save();
         metrics.incrementCount(severity);
-    }
-
-    public int isDependencyReasonBetterForDependencyThen(@NonNull DependencyReason otherDependencyReason, @NonNull Dependency dependency) {
-        return getBestTextRange(dependency).compareTo(otherDependencyReason.getBestTextRange(dependency));
     }
 }
