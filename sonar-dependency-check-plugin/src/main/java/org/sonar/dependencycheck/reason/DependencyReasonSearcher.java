@@ -22,6 +22,7 @@ package org.sonar.dependencycheck.reason;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.Severity;
@@ -97,89 +98,85 @@ public class DependencyReasonSearcher {
      * @return DependencyReason with a TextRange or the first DependencyReason in list or null if list is empty
      */
     @NonNull
-    private DependencyReason getBestDependencyReason(Dependency dependency) {
+    private Optional<DependencyReason> getBestDependencyReason(Dependency dependency) {
         LOGGER.debug("Get the best DependencyReason out of {} for {}", dependencyreasons.size(), dependency.getFileName());
-        DependencyReason dependencyReasonWinner = getParentConfigurationFile();
-        for (DependencyReason dependencyReason : dependencyreasons) {
-            if (dependencyReasonWinner.isDependencyReasonBetterForDependencyThen(dependencyReason, dependency) < 0) {
-                dependencyReasonWinner = dependencyReason;
+        // Prefer root configuration file
+        Optional<DependencyReason> dependencyReasonWinner = DependencyCheckUtils
+                .getRootConfigurationFile(dependencyreasons);
+        if (dependencyReasonWinner.isPresent()) {
+            for (DependencyReason dependencyReason : dependencyreasons) {
+                if (dependencyReasonWinner.get().isDependencyReasonBetterForDependencyThen(
+                        dependencyReason,
+                        dependency) < 0) {
+                    dependencyReasonWinner = Optional.of(dependencyReason);
+                }
             }
+            LOGGER.debug("DependencyReasonWinner: " + dependencyReasonWinner.get().getInputComponent());
         }
-        LOGGER.debug("DependencyReasonWinner: " + dependencyReasonWinner.getInputComponent());
         return dependencyReasonWinner;
     }
 
-    private DependencyReason getParentConfigurationFile() {
-        DependencyReason parent = dependencyreasons.iterator().next();
-        for (DependencyReason dependencyReason : dependencyreasons) {
-            // Simple length check, submodules are often in subfolders
-            if (parent.getInputComponent().isFile() && dependencyReason.getInputComponent().isFile()) {
-                InputFile file1 = (InputFile) parent.getInputComponent();
-                InputFile file2 = (InputFile) dependencyReason.getInputComponent();
-                if (file1.toString().length() > file2.toString().length()) {
-                    parent = dependencyReason;
-                }
-            }
-        }
-        return parent;
-    }
-
     public void addDependenciesToInputComponents(@NonNull Analysis analysis,@NonNull SensorContext context) {
-        if (analysis.getDependencies() == null) {
+        if (analysis.getDependencies() == null || analysis.getDependencies().isEmpty()) {
             LOGGER.info("Analyse doesn't report any Dependencies");
             return;
         }
         if (dependencyreasons.isEmpty()) {
             LOGGER.info("No project configuration file, e.g. pom.xml, *.gradle, *.gradle.kts, package-lock.json found, therefore it isn't possible to correctly link dependencies with files.");
-            linkIssuesToProject(analysis, context);
+            linkIssues(analysis.getDependencies(), context);
             LOGGER.debug("Saving Metrics to project {}", projectMetric.toString());
             projectMetric.saveMeasures(context);
         } else {
-            linkIssuesToDependencyReasons(analysis, context);
+            linkIssues(analysis.getDependencies(), context);
             for (DependencyReason reason : dependencyreasons) {
                 LOGGER.debug("Saving Metrics to Reasonfile {} ", reason.getMetrics().toString());
                 reason.getMetrics().saveMeasures(context);
             }
         }
     }
-    private void linkIssuesToProject(@NonNull Analysis analysis,@NonNull SensorContext context) {
-        LOGGER.info("Linking {} dependencies to project", analysis.getDependencies().size());
-        for (Dependency dependency : analysis.getDependencies()) {
-            projectMetric.increaseTotalDependencies(1);
-            if (!dependency.getVulnerabilities().isEmpty()) {
-                Boolean summarize = context.config().getBoolean(DependencyCheckConstants.SUMMARIZE_PROPERTY).orElse(DependencyCheckConstants.SUMMARIZE_PROPERTY_DEFAULT);
-                projectMetric.increaseVulnerabilityCount(dependency.getVulnerabilities().size());
-                projectMetric.increaseVulnerableDependencies(1);
-                if (summarize.booleanValue()) {
-                    // One issue per dependency
-                    addIssueToProject(context, dependency);
-                } else {
-                    // One issue per vulnerability
-                    for (Vulnerability vulnerability : dependency.getVulnerabilities()) {
-                        addIssueToProject(context, dependency, vulnerability);
-                    }
+
+    private void linkIssues(@NonNull Collection<Dependency> dependencies, @NonNull SensorContext context) {
+        LOGGER.info("Linking {} dependencies", dependencies.size());
+        for (Dependency dependency : dependencies) {
+            Optional<DependencyReason> dependencyReason = getBestDependencyReason(dependency);
+            if (dependencyReason.isPresent()) {
+                linkDependencyToDependencyReasons(dependency, dependencyReason.get(), context);
+            } else {
+                linkDependencyToProject(dependency, context);
+            }
+        }
+    }
+
+    private void linkDependencyToProject(@NonNull Dependency dependency, @NonNull SensorContext context) {
+        projectMetric.increaseTotalDependencies(1);
+        if (!dependency.getVulnerabilities().isEmpty()) {
+            projectMetric.increaseVulnerabilityCount(dependency.getVulnerabilities().size());
+            projectMetric.increaseVulnerableDependencies(1);
+            if (DependencyCheckUtils.summarizeVulnerabilities(context.config())) {
+                // One issue per dependency
+                addIssueToProject(context, dependency);
+            } else {
+                // One issue per vulnerability
+                for (Vulnerability vulnerability : dependency.getVulnerabilities()) {
+                    addIssueToProject(context, dependency, vulnerability);
                 }
             }
         }
     }
 
-    private void linkIssuesToDependencyReasons(@NonNull Analysis analysis,@NonNull SensorContext context) {
-        LOGGER.info("Linking {} dependencies to DependencyReasons", analysis.getDependencies().size());
-        for (Dependency dependency : analysis.getDependencies()) {
-            DependencyReason dependencyReason = getBestDependencyReason(dependency);
-            dependencyReason.getMetrics().increaseTotalDependencies(1);
-            if (!dependency.getVulnerabilities().isEmpty()) {
-                Boolean summarize = context.config().getBoolean(DependencyCheckConstants.SUMMARIZE_PROPERTY).orElse(DependencyCheckConstants.SUMMARIZE_PROPERTY_DEFAULT);
-                dependencyReason.getMetrics().increaseVulnerabilityCount(dependency.getVulnerabilities().size());
-                dependencyReason.getMetrics().increaseVulnerableDependencies(1);
-                if (summarize.booleanValue()) {
-                    // One issue per dependency
-                    dependencyReason.addIssue(context, dependency);
-                } else {
-                    // One issue per vulnerability
-                    for (Vulnerability vulnerability : dependency.getVulnerabilities()) {
-                        dependencyReason.addIssue(context, dependency, vulnerability);
-                    }
+    private void linkDependencyToDependencyReasons(@NonNull Dependency dependency, DependencyReason dependencyReason,
+            @NonNull SensorContext context) {
+        dependencyReason.getMetrics().increaseTotalDependencies(1);
+        if (!dependency.getVulnerabilities().isEmpty()) {
+            dependencyReason.getMetrics().increaseVulnerabilityCount(dependency.getVulnerabilities().size());
+            dependencyReason.getMetrics().increaseVulnerableDependencies(1);
+            if (DependencyCheckUtils.summarizeVulnerabilities(context.config())) {
+                // One issue per dependency
+                dependencyReason.addIssue(context, dependency);
+            } else {
+                // One issue per vulnerability
+                for (Vulnerability vulnerability : dependency.getVulnerabilities()) {
+                    dependencyReason.addIssue(context, dependency, vulnerability);
                 }
             }
         }

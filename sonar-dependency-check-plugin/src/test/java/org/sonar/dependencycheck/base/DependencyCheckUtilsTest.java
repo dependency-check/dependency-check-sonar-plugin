@@ -22,11 +22,20 @@ package org.sonar.dependencycheck.base;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.Severity;
+import org.sonar.dependencycheck.reason.DependencyReason;
+import org.sonar.dependencycheck.reason.MavenDependencyReason;
 
 public class DependencyCheckUtilsTest {
 
@@ -172,5 +181,22 @@ public class DependencyCheckUtilsTest {
     @MethodSource("severitiestoscore")
     public void testSeverityToScore(String severity, Float blocker, Float critical, Float major, Float minor, Float expectedScore) {
         assertEquals(expectedScore, DependencyCheckUtils.severityToScore(severity, blocker, critical, major, minor));
+    }
+
+    @Test
+    public void testRootConfigurationFile() {
+        Path path = new File("root").toPath();
+        InputFile pom = new TestInputFileBuilder("moduleKey", "pom.xml").setModuleBaseDir(path).build();
+        InputFile subpom = new TestInputFileBuilder("moduleKey", "submodule/pom.xml").setModuleBaseDir(path).build();
+        InputFile subpom2 = new TestInputFileBuilder("moduleKey", "submodule2/pom.xml").setModuleBaseDir(path).build();
+        Collection<DependencyReason> reasons = new LinkedList<>();
+        MavenDependencyReason pomReason = new MavenDependencyReason(pom);
+        MavenDependencyReason submodulepomReason = new MavenDependencyReason(subpom);
+        MavenDependencyReason submodule2pomReason = new MavenDependencyReason(subpom2);
+        reasons.add(submodulepomReason);
+        reasons.add(pomReason);
+        reasons.add(submodule2pomReason);
+        assertEquals(pomReason, DependencyCheckUtils.getRootConfigurationFile(reasons).get());
+
     }
 }
