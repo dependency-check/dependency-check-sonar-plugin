@@ -81,17 +81,24 @@ public class DependencyCheckConfiguration {
                         .type(PropertyType.FLOAT)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.SUMMARIZE_PROPERTY)
-                        .subCategory("General")
+                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_GENERAL)
                         .name("Summarize")
                         .description("When enabled we summarize all vulnerabilities per dependency.")
                         .defaultValue(Boolean.toString(DependencyCheckConstants.SUMMARIZE_PROPERTY_DEFAULT))
                         .type(PropertyType.BOOLEAN)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.SKIP_PROPERTY)
-                        .subCategory("General")
+                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_GENERAL)
                         .name("Skip")
                         .description("When enabled we skip this plugin.")
                         .defaultValue(Boolean.toString(DependencyCheckConstants.SKIP_PROPERTY_DEFAULT))
+                        .type(PropertyType.BOOLEAN)
+                        .build(),
+                PropertyDefinition.builder(DependencyCheckConstants.SECURITY_HOTSPOT)
+                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_GENERAL)
+                        .name("Security-Hotspot")
+                        .description("When enabled all SonarQube issues are flagged as Security-Hotspot.")
+                        .defaultValue(Boolean.toString(DependencyCheckConstants.SECURITY_HOTSPOT_DEFAULT))
                         .type(PropertyType.BOOLEAN)
                         .build()
         );

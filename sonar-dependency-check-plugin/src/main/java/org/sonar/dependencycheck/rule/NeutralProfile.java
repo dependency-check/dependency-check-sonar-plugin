@@ -28,6 +28,8 @@ public class NeutralProfile implements BuiltInQualityProfilesDefinition {
     public void define(Context context) {
         NewBuiltInQualityProfile dependencyCheckWay = context.createBuiltInQualityProfile("Neutral", DependencyCheckConstants.LANGUAGE_KEY);
         dependencyCheckWay.activateRule(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckConstants.RULE_KEY);
+        dependencyCheckWay.activateRule(DependencyCheckConstants.REPOSITORY_KEY,
+                DependencyCheckConstants.RULE_KEY_WITH_SECURITY_HOTSPOT);
         dependencyCheckWay.done();
     }
 }

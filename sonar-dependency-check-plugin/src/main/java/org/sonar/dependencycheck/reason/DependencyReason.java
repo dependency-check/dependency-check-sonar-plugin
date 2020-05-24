@@ -88,7 +88,7 @@ public abstract class DependencyReason {
 
         sonarIssue
             .at(location)
-            .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckConstants.RULE_KEY))
+            .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
             .overrideSeverity(severity)
             .save();
         metrics.incrementCount(severity);
@@ -109,7 +109,7 @@ public abstract class DependencyReason {
 
         sonarIssue
             .at(location)
-            .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckConstants.RULE_KEY))
+            .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
             .overrideSeverity(severity)
             .save();
         metrics.incrementCount(severity);
