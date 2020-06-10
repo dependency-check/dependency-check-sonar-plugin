@@ -125,4 +125,21 @@ public class Dependency {
         return vulnerabilityIds;
     }
 
+    public boolean isJavaDependency() {
+        for (Identifier identifier : getPackages()) {
+            if (Identifier.isMavenPackage(identifier)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isJavaScriptDependency() {
+        for (Identifier identifier : getPackages()) {
+            if (Identifier.isNPMPackage(identifier) || Identifier.isJavaScriptPackage(identifier)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

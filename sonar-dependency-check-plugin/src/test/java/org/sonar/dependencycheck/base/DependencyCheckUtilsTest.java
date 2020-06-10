@@ -21,11 +21,19 @@ package org.sonar.dependencycheck.base;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -34,8 +42,14 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.Severity;
-import org.sonar.dependencycheck.reason.DependencyReason;
+import org.sonar.dependencycheck.parser.element.Confidence;
+import org.sonar.dependencycheck.parser.element.CvssV2;
+import org.sonar.dependencycheck.parser.element.Dependency;
+import org.sonar.dependencycheck.parser.element.Identifier;
+import org.sonar.dependencycheck.parser.element.Vulnerability;
+import org.sonar.dependencycheck.reason.GradleDependencyReason;
 import org.sonar.dependencycheck.reason.MavenDependencyReason;
+import org.sonar.dependencycheck.reason.NPMDependencyReason;
 
 public class DependencyCheckUtilsTest {
 
@@ -184,19 +198,86 @@ public class DependencyCheckUtilsTest {
     }
 
     @Test
-    public void testRootConfigurationFile() {
+    public void testBestDependencyReasonRootConfigurationFileOrder() {
         Path path = new File("root").toPath();
-        InputFile pom = new TestInputFileBuilder("moduleKey", "pom.xml").setModuleBaseDir(path).build();
-        InputFile subpom = new TestInputFileBuilder("moduleKey", "submodule/pom.xml").setModuleBaseDir(path).build();
-        InputFile subpom2 = new TestInputFileBuilder("moduleKey", "submodule2/pom.xml").setModuleBaseDir(path).build();
-        Collection<DependencyReason> reasons = new LinkedList<>();
+        InputFile pom = new TestInputFileBuilder("moduleKey", "pom.xml").setContents("123456").setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
+        InputFile subpom = new TestInputFileBuilder("moduleKey", "submodule/pom.xml").setContents("132").setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
+        InputFile subpom2 = new TestInputFileBuilder("moduleKey", "submodule2/pom.xml").setContents("123").setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
         MavenDependencyReason pomReason = new MavenDependencyReason(pom);
         MavenDependencyReason submodulepomReason = new MavenDependencyReason(subpom);
         MavenDependencyReason submodule2pomReason = new MavenDependencyReason(subpom2);
-        reasons.add(submodulepomReason);
-        reasons.add(pomReason);
-        reasons.add(submodule2pomReason);
-        assertEquals(pomReason, DependencyCheckUtils.getRootConfigurationFile(reasons).get());
 
+        // when
+        Dependency dependency = mock(Dependency.class);
+        when(dependency.isJavaDependency()).thenReturn(true);
+        when(dependency.isJavaScriptDependency()).thenReturn(false);
+
+        // then
+        assertEquals(pomReason, DependencyCheckUtils.getBestDependencyReason(dependency, Arrays.asList(pomReason, submodulepomReason, submodule2pomReason)).get());
+        assertEquals(pomReason, DependencyCheckUtils.getBestDependencyReason(dependency, Arrays.asList(submodulepomReason, submodule2pomReason, pomReason)).get());
+        assertEquals(pomReason, DependencyCheckUtils.getBestDependencyReason(dependency, Arrays.asList(submodule2pomReason, pomReason, submodulepomReason)).get());
+    }
+
+    @Test
+    public void testBestDependencyReasonJavaDependency() {
+        Path path = new File("root").toPath();
+        InputFile packagLock = new TestInputFileBuilder("moduleKey", "package-lock.json").setContents("123456").setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
+        InputFile subpom = new TestInputFileBuilder("moduleKey", "submodule/pom.xml").setContents("132").setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
+        NPMDependencyReason npmReason = new NPMDependencyReason(packagLock);
+        MavenDependencyReason submodulepomReason = new MavenDependencyReason(subpom);
+
+        // when
+        Dependency dependency = mock(Dependency.class);
+        when(dependency.isJavaDependency()).thenReturn(true);
+        when(dependency.isJavaScriptDependency()).thenReturn(false);
+
+        // then
+        assertEquals(submodulepomReason, DependencyCheckUtils.getBestDependencyReason(dependency, Arrays.asList(submodulepomReason, npmReason)).get());
+        // we have only a NPM DependencyReason, but a Java-Dependency
+        assertEquals(npmReason, DependencyCheckUtils.getBestDependencyReason(dependency, Arrays.asList(npmReason)).get());
+    }
+
+    @Test
+    public void testBestDependencyReasonNPMDependency() {
+        Path path = new File("root").toPath();
+        InputFile packagLock = new TestInputFileBuilder("moduleKey", "submodule/package-lock.json").setContents("123456").setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
+        InputFile subpom = new TestInputFileBuilder("moduleKey", "pom.xml").setContents("132").setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
+        NPMDependencyReason npmReason = new NPMDependencyReason(packagLock);
+        MavenDependencyReason submodulepomReason = new MavenDependencyReason(subpom);
+
+        // when
+        Dependency dependency = mock(Dependency.class);
+        when(dependency.isJavaDependency()).thenReturn(false);
+        when(dependency.isJavaScriptDependency()).thenReturn(true);
+
+        // then
+        assertEquals(npmReason, DependencyCheckUtils.getBestDependencyReason(dependency, Arrays.asList(submodulepomReason, npmReason)).get());
+        // we have only a Java DependencyReason, but a NPM-Dependency
+        assertEquals(submodulepomReason, DependencyCheckUtils.getBestDependencyReason(dependency, Arrays.asList(submodulepomReason)).get());
+    }
+
+    @Test
+    public void testBestDependencyReasonSubModule() throws IOException {
+        Path path = new File("root").toPath();
+        String pomContent = new String(Files.readAllBytes(new File("src/test/resources/reason", "pom.xml").toPath()), StandardCharsets.UTF_8);
+        String gradleContent = new String(Files.readAllBytes(new File("src/test/resources/reason", "build.gradle").toPath()), StandardCharsets.UTF_8);
+        InputFile gradle = new TestInputFileBuilder("moduleKey", "build.gradle").setContents(gradleContent).setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
+        InputFile subpom = new TestInputFileBuilder("moduleKey", "submodule/pom.xml").setContents(pomContent).setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
+        GradleDependencyReason pomReason = new GradleDependencyReason(gradle);
+        MavenDependencyReason submodulepomReason = new MavenDependencyReason(subpom);
+
+        // when
+        Identifier identifier1 = new Identifier("pkg:maven/struts/struts@1.2.8", Confidence.HIGHEST);
+        Collection<Identifier> packageidentifiers1 = new ArrayList<>();
+        packageidentifiers1.add(identifier1);
+        CvssV2 cvssV2 = new CvssV2(5.0f, "HIGH");
+        Vulnerability vulnerability1 = new Vulnerability("Test name", "NVD", "MyDescription", null, cvssV2, null, null);
+        List<Vulnerability> vulnerabilities1 = new ArrayList<>();
+        vulnerabilities1.add(vulnerability1);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(), vulnerabilities1, packageidentifiers1, Collections.emptyList(), null);
+
+        // then
+        assertEquals(submodulepomReason, DependencyCheckUtils.getBestDependencyReason(dependency, Arrays.asList(pomReason, submodulepomReason)).get());
+        assertEquals(submodulepomReason, DependencyCheckUtils.getBestDependencyReason(dependency, Arrays.asList(submodulepomReason, pomReason)).get());
     }
 }

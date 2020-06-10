@@ -20,16 +20,17 @@
 package org.sonar.dependencycheck.base;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.config.Configuration;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Identifier;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
 import org.sonar.dependencycheck.reason.DependencyReason;
+import org.sonar.dependencycheck.reason.Language;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -63,7 +64,7 @@ public final class DependencyCheckUtils {
         Float severityCritical = config.getFloat(DependencyCheckConstants.SEVERITY_CRITICAL).orElse(DependencyCheckConstants.SEVERITY_CRITICAL_DEFAULT);
         Float severityMajor = config.getFloat(DependencyCheckConstants.SEVERITY_MAJOR).orElse(DependencyCheckConstants.SEVERITY_MAJOR_DEFAULT);
         Float severityMinor = config.getFloat(DependencyCheckConstants.SEVERITY_MINOR).orElse(DependencyCheckConstants.SEVERITY_MINOR_DEFAULT);
-        return DependencyCheckUtils.cvssToSonarQubeSeverity(cvssScore, severityBlocker ,severityCritical, severityMajor, severityMinor);
+        return DependencyCheckUtils.cvssToSonarQubeSeverity(cvssScore, severityBlocker, severityCritical, severityMajor, severityMinor);
     }
 
     public static String getRuleKey(Configuration config) {
@@ -77,6 +78,7 @@ public final class DependencyCheckUtils {
      * We are using following sources for score calculation
      * https://nvd.nist.gov/vuln-metrics/cvss
      * https://docs.npmjs.com/about-audit-reports#severity
+     * 
      * @param severity
      * @param blocker
      * @param critical
@@ -103,10 +105,10 @@ public final class DependencyCheckUtils {
         Float severityCritical = config.getFloat(DependencyCheckConstants.SEVERITY_CRITICAL).orElse(DependencyCheckConstants.SEVERITY_CRITICAL_DEFAULT);
         Float severityMajor = config.getFloat(DependencyCheckConstants.SEVERITY_MAJOR).orElse(DependencyCheckConstants.SEVERITY_MAJOR_DEFAULT);
         Float severityMinor = config.getFloat(DependencyCheckConstants.SEVERITY_MINOR).orElse(DependencyCheckConstants.SEVERITY_MINOR_DEFAULT);
-        return DependencyCheckUtils.severityToScore(severity, severityBlocker ,severityCritical, severityMajor, severityMinor);
+        return DependencyCheckUtils.severityToScore(severity, severityBlocker, severityCritical, severityMajor, severityMinor);
     }
 
-    public static Optional<Identifier> getMavenIdentifier (@NonNull Dependency dependency){
+    public static Optional<Identifier> getMavenIdentifier(@NonNull Dependency dependency) {
         for (Identifier identifier : dependency.getPackages()) {
             if (Identifier.isMavenPackage(identifier)) {
                 return Optional.of(identifier);
@@ -115,7 +117,7 @@ public final class DependencyCheckUtils {
         return Optional.empty();
     }
 
-    public static Optional<Identifier> getNPMIdentifier (@NonNull Dependency dependency){
+    public static Optional<Identifier> getNPMIdentifier(@NonNull Dependency dependency) {
         for (Identifier identifier : dependency.getPackages()) {
             if (Identifier.isNPMPackage(identifier)) {
                 return Optional.of(identifier);
@@ -124,7 +126,7 @@ public final class DependencyCheckUtils {
         return Optional.empty();
     }
 
-    public static Optional<Identifier> getJavaScriptIdentifier (@NonNull Dependency dependency){
+    public static Optional<Identifier> getJavaScriptIdentifier(@NonNull Dependency dependency) {
         for (Identifier identifier : dependency.getPackages()) {
             if (Identifier.isJavaScriptPackage(identifier)) {
                 return Optional.of(identifier);
@@ -167,28 +169,24 @@ public final class DependencyCheckUtils {
     }
 
     public static boolean summarizeVulnerabilities(Configuration config) {
-        return config.getBoolean(DependencyCheckConstants.SUMMARIZE_PROPERTY)
-                .orElse(DependencyCheckConstants.SUMMARIZE_PROPERTY_DEFAULT);
+        return config.getBoolean(DependencyCheckConstants.SUMMARIZE_PROPERTY).orElse(DependencyCheckConstants.SUMMARIZE_PROPERTY_DEFAULT);
     }
 
-    /**
-     * @param dependencyreasons
-     * @return dedependencyreason, which is near the workspace root
-     */
-    public static Optional<DependencyReason> getRootConfigurationFile(Collection<DependencyReason> dependencyreasons) {
-        Optional<DependencyReason> root = Optional.empty();
-        for (DependencyReason dependencyReason : dependencyreasons) {
-            if (!root.isPresent()) {
-                root = Optional.of(dependencyReason);
-            } else if (root.get().getInputComponent().isFile() && dependencyReason.getInputComponent().isFile()) {
-                // Simple length check, submodules are often in subfolders
-                InputFile file1 = (InputFile) root.get().getInputComponent();
-                InputFile file2 = (InputFile) dependencyReason.getInputComponent();
-                if (file1.toString().length() > file2.toString().length()) {
-                    root = Optional.of(dependencyReason);
-                }
-            }
+    public static Optional<DependencyReason> getBestDependencyReason(@NonNull Dependency dependency, @NonNull Collection<DependencyReason> dependencyReasons) {
+
+        Comparator<DependencyReason> comporatorTextRange = (r1, r2) -> r1.getBestTextRange(dependency).compareTo(r2.getBestTextRange(dependency));
+        // Shorter Files-Names indicates to be a root configuration file
+        Comparator<DependencyReason> comporatorFileLength = (r1, r2) -> r1.getInputComponent().toString().length() - r2.getInputComponent().toString().length();
+
+        if (dependency.isJavaDependency() && dependencyReasons.stream().filter(c -> c.getLanguage().equals(Language.JAVA)).count() > 0) {
+            // If a Maven Identifier is present we prefer Java dependency reasons
+            return dependencyReasons.stream().filter(c -> c.getLanguage().equals(Language.JAVA)).sorted(comporatorFileLength).sorted(comporatorTextRange).findFirst();
         }
-        return root;
+        if (dependency.isJavaScriptDependency() && dependencyReasons.stream().filter(c -> c.getLanguage().equals(Language.JAVASCRIPT)).count() > 0) {
+            // If a NPM or JavaScript Identifier is present we prefer JavaScript dependency
+            // reasons
+            return dependencyReasons.stream().filter(c -> c.getLanguage().equals(Language.JAVASCRIPT)).sorted(comporatorFileLength).sorted(comporatorTextRange).findFirst();
+        }
+        return dependencyReasons.stream().sorted(comporatorFileLength).sorted(comporatorTextRange).findFirst();
     }
 }

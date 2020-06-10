@@ -86,11 +86,12 @@ public class DependencyReasonSearcher {
     }
 
     /**
-     * @return the dependencyreasons
+     * @return the all dependencyreasons
      */
     public Collection<DependencyReason> getDependencyreasons() {
         return dependencyreasons;
     }
+
     /**
      *
      * @param dependencyReasons - List of DependencyReason
@@ -101,16 +102,8 @@ public class DependencyReasonSearcher {
     private Optional<DependencyReason> getBestDependencyReason(Dependency dependency) {
         LOGGER.debug("Get the best DependencyReason out of {} for {}", dependencyreasons.size(), dependency.getFileName());
         // Prefer root configuration file
-        Optional<DependencyReason> dependencyReasonWinner = DependencyCheckUtils
-                .getRootConfigurationFile(dependencyreasons);
+        Optional<DependencyReason> dependencyReasonWinner = DependencyCheckUtils.getBestDependencyReason(dependency, dependencyreasons);
         if (dependencyReasonWinner.isPresent()) {
-            for (DependencyReason dependencyReason : dependencyreasons) {
-                if (dependencyReasonWinner.get().isDependencyReasonBetterForDependencyThen(
-                        dependencyReason,
-                        dependency) < 0) {
-                    dependencyReasonWinner = Optional.of(dependencyReason);
-                }
-            }
             LOGGER.debug("DependencyReasonWinner: " + dependencyReasonWinner.get().getInputComponent());
         }
         return dependencyReasonWinner;
