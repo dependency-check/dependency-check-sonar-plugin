@@ -24,10 +24,17 @@ import { DeferredSpinner } from "sonar-components";
 import { getJSON } from "sonar-request";
 
 export function findDependencyCheckReport(options) {
-  return getJSON("/api/measures/component", {
-      component : options.component.key,
-      metricKeys : "report"
-    }).then(function(response) {
+  var request = {
+    component : options.component.key,
+    metricKeys : "report"
+  };
+  if (options.branchLike.key !== undefined) {
+    request.pullRequest = options.branchLike.key;
+  } else {
+    request.branch = options.branchLike.name;
+  }
+
+  return getJSON("/api/measures/component", request).then(function(response) {
     var report = response.component.measures.find((measure) => {
       return measure.metric === "report";
     });
