@@ -29,6 +29,8 @@ export function findDependencyCheckReport(options) {
     component : options.component.key,
     metricKeys : "report"
   };
+
+  // branch and pullRequest are internal parameters for /api/measures/component
   if (isBranch(options.branchLike)) {
     request.branch = options.branchLike.name;
   } else if (isPullRequest(options.branchLike)) {
