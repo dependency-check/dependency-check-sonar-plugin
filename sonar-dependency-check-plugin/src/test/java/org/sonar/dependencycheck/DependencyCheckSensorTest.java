@@ -98,7 +98,7 @@ public class DependencyCheckSensorTest {
 
         when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
         sensor.execute(context);
-        assertEquals(42, context.allIssues().size());
+        assertEquals(45, context.allIssues().size());
     }
 
     @Test
@@ -126,7 +126,7 @@ public class DependencyCheckSensorTest {
 
         when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
         sensor.execute(context);
-        assertEquals(42, context.allIssues().size());
+        assertEquals(45, context.allIssues().size());
         for (Issue issue : context.allIssues()) {
             assertEquals(DependencyCheckConstants.RULE_KEY, issue.ruleKey().rule());
         }
@@ -188,7 +188,7 @@ public class DependencyCheckSensorTest {
 
         when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
         sensor.execute(context);
-        assertEquals(6, context.allIssues().size());
+        assertEquals(7, context.allIssues().size());
     }
 
     @Test
@@ -244,7 +244,7 @@ public class DependencyCheckSensorTest {
                                 .orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT))))
                                         .thenReturn(sampleXmlReport);
         sensor.execute(context);
-        assertEquals(42, context.allIssues().size());
+        assertEquals(45, context.allIssues().size());
         for (Issue issue : context.allIssues()) {
             assertEquals(DependencyCheckConstants.RULE_KEY_WITH_SECURITY_HOTSPOT, issue.ruleKey().rule());
         }

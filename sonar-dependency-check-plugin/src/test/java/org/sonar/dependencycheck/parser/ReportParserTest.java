@@ -21,6 +21,7 @@ package org.sonar.dependencycheck.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -45,24 +46,23 @@ public abstract class ReportParserTest {
     public void parseReportMultiModuleMavenExample() throws Exception {
         Analysis analysis = parseReport("reportMultiModuleMavenExample");
 
-        assertEquals("5.2.0", analysis.getScanInfo().getEngineVersion());
+        assertEquals("6.0.0", analysis.getScanInfo().getEngineVersion());
         assertEquals("Multi-Module Maven Example", analysis.getProjectInfo().get().getName());
-        assertEquals("2019-07-26T12:37:05.863Z", analysis.getProjectInfo().get().getReportDate());
+        assertEquals("2020-09-10T07:54:20.103848Z", analysis.getProjectInfo().get().getReportDate());
 
         Collection<Dependency> dependencies = analysis.getDependencies();
         assertEquals(34, dependencies.size());
-        Iterator<Dependency> iterator = dependencies.iterator();
 
         // struts-1.2.8.jar
-        Dependency dependency = iterator.next();
-        assertEquals("struts-1.2.8.jar", dependency.getFileName());
+        Dependency dependency = findDependency(dependencies, "struts-1.2.8.jar");
+        assertNotNull(dependency);
         assertEquals("/to/path/struts/struts/1.2.8/struts-1.2.8.jar", dependency.getFilePath());
         assertEquals("8af31c3a406cfbfd991a6946102d583a", dependency.getMd5Hash().get());
         assertEquals("5919caff42c3f42fb251fd82a58af4a7880826dd", dependency.getSha1Hash().get());
 
         checkEvidence(dependency.getEvidenceCollected(), 14, 13, 3);
         Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
-        assertEquals(25, vulnerabilities.size());
+        assertEquals(24, vulnerabilities.size());
         Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
         Vulnerability vulnerability = vulnIterator.next();
         assertEquals("CVE-2006-1546", vulnerability.getName());
@@ -89,20 +89,22 @@ public abstract class ReportParserTest {
             vulnerability.getDescription());
 
         // commons-beanutils-1.7.0.jar
-        dependency = iterator.next();
+        dependency = findDependency(dependencies, "commons-beanutils-1.7.0.jar");
+        assertNotNull(dependency);
         checkEvidence(dependency.getEvidenceCollected(), 9, 9, 2);
-        assertEquals(1, dependency.getVulnerabilities().size());
+        assertEquals(2, dependency.getVulnerabilities().size());
 
         // commons-digester-1.6.jar
-        dependency = iterator.next();
+        dependency = findDependency(dependencies, "commons-digester-1.6.jar");
+        assertNotNull(dependency);
         checkEvidence(dependency.getEvidenceCollected(), 9, 9, 2);
         assertTrue(dependency.getVulnerabilities().isEmpty());
 
         // commons-collections-2.1.jar
-        dependency = iterator.next();
-        assertEquals("commons-collections-2.1.jar", dependency.getFileName());
+        dependency = findDependency(dependencies, "commons-collections-2.1.jar");
+        assertNotNull(dependency);
         checkEvidence(dependency.getEvidenceCollected(), 10, 8, 3);
-        assertEquals(2, dependency.getVulnerabilities().size());
+        assertEquals(3, dependency.getVulnerabilities().size());
         assertEquals(1, dependency.getPackages().size());
         assertEquals(1, dependency.getVulnerabilityIds().size());
         assertEquals(1, dependency.getVulnerabilityIds().size());
@@ -111,7 +113,7 @@ public abstract class ReportParserTest {
         assertEquals(Confidence.HIGH, identifier.getConfidence().get());
         assertEquals("pkg:maven/commons-collections/commons-collections@2.1", identifier.getId());
         vulnerabilities = dependency.getVulnerabilities();
-        assertEquals(2, vulnerabilities.size());
+        assertEquals(3, vulnerabilities.size());
         vulnIterator = vulnerabilities.iterator();
         vulnerability = vulnIterator.next();
         assertEquals("CVE-2015-6420", vulnerability.getName());
@@ -119,8 +121,8 @@ public abstract class ReportParserTest {
         assertEquals(7.5f, vulnerability.getCvssScore(null), 0.0f);
 
         // xml-apis-1.0.b2.jar
-        dependency = iterator.next();
-        assertEquals("xml-apis-1.0.b2.jar", dependency.getFileName());
+        dependency = findDependency(dependencies, "xml-apis-1.0.b2.jar");
+        assertNotNull(dependency);
         checkEvidence(dependency.getEvidenceCollected(), 18, 26, 3);
         assertTrue(dependency.getVulnerabilities().isEmpty());
     }
@@ -128,26 +130,30 @@ public abstract class ReportParserTest {
     private void checkEvidence(Map<String, List<Evidence>> evidenceCollected, int vendorEvidence, int productEvidence, int versionEvidence) {
         assertEquals(3, evidenceCollected.size());
         List<Evidence> vendorEvidences = evidenceCollected.get("vendorEvidence");
-        assertEquals(vendorEvidence, vendorEvidences.size());
+        assertEquals(vendorEvidence, vendorEvidences.size(), "vendorEvidence doesn't match");
         for (Evidence evidence : vendorEvidences) {
             assertFalse(evidence.getSource().isEmpty());
             assertFalse(evidence.getName().isEmpty());
             assertFalse(evidence.getValue().isEmpty());
         }
         List<Evidence> productEvidences = evidenceCollected.get("productEvidence");
-        assertEquals(productEvidence, productEvidences.size());
+        assertEquals(productEvidence, productEvidences.size(), "productEvidence doesn't match");
         for (Evidence evidence : productEvidences) {
             assertFalse(evidence.getSource().isEmpty());
             assertFalse(evidence.getName().isEmpty());
             assertFalse(evidence.getValue().isEmpty());
         }
         List<Evidence> versionEvidences = evidenceCollected.get("versionEvidence");
-        assertEquals(versionEvidence, versionEvidences.size());
+        assertEquals(versionEvidence, versionEvidences.size(), "versionEvidence doesn't match");
         for (Evidence evidence : versionEvidences) {
             assertFalse(evidence.getSource().isEmpty());
             assertFalse(evidence.getName().isEmpty());
             assertFalse(evidence.getValue().isEmpty());
         }
+    }
+
+    private Dependency findDependency(Collection<Dependency> dependencies, String name) {
+        return dependencies.stream().filter(dependency -> name.equals(dependency.getFileName())).findAny().orElse(null);
     }
 
     @Test

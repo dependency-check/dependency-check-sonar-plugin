@@ -26,7 +26,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
-@JsonIgnoreProperties({"accessVector", "accessComplexity", "authenticationr", "confidentialImpact", "integrityImpact", "availabilityImpact"})
+@JsonIgnoreProperties({"accessVector",
+                       "accessComplexity",
+                       "authenticationr",
+                       "confidentialImpact",
+                       "integrityImpact",
+                       "availabilityImpact",
+                       "version",
+                       "exploitabilityScore",
+                       "impactScore",
+                       "acInsufInfo",
+                       "obtainAllPrivilege",
+                       "obtainUserPrivilege",
+                       "obtainOtherPrivilege",
+                       "userInteractionRequired"})
 public class CvssV2 implements Cvss {
     private final Float score;
     private final String severity;
