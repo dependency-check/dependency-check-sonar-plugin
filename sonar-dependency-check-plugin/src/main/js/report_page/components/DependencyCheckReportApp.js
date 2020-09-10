@@ -21,13 +21,23 @@ import React from "react";
 // SonarComponents (referenced as sonar-components here, see the Webpack config)
 // exposes React components exposed by SonarQube.
 import { DeferredSpinner } from "sonar-components";
+import { isBranch, isPullRequest } from "sonar-helpers";
 import { getJSON } from "sonar-request";
 
 export function findDependencyCheckReport(options) {
-  return getJSON("/api/measures/component", {
-      component : options.component.key,
-      metricKeys : "report"
-    }).then(function(response) {
+  var request = {
+    component : options.component.key,
+    metricKeys : "report"
+  };
+
+  // branch and pullRequest are internal parameters for /api/measures/component
+  if (isBranch(options.branchLike)) {
+    request.branch = options.branchLike.name;
+  } else if (isPullRequest(options.branchLike)) {
+    request.pullRequest = options.branchLike.key;
+  }
+
+  return getJSON("/api/measures/component", request).then(function(response) {
     var report = response.component.measures.find((measure) => {
       return measure.metric === "report";
     });
