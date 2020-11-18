@@ -25,8 +25,12 @@
         <sonar.pluginClass>org.sonar.dependencycheck.DependencyCheckPlugin</sonar.pluginClass>
         <sonar.pluginName>Dependency-Check</sonar.pluginName>
         <sonar.pluginKey>dependencycheck</sonar.pluginKey>
-        <junit.jupiter.version>5.6.2</junit.jupiter.version>
-        <jackson.version>2.10.3</jackson.version>
+        <jackson.version>2.11.3</jackson.version>
+        <spotbugs.version>4.1.4</spotbugs.version>
+        <commons.lang3.version>3.11</commons.lang3.version>
+        <!-- Test versions -->
+        <junit.jupiter.version>5.7.0</junit.jupiter.version>
+        <mockito.version>3.6.0</mockito.version>
     </properties>
 
     <dependencies>
@@ -39,7 +43,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.10</version>
+            <version>${commons.lang3.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -54,7 +58,7 @@
         <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-annotations</artifactId>
-            <version>4.0.5</version>
+            <version>${spotbugs.version}</version>
             <optional>true</optional>
         </dependency>
 
@@ -80,7 +84,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.3.0</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
