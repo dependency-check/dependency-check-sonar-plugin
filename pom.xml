@@ -17,6 +17,11 @@
     <properties>
         <license.owner>dependency-check</license.owner>
         <license.mailto>philipp.dallig@gmail.com</license.mailto>
+
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.projectKey>dependency-check_dependency-check-sonar-plugin</sonar.projectKey>
+        <sonar.organization>dependency-check</sonar.organization>
+        <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
     </properties>
 
     <organization>
