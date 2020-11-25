@@ -1,4 +1,4 @@
-name: Java
+name: build
 on: 
   push:
     branches: [master]
