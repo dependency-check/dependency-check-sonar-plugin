@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/dependency-check/dependency-check-sonar-plugin.svg?branch=master)](https://travis-ci.com/dependency-check/dependency-check-sonar-plugin)
+![Build Status](https://github.com/dependency-check/dependency-check-sonar-plugin/workflows/build/badge.svg?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e9cebd3112ec4252804bba68a5b44071)](https://www.codacy.com/manual/dependency-check/dependency-check-sonar-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dependency-check/dependency-check-sonar-plugin&amp;utm_campaign=Badge_Grade)
 [![Download](https://api.bintray.com/packages/dependency-check/owasp/sonar-dependency-check/images/download.svg)](https://bintray.com/dependency-check/owasp/sonar-dependency-check/_latestVersion)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dependency-check_dependency-check-sonar-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=dependency-check_dependency-check-sonar-plugin)

@@ -1,4 +1,4 @@
-name: Java
+name: build
 on: 
   push:
     branches: [master]
@@ -20,7 +20,7 @@ jobs:
         with:
           java-version: 11
       - name: Build with Maven
-        run: mvn -B clean verify sonar:sonar -Dsonar.projectKey=dependency-check_dependency-check-sonar-plugin -Dsonar.login=$SONAR_TOKEN
+        run: mvn -B clean verify sonar:sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
