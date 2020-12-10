@@ -1,0 +1,23 @@
+version: 2
+updates:
+  - package-ecosystem: "maven"
+    directory: "/sonar-dependency-check-plugin"
+    schedule:
+      interval: "daily"
+    labels:
+      - "chore"
+      - "dependencies"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    labels:
+      - "chore"
+      - "dependencies"
+  - package-ecosystem: "npm"
+    directory: "/sonar-dependency-check-plugin"
+    schedule:
+      interval: "daily"
+    labels:
+      - "chore"
+      - "dependencies"
