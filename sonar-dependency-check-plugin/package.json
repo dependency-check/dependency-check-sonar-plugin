@@ -14,7 +14,7 @@
     "eslint-plugin-react": "^7.20.6",
     "postcss-loader": "^3.0.0",
     "react": "15.6.2",
-    "react-addons-shallow-compare": "15.6.2",
+    "react-addons-shallow-compare": "15.6.3",
     "react-addons-test-utils": "15.6.2",
     "react-dev-utils": "10.2.0",
     "react-dom": "15.6.2",
