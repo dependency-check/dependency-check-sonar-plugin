@@ -12,7 +12,7 @@
     "dotenv": "^8.2.0",
     "eslint": "^7.15.0",
     "eslint-plugin-react": "^7.21.5",
-    "postcss-loader": "^3.0.0",
+    "postcss-loader": "^4.1.0",
     "react": "15.6.2",
     "react-addons-shallow-compare": "15.6.3",
     "react-addons-test-utils": "15.6.2",
