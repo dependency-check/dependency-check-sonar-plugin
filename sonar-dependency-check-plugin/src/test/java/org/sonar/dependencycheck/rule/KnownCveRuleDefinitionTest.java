@@ -33,12 +33,12 @@ import org.sonar.dependencycheck.base.DependencyCheckConstants;
 /**
  * @author Gregor Tudan, Cofinpro AG
  */
-public class KnownCveRuleDefinitionTest {
+class KnownCveRuleDefinitionTest {
 
     private KnownCveRuleDefinition rule = new KnownCveRuleDefinition();
 
     @Test
-    public void define() throws Exception {
+    void define() throws Exception {
         final RulesDefinition.Context context = mock(RulesDefinition.Context.class);
         final RulesDefinition.NewRepository repo = mock(RulesDefinition.NewRepository.class);
         final RulesDefinition.NewRule rule = mock(RulesDefinition.NewRule.class, RETURNS_SMART_NULLS);

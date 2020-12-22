@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.sonar.dependencycheck.parser.element.Analysis;
 import org.sonar.dependencycheck.parser.element.AnalysisException;
@@ -38,12 +39,12 @@ import org.sonar.dependencycheck.parser.element.Evidence;
 import org.sonar.dependencycheck.parser.element.Identifier;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
 
-public abstract class ReportParserTest {
+abstract class ReportParserTest {
 
     public abstract Analysis parseReport(String dir) throws Exception;
 
     @Test
-    public void parseReportMultiModuleMavenExample() throws Exception {
+    void parseReportMultiModuleMavenExample() throws Exception {
         Analysis analysis = parseReport("reportMultiModuleMavenExample");
 
         assertEquals("6.0.0", analysis.getScanInfo().getEngineVersion());
@@ -157,7 +158,7 @@ public abstract class ReportParserTest {
     }
 
     @Test
-    public void parseReportWithExceptions() throws Exception {
+    void parseReportWithExceptions() throws Exception {
         Analysis analysis = parseReport("reportWithExceptions");
 
         assertEquals("5.2.4", analysis.getScanInfo().getEngineVersion());

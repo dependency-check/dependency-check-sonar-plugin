@@ -39,7 +39,6 @@ import org.sonar.dependencycheck.parser.element.Identifier;
 import org.sonar.dependencycheck.reason.npm.NPMDependency;
 import org.sonar.dependencycheck.reason.npm.PackageLockModel;
 
-import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
@@ -70,7 +69,6 @@ public class NPMDependencyReason extends DependencyReason {
     }
 
     @Override
-    @CheckForNull
     public InputComponent getInputComponent() {
         return packageLock;
     }
@@ -90,11 +88,7 @@ public class NPMDependencyReason extends DependencyReason {
             } else {
                 LOGGER.debug("No Identifier with type npm found for Dependency {}", dependency.getFileName());
             }
-            if (!dependencyMap.containsKey(dependency) || dependencyMap.get(dependency) == null) {
-                LOGGER.debug("We doesn't find a TextRange for {} in {}. We link to first line with {} confidence",
-                        dependency.getFileName(), packageLock, Confidence.LOW);
-                dependencyMap.put(dependency, new TextRangeConfidence(packageLock.selectLine(1), Confidence.LOW));
-            }
+            dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFristLine(k, packageLock));
         }
         return dependencyMap.get(dependency);
     }

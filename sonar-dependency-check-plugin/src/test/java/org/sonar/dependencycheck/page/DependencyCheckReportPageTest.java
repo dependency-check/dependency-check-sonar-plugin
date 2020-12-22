@@ -29,7 +29,7 @@ import org.sonar.api.web.page.Page;
 class DependencyCheckReportPageTest {
 
     @Test
-    public void testPage() {
+    void testPage() {
         DependencyCheckReportPage reportPage = new DependencyCheckReportPage();
         Context context = new Context();
         reportPage.define(context);

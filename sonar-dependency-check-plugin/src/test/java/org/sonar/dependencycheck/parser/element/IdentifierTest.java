@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 class IdentifierTest {
 
     @Test
-    public void testMaven() {
+    void testMaven() {
         Identifier a = new Identifier("pkg:maven/struts/struts@1.2.8", Confidence.HIGH);
         assertTrue(Identifier.isMavenPackage(a));
         assertFalse(Identifier.isNPMPackage(a));
@@ -38,7 +38,7 @@ class IdentifierTest {
     }
 
     @Test
-    public void testNode() {
+    void testNode() {
         Identifier a = new Identifier("pkg:npm/braces@1.8.5", Confidence.HIGHEST);
         assertFalse(Identifier.isMavenPackage(a));
         assertTrue(Identifier.isNPMPackage(a));
@@ -48,7 +48,7 @@ class IdentifierTest {
     }
 
     @Test
-    public void testNodeWithOutVersion() {
+    void testNodeWithOutVersion() {
         Identifier a = new Identifier("pkg:npm/mime", Confidence.HIGHEST);
         assertFalse(Identifier.isMavenPackage(a));
         assertTrue(Identifier.isNPMPackage(a));
@@ -58,7 +58,7 @@ class IdentifierTest {
     }
 
     @Test
-    public void testJavaScript() {
+    void testJavaScript() {
         Identifier a = new Identifier("pkg:javascript/jquery@2.2.0", Confidence.HIGHEST);
         assertFalse(Identifier.isMavenPackage(a));
         assertFalse(Identifier.isNPMPackage(a));

@@ -39,17 +39,17 @@ import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Identifier;
 
-public class MavenDependencyReasonTest extends DependencyReasonTestHelper {
+class MavenDependencyReasonTest extends DependencyReasonTestHelper {
 
     @Test
-    public void isReasonable() throws IOException {
+    void isReasonable() throws IOException {
         MavenDependencyReason maven = new MavenDependencyReason(inputFile("pom.xml"));
         assertTrue(maven.isReasonable());
         assertNotNull(maven.getInputComponent());
     }
 
     @Test
-    public void isReasonableWithoutContent() throws IOException {
+    void isReasonableWithoutContent() throws IOException {
         DefaultInputFile pom = mock(DefaultInputFile.class, RETURNS_DEEP_STUBS);
         when(pom.contents()).thenReturn("");
         MavenDependencyReason maven = new MavenDependencyReason(pom);
@@ -58,7 +58,7 @@ public class MavenDependencyReasonTest extends DependencyReasonTestHelper {
     }
 
     @Test
-    public void constructorWithIOException() throws IOException {
+    void constructorWithIOException() throws IOException {
         DefaultInputFile pom = mock(DefaultInputFile.class, RETURNS_DEEP_STUBS);
         when(pom.contents()).thenThrow(new IOException());
         MavenDependencyReason maven = new MavenDependencyReason(pom);
@@ -67,7 +67,7 @@ public class MavenDependencyReasonTest extends DependencyReasonTestHelper {
     }
 
     @Test
-    public void foundDependency() throws IOException {
+    void foundDependency() throws IOException {
         MavenDependencyReason maven = new MavenDependencyReason(inputFile("pom.xml"));
         // Create Dependency
         Identifier identifier1 = new Identifier("pkg:maven/struts/struts@1.2.8", Confidence.HIGHEST);
@@ -87,7 +87,7 @@ public class MavenDependencyReasonTest extends DependencyReasonTestHelper {
     }
 
     @Test
-    public void foundDependencyOnlyWithArtifactID() throws IOException {
+    void foundDependencyOnlyWithArtifactID() throws IOException {
         MavenDependencyReason maven = new MavenDependencyReason(inputFile("pom.xml"));
         // Create Dependency
         Identifier identifier1 = new Identifier("pkg:maven/dummy/struts@1.2.8", Confidence.HIGHEST);
@@ -107,7 +107,7 @@ public class MavenDependencyReasonTest extends DependencyReasonTestHelper {
     }
 
     @Test
-    public void foundDependencyOnlyWithGroupID() throws IOException {
+    void foundDependencyOnlyWithGroupID() throws IOException {
         MavenDependencyReason maven = new MavenDependencyReason(inputFile("pom.xml"));
         // Create Dependency
         Identifier identifier1 = new Identifier("pkg:maven/struts/dummy@1.2.8", Confidence.HIGHEST);
@@ -127,7 +127,7 @@ public class MavenDependencyReasonTest extends DependencyReasonTestHelper {
     }
 
     @Test
-    public void foundParent() throws IOException {
+    void foundParent() throws IOException {
         MavenDependencyReason maven = new MavenDependencyReason(inputFile("pom.xml"));
         // Create Dependency
         Identifier identifier1 = new Identifier("pkg:maven/dummy-parent/fake-artifact@1.0.0", Confidence.HIGHEST);
@@ -148,7 +148,7 @@ public class MavenDependencyReasonTest extends DependencyReasonTestHelper {
     }
 
     @Test
-    public void foundNoDependency() throws IOException {
+    void foundNoDependency() throws IOException {
         MavenDependencyReason maven = new MavenDependencyReason(inputFile("pom.xml"));
         // Create Dependency
         Identifier identifier1 = new Identifier("pkg:maven/myvendor/myartifact@1.2.8", Confidence.HIGHEST);

@@ -26,9 +26,9 @@ import org.junit.jupiter.api.Test;
 /**
  * @author Gregor Tudan, Cofinpro AG
  */
-public class NeutralLanguageTest {
+class NeutralLanguageTest {
     @Test
-    public void getFileSuffixes() throws Exception {
+    void getFileSuffixes() throws Exception {
         assertEquals(0, new NeutralLanguage().getFileSuffixes().length);
     }
 

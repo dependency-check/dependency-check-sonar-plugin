@@ -36,10 +36,10 @@ import org.sonar.dependencycheck.reason.npm.PackageLockModel;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-public class NPMParserHelperTest {
+class NPMParserHelperTest {
 
     @Test
-    public void parsePackageLock() throws Exception {
+    void parsePackageLock() throws Exception {
         InputStream packageLock = getClass().getClassLoader().getResourceAsStream("reason/package-lock.json");
         PackageLockModel packageLockModel = PackageLockParserHelper.parse(packageLock);
         assertNotNull(packageLockModel);
@@ -65,7 +65,7 @@ public class NPMParserHelperTest {
     }
 
     @Test
-    public void parseReportJsonParseException() {
+    void parseReportJsonParseException() {
         InputStream inputStream = mock(InputStream.class);
         doThrow(JsonParseException.class).when(inputStream);
         ReportParserException exception = assertThrows(ReportParserException.class, () -> PackageLockParserHelper.parse(inputStream), "No JsonParseException thrown");
@@ -73,7 +73,7 @@ public class NPMParserHelperTest {
     }
 
     @Test
-    public void parseReportJsonMappingException() {
+    void parseReportJsonMappingException() {
         InputStream inputStream = mock(InputStream.class);
         doThrow(JsonMappingException.class).when(inputStream);
         ReportParserException exception = assertThrows(ReportParserException.class, () -> PackageLockParserHelper.parse(inputStream), "No JsonMappingException thrown");
@@ -81,7 +81,7 @@ public class NPMParserHelperTest {
     }
 
     @Test
-    public void parseReportJsonIOException() {
+    void parseReportJsonIOException() {
         InputStream inputStream = mock(InputStream.class);
         doThrow(IOException.class).when(inputStream);
         ReportParserException exception = assertThrows(ReportParserException.class, () -> PackageLockParserHelper.parse(inputStream), "No IOException thrown");

@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 class MavenPomModelTest {
 
     @Test
-    public void dependenciesAreNotNull() {
+    void dependenciesAreNotNull() {
         MavenPomModel model = new MavenPomModel(null, null);
         assertEquals(Collections.emptyList(), model.getDependencies());
     }

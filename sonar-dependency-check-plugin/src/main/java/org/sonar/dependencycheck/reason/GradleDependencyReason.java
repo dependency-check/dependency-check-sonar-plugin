@@ -35,7 +35,6 @@ import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Identifier;
 
-import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class GradleDependencyReason extends DependencyReason {
@@ -70,10 +69,7 @@ public class GradleDependencyReason extends DependencyReason {
             } else {
                 LOGGER.debug("No artifactId found for Dependency {}", dependency.getFileName());
             }
-            if (!dependencyMap.containsKey(dependency) || dependencyMap.get(dependency) == null) {
-                LOGGER.debug("We doesn't find a TextRange for {} in {}. We link to first line with {} confidence", dependency.getFileName(), buildGradle, Confidence.LOW);
-                dependencyMap.put(dependency, new TextRangeConfidence(buildGradle.selectLine(1), Confidence.LOW));
-            }
+            dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFristLine(k, buildGradle));
         }
         return dependencyMap.get(dependency);
     }
@@ -123,7 +119,6 @@ public class GradleDependencyReason extends DependencyReason {
      * returns pom file
      */
     @Override
-    @CheckForNull
     public InputComponent getInputComponent() {
         return buildGradle;
     }

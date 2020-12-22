@@ -40,7 +40,6 @@ import org.sonar.dependencycheck.reason.maven.MavenDependency;
 import org.sonar.dependencycheck.reason.maven.MavenParent;
 import org.sonar.dependencycheck.reason.maven.MavenPomModel;
 
-import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class MavenDependencyReason extends DependencyReason {
@@ -74,11 +73,7 @@ public class MavenDependencyReason extends DependencyReason {
             } else {
                 LOGGER.debug("No Identifier with type maven found for Dependency {}", dependency.getFileName());
             }
-            if (!dependencyMap.containsKey(dependency) || dependencyMap.get(dependency) == null) {
-                LOGGER.debug("We doesn't find a TextRange for {} in {}. We link to first line with {} confidence",
-                        dependency.getFileName(), pom, Confidence.LOW);
-                dependencyMap.put(dependency, new TextRangeConfidence(pom.selectLine(1), Confidence.LOW));
-            }
+            dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFristLine(k, pom));
         }
         return dependencyMap.get(dependency);
     }
@@ -157,7 +152,6 @@ public class MavenDependencyReason extends DependencyReason {
      * returns pom file
      */
     @Override
-    @CheckForNull
     public InputComponent getInputComponent() {
         return pom;
     }

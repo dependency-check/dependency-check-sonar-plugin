@@ -30,10 +30,10 @@ import org.sonar.api.internal.PluginContextImpl;
 import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.utils.Version;
 
-public class DependencyCheckPluginTest {
+class DependencyCheckPluginTest {
 
     @Test
-    public void testExtensions() {
+    void testExtensions() {
         SonarRuntime runtime = SonarRuntimeImpl.forSonarQube(Version.create(7, 9), SonarQubeSide.SCANNER,
                 SonarEdition.COMMUNITY);
         Plugin.Context context = new PluginContextImpl.Builder().setSonarRuntime(runtime).build();
