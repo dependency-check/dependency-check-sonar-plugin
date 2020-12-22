@@ -88,11 +88,7 @@ public class NPMDependencyReason extends DependencyReason {
             } else {
                 LOGGER.debug("No Identifier with type npm found for Dependency {}", dependency.getFileName());
             }
-            if (!dependencyMap.containsKey(dependency) || dependencyMap.get(dependency) == null) {
-                LOGGER.debug("We doesn't find a TextRange for {} in {}. We link to first line with {} confidence",
-                        dependency.getFileName(), packageLock, Confidence.LOW);
-                dependencyMap.put(dependency, new TextRangeConfidence(packageLock.selectLine(1), Confidence.LOW));
-            }
+            dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFristLine(k, packageLock));
         }
         return dependencyMap.get(dependency);
     }

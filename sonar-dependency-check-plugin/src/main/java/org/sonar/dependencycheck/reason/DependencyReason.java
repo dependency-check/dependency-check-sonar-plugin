@@ -23,20 +23,26 @@ package org.sonar.dependencycheck.reason;
 import java.util.List;
 
 import org.sonar.api.batch.fs.InputComponent;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 import org.sonar.dependencycheck.base.DependencyCheckMetric;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
+import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 public abstract class DependencyReason {
+
+    private static final Logger LOGGER = Loggers.get(DependencyReason.class);
 
     private final DependencyCheckMetric metrics;
     private final Language language;
@@ -70,6 +76,10 @@ public abstract class DependencyReason {
         return language;
     }
 
+    protected static TextRangeConfidence addDependencyToFristLine(Dependency dependency, InputFile inputFile) {
+        LOGGER.debug("We doesn't find a TextRange for {} in {}. We link to first line with {} confidence", dependency.getFileName(), inputFile, Confidence.LOW);
+        return new TextRangeConfidence(inputFile.selectLine(1), Confidence.LOW);
+    }
     /**
      * Returns for a dependency the a TextRange, where the import is happen
      *

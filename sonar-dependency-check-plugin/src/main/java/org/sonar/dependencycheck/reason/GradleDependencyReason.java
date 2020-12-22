@@ -69,10 +69,7 @@ public class GradleDependencyReason extends DependencyReason {
             } else {
                 LOGGER.debug("No artifactId found for Dependency {}", dependency.getFileName());
             }
-            if (!dependencyMap.containsKey(dependency) || dependencyMap.get(dependency) == null) {
-                LOGGER.debug("We doesn't find a TextRange for {} in {}. We link to first line with {} confidence", dependency.getFileName(), buildGradle, Confidence.LOW);
-                dependencyMap.put(dependency, new TextRangeConfidence(buildGradle.selectLine(1), Confidence.LOW));
-            }
+            dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFristLine(k, buildGradle));
         }
         return dependencyMap.get(dependency);
     }
