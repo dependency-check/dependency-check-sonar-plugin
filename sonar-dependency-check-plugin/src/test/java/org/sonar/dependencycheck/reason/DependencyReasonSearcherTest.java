@@ -50,7 +50,7 @@ import org.sonar.dependencycheck.parser.element.ProjectInfo;
 import org.sonar.dependencycheck.parser.element.ScanInfo;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
 
-public class DependencyReasonSearcherTest {
+class DependencyReasonSearcherTest {
 
     private static final File TEST_DIR = new File("src/test/resources/reason");
 
@@ -64,7 +64,7 @@ public class DependencyReasonSearcherTest {
     }
 
     @Test
-    public void checkForDependencyReasons() throws IOException  {
+    void checkForDependencyReasons() throws IOException {
         SensorContextTester context = SensorContextTester.create(new File(""));
         MapSettings settings = new MapSettings();
         settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
@@ -83,7 +83,7 @@ public class DependencyReasonSearcherTest {
     }
 
     @Test
-    public void checkForDependencyReasonsMaven() throws IOException  {
+    void checkForDependencyReasonsMaven() throws IOException {
         SensorContextTester context = SensorContextTester.create(new File(""));
         MapSettings settings = new MapSettings();
         settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
@@ -128,13 +128,13 @@ public class DependencyReasonSearcherTest {
     }
 
     @Test
-    public void checkForDependencyReasonsGradle() throws IOException  {
+    void checkForDependencyReasonsGradle() throws IOException {
         SensorContextTester context = checkForDependencyReasonsGradleAbstract(inputFile("build.gradle"));
         assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 24));
     }
 
     @Test
-    public void checkForDependencyReasonsGradleKotlinDsl() throws IOException  {
+    void checkForDependencyReasonsGradleKotlinDsl() throws IOException {
         SensorContextTester context = checkForDependencyReasonsGradleAbstract(inputFile("build.gradle.kts"));
         assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 15));
     }

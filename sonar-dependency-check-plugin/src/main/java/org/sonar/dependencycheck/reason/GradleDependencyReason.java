@@ -35,7 +35,6 @@ import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Identifier;
 
-import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class GradleDependencyReason extends DependencyReason {
@@ -123,7 +122,6 @@ public class GradleDependencyReason extends DependencyReason {
      * returns pom file
      */
     @Override
-    @CheckForNull
     public InputComponent getInputComponent() {
         return buildGradle;
     }

@@ -36,8 +36,9 @@ import org.sonar.dependencycheck.parser.element.Analysis;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-public class JsonReportParserHelperTest extends ReportParserTest {
+class JsonReportParserHelperTest extends ReportParserTest {
 
+    @Override
     public Analysis parseReport(String dir) throws Exception {
         Instant startTime = Instant.now();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dir + "/dependency-check-report.json");
@@ -49,7 +50,7 @@ public class JsonReportParserHelperTest extends ReportParserTest {
     }
 
     @Test
-    public void parseReportJsonParseException() {
+    void parseReportJsonParseException() {
         InputStream inputStream = mock(InputStream.class);
         doThrow(JsonParseException.class).when(inputStream);
         ReportParserException exception = assertThrows(ReportParserException.class, () -> JsonReportParserHelper.parse(inputStream), "No JsonParseException thrown");
@@ -57,7 +58,7 @@ public class JsonReportParserHelperTest extends ReportParserTest {
     }
 
     @Test
-    public void parseReportJsonMappingException() {
+    void parseReportJsonMappingException() {
         InputStream inputStream = mock(InputStream.class);
         doThrow(JsonMappingException.class).when(inputStream);
         ReportParserException exception = assertThrows(ReportParserException.class, () -> JsonReportParserHelper.parse(inputStream), "No JsonMappingException thrown");
@@ -65,7 +66,7 @@ public class JsonReportParserHelperTest extends ReportParserTest {
     }
 
     @Test
-    public void parseReportJsonIOException() {
+    void parseReportJsonIOException() {
         InputStream inputStream = mock(InputStream.class);
         doThrow(IOException.class).when(inputStream);
         ReportParserException exception = assertThrows(ReportParserException.class, () -> JsonReportParserHelper.parse(inputStream), "No IOException thrown");

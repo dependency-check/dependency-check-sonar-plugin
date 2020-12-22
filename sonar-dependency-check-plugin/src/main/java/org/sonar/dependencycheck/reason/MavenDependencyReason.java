@@ -40,7 +40,6 @@ import org.sonar.dependencycheck.reason.maven.MavenDependency;
 import org.sonar.dependencycheck.reason.maven.MavenParent;
 import org.sonar.dependencycheck.reason.maven.MavenPomModel;
 
-import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class MavenDependencyReason extends DependencyReason {
@@ -157,7 +156,6 @@ public class MavenDependencyReason extends DependencyReason {
      * returns pom file
      */
     @Override
-    @CheckForNull
     public InputComponent getInputComponent() {
         return pom;
     }

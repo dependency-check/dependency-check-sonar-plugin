@@ -30,7 +30,7 @@ import org.sonar.dependencycheck.base.DependencyCheckConstants;
 class NeutralProfileTest {
 
     @Test
-    public void test() {
+    void test() {
         NeutralProfile profileDef = new NeutralProfile();
         BuiltInQualityProfilesDefinition.Context context = new BuiltInQualityProfilesDefinition.Context();
         profileDef.define(context);

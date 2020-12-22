@@ -41,8 +41,9 @@ import org.sonar.dependencycheck.parser.element.Analysis;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
 
-public class XMLReportParserHelperTest extends ReportParserTest {
+class XMLReportParserHelperTest extends ReportParserTest {
 
+    @Override
     public Analysis parseReport(String dir) throws Exception {
         Instant startTime = Instant.now();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dir + "/dependency-check-report.xml");
@@ -54,7 +55,7 @@ public class XMLReportParserHelperTest extends ReportParserTest {
     }
 
     @Test
-    public void parseReportXMLIOException() {
+    void parseReportXMLIOException() {
         InputStream inputStream = mock(InputStream.class);
         doThrow(IOException.class).when(inputStream);
         ReportParserException exception = assertThrows(ReportParserException.class, () -> XMLReportParserHelper.parse(inputStream), "No IOException thrown");
@@ -62,7 +63,7 @@ public class XMLReportParserHelperTest extends ReportParserTest {
     }
 
     @Test
-    public void parseReportNode500() throws Exception {
+    void parseReportNode500() throws Exception {
         SensorContextTester context = SensorContextTester.create(new File(""));
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportNode.js/dependency-check-report.xml");
         Analysis analysis = XMLReportParserHelper.parse(inputStream);
@@ -165,7 +166,7 @@ public class XMLReportParserHelperTest extends ReportParserTest {
     }
 
     @Test
-    public void parseBigReportNode500() throws Exception {
+    void parseBigReportNode500() throws Exception {
         SensorContextTester context = SensorContextTester.create(new File(""));
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("reportNode.js/big-dependency-check-report.xml");
         Analysis analysis = XMLReportParserHelper.parse(inputStream);

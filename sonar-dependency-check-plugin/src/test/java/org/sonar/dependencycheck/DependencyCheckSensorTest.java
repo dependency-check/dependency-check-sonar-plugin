@@ -49,7 +49,7 @@ import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 
-public class DependencyCheckSensorTest {
+class DependencyCheckSensorTest {
 
     private PathResolver pathResolver;
     private DependencyCheckSensor sensor;
@@ -77,18 +77,18 @@ public class DependencyCheckSensorTest {
     }
 
     @Test
-    public void toStringTest() {
+    void toStringTest() {
         assertEquals("Dependency-Check", this.sensor.toString());
     }
 
     @Test
-    public void testDescribe() {
+    void testDescribe() {
         final SensorDescriptor descriptor = mock(SensorDescriptor.class);
         sensor.describe(descriptor);
         verify(descriptor).name("Dependency-Check");
     }
     @Test
-    public void shouldAnalyse() throws URISyntaxException {
+    void shouldAnalyse() throws URISyntaxException {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
@@ -102,7 +102,7 @@ public class DependencyCheckSensorTest {
     }
 
     @Test
-    public void shouldSkipIfReportWasNotFound() throws URISyntaxException {
+    void shouldSkipIfReportWasNotFound() throws URISyntaxException {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
@@ -116,7 +116,7 @@ public class DependencyCheckSensorTest {
     }
 
     @Test
-    public void shouldAddAnIssueForAVulnerability() throws URISyntaxException {
+    void shouldAddAnIssueForAVulnerability() throws URISyntaxException {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
@@ -133,7 +133,7 @@ public class DependencyCheckSensorTest {
     }
 
     @Test
-    public void shouldPersistTotalMetrics() throws URISyntaxException {
+    void shouldPersistTotalMetrics() throws URISyntaxException {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
@@ -148,7 +148,7 @@ public class DependencyCheckSensorTest {
     }
 
     @Test
-    public void shouldPersistMetricsOnReport() throws URISyntaxException {
+    void shouldPersistMetricsOnReport() throws URISyntaxException {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
@@ -162,7 +162,7 @@ public class DependencyCheckSensorTest {
     }
 
     @Test
-    public void shouldPersistHtmlReport() throws URISyntaxException {
+    void shouldPersistHtmlReport() throws URISyntaxException {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
@@ -177,7 +177,7 @@ public class DependencyCheckSensorTest {
     }
 
     @Test
-    public void shouldPersistSummarizeIssues() throws URISyntaxException {
+    void shouldPersistSummarizeIssues() throws URISyntaxException {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
@@ -192,7 +192,7 @@ public class DependencyCheckSensorTest {
     }
 
     @Test
-    public void shouldSkipPlugin() throws URISyntaxException {
+    void shouldSkipPlugin() throws URISyntaxException {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
@@ -207,7 +207,7 @@ public class DependencyCheckSensorTest {
     }
 
     @Test
-    public void shouldAddWarningsPlugin() throws URISyntaxException {
+    void shouldAddWarningsPlugin() throws URISyntaxException {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
@@ -229,7 +229,7 @@ public class DependencyCheckSensorTest {
     }
 
     @Test
-    public void shouldAddSecurityHotspots() throws URISyntaxException {
+    void shouldAddSecurityHotspots() throws URISyntaxException {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();

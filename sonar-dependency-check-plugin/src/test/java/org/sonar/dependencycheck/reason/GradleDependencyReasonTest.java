@@ -39,17 +39,17 @@ import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Identifier;
 
-public class GradleDependencyReasonTest extends DependencyReasonTestHelper {
+class GradleDependencyReasonTest extends DependencyReasonTestHelper {
 
     @Test
-    public void isReasonable() throws IOException {
+    void isReasonable() throws IOException {
         GradleDependencyReason gradle = new GradleDependencyReason(inputFile("build.gradle"));
         assertTrue(gradle.isReasonable());
         assertNotNull(gradle.getInputComponent());
     }
 
     @Test
-    public void isReasonableWithoutContent() throws IOException {
+    void isReasonableWithoutContent() throws IOException {
         DefaultInputFile gradlefile = mock(DefaultInputFile.class, RETURNS_DEEP_STUBS);
         when(gradlefile.contents()).thenReturn("");
         GradleDependencyReason gradle = new GradleDependencyReason(gradlefile);
@@ -58,7 +58,7 @@ public class GradleDependencyReasonTest extends DependencyReasonTestHelper {
     }
 
     @Test
-    public void constructorWithIOException() throws IOException {
+    void constructorWithIOException() throws IOException {
         DefaultInputFile gradlefile = mock(DefaultInputFile.class, RETURNS_DEEP_STUBS);
         when(gradlefile.contents()).thenThrow(new IOException());
         GradleDependencyReason gradle = new GradleDependencyReason(gradlefile);
@@ -67,7 +67,7 @@ public class GradleDependencyReasonTest extends DependencyReasonTestHelper {
     }
 
     @Test
-    public void foundDependency() throws IOException {
+    void foundDependency() throws IOException {
         GradleDependencyReason gradle = new GradleDependencyReason(inputFile("build.gradle"));
         // Create Dependency
         Identifier identifier = new Identifier("pkg:maven/org.springframework/spring@2.0", Confidence.HIGHEST);
@@ -86,7 +86,7 @@ public class GradleDependencyReasonTest extends DependencyReasonTestHelper {
     }
 
     @Test
-    public void foundNoDependency() throws IOException {
+    void foundNoDependency() throws IOException {
         GradleDependencyReason gradle = new GradleDependencyReason(inputFile("build.gradle"));
         // Create Dependency
         Identifier identifier = new Identifier("pkg:maven/myvendor/myartifact@2.0", Confidence.HIGHEST);

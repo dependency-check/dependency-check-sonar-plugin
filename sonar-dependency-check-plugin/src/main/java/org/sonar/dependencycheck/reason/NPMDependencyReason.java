@@ -39,7 +39,6 @@ import org.sonar.dependencycheck.parser.element.Identifier;
 import org.sonar.dependencycheck.reason.npm.NPMDependency;
 import org.sonar.dependencycheck.reason.npm.PackageLockModel;
 
-import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
@@ -70,7 +69,6 @@ public class NPMDependencyReason extends DependencyReason {
     }
 
     @Override
-    @CheckForNull
     public InputComponent getInputComponent() {
         return packageLock;
     }

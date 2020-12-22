@@ -39,17 +39,17 @@ import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Identifier;
 
-public class NPMDependencyReasonTest extends DependencyReasonTestHelper {
+class NPMDependencyReasonTest extends DependencyReasonTestHelper {
 
     @Test
-    public void isReasonable() throws IOException {
+    void isReasonable() throws IOException {
         NPMDependencyReason npm = new NPMDependencyReason(inputFile("package-lock.json"));
         assertTrue(npm.isReasonable());
         assertNotNull(npm.getInputComponent());
     }
 
     @Test
-    public void isReasonableWithoutContent() throws IOException {
+    void isReasonableWithoutContent() throws IOException {
         DefaultInputFile npmfile = mock(DefaultInputFile.class, RETURNS_DEEP_STUBS);
         when(npmfile.contents()).thenReturn("");
         NPMDependencyReason npm = new NPMDependencyReason(npmfile);
@@ -58,7 +58,7 @@ public class NPMDependencyReasonTest extends DependencyReasonTestHelper {
     }
 
     @Test
-    public void constructorWithIOException() throws IOException {
+    void constructorWithIOException() throws IOException {
         DefaultInputFile npmfile = mock(DefaultInputFile.class, RETURNS_DEEP_STUBS);
         when(npmfile.contents()).thenThrow(new IOException());
         NPMDependencyReason npm = new NPMDependencyReason(npmfile);
@@ -67,7 +67,7 @@ public class NPMDependencyReasonTest extends DependencyReasonTestHelper {
     }
 
     @Test
-    public void foundDependencyJavascript() throws IOException {
+    void foundDependencyJavascript() throws IOException {
         NPMDependencyReason npm = new NPMDependencyReason(inputFile("package-lock.json"));
         // Create Dependency
         Identifier identifier = new Identifier("pkg:javascript/jquery@2.2.0", Confidence.HIGHEST);
@@ -87,7 +87,7 @@ public class NPMDependencyReasonTest extends DependencyReasonTestHelper {
     }
 
     @Test
-    public void foundDependencyNPM() throws IOException {
+    void foundDependencyNPM() throws IOException {
         NPMDependencyReason npm = new NPMDependencyReason(inputFile("package-lock.json"));
         // Create Dependency
         Identifier identifier = new Identifier("pkg:npm/arr-flatten@1.1.0", Confidence.HIGHEST);
@@ -107,7 +107,7 @@ public class NPMDependencyReasonTest extends DependencyReasonTestHelper {
     }
 
     @Test
-    public void foundDependencyNPMOnlyWithName() throws IOException {
+    void foundDependencyNPMOnlyWithName() throws IOException {
         NPMDependencyReason npm = new NPMDependencyReason(inputFile("package-lock.json"));
         // Create Dependency
         Identifier identifier = new Identifier("pkg:npm/arr-flatten@9.9.9", Confidence.HIGHEST);
@@ -127,7 +127,7 @@ public class NPMDependencyReasonTest extends DependencyReasonTestHelper {
     }
 
     @Test
-    public void foundDependencyNPMWithoutVersion() throws IOException {
+    void foundDependencyNPMWithoutVersion() throws IOException {
         NPMDependencyReason npm = new NPMDependencyReason(inputFile("package-lock.json"));
         // Create Dependency
         Identifier identifier = new Identifier("pkg:npm/arr-flatten", Confidence.HIGHEST);
@@ -147,7 +147,7 @@ public class NPMDependencyReasonTest extends DependencyReasonTestHelper {
     }
 
     @Test
-    public void foundNoDependency() throws IOException {
+    void foundNoDependency() throws IOException {
         NPMDependencyReason npm = new NPMDependencyReason(inputFile("package-lock.json"));
         // Create Dependency
         Identifier identifier = new Identifier("pkg:javascript/dummyname@2.2.0", Confidence.HIGHEST);

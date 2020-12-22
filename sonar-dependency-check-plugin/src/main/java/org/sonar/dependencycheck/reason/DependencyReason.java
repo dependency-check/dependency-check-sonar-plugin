@@ -41,7 +41,7 @@ public abstract class DependencyReason {
     private final DependencyCheckMetric metrics;
     private final Language language;
 
-    public DependencyReason(InputComponent inputComponent, Language language) {
+    protected DependencyReason(InputComponent inputComponent, Language language) {
         metrics = new DependencyCheckMetric(inputComponent);
         this.language = language;
     }

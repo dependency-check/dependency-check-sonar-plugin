@@ -51,7 +51,7 @@ import org.sonar.dependencycheck.reason.GradleDependencyReason;
 import org.sonar.dependencycheck.reason.MavenDependencyReason;
 import org.sonar.dependencycheck.reason.NPMDependencyReason;
 
-public class DependencyCheckUtilsTest {
+class DependencyCheckUtilsTest {
 
     public static Stream<Object[]> severities() {
         return Stream.of(new Object[][]{
@@ -141,7 +141,7 @@ public class DependencyCheckUtilsTest {
 
     @ParameterizedTest(name = "{index} => cvssSeverity={0}, blocker={1}, critical={2}, major={3}, minor={4}, expectedSeverity={5}")
     @MethodSource("severities")
-    public void testCvssToSonarQubeSeverity(Float cvssSeverity, Float blocker, Float critical, Float major, Float minor, Severity expectedSeverity) {
+    void testCvssToSonarQubeSeverity(Float cvssSeverity, Float blocker, Float critical, Float major, Float minor, Severity expectedSeverity) {
         assertEquals(expectedSeverity, DependencyCheckUtils.cvssToSonarQubeSeverity(cvssSeverity, blocker, critical, major, minor));
     }
 
@@ -193,12 +193,12 @@ public class DependencyCheckUtilsTest {
     }
     @ParameterizedTest(name = "{index} => severity={0}, blocker={1}, critical={2}, major={3}, minor={4}, expectedScore={5}")
     @MethodSource("severitiestoscore")
-    public void testSeverityToScore(String severity, Float blocker, Float critical, Float major, Float minor, Float expectedScore) {
+    void testSeverityToScore(String severity, Float blocker, Float critical, Float major, Float minor, Float expectedScore) {
         assertEquals(expectedScore, DependencyCheckUtils.severityToScore(severity, blocker, critical, major, minor));
     }
 
     @Test
-    public void testBestDependencyReasonRootConfigurationFileOrder() {
+    void testBestDependencyReasonRootConfigurationFileOrder() {
         Path path = new File("root").toPath();
         InputFile pom = new TestInputFileBuilder("moduleKey", "pom.xml").setContents("123456").setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
         InputFile subpom = new TestInputFileBuilder("moduleKey", "submodule/pom.xml").setContents("132").setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
@@ -219,7 +219,7 @@ public class DependencyCheckUtilsTest {
     }
 
     @Test
-    public void testBestDependencyReasonJavaDependency() {
+    void testBestDependencyReasonJavaDependency() {
         Path path = new File("root").toPath();
         InputFile packagLock = new TestInputFileBuilder("moduleKey", "package-lock.json").setContents("123456").setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
         InputFile subpom = new TestInputFileBuilder("moduleKey", "submodule/pom.xml").setContents("132").setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
@@ -238,7 +238,7 @@ public class DependencyCheckUtilsTest {
     }
 
     @Test
-    public void testBestDependencyReasonNPMDependency() {
+    void testBestDependencyReasonNPMDependency() {
         Path path = new File("root").toPath();
         InputFile packagLock = new TestInputFileBuilder("moduleKey", "submodule/package-lock.json").setContents("123456").setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
         InputFile subpom = new TestInputFileBuilder("moduleKey", "pom.xml").setContents("132").setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
@@ -257,7 +257,7 @@ public class DependencyCheckUtilsTest {
     }
 
     @Test
-    public void testBestDependencyReasonSubModule() throws IOException {
+    void testBestDependencyReasonSubModule() throws IOException {
         Path path = new File("root").toPath();
         String pomContent = new String(Files.readAllBytes(new File("src/test/resources/reason", "pom.xml").toPath()), StandardCharsets.UTF_8);
         String gradleContent = new String(Files.readAllBytes(new File("src/test/resources/reason", "build.gradle").toPath()), StandardCharsets.UTF_8);

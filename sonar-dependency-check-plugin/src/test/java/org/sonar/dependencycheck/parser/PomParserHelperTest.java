@@ -33,10 +33,10 @@ import org.junit.jupiter.api.Test;
 import org.sonar.dependencycheck.reason.maven.MavenDependency;
 import org.sonar.dependencycheck.reason.maven.MavenPomModel;
 
-public class PomParserHelperTest {
+class PomParserHelperTest {
 
     @Test
-    public void parsePom() throws Exception {
+    void parsePom() throws Exception {
         InputStream pom = getClass().getClassLoader().getResourceAsStream("reason/pom.xml");
         MavenPomModel pomModel = PomParserHelper.parse(pom);
         assertNotNull(pomModel);
@@ -70,7 +70,7 @@ public class PomParserHelperTest {
 
 
     @Test
-    public void parsePomIOException() {
+    void parsePomIOException() {
         InputStream inputStream = mock(InputStream.class);
         doThrow(IOException.class).when(inputStream);
         ReportParserException exception = assertThrows(ReportParserException.class, () -> PomParserHelper.parse(inputStream), "No IOException thrown");
