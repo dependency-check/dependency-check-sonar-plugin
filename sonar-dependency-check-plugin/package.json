@@ -20,7 +20,7 @@
     "react-transform-hmr": "1.0.4",
     "style-loader": "^2.0.0",
     "webpack": "4.44.2",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.1"
   },
   "scripts": {
     "build": "node scripts/build.js",
