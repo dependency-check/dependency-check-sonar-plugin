@@ -51,7 +51,7 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 public class DependencyCheckSensor implements ProjectSensor {
 
     private static final Logger LOGGER = Loggers.get(DependencyCheckSensor.class);
-    private static final String SENSOR_NAME = "Dependency-Check";
+    private static String SENSOR_NAME = "Dependency-Check";
     private static final String XSD = "https://jeremylong.github.io/DependencyCheck/dependency-check.2.5.xsd";
 
     private final FileSystem fileSystem;
