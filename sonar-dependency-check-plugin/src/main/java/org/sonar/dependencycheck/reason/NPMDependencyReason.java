@@ -88,7 +88,7 @@ public class NPMDependencyReason extends DependencyReason {
             } else {
                 LOGGER.debug("No Identifier with type npm found for Dependency {}", dependency.getFileName());
             }
-            dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFristLine(k, packageLock));
+            dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFirstLine(k, packageLock));
         }
         return dependencyMap.get(dependency);
     }

@@ -61,7 +61,7 @@ class NPMParserHelperTest {
                 assertEquals(endLineNr, npmDependency.getEndLineNr());
             }
         }
-        assertTrue(found, "We doesn't found dependency " + name);
+        assertTrue(found, "We haven't found dependency " + name);
     }
 
     @Test
