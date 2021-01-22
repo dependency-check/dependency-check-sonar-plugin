@@ -73,7 +73,7 @@ public class MavenDependencyReason extends DependencyReason {
             } else {
                 LOGGER.debug("No Identifier with type maven found for Dependency {}", dependency.getFileName());
             }
-            dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFristLine(k, pom));
+            dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFirstLine(k, pom));
         }
         return dependencyMap.get(dependency);
     }

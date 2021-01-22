@@ -76,8 +76,8 @@ public abstract class DependencyReason {
         return language;
     }
 
-    protected static TextRangeConfidence addDependencyToFristLine(Dependency dependency, InputFile inputFile) {
-        LOGGER.debug("We doesn't find a TextRange for {} in {}. We link to first line with {} confidence", dependency.getFileName(), inputFile, Confidence.LOW);
+    protected static TextRangeConfidence addDependencyToFirstLine(Dependency dependency, InputFile inputFile) {
+        LOGGER.debug("We haven't found a TextRange for {} in {}. We link to first line with {} confidence", dependency.getFileName(), inputFile, Confidence.LOW);
         return new TextRangeConfidence(inputFile.selectLine(1), Confidence.LOW);
     }
     /**

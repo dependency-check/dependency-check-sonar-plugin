@@ -69,7 +69,7 @@ public class GradleDependencyReason extends DependencyReason {
             } else {
                 LOGGER.debug("No artifactId found for Dependency {}", dependency.getFileName());
             }
-            dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFristLine(k, buildGradle));
+            dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFirstLine(k, buildGradle));
         }
         return dependencyMap.get(dependency);
     }

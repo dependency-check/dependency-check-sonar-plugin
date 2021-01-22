@@ -59,7 +59,7 @@ class PomParserHelperTest {
                 assertEquals(endLineNr, mavenDependency.getEndLineNr());
             }
         }
-        assertTrue(found, "We doesn't found dependency " + artifactId);
+        assertTrue(found, "We haven't found dependency " + artifactId);
     }
 
     private void checkMavenParent(MavenPomModel pomModel, String groupId, int startLineNr, int endLineNr) {
