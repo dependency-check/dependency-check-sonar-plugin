@@ -20,7 +20,7 @@
     </scm>
 
     <properties>
-        <sonar.version>7.9.3.33150</sonar.version>
+        <sonar.version>8.6.1.40680</sonar.version>
         <!-- Configuration for sonar-packaging-maven-plugin -->
         <sonar.pluginClass>org.sonar.dependencycheck.DependencyCheckPlugin</sonar.pluginClass>
         <sonar.pluginName>Dependency-Check</sonar.pluginName>
