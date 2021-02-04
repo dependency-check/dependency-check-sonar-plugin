@@ -1,11 +1,12 @@
+# Dependency-Check Plugin for SonarQube 7.x and 8.x
+
 ![Build Status](https://github.com/dependency-check/dependency-check-sonar-plugin/workflows/build/badge.svg?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e9cebd3112ec4252804bba68a5b44071)](https://www.codacy.com/manual/dependency-check/dependency-check-sonar-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dependency-check/dependency-check-sonar-plugin&amp;utm_campaign=Badge_Grade)
-[![Download](https://api.bintray.com/packages/dependency-check/owasp/sonar-dependency-check/images/download.svg)](https://bintray.com/dependency-check/owasp/sonar-dependency-check/_latestVersion)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e9cebd3112ec4252804bba68a5b44071)](https://www.codacy.com/gh/dependency-check/dependency-check-sonar-plugin/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dependency-check/dependency-check-sonar-plugin&amp;utm_campaign=Badge_Grade)
+[![Download](https://img.shields.io/github/v/release/dependency-check/dependency-check-sonar-plugin)](https://github.com/dependency-check/dependency-check-sonar-plugin/releases/latest)
+![Downloads](https://img.shields.io/github/downloads/dependency-check/dependency-check-sonar-plugin/total)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dependency-check_dependency-check-sonar-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=dependency-check_dependency-check-sonar-plugin)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=dependency-check_dependency-check-sonar-plugin&metric=coverage)](https://sonarcloud.io/dashboard?id=dependency-check_dependency-check-sonar-plugin)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=dependency-check_dependency-check-sonar-plugin&metric=security_rating)](https://sonarcloud.io/dashboard?id=dependency-check_dependency-check-sonar-plugin)
-
-# Dependency-Check Plugin for SonarQube 7.x and 8.x
 
 Integrates [Dependency-Check][] reports into SonarQube v7.9 or higher.
 
@@ -56,18 +57,18 @@ This plugin used the same project setup as [sonar-custom-plugin-example][]. Chec
 
 ## Distribution
 
-Ready to use binaries are available from [GitHub][] and [bintray][].
+Ready to use binaries are available from [GitHub][].
 
 ## Plugin version compatibility
 
 Please use the newest minor version. Keep in mind, that SonarQube 5.6 LTS and SonarQube 6.7 LTS are not supported anymore.
 
-| Plugin Version  | SonarQube version        |
-|-----------------|--------------------------|
-| 2.0.6 and up    | SonarQube 7.9 LTS and up |
-| 1.2.x - 2.0.5   | SonarQube 7.6 and up     |
-| 1.1.x           | SonarQube 6.7 LTS        |
-| 1.0.3           | SonarQube 5.6 LTS        |
+| Plugin Version | SonarQube version        |
+| -------------- | ------------------------ |
+| 2.0.6 and up   | SonarQube 7.9 LTS and up |
+| 1.2.x - 2.0.5  | SonarQube 7.6 and up     |
+| 1.1.x          | SonarQube 6.7 LTS        |
+| 1.0.3          | SonarQube 5.6 LTS        |
 
 ## Installation
 
@@ -89,7 +90,7 @@ sonar.dependencyCheck.htmlReportPath=${WORKSPACE}/dependency-check-report.html
 
 In this example, all supported reports (JSON, XML and HTML) are specified. This plugin prefers the JSON over the XML report. At the moment the XML report isn't deprecated, but that might be an option in future. Only the JSON/XML report is required, however, if the HTML report is also available, it greatly enhances the usability of the SonarQube plugin by incorporating the actual Dependency-Check HTML report in the SonarQube project.
 
-This plugin tries to add SonarQube issues to your project configuration files (e.g. pom.xml, *.gradle, package-json.lock). Please make sure, that these files are part of `sonar.sources`.
+This plugin tries to add SonarQube issues to your project configuration files (e.g. pom.xml, \*.gradle, package-json.lock). Please make sure, that these files are part of `sonar.sources`.
 
 To configure the severity of the created issues you can optionally specify the minimum score for each severity with the following parameter. Specify a score of `-1` to completely disable a severity.
 
@@ -124,6 +125,7 @@ sonar.dependencyCheck.securityHotspot=false (default)
 ## Ecosystem
 
 Dependency-Check is available as a:
+
 -   Command-line utility
 -   Ant Task
 -   Gradle Plugin
@@ -144,6 +146,5 @@ Permission to modify and redistribute is granted under the terms of the [LGPLv3]
 [dependency-check]: https://www.owasp.org/index.php/OWASP_Dependency_Check
 [sonarqube 5.x]: https://github.com/dependency-check/dependency-check-sonar-plugin/tree/SonarQube_5.x
 [sonarqube 6.x]: https://github.com/dependency-check/dependency-check-sonar-plugin/tree/SonarQube_6.x
-[bintray]: https://bintray.com/dependency-check/owasp/sonar-dependency-check
 [sonar-custom-plugin-example]: https://github.com/SonarSource/sonar-custom-plugin-example
 [security-hotspot]: https://docs.sonarqube.org/latest/user-guide/security-hotspots/
