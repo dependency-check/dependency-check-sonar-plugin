@@ -1,6 +1,6 @@
 ![Build Status](https://github.com/dependency-check/dependency-check-sonar-plugin/workflows/build/badge.svg?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e9cebd3112ec4252804bba68a5b44071)](https://www.codacy.com/manual/dependency-check/dependency-check-sonar-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dependency-check/dependency-check-sonar-plugin&amp;utm_campaign=Badge_Grade)
-[![Download](https://api.bintray.com/packages/dependency-check/owasp/sonar-dependency-check/images/download.svg)](https://bintray.com/dependency-check/owasp/sonar-dependency-check/_latestVersion)
+[![Download](https://img.shields.io/github/v/release/dependency-check/dependency-check-sonar-plugin)](https://github.com/dependency-check/dependency-check-sonar-plugin/releases/latest)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dependency-check_dependency-check-sonar-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=dependency-check_dependency-check-sonar-plugin)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=dependency-check_dependency-check-sonar-plugin&metric=coverage)](https://sonarcloud.io/dashboard?id=dependency-check_dependency-check-sonar-plugin)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=dependency-check_dependency-check-sonar-plugin&metric=security_rating)](https://sonarcloud.io/dashboard?id=dependency-check_dependency-check-sonar-plugin)
@@ -56,7 +56,7 @@ This plugin used the same project setup as [sonar-custom-plugin-example][]. Chec
 
 ## Distribution
 
-Ready to use binaries are available from [GitHub][] and [bintray][].
+Ready to use binaries are available from [GitHub][].
 
 ## Plugin version compatibility
 
@@ -144,6 +144,5 @@ Permission to modify and redistribute is granted under the terms of the [LGPLv3]
 [dependency-check]: https://www.owasp.org/index.php/OWASP_Dependency_Check
 [sonarqube 5.x]: https://github.com/dependency-check/dependency-check-sonar-plugin/tree/SonarQube_5.x
 [sonarqube 6.x]: https://github.com/dependency-check/dependency-check-sonar-plugin/tree/SonarQube_6.x
-[bintray]: https://bintray.com/dependency-check/owasp/sonar-dependency-check
 [sonar-custom-plugin-example]: https://github.com/SonarSource/sonar-custom-plugin-example
 [security-hotspot]: https://docs.sonarqube.org/latest/user-guide/security-hotspots/

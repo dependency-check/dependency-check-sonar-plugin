@@ -68,14 +68,6 @@
       <url>https://travis-ci.org/dependency-check/dependency-check-sonar-plugin</url>
     </ciManagement>
 
-    <distributionManagement>
-        <repository>
-            <id>bintray-dependency-check-owasp</id>
-            <name>dependency-check-owasp</name>
-            <url>https://api.bintray.com/maven/dependency-check/owasp/sonar-dependency-check/;publish=1</url>
-        </repository>
-    </distributionManagement>
-
     <modules>
         <module>sonar-dependency-check-plugin</module>
     </modules>
@@ -145,12 +137,4 @@
             </plugins>
         </pluginManagement>
     </build>
-    <profiles>
-        <profile>
-            <id>skip-bintray</id>
-            <properties>
-                <maven.deploy.skip>true</maven.deploy.skip>
-            </properties>
-        </profile>
-    </profiles>
 </project>
