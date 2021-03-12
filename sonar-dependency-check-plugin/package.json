@@ -14,7 +14,7 @@
     "eslint-plugin-react": "^7.21.5",
     "postcss-loader": "^4.1.0",
     "react": "17.0.1",
-    "react-dev-utils": "11.0.1",
+    "react-dev-utils": "11.0.4",
     "react-dom": "17.0.1",
     "react-router": "5.2.0",
     "react-transform-hmr": "1.0.4",
