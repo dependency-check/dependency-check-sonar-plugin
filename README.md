@@ -148,3 +148,4 @@ Permission to modify and redistribute is granted under the terms of the [LGPLv3]
 [sonarqube 6.x]: https://github.com/dependency-check/dependency-check-sonar-plugin/tree/SonarQube_6.x
 [sonar-custom-plugin-example]: https://github.com/SonarSource/sonar-custom-plugin-example
 [security-hotspot]: https://docs.sonarqube.org/latest/user-guide/security-hotspots/
+
