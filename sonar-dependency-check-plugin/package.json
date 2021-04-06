@@ -34,6 +34,6 @@
   "dependencies": {
     "backbone": "^1.4.0",
     "jquery": "^3.5.1",
-    "underscore": "^1.12.0"
+    "underscore": "^1.12.1"
   }
 }
