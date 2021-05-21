@@ -9,7 +9,7 @@ updates:
       - "dependencies"
     ignore:
       # Ignore sonar-plugin-api as we need the plugin compatible with older versions
-      - dependency-name: "sonar-plugin-api"
+      - dependency-name: "org.sonarsource.sonarqube:sonar-plugin-api"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
