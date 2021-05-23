@@ -30,7 +30,7 @@ import java.util.Optional;
 import org.sonar.api.config.Configuration;
 import org.sonar.dependencycheck.parser.deserializer.EvidenceDeserializer;
 import org.sonar.dependencycheck.parser.deserializer.IdentifierDeserializer;
-import org.sonar.dependencycheck.parser.deserializer.VulnarabilitiesDeserializer;
+import org.sonar.dependencycheck.parser.deserializer.VulnerabilitiesDeserializer;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -58,7 +58,7 @@ public class Dependency {
                       @JsonProperty(value = "md5") @Nullable String md5Hash,
                       @JsonProperty(value = "sha1") @Nullable String sha1Hash,
                       @JsonProperty(value = "evidenceCollected") @JsonDeserialize(using = EvidenceDeserializer.class ) Map<String, List<Evidence>> evidenceCollected,
-                      @JsonProperty(value = "vulnerabilities") @JsonDeserialize(using = VulnarabilitiesDeserializer.class) List<Vulnerability> vulnerabilities,
+                      @JsonProperty(value = "vulnerabilities") @JsonDeserialize(using = VulnerabilitiesDeserializer.class) List<Vulnerability> vulnerabilities,
                       // For JSON
                       @JsonProperty(value = "packages") @Nullable Collection<Identifier> packages,
                       @JsonProperty(value = "vulnerabilityIds") @Nullable Collection<Identifier> vulnerabilityIds,

@@ -42,8 +42,8 @@ public class CvssV3 implements Cvss{
     private final String severity;
 
     /**
-     * @param baseScore
-     * @param baseSeverity
+     * @param score
+     * @param severity
      */
     @JsonCreator
     public CvssV3(@JsonProperty(value = "baseScore", required = true) @NonNull Float score,
@@ -52,10 +52,12 @@ public class CvssV3 implements Cvss{
         this.severity = severity;
     }
 
+    @NonNull
     @Override
     public Float getScore() {
         return score;
     }
+    @NonNull
     @Override
     public String getSeverity() {
         return severity;

@@ -174,19 +174,19 @@ public final class DependencyCheckUtils {
 
     public static Optional<DependencyReason> getBestDependencyReason(@NonNull Dependency dependency, @NonNull Collection<DependencyReason> dependencyReasons) {
 
-        Comparator<DependencyReason> comporatorTextRange = (r1, r2) -> r1.getBestTextRange(dependency).compareTo(r2.getBestTextRange(dependency));
+        Comparator<DependencyReason> comparatorTextRange = Comparator.comparing(r -> r.getBestTextRange(dependency));
         // Shorter Files-Names indicates to be a root configuration file
-        Comparator<DependencyReason> comporatorFileLength = (r1, r2) -> r1.getInputComponent().toString().length() - r2.getInputComponent().toString().length();
+        Comparator<DependencyReason> comparatorFileLength = Comparator.comparingInt(r -> r.getInputComponent().toString().length());
 
         if (dependency.isJavaDependency() && dependencyReasons.stream().filter(c -> c.getLanguage().equals(Language.JAVA)).count() > 0) {
             // If a Maven Identifier is present we prefer Java dependency reasons
-            return dependencyReasons.stream().filter(c -> c.getLanguage().equals(Language.JAVA)).sorted(comporatorFileLength).sorted(comporatorTextRange).findFirst();
+            return dependencyReasons.stream().filter(c -> c.getLanguage().equals(Language.JAVA)).sorted(comparatorFileLength).sorted(comparatorTextRange).findFirst();
         }
         if (dependency.isJavaScriptDependency() && dependencyReasons.stream().filter(c -> c.getLanguage().equals(Language.JAVASCRIPT)).count() > 0) {
             // If a NPM or JavaScript Identifier is present we prefer JavaScript dependency
             // reasons
-            return dependencyReasons.stream().filter(c -> c.getLanguage().equals(Language.JAVASCRIPT)).sorted(comporatorFileLength).sorted(comporatorTextRange).findFirst();
+            return dependencyReasons.stream().filter(c -> c.getLanguage().equals(Language.JAVASCRIPT)).sorted(comparatorFileLength).sorted(comparatorTextRange).findFirst();
         }
-        return dependencyReasons.stream().sorted(comporatorFileLength).sorted(comporatorTextRange).findFirst();
+        return dependencyReasons.stream().sorted(comparatorFileLength).sorted(comparatorTextRange).findFirst();
     }
 }

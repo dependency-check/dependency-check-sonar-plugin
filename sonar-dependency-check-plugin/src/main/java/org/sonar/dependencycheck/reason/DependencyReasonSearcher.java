@@ -46,16 +46,16 @@ public class DependencyReasonSearcher {
     private static final Logger LOGGER = Loggers.get(DependencyReasonSearcher.class);
     private final DependencyCheckMetric projectMetric;
 
-    private Collection<DependencyReason> dependencyreasons;
+    private final Collection<DependencyReason> dependencyReasons;
 
     public DependencyReasonSearcher(SensorContext context) {
         this.projectMetric = new DependencyCheckMetric(context.project());
-        this.dependencyreasons = new LinkedList<>();
+        this.dependencyReasons = new LinkedList<>();
         Iterable<InputFile> poms = context.fileSystem().inputFiles(context.fileSystem().predicates().matchesPathPattern("**/pom.xml"));
         for (InputFile pom : poms) {
             DependencyReason pomReason = new MavenDependencyReason(pom);
             if (pomReason.isReasonable()) {
-                dependencyreasons.add(pomReason);
+                dependencyReasons.add(pomReason);
                 LOGGER.debug("Found reasonable pom.xml file {}", pom);
             } else {
                 LOGGER.debug("Found unreasonable pom.xml file {}", pom);
@@ -66,7 +66,7 @@ public class DependencyReasonSearcher {
         for (InputFile buildGradle : buildGradles) {
             DependencyReason gradleReason = new GradleDependencyReason(buildGradle);
             if (gradleReason.isReasonable()) {
-                dependencyreasons.add(gradleReason);
+                dependencyReasons.add(gradleReason);
                 LOGGER.debug("Found reasonable gradle file {}", buildGradle);
             } else {
                 LOGGER.debug("Found unreasonable gradle file {}", buildGradle);
@@ -77,7 +77,7 @@ public class DependencyReasonSearcher {
         for (InputFile packageLock : packageLocks) {
             DependencyReason npmReason = new NPMDependencyReason(packageLock);
             if (npmReason.isReasonable()) {
-                dependencyreasons.add(npmReason);
+                dependencyReasons.add(npmReason);
                 LOGGER.debug("Found reasonable npm file {}", npmReason);
             } else {
                 LOGGER.debug("Found unreasonable npm file {}", npmReason);
@@ -86,26 +86,23 @@ public class DependencyReasonSearcher {
     }
 
     /**
-     * @return the all dependencyreasons
+     * @return the all dependencyReasons
      */
-    public Collection<DependencyReason> getDependencyreasons() {
-        return dependencyreasons;
+    public Collection<DependencyReason> getDependencyReasons() {
+        return dependencyReasons;
     }
 
     /**
      *
-     * @param dependencyReasons - List of DependencyReason
      * @param dependency - Dependency to go on Search
      * @return DependencyReason with a TextRange or the first DependencyReason in list or null if list is empty
      */
     @NonNull
     private Optional<DependencyReason> getBestDependencyReason(Dependency dependency) {
-        LOGGER.debug("Get the best DependencyReason out of {} for {}", dependencyreasons.size(), dependency.getFileName());
+        LOGGER.debug("Get the best DependencyReason out of {} for {}", dependencyReasons.size(), dependency.getFileName());
         // Prefer root configuration file
-        Optional<DependencyReason> dependencyReasonWinner = DependencyCheckUtils.getBestDependencyReason(dependency, dependencyreasons);
-        if (dependencyReasonWinner.isPresent()) {
-            LOGGER.debug("DependencyReasonWinner: " + dependencyReasonWinner.get().getInputComponent());
-        }
+        Optional<DependencyReason> dependencyReasonWinner = DependencyCheckUtils.getBestDependencyReason(dependency, dependencyReasons);
+        dependencyReasonWinner.ifPresent(dependencyReason -> LOGGER.debug("DependencyReasonWinner: " + dependencyReason.getInputComponent()));
         return dependencyReasonWinner;
     }
 
@@ -114,15 +111,15 @@ public class DependencyReasonSearcher {
             LOGGER.info("Analyse doesn't report any Dependencies");
             return;
         }
-        if (dependencyreasons.isEmpty()) {
+        if (dependencyReasons.isEmpty()) {
             LOGGER.info("No project configuration file, e.g. pom.xml, *.gradle, *.gradle.kts, package-lock.json found, therefore it isn't possible to correctly link dependencies with files.");
             linkIssues(analysis.getDependencies(), context);
             LOGGER.debug("Saving Metrics to project {}", projectMetric.toString());
             projectMetric.saveMeasures(context);
         } else {
             linkIssues(analysis.getDependencies(), context);
-            for (DependencyReason reason : dependencyreasons) {
-                LOGGER.debug("Saving Metrics to Reasonfile {} ", reason.getMetrics().toString());
+            for (DependencyReason reason : dependencyReasons) {
+                LOGGER.debug("Saving Metrics to reason file {} ", reason.getMetrics().toString());
                 reason.getMetrics().saveMeasures(context);
             }
         }

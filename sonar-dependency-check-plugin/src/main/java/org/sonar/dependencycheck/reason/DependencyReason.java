@@ -83,7 +83,7 @@ public abstract class DependencyReason {
     /**
      * Returns for a dependency the a TextRange, where the import is happen
      *
-     * @param dependency
+     * @param dependency The dependency to check
      * @return TextRange
      */
     @NonNull
@@ -102,7 +102,7 @@ public abstract class DependencyReason {
 
         NewIssueLocation location = sonarIssue.newLocation()
             .on(inputComponent)
-            .at(textRange.getTextrange())
+            .at(textRange.getTextRange())
             .message(DependencyCheckUtils.formatDescription(dependency, vulnerabilities, highestVulnerability, context.config()));
 
         sonarIssue
@@ -123,7 +123,7 @@ public abstract class DependencyReason {
 
         NewIssueLocation location = sonarIssue.newLocation()
             .on(inputComponent)
-            .at(textRange.getTextrange())
+            .at(textRange.getTextRange())
             .message(DependencyCheckUtils.formatDescription(dependency, vulnerability, context.config()));
 
         sonarIssue

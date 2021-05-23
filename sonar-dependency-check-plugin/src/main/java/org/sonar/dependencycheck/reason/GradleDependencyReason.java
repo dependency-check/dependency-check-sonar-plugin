@@ -41,7 +41,7 @@ public class GradleDependencyReason extends DependencyReason {
 
     private final InputFile buildGradle;
     private String content;
-    private Map<Dependency, TextRangeConfidence> dependencyMap;
+    private final Map<Dependency, TextRangeConfidence> dependencyMap;
 
     private static final Logger LOGGER = Loggers.get(GradleDependencyReason.class);
 
@@ -65,7 +65,7 @@ public class GradleDependencyReason extends DependencyReason {
         } else {
             Optional<Identifier> gradleIdentifier = DependencyCheckUtils.getMavenIdentifier(dependency);
             if (gradleIdentifier.isPresent()) {
-                tryArtifactMatch(gradleIdentifier.get()).ifPresent(textrange -> dependencyMap.put(dependency, textrange));
+                tryArtifactMatch(gradleIdentifier.get()).ifPresent(textRange -> dependencyMap.put(dependency, textRange));
             } else {
                 LOGGER.debug("No artifactId found for Dependency {}", dependency.getFileName());
             }
@@ -76,13 +76,13 @@ public class GradleDependencyReason extends DependencyReason {
 
     /**
      *
-     * This Methods tries to find the best TextRange for an given Artifactid in the build.gradle file
-     * If the line parser doesn't find anything we return the TextRange with linenumer 1
+     * This Methods tries to find the best TextRange for an given ArtifactId in the build.gradle file
+     * If the line parser doesn't find anything we return the TextRange with linenumber 1
      * TODO: It would be nice to have something similar to the command "gradlew app:dependencies"
      * At the moment a simple line parser without transitive dependencies
      *
-     * @param artifactid
-     * @return TextRange if found in pom, else null
+     * @param gradleIdentifier Identifier for gradle
+     * @return TextRange if found in gradle, else null
      */
     private Optional<TextRangeConfidence> tryArtifactMatch(Identifier gradleIdentifier) {
         Optional<String> packageArtifact = Identifier.getPackageArtifact(gradleIdentifier);
@@ -118,6 +118,7 @@ public class GradleDependencyReason extends DependencyReason {
     /**
      * returns pom file
      */
+    @NonNull
     @Override
     public InputComponent getInputComponent() {
         return buildGradle;

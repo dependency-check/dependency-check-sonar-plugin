@@ -27,7 +27,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.sonar.dependencycheck.parser.element.AnalysisException;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -51,7 +50,7 @@ public class AnalysisExceptionDeserializer extends StdDeserializer<List<Analysis
 
     @Override
     public List<AnalysisException> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-            throws IOException, JsonProcessingException {
+            throws IOException {
         ArrayList<AnalysisException> exceptions = new ArrayList<>();
         // For JSON
         if (JsonToken.START_ARRAY.equals(jsonParser.getCurrentToken())) {
