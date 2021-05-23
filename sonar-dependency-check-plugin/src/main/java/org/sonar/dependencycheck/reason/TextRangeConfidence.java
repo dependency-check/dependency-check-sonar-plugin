@@ -25,21 +25,21 @@ import org.sonar.api.batch.fs.TextRange;
 import org.sonar.dependencycheck.parser.element.Confidence;
 
 public class TextRangeConfidence implements Comparable<TextRangeConfidence>{
-    private final TextRange textrange;
+    private final TextRange textRange;
     private final Confidence confidence;
     /**
-     * @param textrange
+     * @param textRange
      * @param confidence
      */
-    public TextRangeConfidence(TextRange textrange, Confidence confidence) {
-        this.textrange = textrange;
+    public TextRangeConfidence(TextRange textRange, Confidence confidence) {
+        this.textRange = textRange;
         this.confidence = confidence;
     }
     /**
-     * @return the textrange
+     * @return the textRange
      */
-    public TextRange getTextrange() {
-        return textrange;
+    public TextRange getTextRange() {
+        return textRange;
     }
     /**
      * @return the confidence
@@ -53,7 +53,7 @@ public class TextRangeConfidence implements Comparable<TextRangeConfidence>{
      */
     @Override
     public int hashCode() {
-        return Objects.hash(confidence, textrange);
+        return Objects.hash(confidence, textRange);
     }
     /* (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
@@ -70,7 +70,7 @@ public class TextRangeConfidence implements Comparable<TextRangeConfidence>{
             return false;
         }
         TextRangeConfidence other = (TextRangeConfidence) obj;
-        return confidence == other.confidence && Objects.equals(textrange, other.textrange);
+        return confidence == other.confidence && Objects.equals(textRange, other.textRange);
     }
     @Override
     public int compareTo(TextRangeConfidence other) {

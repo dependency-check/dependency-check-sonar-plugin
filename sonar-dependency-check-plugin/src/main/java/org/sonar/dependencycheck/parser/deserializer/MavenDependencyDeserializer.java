@@ -27,7 +27,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.sonar.dependencycheck.reason.maven.MavenDependency;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -50,7 +49,7 @@ public class MavenDependencyDeserializer extends StdDeserializer<List<MavenDepen
     }
 
     @Override
-    public List<MavenDependency> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public List<MavenDependency> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         List<MavenDependency> mavenDependencies = new LinkedList<>();
         while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
             if (StringUtils.equalsIgnoreCase("dependency", jsonParser.getCurrentName())) {

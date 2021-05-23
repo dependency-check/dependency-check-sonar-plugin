@@ -27,8 +27,8 @@ public class NPMDependency {
     private final int endLineNr;
 
     /**
+     * @param name
      * @param version
-     * @param artifactId
      * @param startLineNr
      * @param endLineNr
      */

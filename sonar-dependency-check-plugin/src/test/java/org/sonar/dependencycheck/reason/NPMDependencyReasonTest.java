@@ -77,10 +77,10 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency);
         assertTrue(npm.isReasonable());
         assertNotNull(textRangeConfidence);
-        assertEquals(335, textRangeConfidence.getTextrange().start().line());
-        assertEquals(0, textRangeConfidence.getTextrange().start().lineOffset());
-        assertEquals(339, textRangeConfidence.getTextrange().end().line());
-        assertEquals(6, textRangeConfidence.getTextrange().end().lineOffset());
+        assertEquals(335, textRangeConfidence.getTextRange().start().line());
+        assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
+        assertEquals(339, textRangeConfidence.getTextRange().end().line());
+        assertEquals(6, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.HIGHEST, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(npm.getBestTextRange(dependency), npm.getBestTextRange(dependency));
@@ -97,10 +97,10 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency);
         assertTrue(npm.isReasonable());
         assertNotNull(textRangeConfidence);
-        assertEquals(7, textRangeConfidence.getTextrange().start().line());
-        assertEquals(0, textRangeConfidence.getTextrange().start().lineOffset());
-        assertEquals(11, textRangeConfidence.getTextrange().end().line());
-        assertEquals(6, textRangeConfidence.getTextrange().end().lineOffset());
+        assertEquals(7, textRangeConfidence.getTextRange().start().line());
+        assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
+        assertEquals(11, textRangeConfidence.getTextRange().end().line());
+        assertEquals(6, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.HIGHEST, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(npm.getBestTextRange(dependency), npm.getBestTextRange(dependency));
@@ -117,10 +117,10 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency);
         assertTrue(npm.isReasonable());
         assertNotNull(textRangeConfidence);
-        assertEquals(7, textRangeConfidence.getTextrange().start().line());
-        assertEquals(0, textRangeConfidence.getTextrange().start().lineOffset());
-        assertEquals(11, textRangeConfidence.getTextrange().end().line());
-        assertEquals(6, textRangeConfidence.getTextrange().end().lineOffset());
+        assertEquals(7, textRangeConfidence.getTextRange().start().line());
+        assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
+        assertEquals(11, textRangeConfidence.getTextRange().end().line());
+        assertEquals(6, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.HIGH, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(npm.getBestTextRange(dependency), npm.getBestTextRange(dependency));
@@ -137,10 +137,10 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency);
         assertTrue(npm.isReasonable());
         assertNotNull(textRangeConfidence);
-        assertEquals(7, textRangeConfidence.getTextrange().start().line());
-        assertEquals(0, textRangeConfidence.getTextrange().start().lineOffset());
-        assertEquals(11, textRangeConfidence.getTextrange().end().line());
-        assertEquals(6, textRangeConfidence.getTextrange().end().lineOffset());
+        assertEquals(7, textRangeConfidence.getTextRange().start().line());
+        assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
+        assertEquals(11, textRangeConfidence.getTextRange().end().line());
+        assertEquals(6, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.HIGH, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(npm.getBestTextRange(dependency), npm.getBestTextRange(dependency));
@@ -157,7 +157,7 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency);
         assertTrue(npm.isReasonable());
         assertNotNull(textRangeConfidence);
-        assertEquals(LINE_NOT_FOUND, textRangeConfidence.getTextrange().start().line());
+        assertEquals(LINE_NOT_FOUND, textRangeConfidence.getTextRange().start().line());
         assertEquals(Confidence.LOW, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(npm.getBestTextRange(dependency), npm.getBestTextRange(dependency));

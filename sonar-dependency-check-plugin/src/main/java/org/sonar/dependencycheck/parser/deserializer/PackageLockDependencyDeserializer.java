@@ -27,7 +27,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.sonar.dependencycheck.reason.npm.NPMDependency;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -49,7 +48,7 @@ public class PackageLockDependencyDeserializer extends StdDeserializer<List<NPMD
     }
 
     @Override
-    public List<NPMDependency> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public List<NPMDependency> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         List<NPMDependency> npmDependencies = new LinkedList<>();
         while (!JsonToken.END_OBJECT.equals(jsonParser.nextToken())) {
             if (JsonToken.START_OBJECT.equals(jsonParser.currentToken())) {

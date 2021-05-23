@@ -25,7 +25,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.sonar.dependencycheck.reason.maven.MavenParent;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -48,7 +47,7 @@ public class MavenParentDeserializer extends StdDeserializer<MavenParent>{
     }
 
     @Override
-    public MavenParent deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public MavenParent deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         int startLineNr = jsonParser.getCurrentLocation().getLineNr();
         String groupId = "";
         while (jsonParser.nextToken() != JsonToken.END_OBJECT) {

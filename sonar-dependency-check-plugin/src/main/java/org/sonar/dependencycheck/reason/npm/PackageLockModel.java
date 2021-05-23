@@ -39,7 +39,6 @@ public class PackageLockModel {
 
     /**
      * @param dependencies
-     * @param parent
      */
     @JsonCreator
     public PackageLockModel(@JsonProperty(value = "dependencies") @JsonDeserialize(using = PackageLockDependencyDeserializer.class ) @Nullable List<NPMDependency> dependencies) {

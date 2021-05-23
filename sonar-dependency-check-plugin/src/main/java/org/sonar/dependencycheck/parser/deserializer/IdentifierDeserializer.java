@@ -28,7 +28,6 @@ import java.util.Map;
 import org.sonar.dependencycheck.parser.element.Identifier;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -51,7 +50,7 @@ public class IdentifierDeserializer extends StdDeserializer<Map<String, List<Ide
     }
 
     @Override
-    public Map<String, List<Identifier>> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public Map<String, List<Identifier>> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         Map<String, List<Identifier>> identifiers = new HashMap<>();
         while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
             JsonToken jsonToken = jsonParser.currentToken();

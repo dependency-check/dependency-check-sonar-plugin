@@ -79,7 +79,7 @@ class DependencyReasonSearcherTest {
         Collection<Dependency> dependencies = new LinkedList<>();
         Analysis analysis = new Analysis(scanInfo, projectInfo, dependencies);
         searcher.addDependenciesToInputComponents(analysis, context);
-        assertEquals(4, searcher.getDependencyreasons().size());
+        assertEquals(4, searcher.getDependencyReasons().size());
     }
 
     @Test
@@ -119,7 +119,7 @@ class DependencyReasonSearcherTest {
         Analysis analysis = new Analysis(scanInfo, projectInfo, dependencies);
         searcher.addDependenciesToInputComponents(analysis, context);
         assertEquals(2, context.allIssues().size());
-        assertEquals(1, searcher.getDependencyreasons().size());
+        assertEquals(1, searcher.getDependencyReasons().size());
 
         // check for org.springframework - spring dependency
         assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 56 && i.primaryLocation().textRange().end().line() == 60));
@@ -167,7 +167,7 @@ class DependencyReasonSearcherTest {
         Analysis analysis = new Analysis(scanInfo, projectInfo, dependencies);
         searcher.addDependenciesToInputComponents(analysis, context);
         assertEquals(1, context.allIssues().size());
-        assertEquals(1, searcher.getDependencyreasons().size());
+        assertEquals(1, searcher.getDependencyReasons().size());
 
         return context;
     }

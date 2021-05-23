@@ -68,11 +68,13 @@ public class NPMDependencyReason extends DependencyReason {
         return packageLock != null && packageLockModel != null;
     }
 
+    @NonNull
     @Override
     public InputComponent getInputComponent() {
         return packageLock;
     }
 
+    @NonNull
     @Override
     public TextRangeConfidence getBestTextRange(Dependency dependency) {
         if (!dependencyMap.containsKey(dependency)) {

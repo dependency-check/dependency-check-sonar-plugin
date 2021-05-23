@@ -77,10 +77,10 @@ class GradleDependencyReasonTest extends DependencyReasonTestHelper {
         TextRangeConfidence textRangeConfidence = gradle.getBestTextRange(dependency);
         assertNotNull(textRangeConfidence);
         assertEquals(Confidence.MEDIUM, textRangeConfidence.getConfidence());
-        assertEquals(24, textRangeConfidence.getTextrange().start().line());
-        assertEquals(0, textRangeConfidence.getTextrange().start().lineOffset());
-        assertEquals(24, textRangeConfidence.getTextrange().end().line());
-        assertEquals(44, textRangeConfidence.getTextrange().end().lineOffset());
+        assertEquals(24, textRangeConfidence.getTextRange().start().line());
+        assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
+        assertEquals(24, textRangeConfidence.getTextRange().end().line());
+        assertEquals(44, textRangeConfidence.getTextRange().end().lineOffset());
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(gradle.getBestTextRange(dependency), gradle.getBestTextRange(dependency));
     }
@@ -95,7 +95,7 @@ class GradleDependencyReasonTest extends DependencyReasonTestHelper {
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
         TextRangeConfidence textRangeConfidence = gradle.getBestTextRange(dependency);
         assertNotNull(textRangeConfidence);
-        assertEquals(LINE_NOT_FOUND, textRangeConfidence.getTextrange().start().line());
+        assertEquals(LINE_NOT_FOUND, textRangeConfidence.getTextRange().start().line());
         assertEquals(Confidence.LOW, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(gradle.getBestTextRange(dependency), gradle.getBestTextRange(dependency));

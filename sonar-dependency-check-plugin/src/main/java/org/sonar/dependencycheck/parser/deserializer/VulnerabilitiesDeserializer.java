@@ -27,14 +27,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 
-public class VulnarabilitiesDeserializer extends StdDeserializer<List<Vulnerability>>{
+public class VulnerabilitiesDeserializer extends StdDeserializer<List<Vulnerability>>{
 
 
     /**
@@ -42,16 +41,16 @@ public class VulnarabilitiesDeserializer extends StdDeserializer<List<Vulnerabil
      */
     private static final long serialVersionUID = -2364903734334590597L;
 
-    protected VulnarabilitiesDeserializer() {
+    protected VulnerabilitiesDeserializer() {
         this(null);
     }
 
-    protected VulnarabilitiesDeserializer(@Nullable Class<?> vc) {
+    protected VulnerabilitiesDeserializer(@Nullable Class<?> vc) {
         super(vc);
     }
 
     @Override
-    public List<Vulnerability> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public List<Vulnerability> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         ArrayList<Vulnerability> vulnerabilities = new ArrayList<>();
         // for JSON
         if (JsonToken.START_ARRAY.equals(jsonParser.currentToken())) {

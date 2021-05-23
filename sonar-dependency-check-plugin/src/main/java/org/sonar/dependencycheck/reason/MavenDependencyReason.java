@@ -86,17 +86,16 @@ public class MavenDependencyReason extends DependencyReason {
      *
      * @param dependency
      * @param mavenIdentifier
-     * @return TextRange if found in pom, else null
      */
     private void fillArtifactMatch(@NonNull Dependency dependency, Identifier mavenIdentifier) {
         // Try to find in <dependency>
         for (MavenDependency mavenDependency : pomModel.getDependencies()) {
             checkPomDependency(mavenIdentifier, mavenDependency)
-                    .ifPresent(textrange -> dependencyMap.put(dependency, textrange));
+                    .ifPresent(textRange -> dependencyMap.put(dependency, textRange));
         }
         // Check Parent if present
         pomModel.getParent().ifPresent(parent -> checkPomParent(mavenIdentifier, parent)
-                .ifPresent(textrange -> dependencyMap.put(dependency, textrange)));
+                .ifPresent(textRange -> dependencyMap.put(dependency, textRange)));
     }
 
     private Optional<TextRangeConfidence> checkPomDependency(Identifier mavenIdentifier, MavenDependency dependency) {
@@ -109,11 +108,11 @@ public class MavenDependencyReason extends DependencyReason {
             String artifactId = mavenIdentifierSplit[1];
             if (StringUtils.equals(artifactId, dependency.getArtifactId())
                     && StringUtils.equals(groupId, dependency.getGroupId())) {
-                LOGGER.debug("Found a artifactid and groupid match in {}", pom);
+                LOGGER.debug("Found a artifactId and groupId match in {}", pom);
                 return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(dependency.getStartLineNr()).start(), pom.selectLine(dependency.getEndLineNr()).end()), Confidence.HIGHEST));
             }
             if (StringUtils.equals(artifactId, dependency.getArtifactId())) {
-                LOGGER.debug("Found a artifactid match in {} for {}", pom, artifactId);
+                LOGGER.debug("Found a artifactId match in {} for {}", pom, artifactId);
                 return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(dependency.getStartLineNr()).start(), pom.selectLine(dependency.getEndLineNr()).end()), Confidence.HIGH));
             }
             if (StringUtils.equals(groupId, dependency.getGroupId())) {
@@ -151,6 +150,7 @@ public class MavenDependencyReason extends DependencyReason {
     /**
      * returns pom file
      */
+    @NonNull
     @Override
     public InputComponent getInputComponent() {
         return pom;
