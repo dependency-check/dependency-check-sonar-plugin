@@ -119,6 +119,14 @@
         </plugins>
         <pluginManagement>
             <plugins>
+                <!-- Skip Deploy plugin as we do not have distributionManagement -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>de.jutzig</groupId>
                     <artifactId>github-release-plugin</artifactId>
