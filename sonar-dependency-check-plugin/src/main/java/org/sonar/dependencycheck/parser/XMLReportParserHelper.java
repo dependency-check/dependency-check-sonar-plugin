@@ -29,6 +29,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
+/**
+ * @deprecated Please use the JSON Report
+ */
+@Deprecated(since = "3.0.0", forRemoval = true)
 public class XMLReportParserHelper {
 
     private XMLReportParserHelper() {

@@ -41,6 +41,7 @@ import org.sonar.dependencycheck.parser.element.Analysis;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
 
+@Deprecated(since = "3.0.0", forRemoval = true)
 class XMLReportParserHelperTest extends ReportParserTest {
 
     @Override

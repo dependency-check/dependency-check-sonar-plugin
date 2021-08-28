@@ -55,8 +55,9 @@ class DependencyCheckSensorTest {
     private DependencyCheckSensor sensor;
 
     private File sampleXmlReport;
+    private File sampleJsonReport;
     private File sampleHtmlReport;
-    private File sampleXMLExceptionReport;
+    private File sampleJsonExceptionReport;
 
     @BeforeEach
     public void init() throws URISyntaxException {
@@ -68,12 +69,18 @@ class DependencyCheckSensorTest {
         final URL sampleXmlResourceURI = getClass().getClassLoader().getResource("reportMultiModuleMavenExample/dependency-check-report.xml");
         assertNotNull(sampleXmlResourceURI);
         this.sampleXmlReport = Paths.get(sampleXmlResourceURI.toURI()).toFile();
+
+        final URL sampleJsonResourceURI = getClass().getClassLoader().getResource("reportMultiModuleMavenExample/dependency-check-report.json");
+        assertNotNull(sampleJsonResourceURI);
+        this.sampleJsonReport = Paths.get(sampleJsonResourceURI.toURI()).toFile();
+
         final URL sampleHtmlResourceURI = getClass().getClassLoader().getResource("reportMultiModuleMavenExample/dependency-check-report.html");
         assertNotNull(sampleHtmlResourceURI);
         this.sampleHtmlReport = Paths.get(sampleHtmlResourceURI.toURI()).toFile();
-        final URL sampleExceptionResourceURI = getClass().getClassLoader().getResource("reportWithExceptions/dependency-check-report.xml");
+
+        final URL sampleExceptionResourceURI = getClass().getClassLoader().getResource("reportWithExceptions/dependency-check-report.json");
         assertNotNull(sampleExceptionResourceURI);
-        this.sampleXMLExceptionReport = Paths.get(sampleExceptionResourceURI.toURI()).toFile();
+        this.sampleJsonExceptionReport = Paths.get(sampleExceptionResourceURI.toURI()).toFile();
     }
 
     @Test
@@ -88,43 +95,43 @@ class DependencyCheckSensorTest {
         verify(descriptor).name("Dependency-Check");
     }
     @Test
-    void shouldAnalyse() throws URISyntaxException {
+    void shouldAnalyse() {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
-        settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        settings.setProperty(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY, "dependency-check-report.json");
         Configuration config = settings.asConfig();
         context.setSettings(settings);
 
-        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
+        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)))).thenReturn(sampleJsonReport);
         sensor.execute(context);
         assertEquals(45, context.allIssues().size());
     }
 
     @Test
-    void shouldSkipIfReportWasNotFound() throws URISyntaxException {
+    void shouldSkipIfReportWasNotFound() {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
-        settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        settings.setProperty(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY, "dependency-check-report.json");
         Configuration config = settings.asConfig();
         context.setSettings(settings);
 
-        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)))).thenReturn(null);
+        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)))).thenReturn(null);
         sensor.execute(context);
         assertEquals(0, context.allIssues().size());
     }
 
     @Test
-    void shouldAddAnIssueForAVulnerability() throws URISyntaxException {
+    void shouldAddAnIssueForAVulnerability() {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
-        settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        settings.setProperty(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY, "dependency-check-report.json");
         Configuration config = settings.asConfig();
         context.setSettings(settings);
 
-        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
+        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)))).thenReturn(sampleJsonReport);
         sensor.execute(context);
         assertEquals(45, context.allIssues().size());
         for (Issue issue : context.allIssues()) {
@@ -133,40 +140,40 @@ class DependencyCheckSensorTest {
     }
 
     @Test
-    void shouldPersistTotalMetrics() throws URISyntaxException {
+    void shouldPersistTotalMetrics() {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
-        settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        settings.setProperty(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY, "dependency-check-report.json");
         Configuration config = settings.asConfig();
         context.setSettings(settings);
 
-        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
+        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)))).thenReturn(sampleJsonReport);
         sensor.execute(context);
         assertEquals(9, context.measures("projectKey").size());
 
     }
 
     @Test
-    void shouldPersistMetricsOnReport() throws URISyntaxException {
+    void shouldPersistMetricsOnReport() {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
-        settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        settings.setProperty(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY, "dependency-check-report.json");
         Configuration config = settings.asConfig();
         context.setSettings(settings);
 
-        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
+        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)))).thenReturn(sampleJsonReport);
         sensor.execute(context);
         assertNotNull(context.measures("projectKey"));
     }
 
     @Test
-    void shouldPersistHtmlReport() throws URISyntaxException {
+    void shouldPersistHtmlReport() {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
-        settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        settings.setProperty(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY, "dependency-check-report.json");
         Configuration config = settings.asConfig();
         context.setSettings(settings);
 
@@ -177,37 +184,60 @@ class DependencyCheckSensorTest {
     }
 
     @Test
-    void shouldPersistSummarizeIssues() throws URISyntaxException {
+    void shouldPersistSummarizeIssues() {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
-        settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        settings.setProperty(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY, "dependency-check-report.json");
         settings.setProperty(DependencyCheckConstants.SUMMARIZE_PROPERTY, Boolean.TRUE);
         Configuration config = settings.asConfig();
         context.setSettings(settings);
 
-        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
+        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)))).thenReturn(sampleJsonReport);
         sensor.execute(context);
         assertEquals(7, context.allIssues().size());
     }
 
     @Test
-    void shouldSkipPlugin() throws URISyntaxException {
+    void shouldSkipPlugin() {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
-        settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        settings.setProperty(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
         settings.setProperty(DependencyCheckConstants.SKIP_PROPERTY, Boolean.TRUE);
         Configuration config = settings.asConfig();
         context.setSettings(settings);
 
-        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
+        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)))).thenReturn(sampleJsonReport);
         sensor.execute(context);
         assertEquals(0, context.allIssues().size());
     }
 
     @Test
-    void shouldAddWarningsPlugin() throws URISyntaxException {
+    void shouldAddWarningsPlugin() {
+        final SensorContextTester context = SensorContextTester.create(new File(""));
+        // Plugin Configuration
+        MapSettings settings = new MapSettings();
+        settings.setProperty(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY, "dependency-check-report.json");
+        Configuration config = settings.asConfig();
+        context.setSettings(settings);
+
+        // Sensor with analysisWarnings
+        FileSystem fileSystem = mock(FileSystem.class, RETURNS_DEEP_STUBS);
+        List<String> analysisWarnings = new ArrayList<>();
+        sensor = new DependencyCheckSensor(fileSystem, this.pathResolver, analysisWarnings::add);
+
+        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)))).thenReturn(sampleJsonExceptionReport);
+        sensor.execute(context);
+        assertTrue(StringUtils.contains(analysisWarnings.get(0), "Dependency-Check - "));
+        assertTrue(StringUtils.contains(analysisWarnings.get(1),"Dependency-Check - "));
+        assertFalse(StringUtils.equals(analysisWarnings.get(0), analysisWarnings.get(1)));
+        assertEquals(2, analysisWarnings.size());
+    }
+
+    @Test
+    @Deprecated(since = "3.0.0", forRemoval = true)
+    void shouldAddWarningsWithXMLReportPlugin() {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
@@ -220,29 +250,27 @@ class DependencyCheckSensorTest {
         List<String> analysisWarnings = new ArrayList<>();
         sensor = new DependencyCheckSensor(fileSystem, this.pathResolver, analysisWarnings::add);
 
-        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)))).thenReturn(sampleXMLExceptionReport);
+        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT)))).thenReturn(sampleXmlReport);
         sensor.execute(context);
-        assertTrue(StringUtils.contains(analysisWarnings.get(0), "Dependency-Check - "));
-        assertTrue(StringUtils.contains(analysisWarnings.get(1),"Dependency-Check - "));
-        assertFalse(StringUtils.equals(analysisWarnings.get(0), analysisWarnings.get(1)));
-        assertEquals(2, analysisWarnings.size());
+        assertTrue(StringUtils.contains(analysisWarnings.get(0), "The XML report is deprecated"));
+        assertEquals(1, analysisWarnings.size());
     }
 
     @Test
-    void shouldAddSecurityHotspots() throws URISyntaxException {
+    void shouldAddSecurityHotspots() {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration
         MapSettings settings = new MapSettings();
-        settings.setProperty(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
+        settings.setProperty(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY, "dependency-check-report.xml");
         settings.setProperty(DependencyCheckConstants.SECURITY_HOTSPOT, Boolean.TRUE);
         Configuration config = settings.asConfig();
         context.setSettings(settings);
 
         when(pathResolver
                 .relativeFile(Mockito.any(File.class),
-                        Mockito.eq(config.get(DependencyCheckConstants.XML_REPORT_PATH_PROPERTY)
-                                .orElse(DependencyCheckConstants.XML_REPORT_PATH_DEFAULT))))
-                                        .thenReturn(sampleXmlReport);
+                        Mockito.eq(config.get(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY)
+                                .orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT))))
+                                        .thenReturn(sampleJsonReport);
         sensor.execute(context);
         assertEquals(45, context.allIssues().size());
         for (Issue issue : context.allIssues()) {

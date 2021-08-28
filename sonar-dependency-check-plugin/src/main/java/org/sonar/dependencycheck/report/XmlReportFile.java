@@ -27,6 +27,10 @@ import org.sonar.api.config.Configuration;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
+/**
+ * @deprecated Please use the JsonReportFile
+ */
+@Deprecated(since = "3.0.0", forRemoval = true)
 public class XmlReportFile extends ReportFile {
 
     public static XmlReportFile getXmlReport(Configuration config, FileSystem fileSystem, PathResolver pathResolver) throws FileNotFoundException {

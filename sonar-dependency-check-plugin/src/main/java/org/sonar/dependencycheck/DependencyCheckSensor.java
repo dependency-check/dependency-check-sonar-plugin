@@ -82,6 +82,10 @@ public class DependencyCheckSensor implements ProjectSensor {
         XmlReportFile report;
         try {
             report = XmlReportFile.getXmlReport(context.config(), fileSystem, pathResolver);
+            LOGGER.warn("The XML report is deprecated and will be removed, please switch to the JSON report.");
+            if (analysisWarnings != null ) {
+                analysisWarnings.addUnique("The XML report is deprecated and will be removed, please switch to the JSON report.");
+            }
             return Optional.of(XMLReportParserHelper.parse(report.getInputStream()));
         } catch (FileNotFoundException e) {
             LOGGER.info("XML-Analysis skipped/aborted due to missing report file");

@@ -20,7 +20,7 @@ Dependency-Check supports the identification of project dependencies in a number
 
 ## Note
 
-**This SonarQube plugin does not perform analysis**, rather, it reads existing Dependency-Check reports. Use one of the other available methods to scan project dependencies and generate the necessary JSON or XML report which can then be consumed by this plugin. Refer to the [Dependency-Check project](https://github.com/jeremylong/DependencyCheck) for relevant [documentation](https://jeremylong.github.io/DependencyCheck/).
+**This SonarQube plugin does not perform analysis**, rather, it reads existing Dependency-Check reports. Use one of the other available methods to scan project dependencies and generate the necessary JSON report which can then be consumed by this plugin. Refer to the [Dependency-Check project](https://github.com/jeremylong/DependencyCheck) for relevant [documentation](https://jeremylong.github.io/DependencyCheck/).
 
 ## Metrics
 
@@ -76,19 +76,18 @@ Copy the plugin (jar file) to $SONAR_INSTALL_DIR/extensions/plugins and restart 
 
 ## Using
 
-Create aggregate reports with Dependency-Check. Dependency-Check will output a file named 'dependency-check-report.json' or 'dependency-check-report.xml'. The Dependency-Check SonarQube plugin reads an existing Dependency-Check JSON or XML report.
+Create aggregate reports with Dependency-Check. Dependency-Check will output a file named 'dependency-check-report.json'. The Dependency-Check SonarQube plugin reads an existing Dependency-Check JSON report.
 
 ## Plugin Configuration
 
 A typical SonarQube configuration will have the following parameter. This example assumes the use of a Jenkins workspace, but can easily be altered for other CI/CD systems.
 
 ```ini
-sonar.dependencyCheck.xmlReportPath=${WORKSPACE}/dependency-check-report.xml
 sonar.dependencyCheck.jsonReportPath=${WORKSPACE}/dependency-check-report.json
 sonar.dependencyCheck.htmlReportPath=${WORKSPACE}/dependency-check-report.html
 ```
 
-In this example, all supported reports (JSON, XML and HTML) are specified. This plugin prefers the JSON over the XML report. At the moment the XML report isn't deprecated, but that might be an option in future. Only the JSON/XML report is required, however, if the HTML report is also available, it greatly enhances the usability of the SonarQube plugin by incorporating the actual Dependency-Check HTML report in the SonarQube project.
+In this example, all supported reports (JSON and HTML) are specified. Only the JSON report is required, however, if the HTML report is also available, it greatly enhances the usability of the SonarQube plugin by incorporating the actual Dependency-Check HTML report in the SonarQube project.
 
 This plugin tries to add SonarQube issues to your project configuration files (e.g. pom.xml, \*.gradle, package-json.lock). Please make sure, that these files are part of `sonar.sources`.
 
