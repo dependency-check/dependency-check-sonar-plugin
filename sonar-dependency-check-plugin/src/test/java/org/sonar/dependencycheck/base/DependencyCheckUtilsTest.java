@@ -221,9 +221,9 @@ class DependencyCheckUtilsTest {
     @Test
     void testBestDependencyReasonJavaDependency() {
         Path path = new File("root").toPath();
-        InputFile packagLock = new TestInputFileBuilder("moduleKey", "package-lock.json").setContents("123456").setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
+        InputFile packageLock = new TestInputFileBuilder("moduleKey", "package-lock.json").setContents("123456").setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
         InputFile subpom = new TestInputFileBuilder("moduleKey", "submodule/pom.xml").setContents("132").setCharset(StandardCharsets.UTF_8).setModuleBaseDir(path).build();
-        NPMDependencyReason npmReason = new NPMDependencyReason(packagLock);
+        NPMDependencyReason npmReason = new NPMDependencyReason(packageLock);
         MavenDependencyReason submodulepomReason = new MavenDependencyReason(subpom);
 
         // when
