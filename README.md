@@ -53,7 +53,7 @@ This is simply a measurement of the number of vulnerabilities to the vulnerable 
 
 ### Working with NodeJS
 
-This plugin used the same project setup as [sonar-custom-plugin-example][]. Checkout this project to get informations to work with NodeJS components.
+This plugin used the same project setup as [sonar-custom-plugin-example][]. Checkout this project to get information to work with NodeJS components.
 
 ## Distribution
 
@@ -61,14 +61,15 @@ Ready to use binaries are available from [GitHub][].
 
 ## Plugin version compatibility
 
-Please use the newest minor version. Keep in mind, that SonarQube 5.6 LTS and SonarQube 6.7 LTS are not supported anymore.
+Please use the newest version. Please keep in mind that this plugin only supports the latest SonarQube LTS version, and the latest non SonarQube LTS version.
 
-| Plugin Version | SonarQube version        |
-| -------------- | ------------------------ |
-| 2.0.6 and up   | SonarQube 7.9 LTS and up |
-| 1.2.x - 2.0.5  | SonarQube 7.6 and up     |
-| 1.1.x          | SonarQube 6.7 LTS        |
-| 1.0.3          | SonarQube 5.6 LTS        |
+| Plugin Version | SonarQube version           |
+| -------------- | --------------------------- |
+| 3.0.0 and up   | SonarQube 8.9 LTS and up    |
+| 2.0.6 - 2.0.8  | SonarQube 7.9 LTS - 8.9 LTS |
+| 1.2.x - 2.0.5  | SonarQube 7.6 - 7.9 LTS     |
+| 1.1.x          | SonarQube 6.7 LTS           |
+| 1.0.3          | SonarQube 5.6 LTS           |
 
 ## Installation
 
