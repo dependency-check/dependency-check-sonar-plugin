@@ -1,10 +1,11 @@
-name: Release Drafter
+name: 'Release Drafter'
 
 on:
   push:
     # branches to consider in the event; optional, defaults to all
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   update_release_draft:
