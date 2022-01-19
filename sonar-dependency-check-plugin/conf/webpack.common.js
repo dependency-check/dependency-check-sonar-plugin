@@ -1,10 +1,3 @@
-/*
- * Copy from https://github.com/SonarSource/sonar-custom-plugin-example/blob/7.x/conf/webpack/webpack.config.js
- *
- * Copyright (C) 2017-2017 SonarSource SA
- * All rights reserved
- * mailto:info AT sonarsource DOT com
- */
 const path = require("path");
 
 module.exports = {
@@ -17,7 +10,7 @@ module.exports = {
   output: {
     // The entry point files MUST be shipped inside the final JAR's static/
     // directory.
-    path: path.join(__dirname, "../../target/classes/static"),
+    path: path.join(__dirname, "../target/classes/static"),
     filename: "[name].js"
   },
   resolve: {

@@ -53,7 +53,9 @@ This is simply a measurement of the number of vulnerabilities to the vulnerable 
 
 ### Working with NodeJS
 
-This plugin used the same project setup as [sonar-custom-plugin-example][]. Checkout this project to get information to work with NodeJS components.
+-   Start SonarQube Server
+-   Run `npm start` inside `sonar-dependency-check-plugin`
+    -   Adjust `DEFAULT_PORT`, `PROXY_URL`, `PROXY_CONTEXT_PATH` for your environment
 
 ## Distribution
 

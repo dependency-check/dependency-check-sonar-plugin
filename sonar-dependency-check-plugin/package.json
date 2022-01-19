@@ -19,11 +19,13 @@
     "react-transform-hmr": "1.0.4",
     "style-loader": "^3.3.1",
     "webpack": "^5.66.0",
-    "webpack-dev-server": "^4.7.3"
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.7.3",
+    "webpack-merge": "^5.8.0"
   },
   "scripts": {
-    "build": "node scripts/build.js",
-    "start": "node scripts/start.js"
+    "build": "NODE_ENV=production BABEL_ENV=production webpack --config conf/webpack.prod.js",
+    "start": "NODE_ENV=development BABEL_ENV=development webpack serve --open --config conf/webpack.dev.js"
   },
   "babel": {
     "presets": [
