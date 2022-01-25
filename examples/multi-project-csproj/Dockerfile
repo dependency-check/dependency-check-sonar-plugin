@@ -1,19 +1,19 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2
-ARG sonarHost
+FROM mcr.microsoft.com/dotnet/sdk:6.0
 
-ENV NODEREPO=node_10.x \
-    DEPENDENCY_CHECK=5.3.0 \
+ENV NODEREPO=node_16.x \
+    DEPENDENCY_CHECK=6.5.3 \
     PATH="$PATH:/root/.dotnet/tools"
 
-RUN /usr/bin/apt-get update && \
+RUN set -x && \
+    /usr/bin/apt-get update && \
     # Install Java 8 and other tools
-    DEBIAN_FRONTEND=noninteractive apt-get install -y openjdk-8-jre unzip wget lsb-release gnupg apt-transport-https && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y openjdk-11-jre-headless unzip wget lsb-release gnupg apt-transport-https && \
     # Install Sonarqube-Scanner
     dotnet tool install --global dotnet-sonarscanner && \
     # Install dependency-check
-    /usr/bin/wget -q -O /opt/dependency-check-${DEPENDENCY_CHECK}-release.zip https://dl.bintray.com/jeremy-long/owasp/dependency-check-${DEPENDENCY_CHECK}-release.zip && \
-    /usr/bin/wget -q -O /opt/dependency-check-${DEPENDENCY_CHECK}-release.zip.asc https://dl.bintray.com/jeremy-long/owasp/dependency-check-${DEPENDENCY_CHECK}-release.zip.asc && \
-    /usr/bin/gpg --batch --keyserver keyserver.ubuntu.com --recv-keys F9514E84AE3708288374BBBE097586CFEA37F9A6 && \
+    /usr/bin/wget -q -O /opt/dependency-check-${DEPENDENCY_CHECK}-release.zip https://github.com/jeremylong/DependencyCheck/releases/download/v${DEPENDENCY_CHECK}/dependency-check-${DEPENDENCY_CHECK}-release.zip && \
+    /usr/bin/wget -q -O /opt/dependency-check-${DEPENDENCY_CHECK}-release.zip.asc https://github.com/jeremylong/DependencyCheck/releases/download/v${DEPENDENCY_CHECK}/dependency-check-${DEPENDENCY_CHECK}-release.zip.asc && \
+    /usr/bin/gpg --batch --keyserver keyserver.ubuntu.com --recv-keys 259A55407DD6C00299E6607EFFDE55BE73A2D1ED && \
     /usr/bin/gpg --batch --verify /opt/dependency-check-${DEPENDENCY_CHECK}-release.zip.asc /opt/dependency-check-${DEPENDENCY_CHECK}-release.zip && \
     /usr/bin/unzip /opt/dependency-check-${DEPENDENCY_CHECK}-release.zip -d /opt && \
     /bin/mkdir /opt/dependency-check/data && \
@@ -34,14 +34,18 @@ RUN /usr/bin/apt-get update && \
 
 WORKDIR /app
 
+ARG sonarHost
+ARG sonarLogin
+ARG sonarPassword
+
 COPY *.sln ./
 COPY ExampleApp1 ./ExampleApp1
 COPY ExampleApp2 ./ExampleApp2
 
-RUN /usr/bin/dependency-check.sh -f XML -f HTML -s . -o .
+RUN /usr/bin/dependency-check.sh -f JSON -f HTML -s . -o .
 RUN dotnet sonarscanner begin /k:exampleCSproj \
-    /d:sonar.host.url=${sonarHost}  \
-    /d:sonar.dependencyCheck.xmlReportPath="/app/dependency-check-report.xml" \
+    /d:sonar.host.url=${sonarHost} /d:sonar.login=${sonarLogin} /d:sonar.password=${sonarPassword} \
+    /d:sonar.dependencyCheck.jsonReportPath="/app/dependency-check-report.json" \
     /d:sonar.dependencyCheck.htmlReportPath="/app/dependency-check-report.html" && \
     dotnet build && \
-    dotnet sonarscanner end
+    dotnet sonarscanner end /d:sonar.login=${sonarLogin} /d:sonar.password=${sonarPassword}

@@ -3,8 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     application
     kotlin("jvm") version "1.3.50"
-    id("org.sonarqube") version "2.8"
-    id("org.owasp.dependencycheck") version "6.0.3"
+    id("org.sonarqube") version "3.3"
+    id("org.owasp.dependencycheck") version "6.5.3"
 }
 
 repositories {
@@ -12,10 +12,10 @@ repositories {
 }
 
 dependencies {
-    compile("com.google.guava:guava:21.0")
-    compile("org.owasp:dependency-check-gradle:5.3.0")
-    compile("org.springframework:spring:2.0")
-    testCompile("junit:junit:4.12")
+    implementation("com.google.guava:guava:21.0")
+    implementation("org.owasp:dependency-check-gradle:5.3.0")
+    implementation("org.springframework:spring:2.0")
+    testImplementation("junit:junit:4.12")
     implementation(kotlin("stdlib-jdk8"))
 }
 
