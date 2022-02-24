@@ -20,7 +20,7 @@
 package org.sonar.dependencycheck.report;
 
 public enum ReportFormat {
-    @Deprecated(since = "3.0.0", forRemoval = true)
+    @Deprecated
     XML,
     HTML,
     JSON
