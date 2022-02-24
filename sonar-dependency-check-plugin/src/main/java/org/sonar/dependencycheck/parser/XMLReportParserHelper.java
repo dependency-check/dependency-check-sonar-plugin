@@ -32,7 +32,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 /**
  * @deprecated Please use the JSON Report
  */
-@Deprecated(since = "3.0.0", forRemoval = true)
+@Deprecated
 public class XMLReportParserHelper {
 
     private XMLReportParserHelper() {

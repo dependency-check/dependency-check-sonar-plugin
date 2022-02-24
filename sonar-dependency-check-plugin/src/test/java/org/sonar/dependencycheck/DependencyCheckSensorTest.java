@@ -236,7 +236,7 @@ class DependencyCheckSensorTest {
     }
 
     @Test
-    @Deprecated(since = "3.0.0", forRemoval = true)
+    @Deprecated
     void shouldAddWarningsWithXMLReportPlugin() {
         final SensorContextTester context = SensorContextTester.create(new File(""));
         // Plugin Configuration

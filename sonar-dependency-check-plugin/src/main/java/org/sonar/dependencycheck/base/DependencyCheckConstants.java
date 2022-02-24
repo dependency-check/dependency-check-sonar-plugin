@@ -24,13 +24,13 @@ public final class DependencyCheckConstants {
     /**
      * @deprecated Please use the JSON Report
      */
-    @Deprecated(since = "3.0.0", forRemoval = true)
+    @Deprecated
     public static final String XML_REPORT_PATH_PROPERTY = "sonar.dependencyCheck.xmlReportPath";
 
     /**
      * @deprecated Please use the JSON Report
      */
-    @Deprecated(since = "3.0.0", forRemoval = true)
+    @Deprecated
     public static final String DEPRECTED_XML_REPORT_PATH_PROPERTY = "sonar.dependencyCheck.reportPath";
     public static final String JSON_REPORT_PATH_PROPERTY = "sonar.dependencyCheck.jsonReportPath";
     public static final String HTML_REPORT_PATH_PROPERTY = "sonar.dependencyCheck.htmlReportPath";
@@ -50,7 +50,7 @@ public final class DependencyCheckConstants {
     /**
      * @deprecated Please use the JSON Report
      */
-    @Deprecated(since = "3.0.0", forRemoval = true)
+    @Deprecated
     public static final String XML_REPORT_PATH_DEFAULT = "${WORKSPACE}/dependency-check-report.xml";
     public static final String JSON_REPORT_PATH_DEFAULT = "${WORKSPACE}/dependency-check-report.json";
     public static final String HTML_REPORT_PATH_DEFAULT = "${WORKSPACE}/dependency-check-report.html";
