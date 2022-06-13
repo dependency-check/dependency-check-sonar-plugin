@@ -3,7 +3,7 @@
   "license": "LGPL-3.0",
   "version": "7.0.0",
   "devDependencies": {
-    "@babel/core": "^7.16.7",
+    "@babel/core": "^7.18.5",
     "autoprefixer": "^10.4.2",
     "babel-loader": "^8.2.3",
     "babel-preset-react-app": "^10.0.1",
