@@ -274,7 +274,7 @@ class DependencyCheckSensorTest {
         sensor.execute(context);
         assertEquals(45, context.allIssues().size());
         for (Issue issue : context.allIssues()) {
-            assertEquals(DependencyCheckConstants.RULE_KEY_WITH_SECURITY_HOTSPOT, issue.ruleKey().rule());
+            assertEquals(DependencyCheckConstants.RULE_KEY, issue.ruleKey().rule());
         }
 
     }

@@ -118,25 +118,25 @@ class DependencyReasonSearcherTest {
 
         Analysis analysis = new Analysis(scanInfo, projectInfo, dependencies);
         searcher.addDependenciesToInputComponents(analysis, context);
-        assertEquals(2, context.allIssues().size());
+        assertEquals(2, context.allExternalIssues().size());
         assertEquals(1, searcher.getDependencyReasons().size());
 
         // check for org.springframework - spring dependency
-        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 56 && i.primaryLocation().textRange().end().line() == 60));
+        assertTrue(context.allExternalIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 56 && i.primaryLocation().textRange().end().line() == 60));
         // check for struts - struts dependency
-        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 46 && i.primaryLocation().textRange().end().line() == 50));
+        assertTrue(context.allExternalIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 46 && i.primaryLocation().textRange().end().line() == 50));
     }
 
     @Test
     void checkForDependencyReasonsGradle() throws IOException {
         SensorContextTester context = checkForDependencyReasonsGradleAbstract(inputFile("build.gradle"));
-        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 24));
+        assertTrue(context.allExternalIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 24));
     }
 
     @Test
     void checkForDependencyReasonsGradleKotlinDsl() throws IOException {
         SensorContextTester context = checkForDependencyReasonsGradleAbstract(inputFile("build.gradle.kts"));
-        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 15));
+        assertTrue(context.allExternalIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 15));
     }
 
     public SensorContextTester checkForDependencyReasonsGradleAbstract(InputFile inputFile) {
@@ -166,7 +166,7 @@ class DependencyReasonSearcherTest {
 
         Analysis analysis = new Analysis(scanInfo, projectInfo, dependencies);
         searcher.addDependenciesToInputComponents(analysis, context);
-        assertEquals(1, context.allIssues().size());
+        assertEquals(1, context.allExternalIssues().size());
         assertEquals(1, searcher.getDependencyReasons().size());
 
         return context;

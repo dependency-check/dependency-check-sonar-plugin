@@ -27,9 +27,8 @@ import java.util.Optional;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.issue.NewIssue;
+import org.sonar.api.batch.sensor.issue.NewExternalIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
-import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
@@ -174,7 +173,7 @@ public class DependencyReasonSearcher {
 
     public void addIssueToProject(SensorContext context, Dependency dependency, Vulnerability vulnerability) {
         Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(context.config()), context.config());
-        NewIssue sonarIssue = context.newIssue();
+        NewExternalIssue sonarIssue = context.newExternalIssue();
 
         NewIssueLocation location = sonarIssue.newLocation()
             .on(context.project())
@@ -182,8 +181,10 @@ public class DependencyReasonSearcher {
 
         sonarIssue
             .at(location)
-            .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
-            .overrideSeverity(severity)
+            .severity(severity)
+            .engineId(DependencyCheckConstants.ENINGE_ID)
+            .ruleId(DependencyCheckConstants.RULE_KEY)
+            .type(DependencyCheckUtils.getRuleType(context.config()))
             .save();
         projectMetric.incrementCount(severity);
     }
@@ -194,7 +195,7 @@ public class DependencyReasonSearcher {
         Vulnerability highestVulnerability = vulnerabilities.get(0);
         Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(highestVulnerability.getCvssScore(context.config()), context.config());
 
-        NewIssue sonarIssue = context.newIssue();
+        NewExternalIssue sonarIssue = context.newExternalIssue();
 
         NewIssueLocation location = sonarIssue.newLocation()
             .on(context.project())
@@ -202,8 +203,10 @@ public class DependencyReasonSearcher {
 
         sonarIssue
             .at(location)
-            .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
-            .overrideSeverity(severity)
+            .severity(severity)
+            .engineId(DependencyCheckConstants.ENINGE_ID)
+            .ruleId(DependencyCheckConstants.RULE_KEY)
+            .type(DependencyCheckUtils.getRuleType(context.config()))
             .save();
         projectMetric.incrementCount(severity);
     }

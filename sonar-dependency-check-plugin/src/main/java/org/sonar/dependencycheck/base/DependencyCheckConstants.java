@@ -60,8 +60,8 @@ public final class DependencyCheckConstants {
 
     public static final String REPOSITORY_KEY = "OWASP";
     public static final String LANGUAGE_KEY = "neutral";
+    public static final String ENINGE_ID = "dependencyCheck";
     public static final String RULE_KEY = "UsingComponentWithKnownVulnerability";
-    public static final String RULE_KEY_WITH_SECURITY_HOTSPOT = "UsingComponentWithKnownVulnerabilitySecurityHotspot";
     public static final String SUB_CATEGORY_SEVERITIES = "Severities";
     public static final String SUB_CATEGORY_PATHS = "Paths";
     public static final String SUB_CATEGORY_GENERAL = "General";

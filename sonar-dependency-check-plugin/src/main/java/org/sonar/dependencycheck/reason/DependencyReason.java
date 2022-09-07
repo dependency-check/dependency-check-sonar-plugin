@@ -26,9 +26,8 @@ import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.issue.NewIssue;
+import org.sonar.api.batch.sensor.issue.NewExternalIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
-import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
@@ -97,8 +96,7 @@ public abstract class DependencyReason {
 
         TextRangeConfidence textRange = getBestTextRange(dependency);
         InputComponent inputComponent = getInputComponent();
-
-        NewIssue sonarIssue = context.newIssue();
+        NewExternalIssue sonarIssue = context.newExternalIssue();
 
         NewIssueLocation location = sonarIssue.newLocation()
             .on(inputComponent)
@@ -107,8 +105,10 @@ public abstract class DependencyReason {
 
         sonarIssue
             .at(location)
-            .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
-            .overrideSeverity(severity)
+            .severity(severity)
+            .engineId(DependencyCheckConstants.ENINGE_ID)
+            .ruleId(DependencyCheckConstants.RULE_KEY)
+            .type(DependencyCheckUtils.getRuleType(context.config()))
             .save();
         metrics.incrementCount(severity);
     }
@@ -119,7 +119,7 @@ public abstract class DependencyReason {
         TextRangeConfidence textRange = getBestTextRange(dependency);
         InputComponent inputComponent = getInputComponent();
 
-        NewIssue sonarIssue = context.newIssue();
+        NewExternalIssue  sonarIssue = context.newExternalIssue();
 
         NewIssueLocation location = sonarIssue.newLocation()
             .on(inputComponent)
@@ -128,8 +128,10 @@ public abstract class DependencyReason {
 
         sonarIssue
             .at(location)
-            .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
-            .overrideSeverity(severity)
+            .severity(severity)
+            .engineId(DependencyCheckConstants.ENINGE_ID)
+            .ruleId(DependencyCheckConstants.RULE_KEY)
+            .type(DependencyCheckUtils.getRuleType(context.config()))
             .save();
         metrics.incrementCount(severity);
     }

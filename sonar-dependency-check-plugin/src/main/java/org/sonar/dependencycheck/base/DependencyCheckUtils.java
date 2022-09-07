@@ -26,6 +26,7 @@ import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.config.Configuration;
+import org.sonar.api.rules.RuleType;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Identifier;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
@@ -67,11 +68,10 @@ public final class DependencyCheckUtils {
         return DependencyCheckUtils.cvssToSonarQubeSeverity(cvssScore, severityBlocker, severityCritical, severityMajor, severityMinor);
     }
 
-    public static String getRuleKey(Configuration config) {
+    public static RuleType getRuleType(Configuration config) {
         return config.getBoolean(DependencyCheckConstants.SECURITY_HOTSPOT)
-                .orElse(DependencyCheckConstants.SECURITY_HOTSPOT_DEFAULT)
-                        ? DependencyCheckConstants.RULE_KEY_WITH_SECURITY_HOTSPOT
-                        : DependencyCheckConstants.RULE_KEY;
+                 .orElse(DependencyCheckConstants.SECURITY_HOTSPOT_DEFAULT) ?
+                     RuleType.VULNERABILITY : RuleType.SECURITY_HOTSPOT;
     }
 
     /**
