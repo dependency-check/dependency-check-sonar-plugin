@@ -160,7 +160,6 @@ class XMLReportParserHelperTest extends ReportParserTest {
         assertEquals(4.0f, vulnerability.getCvssScore(context.config()), 0.0f);
         assertEquals("MEDIUM", vulnerability.getSeverity());
         assertEquals("MEDIUM", vulnerability.getSeverity(false));
-        assertFalse(vulnerability.getCwes().isPresent());
         assertEquals("Versions of `braces` prior to 2.3.1 are vulnerable to Regular Expression Denial of\n" +
             "                        Service (ReDoS). Untrusted input may cause catastrophic backtracking while matching regular\n" +
             "                        expressions. This can cause the application to be unresponsive leading to Denial of Service.", vulnerability.getDescription());
@@ -260,7 +259,6 @@ class XMLReportParserHelperTest extends ReportParserTest {
                 assertEquals(4.0f, vulnerability.getCvssScore(context.config()), 0.0f);
                 assertEquals("MEDIUM", vulnerability.getSeverity());
                 assertEquals("MEDIUM", vulnerability.getSeverity(false));
-                assertFalse(vulnerability.getCwes().isPresent());
                 assertEquals(
                     "Versions of `braces` prior to 2.3.1 are vulnerable to Regular Expression Denial of Service (ReDoS). Untrusted input may cause catastrophic backtracking while matching regular expressions. This can cause the application to be unresponsive leading to Denial of Service.",
                     vulnerability.getDescription());
