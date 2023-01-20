@@ -41,6 +41,7 @@ public final class DependencyCheckConstants {
     public static final String SUMMARIZE_PROPERTY = "sonar.dependencyCheck.summarize";
     public static final String SKIP_PROPERTY = "sonar.dependencyCheck.skip";
     public static final String SECURITY_HOTSPOT = "sonar.dependencyCheck.securityHotspot";
+	public static final String USE_FILEPATH = "sonar.dependencyCheck.useFilePath";
 
     public static final Float SEVERITY_BLOCKER_DEFAULT = 9.0f;
     public static final Float SEVERITY_CRITICAL_DEFAULT = 7.0f;
@@ -57,6 +58,7 @@ public final class DependencyCheckConstants {
     public static final Boolean SUMMARIZE_PROPERTY_DEFAULT = Boolean.FALSE;
     public static final Boolean SKIP_PROPERTY_DEFAULT = Boolean.FALSE;
     public static final Boolean SECURITY_HOTSPOT_DEFAULT = Boolean.FALSE;
+	public static final Boolean USE_FILEPATH_DEFAULT = Boolean.FALSE;
 
     public static final String REPOSITORY_KEY = "OWASP";
     public static final String LANGUAGE_KEY = "neutral";
