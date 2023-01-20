@@ -141,12 +141,12 @@ public final class DependencyCheckUtils {
      */
     public static String formatDescription(Dependency dependency, Vulnerability vulnerability, Configuration config) {
         StringBuilder sb = new StringBuilder();
-		if (config.getBoolean(DependencyCheckConstants.USE_FILEPATH)
-				.orElse(DependencyCheckConstants.USE_FILEPATH_DEFAULT)) {
-			sb.append("Filepath: ").append(dependency.getFilePath()).append(" | ");
-		} else {
-			sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
-		}
+        if (config.getBoolean(DependencyCheckConstants.USE_FILEPATH)
+                .orElse(DependencyCheckConstants.USE_FILEPATH_DEFAULT)) {
+            sb.append("Filepath: ").append(dependency.getFilePath()).append(" | ");
+        } else {
+            sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
+        }
         sb.append("Reference: ").append(vulnerability.getName()).append(" | ");
         sb.append("CVSS Score: ").append(vulnerability.getCvssScore(config)).append(" | ");
         Optional<String[]> vulnerabilityCwe = vulnerability.getCwes();
@@ -159,12 +159,12 @@ public final class DependencyCheckUtils {
 
     public static String formatDescription(Dependency dependency, Collection<Vulnerability> vulnerabilities, Vulnerability highestVulnerability, Configuration config) {
         StringBuilder sb = new StringBuilder();
-		if (config.getBoolean(DependencyCheckConstants.USE_FILEPATH)
-				.orElse(DependencyCheckConstants.USE_FILEPATH_DEFAULT)) {
-			sb.append("Filepath: ").append(dependency.getFilePath()).append(" | ");
-		} else {
-			sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
-		}
+        if (config.getBoolean(DependencyCheckConstants.USE_FILEPATH)
+                .orElse(DependencyCheckConstants.USE_FILEPATH_DEFAULT)) {
+            sb.append("Filepath: ").append(dependency.getFilePath()).append(" | ");
+        } else {
+            sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
+        }
         sb.append("Highest CVSS Score: ").append(highestVulnerability.getCvssScore(config)).append(" | ");
         sb.append("Amount of CVSS: ").append(vulnerabilities.size()).append(" | ");
         sb.append("References: ");
