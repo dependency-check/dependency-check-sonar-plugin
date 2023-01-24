@@ -40,7 +40,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
-@JsonIgnoreProperties({"isVirtual", "sha256", "description", "projectReferences", "license", "relatedDependencies", "suppressedVulnerabilities", "suppressedVulnerabilityIds"})
+@JsonIgnoreProperties({"isVirtual", "sha256", "description", "projectReferences", "license", "relatedDependencies", "suppressedVulnerabilities", "suppressedVulnerabilityIds", "includedBy"})
 public class Dependency {
 
     private final String fileName;
