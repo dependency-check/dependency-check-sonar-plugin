@@ -109,27 +109,36 @@ public final class DependencyCheckUtils {
     }
 
     public static Optional<Identifier> getMavenIdentifier(@NonNull Dependency dependency) {
-        for (Identifier identifier : dependency.getPackages()) {
-            if (Identifier.isMavenPackage(identifier)) {
-                return Optional.of(identifier);
+        Optional<Collection<Identifier>> packages = dependency.getPackages();
+        if (packages.isPresent()) {
+            for (Identifier identifier : packages.get()) {
+                if (Identifier.isMavenPackage(identifier)) {
+                    return Optional.of(identifier);
+                }
             }
         }
         return Optional.empty();
     }
 
     public static Optional<Identifier> getNPMIdentifier(@NonNull Dependency dependency) {
-        for (Identifier identifier : dependency.getPackages()) {
-            if (Identifier.isNPMPackage(identifier)) {
-                return Optional.of(identifier);
+        Optional<Collection<Identifier>> packages = dependency.getPackages();
+        if (packages.isPresent()) {
+            for (Identifier identifier : packages.get()) {
+                if (Identifier.isNPMPackage(identifier)) {
+                    return Optional.of(identifier);
+                }
             }
         }
         return Optional.empty();
     }
 
     public static Optional<Identifier> getJavaScriptIdentifier(@NonNull Dependency dependency) {
-        for (Identifier identifier : dependency.getPackages()) {
-            if (Identifier.isJavaScriptPackage(identifier)) {
-                return Optional.of(identifier);
+        Optional<Collection<Identifier>> packages = dependency.getPackages();
+        if (packages.isPresent()) {
+            for (Identifier identifier : packages.get()) {
+                if (Identifier.isJavaScriptPackage(identifier)) {
+                    return Optional.of(identifier);
+                }
             }
         }
         return Optional.empty();

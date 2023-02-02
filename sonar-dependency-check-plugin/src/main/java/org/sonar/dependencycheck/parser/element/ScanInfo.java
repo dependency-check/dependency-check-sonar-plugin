@@ -19,36 +19,41 @@
  */
 package org.sonar.dependencycheck.parser.element;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
-import java.util.List;
-import java.util.Optional;
-
-import org.sonar.dependencycheck.parser.deserializer.AnalysisExceptionDeserializer;
 
 @JsonIgnoreProperties("dataSource")
 public class ScanInfo {
 
     private final String engineVersion;
     private final List<AnalysisException> exceptions;
+    private static final String EXCEPTION_KEYWORD = "exception";
 
     @JsonCreator
     public ScanInfo(@JsonProperty(value = "engineVersion", required = true) @NonNull String engineVersion,
-                    @JsonProperty(value = "analysisExceptions") @JsonDeserialize(using = AnalysisExceptionDeserializer.class ) @Nullable List<AnalysisException> exceptions) {
+                    @JsonProperty(value = "analysisExceptions") @Nullable List<Map<String, AnalysisException>> exceptions) {
         this.engineVersion = engineVersion;
-        this.exceptions = exceptions;
+        this.exceptions = new LinkedList<>();
+        if (exceptions != null) {
+            for (Map<String, AnalysisException> exception : exceptions) {
+                this.exceptions.add(exception.get(EXCEPTION_KEYWORD));
+            }
+        }
     }
 
     public String getEngineVersion() {
         return engineVersion;
     }
 
-    public Optional<List<AnalysisException>> getExceptions() {
-        return Optional.ofNullable(exceptions);
+    public List<AnalysisException> getExceptions() {
+        return exceptions;
     }
 }

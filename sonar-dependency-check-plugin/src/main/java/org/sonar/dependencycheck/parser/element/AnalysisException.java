@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties("stackTrace")
-public class AnalysisException extends Exception{
+public class AnalysisException extends Exception {
 
     private static final long serialVersionUID = 1444677757100744831L;
 

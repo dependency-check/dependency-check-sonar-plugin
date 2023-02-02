@@ -73,7 +73,7 @@ class GradleDependencyReasonTest extends DependencyReasonTestHelper {
         Identifier identifier = new Identifier("pkg:maven/org.springframework/spring@2.0", Confidence.HIGHEST);
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList());
         TextRangeConfidence textRangeConfidence = gradle.getBestTextRange(dependency);
         assertNotNull(textRangeConfidence);
         assertEquals(Confidence.MEDIUM, textRangeConfidence.getConfidence());
@@ -92,7 +92,7 @@ class GradleDependencyReasonTest extends DependencyReasonTestHelper {
         Identifier identifier = new Identifier("pkg:maven/myvendor/myartifact@2.0", Confidence.HIGHEST);
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList());
         TextRangeConfidence textRangeConfidence = gradle.getBestTextRange(dependency);
         assertNotNull(textRangeConfidence);
         assertEquals(LINE_NOT_FOUND, textRangeConfidence.getTextRange().start().line());
