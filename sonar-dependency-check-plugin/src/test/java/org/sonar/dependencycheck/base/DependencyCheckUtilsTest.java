@@ -274,7 +274,7 @@ class DependencyCheckUtilsTest {
         Vulnerability vulnerability1 = new Vulnerability("Test name", "NVD", "MyDescription", null, cvssV2, null, null);
         List<Vulnerability> vulnerabilities1 = new ArrayList<>();
         vulnerabilities1.add(vulnerability1);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(), vulnerabilities1, packageidentifiers1, Collections.emptyList(), null);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(), vulnerabilities1, packageidentifiers1, Collections.emptyList());
 
         // then
         assertEquals(submodulepomReason, DependencyCheckUtils.getBestDependencyReason(dependency, Arrays.asList(pomReason, submodulepomReason)).get());

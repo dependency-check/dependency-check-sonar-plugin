@@ -106,10 +106,10 @@ abstract class ReportParserTest {
         assertNotNull(dependency);
         checkEvidence(dependency.getEvidenceCollected(), 10, 8, 3);
         assertEquals(3, dependency.getVulnerabilities().size());
-        assertEquals(1, dependency.getPackages().size());
-        assertEquals(1, dependency.getVulnerabilityIds().size());
-        assertEquals(1, dependency.getVulnerabilityIds().size());
-        Collection<Identifier> identifiers = dependency.getPackages();
+        assertEquals(1, dependency.getPackages().get().size());
+        assertEquals(1, dependency.getVulnerabilityIds().get().size());
+        assertEquals(1, dependency.getVulnerabilityIds().get().size());
+        Collection<Identifier> identifiers = dependency.getPackages().get();
         Identifier identifier = identifiers.iterator().next();
         assertEquals(Confidence.HIGH, identifier.getConfidence().get());
         assertEquals("pkg:maven/commons-collections/commons-collections@2.1", identifier.getId());
@@ -163,7 +163,7 @@ abstract class ReportParserTest {
 
         assertEquals("5.2.4", analysis.getScanInfo().getEngineVersion());
 
-        List<AnalysisException> analysisExceptions = analysis.getScanInfo().getExceptions().get();
+        List<AnalysisException> analysisExceptions = analysis.getScanInfo().getExceptions();
         assertEquals(1, analysisExceptions.size());
         AnalysisException analysisException = analysisExceptions.get(0);
         assertEquals("org.owasp.dependencycheck.analyzer.exception.AnalysisException: Failed to request component-reports", analysisException

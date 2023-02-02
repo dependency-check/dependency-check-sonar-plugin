@@ -73,7 +73,7 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         Identifier identifier = new Identifier("pkg:javascript/jquery@2.2.0", Confidence.HIGHEST);
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList());
         TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency);
         assertTrue(npm.isReasonable());
         assertNotNull(textRangeConfidence);
@@ -93,7 +93,7 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         Identifier identifier = new Identifier("pkg:npm/arr-flatten@1.1.0", Confidence.HIGHEST);
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList());
         TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency);
         assertTrue(npm.isReasonable());
         assertNotNull(textRangeConfidence);
@@ -113,7 +113,7 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         Identifier identifier = new Identifier("pkg:npm/arr-flatten@9.9.9", Confidence.HIGHEST);
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList());
         TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency);
         assertTrue(npm.isReasonable());
         assertNotNull(textRangeConfidence);
@@ -133,7 +133,7 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         Identifier identifier = new Identifier("pkg:npm/arr-flatten", Confidence.HIGHEST);
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList());
         TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency);
         assertTrue(npm.isReasonable());
         assertNotNull(textRangeConfidence);
@@ -153,7 +153,7 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         Identifier identifier = new Identifier("pkg:javascript/dummyname@2.2.0", Confidence.HIGHEST);
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList());
         TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency);
         assertTrue(npm.isReasonable());
         assertNotNull(textRangeConfidence);
