@@ -22,7 +22,7 @@ package org.sonar.dependencycheck.parser.deserializer;
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.sonar.dependencycheck.reason.maven.MavenParent;
+import org.sonar.dependencycheck.reason.maven.MavenDependencyLocation;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 
-public class MavenParentDeserializer extends StdDeserializer<MavenParent>{
+public class MavenParentDeserializer extends StdDeserializer<MavenDependencyLocation>{
 
     /**
      *
@@ -47,15 +47,23 @@ public class MavenParentDeserializer extends StdDeserializer<MavenParent>{
     }
 
     @Override
-    public MavenParent deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+    public MavenDependencyLocation deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         int startLineNr = jsonParser.getCurrentLocation().getLineNr();
         String groupId = "";
+        String artifactId = "";
+        String version = "";
         while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
             if (StringUtils.equalsIgnoreCase("groupId", jsonParser.getCurrentName())) {
                 groupId = jsonParser.getValueAsString();
             }
+            if (StringUtils.equalsIgnoreCase("artifactId", jsonParser.getCurrentName())) {
+                artifactId = jsonParser.getValueAsString();
+            }
+            if (StringUtils.equalsIgnoreCase("version", jsonParser.getCurrentName())) {
+                version = jsonParser.getValueAsString();
+            }
         }
         int endLineNr = jsonParser.getCurrentLocation().getLineNr();
-        return new MavenParent(groupId, startLineNr, endLineNr);
+        return new MavenDependencyLocation(groupId, artifactId, version, startLineNr, endLineNr);
     }
 }

@@ -47,9 +47,9 @@ abstract class ReportParserTest {
     void parseReportMultiModuleMavenExample() throws Exception {
         Analysis analysis = parseReport("reportMultiModuleMavenExample");
 
-        assertEquals("6.0.0", analysis.getScanInfo().getEngineVersion());
+        assertEquals("8.0.2", analysis.getScanInfo().getEngineVersion());
         assertEquals("Multi-Module Maven Example", analysis.getProjectInfo().get().getName());
-        assertEquals("2020-09-10T07:54:20.103848Z", analysis.getProjectInfo().get().getReportDate());
+        assertEquals("2023-02-02T15:59:49.067Z", analysis.getProjectInfo().get().getReportDate());
 
         Collection<Dependency> dependencies = analysis.getDependencies();
         assertEquals(34, dependencies.size());
@@ -61,51 +61,51 @@ abstract class ReportParserTest {
         assertEquals("8af31c3a406cfbfd991a6946102d583a", dependency.getMd5Hash().get());
         assertEquals("5919caff42c3f42fb251fd82a58af4a7880826dd", dependency.getSha1Hash().get());
 
-        checkEvidence(dependency.getEvidenceCollected(), 14, 13, 3);
+        checkEvidence(dependency.getEvidenceCollected(), 63, 61, 3);
         Collection<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
-        assertEquals(24, vulnerabilities.size());
+        assertEquals(8, vulnerabilities.size());
         Iterator<Vulnerability> vulnIterator = vulnerabilities.iterator();
         Vulnerability vulnerability = vulnIterator.next();
-        assertEquals("CVE-2006-1546", vulnerability.getName());
+        assertEquals("CVE-2016-1182", vulnerability.getName());
         assertEquals("NVD", vulnerability.getSource());
-        assertEquals(7.5f, vulnerability.getCvssScore(null), 0.0f);
+        assertEquals(8.2f, vulnerability.getCvssScore(null), 0.0f);
         assertEquals("HIGH", vulnerability.getSeverity());
         assertTrue(vulnerability.getCwes().isPresent());
-        assertEquals("NVD-CWE-Other", vulnerability.getCwes().get()[0]);
+        assertEquals("CWE-20", vulnerability.getCwes().get()[0]);
         assertEquals(1, vulnerability.getCwes().get().length);
         assertEquals(
-            "Apache Software Foundation (ASF) Struts before 1.2.9 allows remote attackers to bypass validation via a request with a 'org.apache.struts.taglib.html.Constants.CANCEL' parameter, which causes the action to be canceled but would not be detected from applications that do not use the isCancelled check.",
+            "ActionServlet.java in Apache Struts 1 1.x through 1.3.10 does not properly restrict the Validator configuration, which allows remote attackers to conduct cross-site scripting (XSS) attacks or cause a denial of service via crafted input, a related issue to CVE-2015-0899.",
             vulnerability.getDescription());
 
         vulnerability = vulnIterator.next();
-        assertEquals("CVE-2006-1547", vulnerability.getName());
+        assertEquals("CVE-2016-1181", vulnerability.getName());
         assertEquals("NVD", vulnerability.getSource());
-        assertEquals(7.8f, vulnerability.getCvssScore(null), 0.0f);
+        assertEquals(8.1f, vulnerability.getCvssScore(null), 0.0f);
         assertEquals("HIGH", vulnerability.getSeverity());
         assertTrue(vulnerability.getCwes().isPresent());
-        assertEquals("NVD-CWE-Other", vulnerability.getCwes().get()[0]);
+        assertEquals("NVD-CWE-noinfo", vulnerability.getCwes().get()[0]);
         assertEquals(1, vulnerability.getCwes().get().length);
         assertEquals(
-            "ActionForm in Apache Software Foundation (ASF) Struts before 1.2.9 with BeanUtils 1.7 allows remote attackers to cause a denial of service via a multipart/form-data encoded form with a parameter name that references the public getMultipartRequestHandler method, which provides further access to elements in the CommonsMultipartRequestHandler implementation and BeanUtils.",
+            "ActionServlet.java in Apache Struts 1 1.x through 1.3.10 mishandles multithreaded access to an ActionForm instance, which allows remote attackers to execute arbitrary code or cause a denial of service (unexpected memory access) via a multipart request, a related issue to CVE-2015-0899.",
             vulnerability.getDescription());
 
         // commons-beanutils-1.7.0.jar
         dependency = findDependency(dependencies, "commons-beanutils-1.7.0.jar");
         assertNotNull(dependency);
-        checkEvidence(dependency.getEvidenceCollected(), 9, 9, 2);
+        checkEvidence(dependency.getEvidenceCollected(), 10, 9, 2);
         assertEquals(2, dependency.getVulnerabilities().size());
 
         // commons-digester-1.6.jar
         dependency = findDependency(dependencies, "commons-digester-1.6.jar");
         assertNotNull(dependency);
-        checkEvidence(dependency.getEvidenceCollected(), 9, 9, 2);
+        checkEvidence(dependency.getEvidenceCollected(), 10, 9, 2);
         assertTrue(dependency.getVulnerabilities().isEmpty());
 
         // commons-collections-2.1.jar
         dependency = findDependency(dependencies, "commons-collections-2.1.jar");
         assertNotNull(dependency);
-        checkEvidence(dependency.getEvidenceCollected(), 10, 8, 3);
-        assertEquals(3, dependency.getVulnerabilities().size());
+        checkEvidence(dependency.getEvidenceCollected(), 17, 14, 3);
+        assertEquals(1, dependency.getVulnerabilities().size());
         assertEquals(1, dependency.getPackages().get().size());
         assertEquals(1, dependency.getVulnerabilityIds().get().size());
         assertEquals(1, dependency.getVulnerabilityIds().get().size());
@@ -114,7 +114,7 @@ abstract class ReportParserTest {
         assertEquals(Confidence.HIGH, identifier.getConfidence().get());
         assertEquals("pkg:maven/commons-collections/commons-collections@2.1", identifier.getId());
         vulnerabilities = dependency.getVulnerabilities();
-        assertEquals(3, vulnerabilities.size());
+        assertEquals(1, vulnerabilities.size());
         vulnIterator = vulnerabilities.iterator();
         vulnerability = vulnIterator.next();
         assertEquals("CVE-2015-6420", vulnerability.getName());
@@ -124,7 +124,7 @@ abstract class ReportParserTest {
         // xml-apis-1.0.b2.jar
         dependency = findDependency(dependencies, "xml-apis-1.0.b2.jar");
         assertNotNull(dependency);
-        checkEvidence(dependency.getEvidenceCollected(), 18, 26, 3);
+        checkEvidence(dependency.getEvidenceCollected(), 19, 26, 3);
         assertTrue(dependency.getVulnerabilities().isEmpty());
     }
 

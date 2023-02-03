@@ -24,7 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.sonar.dependencycheck.reason.npm.NPMDependency;
+import org.sonar.dependencycheck.reason.npm.NPMDependencyLocation;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -33,7 +33,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 
-public class PackageLockDependencyDeserializer extends StdDeserializer<List<NPMDependency>> {
+public class PackageLockDependencyDeserializer extends StdDeserializer<List<NPMDependencyLocation>> {
     /**
      *
      */
@@ -48,15 +48,15 @@ public class PackageLockDependencyDeserializer extends StdDeserializer<List<NPMD
     }
 
     @Override
-    public List<NPMDependency> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-        List<NPMDependency> npmDependencies = new LinkedList<>();
+    public List<NPMDependencyLocation> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+        List<NPMDependencyLocation> npmDependencies = new LinkedList<>();
         while (!JsonToken.END_OBJECT.equals(jsonParser.nextToken())) {
             if (JsonToken.START_OBJECT.equals(jsonParser.currentToken())) {
                 String name = jsonParser.getCurrentName();
                 int startLineNr = jsonParser.getCurrentLocation().getLineNr();
                 String version = scanWholeDependencyForVersion(jsonParser);
                 int endLineNr = jsonParser.getCurrentLocation().getLineNr();
-                npmDependencies.add(new NPMDependency(name, version, startLineNr, endLineNr));
+                npmDependencies.add(new NPMDependencyLocation(name, version, startLineNr, endLineNr));
             }
         }
         return npmDependencies;

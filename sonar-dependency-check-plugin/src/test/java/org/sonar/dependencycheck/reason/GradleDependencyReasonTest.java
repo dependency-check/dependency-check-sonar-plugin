@@ -73,10 +73,10 @@ class GradleDependencyReasonTest extends DependencyReasonTestHelper {
         Identifier identifier = new Identifier("pkg:maven/org.springframework/spring@2.0", Confidence.HIGHEST);
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList());
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
         TextRangeConfidence textRangeConfidence = gradle.getBestTextRange(dependency);
         assertNotNull(textRangeConfidence);
-        assertEquals(Confidence.MEDIUM, textRangeConfidence.getConfidence());
+        assertEquals(Confidence.HIGHEST, textRangeConfidence.getConfidence());
         assertEquals(24, textRangeConfidence.getTextRange().start().line());
         assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
         assertEquals(24, textRangeConfidence.getTextRange().end().line());
@@ -92,7 +92,7 @@ class GradleDependencyReasonTest extends DependencyReasonTestHelper {
         Identifier identifier = new Identifier("pkg:maven/myvendor/myartifact@2.0", Confidence.HIGHEST);
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList());
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
         TextRangeConfidence textRangeConfidence = gradle.getBestTextRange(dependency);
         assertNotNull(textRangeConfidence);
         assertEquals(LINE_NOT_FOUND, textRangeConfidence.getTextRange().start().line());

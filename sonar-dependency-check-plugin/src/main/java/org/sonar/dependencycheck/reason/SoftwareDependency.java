@@ -18,39 +18,37 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package org.sonar.dependencycheck.parser.element;
+package org.sonar.dependencycheck.reason;
 
 import java.util.Optional;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
-@JsonIgnoreProperties({"url", "description","notes"})
-public class Identifier {
-    private final String id;
-    private final Optional<Confidence> confidence;
-
-    @JsonCreator
-    public Identifier(@JsonProperty(value = "id", required = true) @NonNull String id,
-                      @JsonProperty(value = "confidence") @Nullable Confidence confidence) {
-        this.id = id;
-        this.confidence = Optional.ofNullable(confidence);
+public class SoftwareDependency {
+    private final String name;
+    private final Optional<String> version;
+    /**
+     * @param version
+     * @param name
+     */
+    public SoftwareDependency(@NonNull String name, @Nullable String version) {
+        super();
+        this.name = name;
+        this.version = Optional.ofNullable(version);
     }
     /**
-     * @return the id
+     * @return the name
      */
-    public String getId() {
-        return id;
+    @NonNull
+    public String getName() {
+        return name;
+    }
+    /**
+     * @return the version
+     */
+    public Optional<String> getVersion() {
+        return version;
     }
 
-    /**
-     * @return the confidence
-     */
-    public Optional<Confidence> getConfidence() {
-        return confidence;
-    }
 }

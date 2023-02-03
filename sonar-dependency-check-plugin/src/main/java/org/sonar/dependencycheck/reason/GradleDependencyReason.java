@@ -21,11 +21,13 @@
 package org.sonar.dependencycheck.reason;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.utils.log.Logger;
@@ -33,7 +35,8 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
-import org.sonar.dependencycheck.parser.element.Identifier;
+import org.sonar.dependencycheck.parser.element.IncludedBy;
+import org.sonar.dependencycheck.reason.maven.MavenDependency;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -63,47 +66,78 @@ public class GradleDependencyReason extends DependencyReason {
         if (dependencyMap.containsKey(dependency)) {
             return dependencyMap.get(dependency);
         } else {
-            Optional<Identifier> gradleIdentifier = DependencyCheckUtils.getMavenIdentifier(dependency);
-            if (gradleIdentifier.isPresent()) {
-                tryArtifactMatch(gradleIdentifier.get()).ifPresent(textRange -> dependencyMap.put(dependency, textRange));
+            Optional<MavenDependency> mavenDependency = DependencyCheckUtils.getMavenDependency(dependency);
+            if (mavenDependency.isPresent()) {
+                fillArtifactMatch(dependency, mavenDependency.get());
             } else {
                 LOGGER.debug("No artifactId found for Dependency {}", dependency.getFileName());
+            }
+            Optional<Collection<IncludedBy>> includedBys = dependency.getIncludedBy();
+            if (includedBys.isPresent()) {
+                workOnIncludedBy(dependency, includedBys.get());
             }
             dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFirstLine(k, buildGradle));
         }
         return dependencyMap.get(dependency);
     }
 
-    /**
-     *
-     * This Methods tries to find the best TextRange for an given ArtifactId in the build.gradle file
-     * If the line parser doesn't find anything we return the TextRange with linenumber 1
-     * TODO: It would be nice to have something similar to the command "gradlew app:dependencies"
-     * At the moment a simple line parser without transitive dependencies
-     *
-     * @param gradleIdentifier Identifier for gradle
-     * @return TextRange if found in gradle, else null
-     */
-    private Optional<TextRangeConfidence> tryArtifactMatch(Identifier gradleIdentifier) {
-        Optional<String> packageArtifact = Identifier.getPackageArtifact(gradleIdentifier);
-        if (packageArtifact.isPresent()) {
-            // packageArtifact has something like struts/struts@1.2.8
-            String[] gradleIdentifierSplit = packageArtifact.get().split("@");
-            gradleIdentifierSplit = gradleIdentifierSplit[0].split("/");
-            String artifactId = gradleIdentifierSplit[1];
-            try (final Scanner scanner = new Scanner(content)) {
-                int linenumber = 0;
-                while (scanner.hasNextLine()) {
-                    final String lineFromFile = scanner.nextLine();
-                    linenumber++;
-                    if (lineFromFile.contains(artifactId)) {
-                        LOGGER.debug("We found {} in {} on line {}", artifactId, buildGradle, linenumber);
-                        return Optional.of(new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.MEDIUM));
-                    }
+    private void workOnIncludedBy(@NonNull Dependency dependency, Collection<IncludedBy> includedBys) {
+        for (IncludedBy includedBy : includedBys) {
+            String reference = includedBy.getReference();
+            if (StringUtils.isNotBlank(reference)) {
+                Optional<SoftwareDependency> softwareDependency = DependencyCheckUtils.convertToSoftwareDependency(reference);
+                if (softwareDependency.isPresent() && DependencyCheckUtils.isMavenDependency(softwareDependency.get())) {
+                    fillArtifactMatch(dependency, (MavenDependency) softwareDependency.get());
                 }
             }
         }
-        return Optional.empty();
+    }
+
+    private void putDependencyMap(@NonNull Dependency dependency, TextRangeConfidence newTextRange) {
+        if (dependencyMap.containsKey(dependency)) {
+            TextRangeConfidence oldTextRange = dependencyMap.get(dependency);
+            if (oldTextRange.getConfidence().compareTo(newTextRange.getConfidence()) > 0) {
+                dependencyMap.put(dependency, newTextRange);
+            }
+        } else {
+            dependencyMap.put(dependency, newTextRange);
+        }
+    }
+
+    /**
+     *
+     * At the moment a simple line parser without transitive dependencies
+     *
+     * @param mavenDependency Identifier for gradle
+     * @return TextRange if found in gradle, else null
+     */
+    private void fillArtifactMatch(@NonNull Dependency dependency, MavenDependency mavenDependency) {
+        try (final Scanner scanner = new Scanner(content)) {
+            int linenumber = 0;
+            while (scanner.hasNextLine()) {
+                final String lineFromFile = scanner.nextLine();
+                linenumber++;
+                if (lineFromFile.contains(mavenDependency.getArtifactId()) &&
+                    lineFromFile.contains(mavenDependency.getGroupId())) {
+                    Optional<String> depVersion = mavenDependency.getVersion();
+                    if (depVersion.isPresent() &&
+                        lineFromFile.contains(depVersion.get())) {
+                        LOGGER.debug("Found a artifactId, groupId and version match in {}", buildGradle);
+                        putDependencyMap(dependency, new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.HIGHEST));
+                    }
+                    LOGGER.debug("Found a artifactId and groupId match in {} on line {}", buildGradle, linenumber);
+                    putDependencyMap(dependency, new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.HIGH));
+                }
+                if (lineFromFile.contains(mavenDependency.getArtifactId())) {
+                    LOGGER.debug("Found a artifactId match in {} for {}", buildGradle, mavenDependency.getArtifactId());
+                    putDependencyMap(dependency, new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.MEDIUM));
+                }
+                if (lineFromFile.contains(mavenDependency.getGroupId())) {
+                    LOGGER.debug("Found a groupId match in {} for {}", buildGradle, mavenDependency.getGroupId());
+                    putDependencyMap(dependency, new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.MEDIUM));
+                }
+            }
+        }
     }
 
     /**

@@ -31,6 +31,9 @@ import org.sonar.dependencycheck.parser.element.Identifier;
 import org.sonar.dependencycheck.parser.element.Vulnerability;
 import org.sonar.dependencycheck.reason.DependencyReason;
 import org.sonar.dependencycheck.reason.Language;
+import org.sonar.dependencycheck.reason.SoftwareDependency;
+import org.sonar.dependencycheck.reason.maven.MavenDependency;
+import org.sonar.dependencycheck.reason.npm.NPMDependency;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
@@ -108,36 +111,26 @@ public final class DependencyCheckUtils {
         return DependencyCheckUtils.severityToScore(severity, severityBlocker, severityCritical, severityMajor, severityMinor);
     }
 
-    public static Optional<Identifier> getMavenIdentifier(@NonNull Dependency dependency) {
+    public static Optional<MavenDependency> getMavenDependency(@NonNull Dependency dependency) {
         Optional<Collection<Identifier>> packages = dependency.getPackages();
         if (packages.isPresent()) {
             for (Identifier identifier : packages.get()) {
-                if (Identifier.isMavenPackage(identifier)) {
-                    return Optional.of(identifier);
+                Optional<SoftwareDependency> softwareDependency = DependencyCheckUtils.convertToSoftwareDependency(identifier.getId());
+                if (softwareDependency.isPresent() && softwareDependency.get() instanceof MavenDependency) {
+                    return Optional.of((MavenDependency) softwareDependency.get());
                 }
             }
         }
         return Optional.empty();
     }
 
-    public static Optional<Identifier> getNPMIdentifier(@NonNull Dependency dependency) {
+    public static Optional<NPMDependency> getNPMDependency(@NonNull Dependency dependency) {
         Optional<Collection<Identifier>> packages = dependency.getPackages();
         if (packages.isPresent()) {
             for (Identifier identifier : packages.get()) {
-                if (Identifier.isNPMPackage(identifier)) {
-                    return Optional.of(identifier);
-                }
-            }
-        }
-        return Optional.empty();
-    }
-
-    public static Optional<Identifier> getJavaScriptIdentifier(@NonNull Dependency dependency) {
-        Optional<Collection<Identifier>> packages = dependency.getPackages();
-        if (packages.isPresent()) {
-            for (Identifier identifier : packages.get()) {
-                if (Identifier.isJavaScriptPackage(identifier)) {
-                    return Optional.of(identifier);
+                Optional<SoftwareDependency> softwareDependency = DependencyCheckUtils.convertToSoftwareDependency(identifier.getId());
+                if (softwareDependency.isPresent() && softwareDependency.get() instanceof NPMDependency) {
+                    return Optional.of((NPMDependency) softwareDependency.get());
                 }
             }
         }
@@ -207,5 +200,45 @@ public final class DependencyCheckUtils {
             return dependencyReasons.stream().filter(c -> c.getLanguage().equals(Language.JAVASCRIPT)).sorted(comparatorFileLength).sorted(comparatorTextRange).findFirst();
         }
         return dependencyReasons.stream().sorted(comparatorFileLength).sorted(comparatorTextRange).findFirst();
+    }
+
+    /**
+     *
+     * @param reference
+     * @return
+     */
+    public static Optional<SoftwareDependency> convertToSoftwareDependency(@NonNull String reference) {
+        if (StringUtils.isNotBlank(reference)) {
+            if (reference.contains("maven")) {
+                // pkg:maven/struts/struts@1.2.8 -> struts/struts@1.2.8
+                String dependency = StringUtils.substringAfter(reference, "/");
+                String groupId = StringUtils.substringBefore(dependency, "/");
+                String artifactId = StringUtils.substringBetween(dependency, "/", "@");
+                if (StringUtils.isAnyBlank(groupId, artifactId)) {
+                    return Optional.empty();
+                }
+                String version = StringUtils.substringAfter(dependency, "@");
+                return Optional.of(new MavenDependency(groupId, artifactId, StringUtils.isBlank(version) ? null : version));
+            } else if (reference.contains("npm") || reference.contains("javascript")) {
+                // pkg:npm/arr-flatten@1.1.0 -> arr-flatten@1.1.0
+                // pkg:npm/mime -> mime
+                String dependency = StringUtils.substringAfter(reference, "/");
+                String name = StringUtils.substringBefore(dependency, "@");
+                if (StringUtils.isBlank(name)) {
+                    return Optional.empty();
+                }
+                String version = StringUtils.substringAfter(dependency, "@");
+                return Optional.of(new NPMDependency(name, StringUtils.isBlank(version) ? null : version));
+            }
+        }
+        return Optional.empty();
+    }
+
+    public static boolean isMavenDependency(@NonNull SoftwareDependency dep) {
+        return dep instanceof MavenDependency;
+    }
+
+    public static boolean isNPMDependency(@NonNull SoftwareDependency dep) {
+        return dep instanceof NPMDependency;
     }
 }

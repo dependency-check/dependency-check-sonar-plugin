@@ -21,6 +21,8 @@ package org.sonar.dependencycheck.base;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -34,6 +36,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -50,6 +53,8 @@ import org.sonar.dependencycheck.parser.element.Vulnerability;
 import org.sonar.dependencycheck.reason.GradleDependencyReason;
 import org.sonar.dependencycheck.reason.MavenDependencyReason;
 import org.sonar.dependencycheck.reason.NPMDependencyReason;
+import org.sonar.dependencycheck.reason.SoftwareDependency;
+import org.sonar.dependencycheck.reason.maven.MavenDependency;
 
 class DependencyCheckUtilsTest {
 
@@ -274,10 +279,47 @@ class DependencyCheckUtilsTest {
         Vulnerability vulnerability1 = new Vulnerability("Test name", "NVD", "MyDescription", null, cvssV2, null, null);
         List<Vulnerability> vulnerabilities1 = new ArrayList<>();
         vulnerabilities1.add(vulnerability1);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(), vulnerabilities1, packageidentifiers1, Collections.emptyList());
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(), vulnerabilities1, packageidentifiers1, Collections.emptyList(), null);
 
         // then
         assertEquals(submodulepomReason, DependencyCheckUtils.getBestDependencyReason(dependency, Arrays.asList(pomReason, submodulepomReason)).get());
         assertEquals(submodulepomReason, DependencyCheckUtils.getBestDependencyReason(dependency, Arrays.asList(submodulepomReason, pomReason)).get());
+    }
+
+    @Test
+    void testMaven() {
+        Optional<SoftwareDependency> dep = DependencyCheckUtils.convertToSoftwareDependency("pkg:maven/struts/struts@1.2.8");
+        assertTrue(DependencyCheckUtils.isMavenDependency(dep.get()));
+        assertFalse(DependencyCheckUtils.isNPMDependency(dep.get()));
+        assertEquals("struts", ((MavenDependency)dep.get()).getGroupId());
+        assertEquals("struts", ((MavenDependency)dep.get()).getArtifactId());
+        assertEquals("1.2.8", ((MavenDependency)dep.get()).getVersion().get());
+    }
+
+    @Test
+    void testNode() {
+        Optional<SoftwareDependency> dep = DependencyCheckUtils.convertToSoftwareDependency("pkg:npm/braces@1.8.5");
+        assertFalse(DependencyCheckUtils.isMavenDependency(dep.get()));
+        assertTrue(DependencyCheckUtils.isNPMDependency(dep.get()));
+        assertEquals("braces", dep.get().getName());
+        assertEquals("1.8.5", dep.get().getVersion().get());
+    }
+
+    @Test
+    void testNodeWithOutVersion() {
+        Optional<SoftwareDependency> dep = DependencyCheckUtils.convertToSoftwareDependency("pkg:npm/mime");
+        assertFalse(DependencyCheckUtils.isMavenDependency(dep.get()));
+        assertTrue(DependencyCheckUtils.isNPMDependency(dep.get()));
+        assertEquals("mime", dep.get().getName());
+        assertFalse(dep.get().getVersion().isPresent());
+    }
+
+    @Test
+    void testJavaScript() {
+        Optional<SoftwareDependency> dep = DependencyCheckUtils.convertToSoftwareDependency("pkg:javascript/jquery@2.2.0");
+        assertFalse(DependencyCheckUtils.isMavenDependency(dep.get()));
+        assertTrue(DependencyCheckUtils.isNPMDependency(dep.get()));
+        assertEquals("jquery", dep.get().getName());
+        assertEquals("2.2.0", dep.get().getVersion().get());
     }
 }
