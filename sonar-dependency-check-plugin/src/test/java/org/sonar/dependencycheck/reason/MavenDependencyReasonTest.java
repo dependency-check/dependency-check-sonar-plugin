@@ -73,7 +73,7 @@ class MavenDependencyReasonTest extends DependencyReasonTestHelper {
         Identifier identifier1 = new Identifier("pkg:maven/struts/struts@1.2.8", Confidence.HIGHEST);
         Collection<Identifier> packageidentifiers1 = new ArrayList<>();
         packageidentifiers1.add(identifier1);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList());
         TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
         assertTrue(maven.isReasonable());
         assertNotNull(textRangeConfidence);
@@ -93,7 +93,7 @@ class MavenDependencyReasonTest extends DependencyReasonTestHelper {
         Identifier identifier1 = new Identifier("pkg:maven/dummy/struts@1.2.8", Confidence.HIGHEST);
         Collection<Identifier> packageidentifiers1 = new ArrayList<>();
         packageidentifiers1.add(identifier1);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList());
         TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
         assertTrue(maven.isReasonable());
         assertNotNull(textRangeConfidence);
@@ -113,7 +113,7 @@ class MavenDependencyReasonTest extends DependencyReasonTestHelper {
         Identifier identifier1 = new Identifier("pkg:maven/struts/dummy@1.2.8", Confidence.HIGHEST);
         Collection<Identifier> packageidentifiers1 = new ArrayList<>();
         packageidentifiers1.add(identifier1);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList());
         TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
         assertTrue(maven.isReasonable());
         assertNotNull(textRangeConfidence);
@@ -133,7 +133,7 @@ class MavenDependencyReasonTest extends DependencyReasonTestHelper {
         Identifier identifier1 = new Identifier("pkg:maven/dummy-parent/fake-artifact@1.0.0", Confidence.HIGHEST);
         Collection<Identifier> packageidentifiers1 = new ArrayList<>();
         packageidentifiers1.add(identifier1);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList());
         TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
         assertTrue(maven.isReasonable());
         assertNotNull(textRangeConfidence);
@@ -154,7 +154,7 @@ class MavenDependencyReasonTest extends DependencyReasonTestHelper {
         Identifier identifier1 = new Identifier("pkg:maven/myvendor/myartifact@1.2.8", Confidence.HIGHEST);
         Collection<Identifier> packageidentifiers1 = new ArrayList<>();
         packageidentifiers1.add(identifier1);
-        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList());
         TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
         // Check for default location, first line in file with low confidence
         assertNotNull(textRangeConfidence);
