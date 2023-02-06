@@ -124,6 +124,13 @@ sonar.dependencyCheck.securityHotspot=true
 sonar.dependencyCheck.securityHotspot=false (default)
 ```
 
+If you want to have the complete jar file path instead of the name, use the following configuration.
+
+```ini
+sonar.dependencyCheck.useFilePath=true
+sonar.dependencyCheck.useFilePath=false (default)
+```
+
 ## Ecosystem
 
 Dependency-Check is available as a:
