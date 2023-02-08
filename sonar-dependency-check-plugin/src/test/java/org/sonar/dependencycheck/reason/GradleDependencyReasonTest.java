@@ -30,6 +30,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -38,6 +39,7 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Identifier;
+import org.sonar.dependencycheck.parser.element.IncludedBy;
 
 class GradleDependencyReasonTest extends DependencyReasonTestHelper {
 
@@ -81,6 +83,27 @@ class GradleDependencyReasonTest extends DependencyReasonTestHelper {
         assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
         assertEquals(24, textRangeConfidence.getTextRange().end().line());
         assertEquals(44, textRangeConfidence.getTextRange().end().lineOffset());
+        // verify that same dependency points to the same TextRange, use of HashMap
+        assertEquals(gradle.getBestTextRange(dependency), gradle.getBestTextRange(dependency));
+    }
+
+    @Test
+    void foundDependencyWithIncludedBy() throws IOException {
+        GradleDependencyReason gradle = new GradleDependencyReason(inputFile("build.gradle"));
+        // Create Dependency
+        Identifier identifier = new Identifier("pkg:maven/custom.groupId/exampleArtifact@2.3", Confidence.HIGH);
+        Collection<Identifier> identifiersCollected = new ArrayList<>();
+        identifiersCollected.add(identifier);
+        IncludedBy includedBy = new IncludedBy();
+        includedBy.put(IncludedBy.REFERENCE_KEYWORD, "pkg:maven/org.owasp/dependency-check-gradle@3.3.4");
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(), Collections.emptyList(), identifiersCollected, Collections.emptyList(), Arrays.asList(includedBy));
+        TextRangeConfidence textRangeConfidence = gradle.getBestTextRange(dependency);
+        assertNotNull(textRangeConfidence);
+        assertEquals(Confidence.HIGHEST, textRangeConfidence.getConfidence());
+        assertEquals(23, textRangeConfidence.getTextRange().start().line());
+        assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
+        assertEquals(23, textRangeConfidence.getTextRange().end().line());
+        assertEquals(53, textRangeConfidence.getTextRange().end().lineOffset());
         // verify that same dependency points to the same TextRange, use of HashMap
         assertEquals(gradle.getBestTextRange(dependency), gradle.getBestTextRange(dependency));
     }

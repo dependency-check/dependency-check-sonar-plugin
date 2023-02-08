@@ -28,7 +28,7 @@ public class IncludedBy extends HashMap<String, String> {
      *
      */
     private static final long serialVersionUID = 1L;
-    private static final String REFERENCE_KEYWORD = "reference";
+    public static final String REFERENCE_KEYWORD = "reference";
 
     public String getReference() {
         return get(REFERENCE_KEYWORD);

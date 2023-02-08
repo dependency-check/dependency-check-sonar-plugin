@@ -30,6 +30,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -38,6 +39,7 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Identifier;
+import org.sonar.dependencycheck.parser.element.IncludedBy;
 
 class MavenDependencyReasonTest extends DependencyReasonTestHelper {
 
@@ -80,6 +82,28 @@ class MavenDependencyReasonTest extends DependencyReasonTestHelper {
         assertEquals(46, textRangeConfidence.getTextRange().start().line());
         assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
         assertEquals(50, textRangeConfidence.getTextRange().end().line());
+        assertEquals(21, textRangeConfidence.getTextRange().end().lineOffset());
+        assertEquals(Confidence.HIGHEST, textRangeConfidence.getConfidence());
+        // verify that same dependency points to the same TextRange, use of HashMap
+        assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
+    }
+
+    @Test
+    void foundDependencyWithIncludedBy() throws IOException {
+        MavenDependencyReason maven = new MavenDependencyReason(inputFile("pom.xml"));
+        // Create Dependency
+        Identifier identifier1 = new Identifier("pkg:maven/custom.groupId/exampleArtifact@2.3", Confidence.HIGH);
+        Collection<Identifier> packageidentifiers1 = new ArrayList<>();
+        packageidentifiers1.add(identifier1);
+        IncludedBy includedBy = new IncludedBy();
+        includedBy.put(IncludedBy.REFERENCE_KEYWORD, "pkg:maven/com.sun.mail/javax.mail@1.4.4");
+        Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(), Collections.emptyList(), packageidentifiers1, Collections.emptyList(), Arrays.asList(includedBy));
+        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
+        assertTrue(maven.isReasonable());
+        assertNotNull(textRangeConfidence);
+        assertEquals(51, textRangeConfidence.getTextRange().start().line());
+        assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
+        assertEquals(55, textRangeConfidence.getTextRange().end().line());
         assertEquals(21, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.HIGHEST, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap

@@ -210,28 +210,36 @@ public final class DependencyCheckUtils {
     public static Optional<SoftwareDependency> convertToSoftwareDependency(@NonNull String reference) {
         if (StringUtils.isNotBlank(reference)) {
             if (reference.contains("maven")) {
-                // pkg:maven/struts/struts@1.2.8 -> struts/struts@1.2.8
-                String dependency = StringUtils.substringAfter(reference, "/");
-                String groupId = StringUtils.substringBefore(dependency, "/");
-                String artifactId = StringUtils.substringBetween(dependency, "/", "@");
-                if (StringUtils.isAnyBlank(groupId, artifactId)) {
-                    return Optional.empty();
-                }
-                String version = StringUtils.substringAfter(dependency, "@");
-                return Optional.of(new MavenDependency(groupId, artifactId, StringUtils.isBlank(version) ? null : version));
+                return convertToMavenDependency(reference);
             } else if (reference.contains("npm") || reference.contains("javascript")) {
-                // pkg:npm/arr-flatten@1.1.0 -> arr-flatten@1.1.0
-                // pkg:npm/mime -> mime
-                String dependency = StringUtils.substringAfter(reference, "/");
-                String name = StringUtils.substringBefore(dependency, "@");
-                if (StringUtils.isBlank(name)) {
-                    return Optional.empty();
-                }
-                String version = StringUtils.substringAfter(dependency, "@");
-                return Optional.of(new NPMDependency(name, StringUtils.isBlank(version) ? null : version));
+                return convertToNPMDependency(reference);
             }
         }
         return Optional.empty();
+    }
+
+    private static Optional<SoftwareDependency> convertToMavenDependency(@NonNull String reference) {
+        // pkg:maven/struts/struts@1.2.8 -> struts/struts@1.2.8
+        String dependency = StringUtils.substringAfter(reference, "/");
+        String groupId = StringUtils.substringBefore(dependency, "/");
+        String artifactId = StringUtils.substringBetween(dependency, "/", "@");
+        if (StringUtils.isAnyBlank(groupId, artifactId)) {
+            return Optional.empty();
+        }
+        String version = StringUtils.substringAfter(dependency, "@");
+        return Optional.of(new MavenDependency(groupId, artifactId, StringUtils.isBlank(version) ? null : version));
+    }
+
+    private static Optional<SoftwareDependency> convertToNPMDependency(@NonNull String reference) {
+        // pkg:npm/arr-flatten@1.1.0 -> arr-flatten@1.1.0
+        // pkg:npm/mime -> mime
+        String dependency = StringUtils.substringAfter(reference, "/");
+        String name = StringUtils.substringBefore(dependency, "@");
+        if (StringUtils.isBlank(name)) {
+            return Optional.empty();
+        }
+        String version = StringUtils.substringAfter(dependency, "@");
+        return Optional.of(new NPMDependency(name, StringUtils.isBlank(version) ? null : version));
     }
 
     public static boolean isMavenDependency(@NonNull SoftwareDependency dep) {
