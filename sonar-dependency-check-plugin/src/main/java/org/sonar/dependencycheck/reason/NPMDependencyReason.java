@@ -21,7 +21,6 @@
 package org.sonar.dependencycheck.reason;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -36,7 +35,6 @@ import org.sonar.dependencycheck.parser.PackageLockParserHelper;
 import org.sonar.dependencycheck.parser.ReportParserException;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
-import org.sonar.dependencycheck.parser.element.IncludedBy;
 import org.sonar.dependencycheck.reason.npm.NPMDependency;
 import org.sonar.dependencycheck.reason.npm.NPMDependencyLocation;
 import org.sonar.dependencycheck.reason.npm.PackageLockModel;
@@ -85,25 +83,9 @@ public class NPMDependencyReason extends DependencyReason {
             } else {
                 LOGGER.debug("No Identifier with type npm/javascript found for Dependency {}", dependency.getFileName());
             }
-            Optional<Collection<IncludedBy>> includedBys = dependency.getIncludedBy();
-            if (includedBys.isPresent()) {
-                workOnIncludedBy(dependency, includedBys.get());
-            }
             dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFirstLine(k, packageLock));
         }
         return dependencyMap.get(dependency);
-    }
-
-    private void workOnIncludedBy(@NonNull Dependency dependency, Collection<IncludedBy> includedBys) {
-        for (IncludedBy includedBy : includedBys) {
-            String reference = includedBy.getReference();
-            if (StringUtils.isNotBlank(reference)) {
-                Optional<SoftwareDependency> softwareDependency = DependencyCheckUtils.convertToSoftwareDependency(reference);
-                if (softwareDependency.isPresent() && DependencyCheckUtils.isNPMDependency(softwareDependency.get())) {
-                    fillArtifactMatch(dependency, (NPMDependency) softwareDependency.get());
-                }
-            }
-        }
     }
 
     private void fillArtifactMatch(@NonNull Dependency dependency, NPMDependency npmDependency) {
