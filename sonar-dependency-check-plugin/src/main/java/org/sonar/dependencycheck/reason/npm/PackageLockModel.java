@@ -35,18 +35,18 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PackageLockModel {
-    private final List<NPMDependency> dependencies;
+    private final List<NPMDependencyLocation> dependencies;
 
     /**
      * @param dependencies
      */
     @JsonCreator
-    public PackageLockModel(@JsonProperty(value = "dependencies") @JsonDeserialize(using = PackageLockDependencyDeserializer.class ) @Nullable List<NPMDependency> dependencies) {
+    public PackageLockModel(@JsonProperty(value = "dependencies") @JsonDeserialize(using = PackageLockDependencyDeserializer.class ) @Nullable List<NPMDependencyLocation> dependencies) {
         this.dependencies = dependencies == null ? Collections.emptyList() : dependencies;
     }
 
     @NonNull
-    public List<NPMDependency> getDependencies() {
+    public List<NPMDependencyLocation> getDependencies() {
         return dependencies;
     }
 

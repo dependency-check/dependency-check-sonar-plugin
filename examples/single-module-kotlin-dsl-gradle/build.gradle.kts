@@ -4,7 +4,7 @@ plugins {
     application
     kotlin("jvm") version "1.3.50"
     id("org.sonarqube") version "3.3"
-    id("org.owasp.dependencycheck") version "6.5.3"
+    id("org.owasp.dependencycheck") version "8.0.2"
 }
 
 repositories {

@@ -35,12 +35,11 @@ import org.sonar.dependencycheck.parser.PackageLockParserHelper;
 import org.sonar.dependencycheck.parser.ReportParserException;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
-import org.sonar.dependencycheck.parser.element.Identifier;
 import org.sonar.dependencycheck.reason.npm.NPMDependency;
+import org.sonar.dependencycheck.reason.npm.NPMDependencyLocation;
 import org.sonar.dependencycheck.reason.npm.PackageLockModel;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 
 public class NPMDependencyReason extends DependencyReason {
 
@@ -78,57 +77,36 @@ public class NPMDependencyReason extends DependencyReason {
     @Override
     public TextRangeConfidence getBestTextRange(Dependency dependency) {
         if (!dependencyMap.containsKey(dependency)) {
-            Optional<Identifier> javaScriptIdentifier = DependencyCheckUtils.getJavaScriptIdentifier(dependency);
-            if (javaScriptIdentifier.isPresent()) {
-                fillArtifactMatch(dependency, javaScriptIdentifier.get());
+            Optional<NPMDependency> npmDependency = DependencyCheckUtils.getNPMDependency(dependency);
+            if (npmDependency.isPresent()) {
+                fillArtifactMatch(dependency, npmDependency.get());
             } else {
-                LOGGER.debug("No Identifier with type javascript found for Dependency {}", dependency.getFileName());
-            }
-            Optional<Identifier> npmIdentifier = DependencyCheckUtils.getNPMIdentifier(dependency);
-            if (npmIdentifier.isPresent()) {
-                fillArtifactMatch(dependency, npmIdentifier.get());
-            } else {
-                LOGGER.debug("No Identifier with type npm found for Dependency {}", dependency.getFileName());
+                LOGGER.debug("No Identifier with type npm/javascript found for Dependency {}", dependency.getFileName());
             }
             dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFirstLine(k, packageLock));
         }
         return dependencyMap.get(dependency);
     }
 
-    private void fillArtifactMatch(@NonNull Dependency dependency, Identifier npmIdentifier) {
-        String packageArtifact = Identifier.getPackageArtifact(npmIdentifier).orElse(null);
-        if (StringUtils.isNotBlank(packageArtifact)) {
-            String name;
-            String version;
-            if (packageArtifact.contains("@")) {
-                // packageArtifact is something like jquery@2.2.0
-                String[] npmIdentifierSplit = packageArtifact.split("@");
-                name = npmIdentifierSplit[0];
-                version = npmIdentifierSplit[1];
-            } else {
-                // It happens, that packageArtifact doesn't contain a version
-                // https://github.com/dependency-check/dependency-check-sonar-plugin/issues/242#issuecomment-605521827
-                name = packageArtifact;
-                version = null;
-            }
-
-            // Try to find in <dependency>
-            for (NPMDependency npmDependency : packageLockModel.getDependencies()) {
-                checkNPMDependency(name, version , npmDependency)
-                        .ifPresent(textrange -> dependencyMap.put(dependency, textrange));
-            }
+    private void fillArtifactMatch(@NonNull Dependency dependency, NPMDependency npmDependency) {
+        // Try to find in <dependency>
+        for (NPMDependencyLocation npmDependencyLocation : packageLockModel.getDependencies()) {
+            checkNPMDependency(npmDependency, npmDependencyLocation)
+                    .ifPresent(textrange -> dependencyMap.put(dependency, textrange));
         }
     }
 
-    private Optional<TextRangeConfidence> checkNPMDependency(String name, @Nullable String version, NPMDependency dependency) {
-        if (StringUtils.equals(name, dependency.getName())
-                && StringUtils.equals(version, dependency.getVersion())) {
-            LOGGER.debug("Found a name and version match in {}", packageLock);
-            return Optional.of(new TextRangeConfidence(packageLock.newRange(packageLock.selectLine(dependency.getStartLineNr()).start(), packageLock.selectLine(dependency.getEndLineNr()).end()), Confidence.HIGHEST));
-        }
-        if (StringUtils.equals(name, dependency.getName())) {
-            LOGGER.debug("Found a name match in {} for {}", packageLock, name);
-            return Optional.of(new TextRangeConfidence(packageLock.newRange(packageLock.selectLine(dependency.getStartLineNr()).start(), packageLock.selectLine(dependency.getEndLineNr()).end()), Confidence.HIGH));
+    private Optional<TextRangeConfidence> checkNPMDependency(NPMDependency npmDependency, NPMDependencyLocation npmDependencyLocation) {
+        if (StringUtils.equals(npmDependency.getName(), npmDependencyLocation.getName())) {
+            Optional<String> npmDepVersion = npmDependency.getVersion();
+            Optional<String> npmDepLocVersion = npmDependencyLocation.getVersion();
+            if (npmDepVersion.isPresent() && npmDepLocVersion.isPresent() &&
+                StringUtils.equals(npmDepVersion.get(), npmDepLocVersion.get())) {
+                LOGGER.debug("Found a name and version match in {}", packageLock);
+                return Optional.of(new TextRangeConfidence(packageLock.newRange(packageLock.selectLine(npmDependencyLocation.getStartLineNr()).start(), packageLock.selectLine(npmDependencyLocation.getEndLineNr()).end()), Confidence.HIGHEST));
+            }
+            LOGGER.debug("Found a name match in {} for {}", packageLock, npmDependency.getName());
+            return Optional.of(new TextRangeConfidence(packageLock.newRange(packageLock.selectLine(npmDependencyLocation.getStartLineNr()).start(), packageLock.selectLine(npmDependencyLocation.getEndLineNr()).end()), Confidence.HIGH));
         }
         return Optional.empty();
     }

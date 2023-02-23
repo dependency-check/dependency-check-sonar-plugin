@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.junit.jupiter.api.Test;
-import org.sonar.dependencycheck.reason.maven.MavenDependency;
+import org.sonar.dependencycheck.reason.maven.MavenDependencyLocation;
 import org.sonar.dependencycheck.reason.maven.MavenPomModel;
 
 class PomParserHelperTest {
@@ -41,20 +41,21 @@ class PomParserHelperTest {
         MavenPomModel pomModel = PomParserHelper.parse(pom);
         assertNotNull(pomModel);
         // check some dependencies
-        checkMavenDependency(pomModel, "struts", "struts", 46, 50);
-        checkMavenDependency(pomModel, "javax.mail", "com.sun.mail", 51, 55);
-        checkMavenDependency(pomModel, "spring", "org.springframework", 56, 60);
-        checkMavenDependency(pomModel, "commons-io", "commons-io", 61, 65);
+        checkMavenDependency(pomModel, "struts", "struts", "1.2.8", 46, 50);
+        checkMavenDependency(pomModel, "com.sun.mail", "javax.mail", "1.4.4", 51, 55);
+        checkMavenDependency(pomModel, "org.springframework", "spring", "2.0.8", 56, 60);
+        checkMavenDependency(pomModel, "commons-io", "commons-io", "2.4", 61, 65);
         // check parent
-        checkMavenParent(pomModel, "dummy-parent", 18, 21);
+        checkMavenParent(pomModel, "dummy-parent", "dummy-parent-artifact", "1.0", 18, 21);
     }
 
-    private void checkMavenDependency(MavenPomModel pomModel, String artifactId, String groupId, int startLineNr, int endLineNr) {
+    private void checkMavenDependency(MavenPomModel pomModel, String groupId, String artifactId, String version, int startLineNr, int endLineNr) {
         boolean found = false;
-        for (MavenDependency mavenDependency : pomModel.getDependencies()) {
+        for (MavenDependencyLocation mavenDependency : pomModel.getDependencies()) {
             if (artifactId.equals(mavenDependency.getArtifactId())) {
                 found = true;
                 assertEquals(groupId, mavenDependency.getGroupId());
+                assertEquals(version, mavenDependency.getVersion().get());
                 assertEquals(startLineNr, mavenDependency.getStartLineNr());
                 assertEquals(endLineNr, mavenDependency.getEndLineNr());
             }
@@ -62,8 +63,10 @@ class PomParserHelperTest {
         assertTrue(found, "We haven't found dependency " + artifactId);
     }
 
-    private void checkMavenParent(MavenPomModel pomModel, String groupId, int startLineNr, int endLineNr) {
+    private void checkMavenParent(MavenPomModel pomModel, String groupId, String artifactId, String version, int startLineNr, int endLineNr) {
         assertEquals(groupId, pomModel.getParent().get().getGroupId());
+        assertEquals(artifactId, pomModel.getParent().get().getArtifactId());
+        assertEquals(version, pomModel.getParent().get().getVersion().get());
         assertEquals(startLineNr, pomModel.getParent().get().getStartLineNr());
         assertEquals(endLineNr, pomModel.getParent().get().getEndLineNr());
     }

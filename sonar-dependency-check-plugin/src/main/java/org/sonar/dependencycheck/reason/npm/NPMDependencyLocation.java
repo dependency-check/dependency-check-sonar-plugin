@@ -17,17 +17,38 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 package org.sonar.dependencycheck.reason.npm;
 
 import org.sonar.dependencycheck.reason.SoftwareDependency;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
+public class NPMDependencyLocation extends SoftwareDependency{
 
-public class NPMDependency extends SoftwareDependency {
+    private final int startLineNr;
+    private final int endLineNr;
 
-    public NPMDependency(@NonNull String name, @Nullable String version) {
+    /**
+     * @param name
+     * @param version
+     * @param startLineNr
+     * @param endLineNr
+     */
+    public NPMDependencyLocation(String name, String version, int startLineNr, int endLineNr) {
         super(name, version);
+        this.startLineNr = startLineNr;
+        this.endLineNr = endLineNr;
+    }
+
+    /**
+     * @return the startLineNr
+     */
+    public int getStartLineNr() {
+        return startLineNr;
+    }
+
+    /**
+     * @return the endLineNr
+     */
+    public int getEndLineNr() {
+        return endLineNr;
     }
 }

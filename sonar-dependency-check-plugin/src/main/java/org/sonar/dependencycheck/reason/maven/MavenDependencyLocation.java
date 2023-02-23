@@ -18,16 +18,37 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package org.sonar.dependencycheck.reason.npm;
+package org.sonar.dependencycheck.reason.maven;
 
-import org.sonar.dependencycheck.reason.SoftwareDependency;
+public class MavenDependencyLocation extends MavenDependency{
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
+    private final int startLineNr;
+    private final int endLineNr;
 
-public class NPMDependency extends SoftwareDependency {
+    /**
+     * @param groupId
+     * @param artifactId
+     * @param version
+     * @param startLineNr
+     * @param endLineNr
+     */
+    public MavenDependencyLocation(String groupId, String artifactId, String version, int startLineNr, int endLineNr) {
+        super(groupId, artifactId, version);
+        this.startLineNr = startLineNr;
+        this.endLineNr = endLineNr;
+    }
 
-    public NPMDependency(@NonNull String name, @Nullable String version) {
-        super(name, version);
+    /**
+     * @return the startLineNr
+     */
+    public int getStartLineNr() {
+        return startLineNr;
+    }
+
+    /**
+     * @return the endLineNr
+     */
+    public int getEndLineNr() {
+        return endLineNr;
     }
 }

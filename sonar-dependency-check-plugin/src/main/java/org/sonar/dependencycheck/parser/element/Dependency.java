@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.sonar.api.config.Configuration;
+import org.sonar.dependencycheck.base.DependencyCheckUtils;
+import org.sonar.dependencycheck.reason.SoftwareDependency;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -46,6 +48,7 @@ public class Dependency {
     private final List<Vulnerability> vulnerabilities;
     private final Optional<Collection<Identifier>> packages;
     private final Optional<Collection<Identifier>> vulnerabilityIds;
+    private final Optional<Collection<IncludedBy>> includedBy;
 
     @JsonCreator
     public Dependency(@JsonProperty(value = "fileName", required = true) @NonNull String fileName,
@@ -55,8 +58,8 @@ public class Dependency {
                       @JsonProperty(value = "evidenceCollected") Map<String, List<Evidence>> evidenceCollected,
                       @JsonProperty(value = "vulnerabilities") List<Vulnerability> vulnerabilities,
                       @JsonProperty(value = "packages") @Nullable Collection<Identifier> packages,
-                      @JsonProperty(value = "vulnerabilityIds") @Nullable Collection<Identifier> vulnerabilityIds)
-                      {
+                      @JsonProperty(value = "vulnerabilityIds") @Nullable Collection<Identifier> vulnerabilityIds,
+                      @JsonProperty(value = "includedBy") @Nullable Collection<IncludedBy> includedBy) {
         this.fileName = fileName;
         this.filePath = filePath;
         this.md5 = Optional.ofNullable(md5Hash);
@@ -65,6 +68,8 @@ public class Dependency {
         this.vulnerabilities = vulnerabilities;
         this.packages = Optional.ofNullable(packages);
         this.vulnerabilityIds = Optional.ofNullable(vulnerabilityIds);
+        this.includedBy = Optional.ofNullable(includedBy);
+
     }
 
     public String getFileName() {
@@ -104,10 +109,18 @@ public class Dependency {
         return vulnerabilityIds;
     }
 
+    /**
+     * @return the includedBy
+     */
+    public Optional<Collection<IncludedBy>> getIncludedBy() {
+        return includedBy;
+    }
+
     public boolean isJavaDependency() {
         if (packages.isPresent()) {
             for (Identifier identifier : packages.get()) {
-                if (Identifier.isMavenPackage(identifier)) {
+                Optional<SoftwareDependency> dep = DependencyCheckUtils.convertToSoftwareDependency(identifier.getId());
+                if (dep.isPresent() && DependencyCheckUtils.isMavenDependency(dep.get())) {
                     return true;
                 }
             }
@@ -118,7 +131,8 @@ public class Dependency {
     public boolean isJavaScriptDependency() {
         if (packages.isPresent()) {
             for (Identifier identifier : packages.get()) {
-                if (Identifier.isNPMPackage(identifier) || Identifier.isJavaScriptPackage(identifier)) {
+                Optional<SoftwareDependency> dep = DependencyCheckUtils.convertToSoftwareDependency(identifier.getId());
+                if (dep.isPresent() && DependencyCheckUtils.isNPMDependency(dep.get())) {
                     return true;
                 }
             }

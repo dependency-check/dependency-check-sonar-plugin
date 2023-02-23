@@ -100,7 +100,7 @@ class DependencyCheckSensorTest {
 
         when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)))).thenReturn(sampleJsonReport);
         sensor.execute(context);
-        assertEquals(45, context.allIssues().size());
+        assertEquals(40, context.allIssues().size());
     }
 
     @Test
@@ -128,7 +128,7 @@ class DependencyCheckSensorTest {
 
         when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)))).thenReturn(sampleJsonReport);
         sensor.execute(context);
-        assertEquals(45, context.allIssues().size());
+        assertEquals(40, context.allIssues().size());
         for (Issue issue : context.allIssues()) {
             assertEquals(DependencyCheckConstants.RULE_KEY, issue.ruleKey().rule());
         }
@@ -190,7 +190,7 @@ class DependencyCheckSensorTest {
 
         when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)))).thenReturn(sampleJsonReport);
         sensor.execute(context);
-        assertEquals(7, context.allIssues().size());
+        assertEquals(8, context.allIssues().size());
     }
 
     @Test
@@ -246,7 +246,7 @@ class DependencyCheckSensorTest {
                                 .orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT))))
                                         .thenReturn(sampleJsonReport);
         sensor.execute(context);
-        assertEquals(45, context.allIssues().size());
+        assertEquals(40, context.allIssues().size());
         for (Issue issue : context.allIssues()) {
             assertEquals(DependencyCheckConstants.RULE_KEY_WITH_SECURITY_HOTSPOT, issue.ruleKey().rule());
         }

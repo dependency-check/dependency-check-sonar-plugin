@@ -24,7 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.sonar.dependencycheck.reason.maven.MavenDependency;
+import org.sonar.dependencycheck.reason.maven.MavenDependencyLocation;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -33,7 +33,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 
-public class MavenDependencyDeserializer extends StdDeserializer<List<MavenDependency>>{
+public class MavenDependencyDeserializer extends StdDeserializer<List<MavenDependencyLocation>>{
 
     /**
      *
@@ -49,13 +49,14 @@ public class MavenDependencyDeserializer extends StdDeserializer<List<MavenDepen
     }
 
     @Override
-    public List<MavenDependency> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-        List<MavenDependency> mavenDependencies = new LinkedList<>();
+    public List<MavenDependencyLocation> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+        List<MavenDependencyLocation> mavenDependencies = new LinkedList<>();
         while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
             if (StringUtils.equalsIgnoreCase("dependency", jsonParser.getCurrentName())) {
                 // We found a dependency
                 String groupId = "";
                 String artifactId = "";
+                String version = "";
                 int startLineNr = jsonParser.getCurrentLocation().getLineNr();
                 while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
                     if (StringUtils.equalsIgnoreCase("artifactId", jsonParser.getCurrentName())) {
@@ -64,9 +65,12 @@ public class MavenDependencyDeserializer extends StdDeserializer<List<MavenDepen
                     if (StringUtils.equalsIgnoreCase("groupId", jsonParser.getCurrentName())) {
                         groupId = jsonParser.getValueAsString();
                     }
+                    if (StringUtils.equalsIgnoreCase("version", jsonParser.getCurrentName())) {
+                        version = jsonParser.getValueAsString();
+                    }
                 }
                 int endLineNr = jsonParser.getCurrentLocation().getLineNr();
-                mavenDependencies.add(new MavenDependency(groupId, artifactId, startLineNr, endLineNr));
+                mavenDependencies.add(new MavenDependencyLocation(groupId, artifactId, version, startLineNr, endLineNr));
             }
         }
         return mavenDependencies;

@@ -18,40 +18,19 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package org.sonar.dependencycheck.reason.maven;
+package org.sonar.dependencycheck.parser.element;
 
-public class MavenParent {
+import java.util.HashMap;
 
-    private final String groupId;
-    private final int startLineNr;
-    private final int endLineNr;
-    /**
-     * @param groupId
-     * @param startLineNr
-     * @param endLineNr
-     */
-    public MavenParent(String groupId ,int startLineNr, int endLineNr) {
-        this.groupId = groupId;
-        this.startLineNr = startLineNr;
-        this.endLineNr = endLineNr;
-    }
-    /**
-     * @return the groupId
-     */
-    public String getGroupId() {
-        return groupId;
-    }
-    /**
-     * @return the startLineNr
-     */
-    public int getStartLineNr() {
-        return startLineNr;
-    }
-    /**
-     * @return the endLineNr
-     */
-    public int getEndLineNr() {
-        return endLineNr;
-    }
+public class IncludedBy extends HashMap<String, String> {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    public static final String REFERENCE_KEYWORD = "reference";
+
+    public String getReference() {
+        return get(REFERENCE_KEYWORD);
+    }
 }

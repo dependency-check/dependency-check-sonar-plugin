@@ -33,7 +33,6 @@ class DependencyCheckReportPageTest {
         DependencyCheckReportPage reportPage = new DependencyCheckReportPage();
         Context context = new Context();
         reportPage.define(context);
-        System.out.println(context.getPages().size());
         Page report_page = context.getPages().iterator().next();
         assertEquals("Dependency-Check", report_page.getName());
         assertEquals("dependencycheck/report_page", report_page.getKey());

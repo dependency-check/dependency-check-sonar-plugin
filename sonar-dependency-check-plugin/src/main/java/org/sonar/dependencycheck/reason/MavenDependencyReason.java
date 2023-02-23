@@ -21,6 +21,7 @@
 package org.sonar.dependencycheck.reason;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -35,9 +36,9 @@ import org.sonar.dependencycheck.parser.PomParserHelper;
 import org.sonar.dependencycheck.parser.ReportParserException;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
-import org.sonar.dependencycheck.parser.element.Identifier;
+import org.sonar.dependencycheck.parser.element.IncludedBy;
 import org.sonar.dependencycheck.reason.maven.MavenDependency;
-import org.sonar.dependencycheck.reason.maven.MavenParent;
+import org.sonar.dependencycheck.reason.maven.MavenDependencyLocation;
 import org.sonar.dependencycheck.reason.maven.MavenPomModel;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -67,75 +68,82 @@ public class MavenDependencyReason extends DependencyReason {
     @NonNull
     public TextRangeConfidence getBestTextRange(@NonNull Dependency dependency) {
         if (!dependencyMap.containsKey(dependency)) {
-            Optional<Identifier> mavenIdentifier = DependencyCheckUtils.getMavenIdentifier(dependency);
-            if (mavenIdentifier.isPresent()) {
-                fillArtifactMatch(dependency, mavenIdentifier.get());
+            Optional<MavenDependency> mavenDependency = DependencyCheckUtils.getMavenDependency(dependency);
+            if (mavenDependency.isPresent()) {
+                fillArtifactMatch(dependency, mavenDependency.get());
             } else {
                 LOGGER.debug("No Identifier with type maven found for Dependency {}", dependency.getFileName());
+            }
+            Optional<Collection<IncludedBy>> includedBys = dependency.getIncludedBy();
+            if (includedBys.isPresent()) {
+                workOnIncludedBy(dependency, includedBys.get());
             }
             dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFirstLine(k, pom));
         }
         return dependencyMap.get(dependency);
     }
 
+    private void workOnIncludedBy(@NonNull Dependency dependency, Collection<IncludedBy> includedBys) {
+        for (IncludedBy includedBy : includedBys) {
+            String reference = includedBy.getReference();
+            if (StringUtils.isNotBlank(reference)) {
+                Optional<SoftwareDependency> softwareDependency = DependencyCheckUtils.convertToSoftwareDependency(reference);
+                if (softwareDependency.isPresent() && DependencyCheckUtils.isMavenDependency(softwareDependency.get())) {
+                    fillArtifactMatch(dependency, (MavenDependency) softwareDependency.get());
+                }
+            }
+        }
+    }
     /**
      *
-     * This Methods fills a map for a dependency TODO: It would be nice to have
-     * something similar to the command "mvn dependency:tree" At the moment a simple
-     * pom line parser without transitive dependencies
-     *
      * @param dependency
-     * @param mavenIdentifier
+     * @param mavenDependency
      */
-    private void fillArtifactMatch(@NonNull Dependency dependency, Identifier mavenIdentifier) {
+    private void fillArtifactMatch(@NonNull Dependency dependency, MavenDependency mavenDependency) {
         // Try to find in <dependency>
-        for (MavenDependency mavenDependency : pomModel.getDependencies()) {
-            checkPomDependency(mavenIdentifier, mavenDependency)
-                    .ifPresent(textRange -> dependencyMap.put(dependency, textRange));
+        for (MavenDependencyLocation mavenDependencyLocation : pomModel.getDependencies()) {
+            checkPomDependency(mavenDependency, mavenDependencyLocation)
+                .ifPresent(textRange -> putDependencyMap(dependency, textRange));
         }
         // Check Parent if present
-        pomModel.getParent().ifPresent(parent -> checkPomParent(mavenIdentifier, parent)
-                .ifPresent(textRange -> dependencyMap.put(dependency, textRange)));
+        pomModel.getParent()
+            .ifPresent(parent -> checkPomDependency(mavenDependency, parent)
+            .ifPresent(textRange -> putDependencyMap(dependency, textRange)));
     }
 
-    private Optional<TextRangeConfidence> checkPomDependency(Identifier mavenIdentifier, MavenDependency dependency) {
-        Optional<String> packageArtifact = Identifier.getPackageArtifact(mavenIdentifier);
-        if (packageArtifact.isPresent()) {
-            // packageArtifact has something like struts/struts@1.2.8
-            String[] mavenIdentifierSplit = packageArtifact.get().split("@");
-            mavenIdentifierSplit = mavenIdentifierSplit[0].split("/");
-            String groupId = mavenIdentifierSplit[0];
-            String artifactId = mavenIdentifierSplit[1];
-            if (StringUtils.equals(artifactId, dependency.getArtifactId())
-                    && StringUtils.equals(groupId, dependency.getGroupId())) {
-                LOGGER.debug("Found a artifactId and groupId match in {}", pom);
-                return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(dependency.getStartLineNr()).start(), pom.selectLine(dependency.getEndLineNr()).end()), Confidence.HIGHEST));
+    private void putDependencyMap(@NonNull Dependency dependency, TextRangeConfidence newTextRange) {
+        if (dependencyMap.containsKey(dependency)) {
+            TextRangeConfidence oldTextRange = dependencyMap.get(dependency);
+            if (oldTextRange.getConfidence().compareTo(newTextRange.getConfidence()) > 0) {
+                dependencyMap.put(dependency, newTextRange);
             }
-            if (StringUtils.equals(artifactId, dependency.getArtifactId())) {
-                LOGGER.debug("Found a artifactId match in {} for {}", pom, artifactId);
-                return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(dependency.getStartLineNr()).start(), pom.selectLine(dependency.getEndLineNr()).end()), Confidence.HIGH));
-            }
-            if (StringUtils.equals(groupId, dependency.getGroupId())) {
-                LOGGER.debug("Found a groupId match in {} for {}", pom, groupId);
-                return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(dependency.getStartLineNr()).start(), pom.selectLine(dependency.getEndLineNr()).end()), Confidence.MEDIUM));
-            }
+        } else {
+            dependencyMap.put(dependency, newTextRange);
         }
-        return Optional.empty();
     }
 
-    private Optional<TextRangeConfidence> checkPomParent(Identifier mavenIdentifier, MavenParent parent) {
-        Optional<String> packageArtifact = Identifier.getPackageArtifact(mavenIdentifier);
-        if (packageArtifact.isPresent()) {
-            // packageArtifact has something like struts/struts@1.2.8
-            String[] mavenIdentifierSplit = packageArtifact.get().split("@");
-            mavenIdentifierSplit = mavenIdentifierSplit[0].split("/");
-            String groupId = mavenIdentifierSplit[0];
-            if (StringUtils.equals(groupId, parent.getGroupId())) {
-                LOGGER.debug("Found a groupId match in {} for {}", pom, groupId);
-                return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(parent.getStartLineNr()).start(), pom.selectLine(parent.getEndLineNr()).end()), Confidence.MEDIUM));
+    private Optional<TextRangeConfidence> checkPomDependency(MavenDependency mavenDependency, MavenDependencyLocation mavenDependencyLocation) {
+        if (StringUtils.equals(mavenDependency.getArtifactId(), mavenDependencyLocation.getArtifactId())
+            && StringUtils.equals(mavenDependency.getGroupId(), mavenDependencyLocation.getGroupId())) {
+            Optional<String> depVersion = mavenDependency.getVersion();
+            Optional<String> depLocVersion = mavenDependencyLocation.getVersion();
+            if (depVersion.isPresent() && depLocVersion.isPresent() &&
+                StringUtils.equals(depVersion.get(), depLocVersion.get())) {
+                LOGGER.debug("Found a artifactId, groupId and version match in {} ({} - {})", pom, mavenDependencyLocation.getStartLineNr(), mavenDependencyLocation.getEndLineNr());
+                return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(mavenDependencyLocation.getStartLineNr()).start(), pom.selectLine(mavenDependencyLocation.getEndLineNr()).end()), Confidence.HIGHEST));
             }
+            LOGGER.debug("Found a artifactId and groupId match in {} ({} - {})", pom, mavenDependencyLocation.getStartLineNr(), mavenDependencyLocation.getEndLineNr());
+            return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(mavenDependencyLocation.getStartLineNr()).start(), pom.selectLine(mavenDependencyLocation.getEndLineNr()).end()), Confidence.HIGH));
         }
-        return Optional.empty();
+        if (StringUtils.equals(mavenDependency.getArtifactId(), mavenDependencyLocation.getArtifactId())) {
+            LOGGER.debug("Found a artifactId match in {} ({} - {})", pom, mavenDependencyLocation.getStartLineNr(), mavenDependencyLocation.getEndLineNr());
+            return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(mavenDependencyLocation.getStartLineNr()).start(), pom.selectLine(mavenDependencyLocation.getEndLineNr()).end()), Confidence.MEDIUM));
+        }
+        if (StringUtils.equals(mavenDependency.getGroupId(), mavenDependencyLocation.getGroupId())) {
+            LOGGER.debug("Found a groupId match in {} ({} - {})", pom, mavenDependencyLocation.getStartLineNr(), mavenDependencyLocation.getEndLineNr());
+            return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(mavenDependencyLocation.getStartLineNr()).start(), pom.selectLine(mavenDependencyLocation.getEndLineNr()).end()), Confidence.MEDIUM));
+        }
+         return Optional.empty();
     }
 
     /**

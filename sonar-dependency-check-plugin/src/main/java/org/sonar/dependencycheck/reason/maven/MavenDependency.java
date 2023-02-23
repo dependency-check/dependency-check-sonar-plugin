@@ -20,51 +20,23 @@
 
 package org.sonar.dependencycheck.reason.maven;
 
-public class MavenDependency {
+import org.sonar.dependencycheck.reason.SoftwareDependency;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
+
+public class MavenDependency extends SoftwareDependency {
     private final String groupId;
-    private final String artifactId;
-    private final int startLineNr;
-    private final int endLineNr;
 
-    /**
-     * @param groupId
-     * @param artifactId
-     * @param startLineNr
-     * @param endLineNr
-     */
-    public MavenDependency(String groupId, String artifactId, int startLineNr, int endLineNr) {
+    public MavenDependency(@NonNull String groupId, @NonNull String artifactId, @Nullable String version) {
+        super(artifactId, version);
         this.groupId = groupId;
-        this.artifactId = artifactId;
-        this.startLineNr = startLineNr;
-        this.endLineNr = endLineNr;
+    }
+    public String getArtifactId() {
+        return getName();
     }
 
-    /**
-     * @return the groupId
-     */
     public String getGroupId() {
         return groupId;
-    }
-
-    /**
-     * @return the artifactId
-     */
-    public String getArtifactId() {
-        return artifactId;
-    }
-
-    /**
-     * @return the startLineNr
-     */
-    public int getStartLineNr() {
-        return startLineNr;
-    }
-
-    /**
-     * @return the endLineNr
-     */
-    public int getEndLineNr() {
-        return endLineNr;
     }
 }
