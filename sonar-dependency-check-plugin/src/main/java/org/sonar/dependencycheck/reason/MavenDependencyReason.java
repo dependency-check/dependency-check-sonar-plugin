@@ -21,7 +21,9 @@
 package org.sonar.dependencycheck.reason;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -37,16 +39,18 @@ import org.sonar.dependencycheck.parser.ReportParserException;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.IncludedBy;
+import org.sonar.dependencycheck.parser.element.Vulnerability;
 import org.sonar.dependencycheck.reason.maven.MavenDependency;
 import org.sonar.dependencycheck.reason.maven.MavenDependencyLocation;
 import org.sonar.dependencycheck.reason.maven.MavenPomModel;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 public class MavenDependencyReason extends DependencyReason {
 
     private final InputFile pom;
-    private final Map<Dependency, TextRangeConfidence> dependencyMap;
+    private final Map<Map<Dependency, Vulnerability>, TextRangeConfidence> dependencyMap;
     private MavenPomModel pomModel;
 
     private static final Logger LOGGER = Loggers.get(MavenDependencyReason.class);
@@ -66,30 +70,30 @@ public class MavenDependencyReason extends DependencyReason {
 
     @Override
     @NonNull
-    public TextRangeConfidence getBestTextRange(@NonNull Dependency dependency) {
+    public TextRangeConfidence getBestTextRange(@NonNull Dependency dependency, @Nullable Vulnerability vulnerability) {
         if (!dependencyMap.containsKey(dependency)) {
             Optional<MavenDependency> mavenDependency = DependencyCheckUtils.getMavenDependency(dependency);
             if (mavenDependency.isPresent()) {
-                fillArtifactMatch(dependency, mavenDependency.get());
+                fillArtifactMatch(dependency, vulnerability, mavenDependency.get());
             } else {
                 LOGGER.debug("No Identifier with type maven found for Dependency {}", dependency.getFileName());
             }
             Optional<Collection<IncludedBy>> includedBys = dependency.getIncludedBy();
             if (includedBys.isPresent()) {
-                workOnIncludedBy(dependency, includedBys.get());
+                workOnIncludedBy(dependency, vulnerability, includedBys.get());
             }
-            dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFirstLine(k, pom));
+            dependencyMap.computeIfAbsent(Collections.singletonMap(dependency, vulnerability), k -> addDependencyToFirstLine(k, pom));
         }
-        return dependencyMap.get(dependency);
+        return dependencyMap.get(Collections.singletonMap(dependency, vulnerability));
     }
 
-    private void workOnIncludedBy(@NonNull Dependency dependency, Collection<IncludedBy> includedBys) {
+    private void workOnIncludedBy(@NonNull Dependency dependency, @Nullable Vulnerability vulnerability, Collection<IncludedBy> includedBys) {
         for (IncludedBy includedBy : includedBys) {
             String reference = includedBy.getReference();
             if (StringUtils.isNotBlank(reference)) {
                 Optional<SoftwareDependency> softwareDependency = DependencyCheckUtils.convertToSoftwareDependency(reference);
                 if (softwareDependency.isPresent() && DependencyCheckUtils.isMavenDependency(softwareDependency.get())) {
-                    fillArtifactMatch(dependency, (MavenDependency) softwareDependency.get());
+                    fillArtifactMatch(dependency, vulnerability, (MavenDependency) softwareDependency.get());
                 }
             }
         }
@@ -99,30 +103,40 @@ public class MavenDependencyReason extends DependencyReason {
      * @param dependency
      * @param mavenDependency
      */
-    private void fillArtifactMatch(@NonNull Dependency dependency, MavenDependency mavenDependency) {
-        // Try to find in <dependency>
+    private void fillArtifactMatch(@NonNull Dependency dependency, @Nullable Vulnerability vulnerability, MavenDependency mavenDependency) {
+    	BigInteger cveNum = BigInteger.valueOf(0);
+    	if(vulnerability != null) {
+        	String name = vulnerability.getName().replaceAll("[^\\d]", "");
+        	if(!StringUtils.isEmpty(name)) {
+        		cveNum = new BigInteger(name);
+        	}
+    	}
+    	
+    	final int cve = cveNum.intValue();
+    	
+    	// Try to find in <dependency>
         for (MavenDependencyLocation mavenDependencyLocation : pomModel.getDependencies()) {
-            checkPomDependency(mavenDependency, mavenDependencyLocation)
-                .ifPresent(textRange -> putDependencyMap(dependency, textRange));
+            checkPomDependency(mavenDependency, mavenDependencyLocation, cve)
+                .ifPresent(textRange -> putDependencyMap(dependency, vulnerability, textRange));
         }
         // Check Parent if present
         pomModel.getParent()
-            .ifPresent(parent -> checkPomDependency(mavenDependency, parent)
-            .ifPresent(textRange -> putDependencyMap(dependency, textRange)));
+            .ifPresent(parent -> checkPomDependency(mavenDependency, parent, cve)
+            .ifPresent(textRange -> putDependencyMap(dependency, vulnerability, textRange)));
     }
 
-    private void putDependencyMap(@NonNull Dependency dependency, TextRangeConfidence newTextRange) {
+    private void putDependencyMap(@NonNull Dependency dependency, @Nullable Vulnerability vulnerability, TextRangeConfidence newTextRange) {
         if (dependencyMap.containsKey(dependency)) {
             TextRangeConfidence oldTextRange = dependencyMap.get(dependency);
             if (oldTextRange.getConfidence().compareTo(newTextRange.getConfidence()) > 0) {
-                dependencyMap.put(dependency, newTextRange);
+                dependencyMap.put(Collections.singletonMap(dependency, vulnerability), newTextRange);
             }
         } else {
-            dependencyMap.put(dependency, newTextRange);
+            dependencyMap.put(Collections.singletonMap(dependency, vulnerability), newTextRange);
         }
     }
 
-    private Optional<TextRangeConfidence> checkPomDependency(MavenDependency mavenDependency, MavenDependencyLocation mavenDependencyLocation) {
+    private Optional<TextRangeConfidence> checkPomDependency(MavenDependency mavenDependency, MavenDependencyLocation mavenDependencyLocation, int cveNum) {
         if (StringUtils.equals(mavenDependency.getArtifactId(), mavenDependencyLocation.getArtifactId())
             && StringUtils.equals(mavenDependency.getGroupId(), mavenDependencyLocation.getGroupId())) {
             Optional<String> depVersion = mavenDependency.getVersion();
@@ -130,18 +144,18 @@ public class MavenDependencyReason extends DependencyReason {
             if (depVersion.isPresent() && depLocVersion.isPresent() &&
                 StringUtils.equals(depVersion.get(), depLocVersion.get())) {
                 LOGGER.debug("Found a artifactId, groupId and version match in {} ({} - {})", pom, mavenDependencyLocation.getStartLineNr(), mavenDependencyLocation.getEndLineNr());
-                return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(mavenDependencyLocation.getStartLineNr()).start(), pom.selectLine(mavenDependencyLocation.getEndLineNr()).end()), Confidence.HIGHEST));
+                return Optional.of(new TextRangeConfidence(pom.newRange(mavenDependencyLocation.getStartLineNr(), cveNum, mavenDependencyLocation.getEndLineNr(), cveNum + 1), Confidence.HIGHEST));
             }
             LOGGER.debug("Found a artifactId and groupId match in {} ({} - {})", pom, mavenDependencyLocation.getStartLineNr(), mavenDependencyLocation.getEndLineNr());
-            return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(mavenDependencyLocation.getStartLineNr()).start(), pom.selectLine(mavenDependencyLocation.getEndLineNr()).end()), Confidence.HIGH));
+            return Optional.of(new TextRangeConfidence(pom.newRange(mavenDependencyLocation.getStartLineNr(), cveNum, mavenDependencyLocation.getEndLineNr(), cveNum + 1), Confidence.HIGH));
         }
         if (StringUtils.equals(mavenDependency.getArtifactId(), mavenDependencyLocation.getArtifactId())) {
             LOGGER.debug("Found a artifactId match in {} ({} - {})", pom, mavenDependencyLocation.getStartLineNr(), mavenDependencyLocation.getEndLineNr());
-            return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(mavenDependencyLocation.getStartLineNr()).start(), pom.selectLine(mavenDependencyLocation.getEndLineNr()).end()), Confidence.MEDIUM));
+            return Optional.of(new TextRangeConfidence(pom.newRange(mavenDependencyLocation.getStartLineNr(), cveNum, mavenDependencyLocation.getEndLineNr(), cveNum + 1), Confidence.MEDIUM));
         }
         if (StringUtils.equals(mavenDependency.getGroupId(), mavenDependencyLocation.getGroupId())) {
             LOGGER.debug("Found a groupId match in {} ({} - {})", pom, mavenDependencyLocation.getStartLineNr(), mavenDependencyLocation.getEndLineNr());
-            return Optional.of(new TextRangeConfidence(pom.newRange(pom.selectLine(mavenDependencyLocation.getStartLineNr()).start(), pom.selectLine(mavenDependencyLocation.getEndLineNr()).end()), Confidence.MEDIUM));
+            return Optional.of(new TextRangeConfidence(pom.newRange(mavenDependencyLocation.getStartLineNr(), cveNum, mavenDependencyLocation.getEndLineNr(), cveNum + 1), Confidence.MEDIUM));
         }
          return Optional.empty();
     }
