@@ -22,13 +22,13 @@ package org.sonar.dependencycheck.reason;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.utils.log.Logger;
@@ -47,7 +47,7 @@ public class GradleDependencyReason extends DependencyReason {
 
     private final InputFile buildGradle;
     private String content;
-    private final Map<Map<Dependency, Vulnerability>, TextRangeConfidence> dependencyMap;
+    private final Map<Pair<Dependency, Vulnerability>, TextRangeConfidence> dependencyMap;
 
     private static final Logger LOGGER = Loggers.get(GradleDependencyReason.class);
 
@@ -79,9 +79,9 @@ public class GradleDependencyReason extends DependencyReason {
             if (includedBys.isPresent()) {
                 workOnIncludedBy(dependency, vulnerability, includedBys.get());
             }
-            dependencyMap.computeIfAbsent(Collections.singletonMap(dependency, vulnerability), k -> addDependencyToFirstLine(k, buildGradle));
+            dependencyMap.computeIfAbsent(Pair.of(dependency, vulnerability), k -> addDependencyToFirstLine(k, buildGradle));
         }
-        return dependencyMap.get(Collections.singletonMap(dependency, vulnerability));
+        return dependencyMap.get(Pair.of(dependency, vulnerability));
     }
 
     private void workOnIncludedBy(@NonNull Dependency dependency, @Nullable Vulnerability vulnerability, Collection<IncludedBy> includedBys) {
@@ -100,10 +100,10 @@ public class GradleDependencyReason extends DependencyReason {
         if (dependencyMap.containsKey(dependency)) {
             TextRangeConfidence oldTextRange = dependencyMap.get(dependency);
             if (oldTextRange.getConfidence().compareTo(newTextRange.getConfidence()) > 0) {
-                dependencyMap.put(Collections.singletonMap(dependency, vulnerability), newTextRange);
+                dependencyMap.put(Pair.of(dependency, vulnerability), newTextRange);
             }
         } else {
-            dependencyMap.put(Collections.singletonMap(dependency, vulnerability), newTextRange);
+            dependencyMap.put(Pair.of(dependency, vulnerability), newTextRange);
         }
     }
 
@@ -128,10 +128,9 @@ public class GradleDependencyReason extends DependencyReason {
                         LOGGER.debug("Found a artifactId, groupId and version match in {}", buildGradle);
                         putDependencyMap(dependency, vulnerability, new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.HIGHEST));
                         return;
-                    } else {
-                    	LOGGER.debug("Found a artifactId and groupId match in {} on line {}", buildGradle, linenumber);
-                    	putDependencyMap(dependency, vulnerability, new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.HIGH));
                     }
+                    LOGGER.debug("Found a artifactId and groupId match in {} on line {}", buildGradle, linenumber);
+                    putDependencyMap(dependency, vulnerability, new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.HIGH));
                 } else if (lineFromFile.contains(mavenDependency.getArtifactId())) {
                     LOGGER.debug("Found a artifactId match in {} for {}", buildGradle, mavenDependency.getArtifactId());
                     putDependencyMap(dependency, vulnerability, new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.MEDIUM));

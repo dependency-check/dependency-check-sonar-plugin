@@ -21,8 +21,8 @@
 package org.sonar.dependencycheck.reason;
 
 import java.util.List;
-import java.util.Map;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.Severity;
@@ -77,8 +77,8 @@ public abstract class DependencyReason {
         return language;
     }
 
-    protected static TextRangeConfidence addDependencyToFirstLine(Map<Dependency, Vulnerability> k, InputFile inputFile) {
-    	Dependency dependency = k.entrySet().iterator().next().getKey();
+    protected static TextRangeConfidence addDependencyToFirstLine(Pair<Dependency, Vulnerability> pair, InputFile inputFile) {
+    	Dependency dependency = pair.getKey();
     	LOGGER.debug("We haven't found a TextRange for {} in {}. We link to first line with {} confidence", dependency.getFileName(), inputFile, Confidence.LOW);
         return new TextRangeConfidence(inputFile.selectLine(1), Confidence.LOW);
     }

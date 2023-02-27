@@ -21,12 +21,12 @@
 package org.sonar.dependencycheck.reason;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.utils.log.Logger;
@@ -48,7 +48,7 @@ public class NPMDependencyReason extends DependencyReason {
 
     private final InputFile packageLock;
     private PackageLockModel packageLockModel;
-    private final Map<Map<Dependency, Vulnerability>, TextRangeConfidence> dependencyMap;
+    private final Map<Pair<Dependency, Vulnerability>, TextRangeConfidence> dependencyMap;
 
     private static final Logger LOGGER = Loggers.get(NPMDependencyReason.class);
 
@@ -86,16 +86,16 @@ public class NPMDependencyReason extends DependencyReason {
             } else {
                 LOGGER.debug("No Identifier with type npm/javascript found for Dependency {}", dependency.getFileName());
             }
-            dependencyMap.computeIfAbsent(Collections.singletonMap(dependency, vulnerability), k -> addDependencyToFirstLine(k, packageLock));
+            dependencyMap.computeIfAbsent(Pair.of(dependency, vulnerability), k -> addDependencyToFirstLine(k, packageLock));
         }
-        return dependencyMap.get(Collections.singletonMap(dependency, vulnerability));
+        return dependencyMap.get(Pair.of(dependency, vulnerability));
     }
 
     private void fillArtifactMatch(@NonNull Dependency dependency, @NonNull Vulnerability vulnerability, NPMDependency npmDependency) {
         // Try to find in <dependency>
         for (NPMDependencyLocation npmDependencyLocation : packageLockModel.getDependencies()) {
             checkNPMDependency(npmDependency, npmDependencyLocation)
-                    .ifPresent(textrange -> dependencyMap.put(Collections.singletonMap(dependency, vulnerability), textrange));
+                    .ifPresent(textrange -> dependencyMap.put(Pair.of(dependency, vulnerability), textrange));
         }
     }
 

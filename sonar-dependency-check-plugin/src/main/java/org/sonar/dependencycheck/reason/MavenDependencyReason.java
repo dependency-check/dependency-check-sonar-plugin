@@ -23,12 +23,12 @@ package org.sonar.dependencycheck.reason;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.utils.log.Logger;
@@ -50,7 +50,7 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 public class MavenDependencyReason extends DependencyReason {
 
     private final InputFile pom;
-    private final Map<Map<Dependency, Vulnerability>, TextRangeConfidence> dependencyMap;
+    private final Map<Pair<Dependency, Vulnerability>, TextRangeConfidence> dependencyMap;
     private MavenPomModel pomModel;
 
     private static final Logger LOGGER = Loggers.get(MavenDependencyReason.class);
@@ -82,9 +82,9 @@ public class MavenDependencyReason extends DependencyReason {
             if (includedBys.isPresent()) {
                 workOnIncludedBy(dependency, vulnerability, includedBys.get());
             }
-            dependencyMap.computeIfAbsent(Collections.singletonMap(dependency, vulnerability), k -> addDependencyToFirstLine(k, pom));
+            dependencyMap.computeIfAbsent(Pair.of(dependency, vulnerability), k -> addDependencyToFirstLine(k, pom));
         }
-        return dependencyMap.get(Collections.singletonMap(dependency, vulnerability));
+        return dependencyMap.get(Pair.of(dependency, vulnerability));
     }
 
     private void workOnIncludedBy(@NonNull Dependency dependency, @Nullable Vulnerability vulnerability, Collection<IncludedBy> includedBys) {
@@ -129,10 +129,10 @@ public class MavenDependencyReason extends DependencyReason {
         if (dependencyMap.containsKey(dependency)) {
             TextRangeConfidence oldTextRange = dependencyMap.get(dependency);
             if (oldTextRange.getConfidence().compareTo(newTextRange.getConfidence()) > 0) {
-                dependencyMap.put(Collections.singletonMap(dependency, vulnerability), newTextRange);
+                dependencyMap.put(Pair.of(dependency, vulnerability), newTextRange);
             }
         } else {
-            dependencyMap.put(Collections.singletonMap(dependency, vulnerability), newTextRange);
+            dependencyMap.put(Pair.of(dependency, vulnerability), newTextRange);
         }
     }
 
