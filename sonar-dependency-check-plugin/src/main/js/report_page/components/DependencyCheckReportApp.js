@@ -111,4 +111,5 @@ export default class DependencyCheckReportApp extends React.PureComponent {
 
       return (<center><h1 style={{padding: "250px 0 0 0"}}>Dependency-Check report opened in adjacent tab.</h1></center>);
     }
+  }
 }
