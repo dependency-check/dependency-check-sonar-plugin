@@ -1,4 +1,4 @@
-# Dependency-Check Plugin for SonarQube 8.x and 9.x
+# Dependency-Check Plugin for SonarQube 9.x and 10.x
 
 ![Build Status](https://github.com/dependency-check/dependency-check-sonar-plugin/workflows/build/badge.svg?branch=master)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e9cebd3112ec4252804bba68a5b44071)](https://www.codacy.com/gh/dependency-check/dependency-check-sonar-plugin/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dependency-check/dependency-check-sonar-plugin&amp;utm_campaign=Badge_Grade)
@@ -8,7 +8,7 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=dependency-check_dependency-check-sonar-plugin&metric=coverage)](https://sonarcloud.io/dashboard?id=dependency-check_dependency-check-sonar-plugin)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=dependency-check_dependency-check-sonar-plugin&metric=security_rating)](https://sonarcloud.io/dashboard?id=dependency-check_dependency-check-sonar-plugin)
 
-Integrates [Dependency-Check][] reports into SonarQube v8.9 or higher.
+Integrates [Dependency-Check][] reports into SonarQube v9.9 or higher.
 
 The project will try to backport all code from master branch to last supported LTS. Please see the [SonarQube 6.x][] or [SonarQube 7.x][] branch for old supported version.
 
@@ -67,7 +67,8 @@ Please use the newest version. Please keep in mind that this plugin only support
 
 | Plugin Version | SonarQube version           |
 | -------------- | --------------------------- |
-| 3.0.0 and up   | SonarQube 8.9 LTS and up    |
+| 4.0.0 and up   | SonarQube 9.9 LTS and up    |
+| 3.0.0 - 3.1.0  | SonarQube 8.9 LTS - 9.9 LTS |
 | 2.0.6 - 2.0.8  | SonarQube 7.9 LTS - 8.9 LTS |
 | 1.2.x - 2.0.5  | SonarQube 7.6 - 7.9 LTS     |
 | 1.1.x          | SonarQube 6.7 LTS           |

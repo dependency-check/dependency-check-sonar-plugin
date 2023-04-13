@@ -8,7 +8,7 @@
     </parent>
     <groupId>org.sonarsource.owasp</groupId>
     <artifactId>sonar-dependency-check</artifactId>
-    <version>3.1.1-SNAPSHOT</version>
+    <version>4.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Dependency-Check for SonarQube</name>
     <description>Integrates Dependency-Check reports into SonarQube</description>
@@ -17,7 +17,7 @@
     <properties>
         <license.owner>dependency-check</license.owner>
         <license.mailto>philipp.dallig@gmail.com</license.mailto>
-
+        <jdk.min.version>11</jdk.min.version>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.projectKey>dependency-check_dependency-check-sonar-plugin</sonar.projectKey>
         <sonar.organization>dependency-check</sonar.organization>
@@ -113,7 +113,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
-                    <source>8</source>
+                    <source>${jdk.min.version}</source>
                 </configuration>
             </plugin>
         </plugins>
