@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.sonarsource.owasp</groupId>
         <artifactId>sonar-dependency-check</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>sonar-dependency-check-plugin</artifactId>
     <packaging>sonar-plugin</packaging>
@@ -19,7 +19,8 @@
     </scm>
 
     <properties>
-        <sonar.version>8.9.0.43852</sonar.version>
+        <sonar.api.version>9.9.0.229</sonar.api.version>
+        <sonar.api.impl.version>9.6.1.59531</sonar.api.impl.version>
         <!-- Configuration for sonar-packaging-maven-plugin -->
         <sonar.pluginClass>org.sonar.dependencycheck.DependencyCheckPlugin</sonar.pluginClass>
         <sonar.pluginName>Dependency-Check</sonar.pluginName>
@@ -34,9 +35,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.sonarsource.sonarqube</groupId>
+            <groupId>org.sonarsource.api.plugin</groupId>
             <artifactId>sonar-plugin-api</artifactId>
-            <version>${sonar.version}</version>
+            <version>${sonar.api.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -89,7 +90,7 @@
         <dependency>
             <groupId>org.sonarsource.sonarqube</groupId>
             <artifactId>sonar-plugin-api-impl</artifactId>
-            <version>${sonar.version}</version>
+            <version>${sonar.api.impl.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
