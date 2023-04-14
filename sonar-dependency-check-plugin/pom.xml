@@ -20,7 +20,7 @@
 
     <properties>
         <sonar.api.version>9.9.0.229</sonar.api.version>
-        <sonar.api.impl.version>9.6.1.59531</sonar.api.impl.version>
+        <sonar.api.impl.version>10.0.0.68432</sonar.api.impl.version>
         <!-- Configuration for sonar-packaging-maven-plugin -->
         <sonar.pluginClass>org.sonar.dependencycheck.DependencyCheckPlugin</sonar.pluginClass>
         <sonar.pluginName>Dependency-Check</sonar.pluginName>
