@@ -18,11 +18,15 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 import React from "react";
-// SonarComponents (referenced as sonar-components here, see the Webpack config)
-// exposes React components exposed by SonarQube.
-import { DeferredSpinner } from "sonar-components";
-import { isBranch, isPullRequest } from "sonar-helpers";
 import { getJSON } from "sonar-request";
+
+export function isBranch(branchLike) {
+  return branchLike !== undefined && branchLike.isMain !== undefined;
+}
+
+export function isPullRequest(branchLike) {
+  return branchLike !== undefined && branchLike.key !== undefined;
+}
 
 export function findDependencyCheckReport(options) {
   var request = {
@@ -92,7 +96,11 @@ export default class DependencyCheckReportApp extends React.PureComponent {
 
   render() {
     if (this.state.loading) {
-      return <div className="page page-limited"><DeferredSpinner /></div>;
+      return (
+        <div className="page page-limited">
+          Loading...
+        </div>
+      );
     }
 
     return (<div className="page dependency-check-report-container" >
