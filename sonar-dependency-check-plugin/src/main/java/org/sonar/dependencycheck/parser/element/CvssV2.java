@@ -30,6 +30,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
                        "accessComplexity",
                        "authenticationr",
                        "confidentialImpact",
+                       "confidentialityImpact",
                        "integrityImpact",
                        "availabilityImpact",
                        "version",
