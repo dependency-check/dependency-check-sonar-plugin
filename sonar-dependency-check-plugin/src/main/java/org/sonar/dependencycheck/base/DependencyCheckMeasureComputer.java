@@ -36,8 +36,7 @@ public class DependencyCheckMeasureComputer implements MeasureComputer {
     @Override
     public MeasureComputerDefinition define(MeasureComputerDefinitionContext defContext) {
         return defContext.newDefinitionBuilder()
-                .setOutputMetrics(DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS.getKey(),
-                        DependencyCheckMetrics.HIGH_SEVERITY_VULNS.getKey(),
+                .setOutputMetrics(DependencyCheckMetrics.HIGH_SEVERITY_VULNS.getKey(),
                         DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS.getKey(),
                         DependencyCheckMetrics.LOW_SEVERITY_VULNS.getKey(),
                         DependencyCheckMetrics.TOTAL_DEPENDENCIES.getKey(),
@@ -55,14 +54,13 @@ public class DependencyCheckMeasureComputer implements MeasureComputer {
             return;
         }
         if (context.getComponent().getType() != Type.FILE) {
-            int blocker = sumMeasure(context, DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS.key());
             int high = sumMeasure(context, DependencyCheckMetrics.HIGH_SEVERITY_VULNS.key());
-            int major = sumMeasure(context, DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS.key());
-            int minor = sumMeasure(context, DependencyCheckMetrics.LOW_SEVERITY_VULNS.key());
+            int medium = sumMeasure(context, DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS.key());
+            int low = sumMeasure(context, DependencyCheckMetrics.LOW_SEVERITY_VULNS.key());
             sumMeasure(context, DependencyCheckMetrics.TOTAL_DEPENDENCIES.key());
             int vulnerableDependencies = sumMeasure(context, DependencyCheckMetrics.VULNERABLE_DEPENDENCIES.key());
             int vulnerabilityCount = sumMeasure(context, DependencyCheckMetrics.TOTAL_VULNERABILITIES.key());
-            context.addMeasure(DependencyCheckMetrics.INHERITED_RISK_SCORE.getKey(), DependencyCheckMetrics.inheritedRiskScore(blocker, high, major, minor));
+            context.addMeasure(DependencyCheckMetrics.INHERITED_RISK_SCORE.getKey(), DependencyCheckMetrics.inheritedRiskScore(high, medium, low));
             context.addMeasure(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO.getKey(), DependencyCheckMetrics.vulnerableComponentRatio(vulnerabilityCount, vulnerableDependencies));
         }
     }

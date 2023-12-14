@@ -39,6 +39,6 @@ class DependencyCheckPluginTest {
         Plugin.Context context = new PluginContextImpl.Builder().setSonarRuntime(runtime).build();
         DependencyCheckPlugin plugin = new DependencyCheckPlugin();
         plugin.define(context);
-        assertEquals(17, context.getExtensions().size());
+        assertEquals(16, context.getExtensions().size());
     }
 }

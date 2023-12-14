@@ -24,7 +24,7 @@ import java.util.Comparator;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
-import org.sonar.api.batch.rule.Severity;
+import org.sonar.api.issue.impact.Severity;
 import org.sonar.api.config.Configuration;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.Identifier;
@@ -48,26 +48,20 @@ public final class DependencyCheckUtils {
     private DependencyCheckUtils() {
     }
 
-    public static Severity cvssToSonarQubeSeverity(Float cvssScore, Float blocker, Float critical, Float major, Float minor) {
-        if (blocker.floatValue() >= 0 && cvssScore.floatValue() >= blocker.doubleValue()) {
-            return Severity.BLOCKER;
-        } else if (critical.floatValue() >= 0 && cvssScore.floatValue() >= critical.floatValue()) {
-            return Severity.CRITICAL;
-        } else if (major.floatValue() >= 0 && cvssScore.floatValue() >= major.floatValue()) {
-            return Severity.MAJOR;
-        } else if (minor.floatValue() >= 0 && cvssScore.floatValue() >= minor.floatValue()) {
-            return Severity.MINOR;
+    public static Severity cvssToSonarQubeSeverity(Float cvssScore, Float high, Float medium) {
+        if (high >= 0 && cvssScore >= high) {
+            return Severity.HIGH;
+        } else if (medium >= 0 && cvssScore >= medium) {
+            return Severity.MEDIUM;
         } else {
-            return Severity.INFO;
+            return Severity.LOW;
         }
     }
 
     public static Severity cvssToSonarQubeSeverity(Float cvssScore, Configuration config) {
-        Float severityBlocker = config.getFloat(DependencyCheckConstants.SEVERITY_BLOCKER).orElse(DependencyCheckConstants.SEVERITY_BLOCKER_DEFAULT);
-        Float severityCritical = config.getFloat(DependencyCheckConstants.SEVERITY_CRITICAL).orElse(DependencyCheckConstants.SEVERITY_CRITICAL_DEFAULT);
-        Float severityMajor = config.getFloat(DependencyCheckConstants.SEVERITY_MAJOR).orElse(DependencyCheckConstants.SEVERITY_MAJOR_DEFAULT);
-        Float severityMinor = config.getFloat(DependencyCheckConstants.SEVERITY_MINOR).orElse(DependencyCheckConstants.SEVERITY_MINOR_DEFAULT);
-        return DependencyCheckUtils.cvssToSonarQubeSeverity(cvssScore, severityBlocker, severityCritical, severityMajor, severityMinor);
+        Float severityHigh = config.getFloat(DependencyCheckConstants.SEVERITY_HIGH).orElse(DependencyCheckConstants.SEVERITY_HIGH_DEFAULT);
+        Float severityMedium = config.getFloat(DependencyCheckConstants.SEVERITY_MEDIUM).orElse(DependencyCheckConstants.SEVERITY_MEDIUM_DEFAULT);
+        return DependencyCheckUtils.cvssToSonarQubeSeverity(cvssScore, severityHigh, severityMedium);
     }
 
     public static String getRuleKey(Configuration config) {
@@ -83,32 +77,32 @@ public final class DependencyCheckUtils {
      * https://docs.npmjs.com/about-audit-reports#severity
      * 
      * @param severity
-     * @param blocker
      * @param critical
-     * @param major
-     * @param minor
+     * @param high
+     * @param medium
+     * @param low
      * @return score based on severity
      */
-    public static Float severityToScore(String severity, Float blocker, Float critical, Float major, Float minor) {
-        if (blocker >= 0 && StringUtils.equalsAnyIgnoreCase(severity, CRITICAL)) {
-            return blocker;
-        } else if (critical >= 0 && StringUtils.equalsAnyIgnoreCase(severity, CRITICAL, HIGH)) {
+    public static Float severityToScore(String severity, Float critical, Float high, Float medium, Float low) {
+        if (critical >= 0 && StringUtils.equalsAnyIgnoreCase(severity, CRITICAL)) {
             return critical;
-        } else if (major >= 0 && StringUtils.equalsAnyIgnoreCase(severity, CRITICAL, HIGH, MEDIUM, MODERATE)) {
-            return major;
-        } else if (minor >= 0 && StringUtils.equalsAnyIgnoreCase(severity, CRITICAL, HIGH, MEDIUM, MODERATE, LOW)) {
-            return minor;
+        } else if (high >= 0 && StringUtils.equalsAnyIgnoreCase(severity, CRITICAL, HIGH)) {
+            return high;
+        } else if (medium >= 0 && StringUtils.equalsAnyIgnoreCase(severity, CRITICAL, HIGH, MEDIUM, MODERATE)) {
+            return medium;
+        } else if (low >= 0 && StringUtils.equalsAnyIgnoreCase(severity, CRITICAL, HIGH, MEDIUM, MODERATE, LOW)) {
+            return low;
         } else {
             return 0.0f;
         }
     }
 
     public static Float severityToScore(String severity, Configuration config) {
-        Float severityBlocker = config.getFloat(DependencyCheckConstants.SEVERITY_BLOCKER).orElse(DependencyCheckConstants.SEVERITY_BLOCKER_DEFAULT);
         Float severityCritical = config.getFloat(DependencyCheckConstants.SEVERITY_CRITICAL).orElse(DependencyCheckConstants.SEVERITY_CRITICAL_DEFAULT);
-        Float severityMajor = config.getFloat(DependencyCheckConstants.SEVERITY_MAJOR).orElse(DependencyCheckConstants.SEVERITY_MAJOR_DEFAULT);
-        Float severityMinor = config.getFloat(DependencyCheckConstants.SEVERITY_MINOR).orElse(DependencyCheckConstants.SEVERITY_MINOR_DEFAULT);
-        return DependencyCheckUtils.severityToScore(severity, severityBlocker, severityCritical, severityMajor, severityMinor);
+        Float severityHigh = config.getFloat(DependencyCheckConstants.SEVERITY_HIGH).orElse(DependencyCheckConstants.SEVERITY_HIGH_DEFAULT);
+        Float severityMedium = config.getFloat(DependencyCheckConstants.SEVERITY_MEDIUM).orElse(DependencyCheckConstants.SEVERITY_MEDIUM_DEFAULT);
+        Float severityLow = config.getFloat(DependencyCheckConstants.SEVERITY_LOW).orElse(DependencyCheckConstants.SEVERITY_LOW_DEFAULT);
+        return DependencyCheckUtils.severityToScore(severity, severityCritical, severityHigh, severityMedium, severityLow);
     }
 
     public static Optional<MavenDependency> getMavenDependency(@NonNull Dependency dependency) {
