@@ -68,7 +68,7 @@ abstract class ReportParserTest {
         Vulnerability vulnerability = vulnIterator.next();
         assertEquals("CVE-2016-1182", vulnerability.getName());
         assertEquals("NVD", vulnerability.getSource());
-        assertEquals(8.2f, vulnerability.getCvssScore(null), 0.0f);
+        assertEquals(8.2f, vulnerability.getCvssScore(), 0.0f);
         assertEquals("HIGH", vulnerability.getSeverity());
         assertTrue(vulnerability.getCwes().isPresent());
         assertEquals("CWE-20", vulnerability.getCwes().get()[0]);
@@ -80,7 +80,7 @@ abstract class ReportParserTest {
         vulnerability = vulnIterator.next();
         assertEquals("CVE-2016-1181", vulnerability.getName());
         assertEquals("NVD", vulnerability.getSource());
-        assertEquals(8.1f, vulnerability.getCvssScore(null), 0.0f);
+        assertEquals(8.1f, vulnerability.getCvssScore(), 0.0f);
         assertEquals("HIGH", vulnerability.getSeverity());
         assertTrue(vulnerability.getCwes().isPresent());
         assertEquals("NVD-CWE-noinfo", vulnerability.getCwes().get()[0]);
@@ -119,7 +119,7 @@ abstract class ReportParserTest {
         vulnerability = vulnIterator.next();
         assertEquals("CVE-2015-6420", vulnerability.getName());
         assertEquals("NVD", vulnerability.getSource());
-        assertEquals(7.5f, vulnerability.getCvssScore(null), 0.0f);
+        assertEquals(7.5f, vulnerability.getCvssScore(), 0.0f);
 
         // xml-apis-1.0.b2.jar
         dependency = findDependency(dependencies, "xml-apis-1.0.b2.jar");

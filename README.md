@@ -96,10 +96,16 @@ In this example, all supported reports (JSON and HTML) are specified. Only the J
 
 This plugin tries to add SonarQube issues to your project configuration files (e.g. pom.xml, \*.gradle, package-json.lock). Please make sure, that these files are part of `sonar.sources`.
 
+```ini
+cvss.severity.critical=9.0
+cvss.severity.high=7.0
+cvss.severity.medium=4.0
+cvss.severity.low=0.1
+```
+
 To configure the severity of the created issues you can optionally specify the minimum score for each severity with the following parameter. Specify a score of `-1` to completely disable a severity.
 
 ```ini
-sonar.dependencyCheck.severity.critical=9.0
 sonar.dependencyCheck.severity.high=7.0
 sonar.dependencyCheck.severity.medium=4.0
 sonar.dependencyCheck.severity.low=0.0
