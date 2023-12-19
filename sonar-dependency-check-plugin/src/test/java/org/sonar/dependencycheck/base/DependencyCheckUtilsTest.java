@@ -168,7 +168,7 @@ class DependencyCheckUtilsTest {
     @ParameterizedTest(name = "{index} => severity={0}, critical={1}, high={2}, medium={3}, low={4}, expectedScore={5}")
     @MethodSource("severitiesToScore")
     void testSeverityToScore(String severity, Float critical, Float high, Float medium, Float low, Float expectedScore) {
-        assertEquals(expectedScore, DependencyCheckUtils.severityToScore(severity, critical, high, medium, low));
+        assertEquals(expectedScore, DependencyCheckUtils.severityToCVSSScore(severity, critical, high, medium, low));
     }
 
     @Test

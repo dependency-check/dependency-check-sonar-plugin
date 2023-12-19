@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.sonar.api.config.Configuration;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.reason.SoftwareDependency;
 
@@ -96,8 +95,8 @@ public class Dependency {
         return Optional.ofNullable(vulnerabilities).orElse(Collections.emptyList());
     }
 
-    public void sortVulnerabilityBycvssScore(Configuration config) {
-        final Comparator<Vulnerability> comp = (vul1, vul2) -> Float.compare( vul1.getCvssScore(config), vul2.getCvssScore(config));
+    public void sortVulnerabilityBycvssScore() {
+        final Comparator<Vulnerability> comp = (vul1, vul2) -> Float.compare(vul1.getCvssScore(), vul2.getCvssScore());
         Collections.sort(this.vulnerabilities, comp.reversed());
     }
 

@@ -91,10 +91,11 @@ public abstract class DependencyReason {
     public abstract TextRangeConfidence getBestTextRange(Dependency dependency);
 
     public void addIssue(SensorContext context, Dependency dependency) {
-        dependency.sortVulnerabilityBycvssScore(context.config());
+        dependency.sortVulnerabilityBycvssScore();
         List<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
         Vulnerability highestVulnerability = vulnerabilities.get(0);
-        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(highestVulnerability.getCvssScore(context.config()), context.config());
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(highestVulnerability.getCvssScore(),
+            context.config());
 
         TextRangeConfidence textRange = getBestTextRange(dependency);
         InputComponent inputComponent = getInputComponent();
@@ -115,7 +116,7 @@ public abstract class DependencyReason {
     }
 
     public void addIssue(SensorContext context, Dependency dependency, Vulnerability vulnerability) {
-        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(context.config()), context.config());
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(), context.config());
 
         TextRangeConfidence textRange = getBestTextRange(dependency);
         InputComponent inputComponent = getInputComponent();

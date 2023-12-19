@@ -23,7 +23,6 @@ public final class DependencyCheckConstants {
 
     public static final String JSON_REPORT_PATH_PROPERTY = "sonar.dependencyCheck.jsonReportPath";
     public static final String HTML_REPORT_PATH_PROPERTY = "sonar.dependencyCheck.htmlReportPath";
-    public static final String SEVERITY_CRITICAL = "sonar.dependencyCheck.severity.critical";
     public static final String SEVERITY_HIGH = "sonar.dependencyCheck.severity.high";
     public static final String SEVERITY_MEDIUM = "sonar.dependencyCheck.severity.medium";
     public static final String SEVERITY_LOW = "sonar.dependencyCheck.severity.low";
@@ -32,10 +31,14 @@ public final class DependencyCheckConstants {
     public static final String SECURITY_HOTSPOT = "sonar.dependencyCheck.securityHotspot";
     public static final String USE_FILEPATH = "sonar.dependencyCheck.useFilePath";
 
-    public static final Float SEVERITY_CRITICAL_DEFAULT = 9.0f;
     public static final Float SEVERITY_HIGH_DEFAULT = 7.0f;
     public static final Float SEVERITY_MEDIUM_DEFAULT = 4.0f;
     public static final Float SEVERITY_LOW_DEFAULT = 0.0f;
+
+    public static final Float CVSS_CRITICAL_SCORE = 9.0f;
+    public static final Float CVSS_HIGH_SCORE = 7.0f;
+    public static final Float CVSS_MEDIUM_SCORE = 4.0f;
+    public static final Float CVSS_LOW_SCORE = 0.1f;
 
     public static final String JSON_REPORT_PATH_DEFAULT = "${WORKSPACE}/dependency-check-report.json";
     public static final String HTML_REPORT_PATH_DEFAULT = "${WORKSPACE}/dependency-check-report.html";

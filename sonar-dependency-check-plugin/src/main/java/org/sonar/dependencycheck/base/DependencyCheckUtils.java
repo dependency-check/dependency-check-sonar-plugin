@@ -75,7 +75,7 @@ public final class DependencyCheckUtils {
      * We are using following sources for score calculation
      * https://nvd.nist.gov/vuln-metrics/cvss
      * https://docs.npmjs.com/about-audit-reports#severity
-     * 
+     *
      * @param severity
      * @param critical
      * @param high
@@ -83,7 +83,7 @@ public final class DependencyCheckUtils {
      * @param low
      * @return score based on severity
      */
-    public static Float severityToScore(String severity, Float critical, Float high, Float medium, Float low) {
+    public static Float severityToCVSSScore(String severity, Float critical, Float high, Float medium, Float low) {
         if (critical >= 0 && StringUtils.equalsAnyIgnoreCase(severity, CRITICAL)) {
             return critical;
         } else if (high >= 0 && StringUtils.equalsAnyIgnoreCase(severity, CRITICAL, HIGH)) {
@@ -97,12 +97,10 @@ public final class DependencyCheckUtils {
         }
     }
 
-    public static Float severityToScore(String severity, Configuration config) {
-        Float severityCritical = config.getFloat(DependencyCheckConstants.SEVERITY_CRITICAL).orElse(DependencyCheckConstants.SEVERITY_CRITICAL_DEFAULT);
-        Float severityHigh = config.getFloat(DependencyCheckConstants.SEVERITY_HIGH).orElse(DependencyCheckConstants.SEVERITY_HIGH_DEFAULT);
-        Float severityMedium = config.getFloat(DependencyCheckConstants.SEVERITY_MEDIUM).orElse(DependencyCheckConstants.SEVERITY_MEDIUM_DEFAULT);
-        Float severityLow = config.getFloat(DependencyCheckConstants.SEVERITY_LOW).orElse(DependencyCheckConstants.SEVERITY_LOW_DEFAULT);
-        return DependencyCheckUtils.severityToScore(severity, severityCritical, severityHigh, severityMedium, severityLow);
+    public static Float severityToCVSSScore(String severity) {
+        return DependencyCheckUtils.severityToCVSSScore(severity, DependencyCheckConstants.CVSS_CRITICAL_SCORE,
+            DependencyCheckConstants.CVSS_HIGH_SCORE, DependencyCheckConstants.CVSS_MEDIUM_SCORE,
+            DependencyCheckConstants.CVSS_LOW_SCORE);
     }
 
     public static Optional<MavenDependency> getMavenDependency(@NonNull Dependency dependency) {
@@ -144,7 +142,7 @@ public final class DependencyCheckUtils {
             sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
         }
         sb.append("Reference: ").append(vulnerability.getName()).append(" | ");
-        sb.append("CVSS Score: ").append(vulnerability.getCvssScore(config)).append(" | ");
+        sb.append("CVSS Score: ").append(vulnerability.getCvssScore()).append(" | ");
         Optional<String[]> vulnerabilityCwe = vulnerability.getCwes();
         if (vulnerabilityCwe.isPresent()) {
             sb.append("Category: ").append(String.join(",", vulnerabilityCwe.get())).append(" | ");
@@ -161,11 +159,11 @@ public final class DependencyCheckUtils {
         } else {
             sb.append("Filename: ").append(dependency.getFileName()).append(" | ");
         }
-        sb.append("Highest CVSS Score: ").append(highestVulnerability.getCvssScore(config)).append(" | ");
+        sb.append("Highest CVSS Score: ").append(highestVulnerability.getCvssScore()).append(" | ");
         sb.append("Amount of CVSS: ").append(vulnerabilities.size()).append(" | ");
         sb.append("References: ");
         for (Vulnerability vulnerability : vulnerabilities) {
-            sb.append(vulnerability.getName()).append(" (").append(vulnerability.getCvssScore(config)).append(") ");
+            sb.append(vulnerability.getName()).append(" (").append(vulnerability.getCvssScore()).append(") ");
         }
         return sb.toString().trim();
     }
