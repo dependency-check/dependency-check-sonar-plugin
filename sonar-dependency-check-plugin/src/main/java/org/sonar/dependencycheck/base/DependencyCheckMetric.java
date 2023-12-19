@@ -20,8 +20,8 @@
 package org.sonar.dependencycheck.base;
 
 import org.sonar.api.batch.fs.InputComponent;
-import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.issue.impact.Severity;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
@@ -35,22 +35,18 @@ public class DependencyCheckMetric {
     private int totalDependencies;
     private int vulnerableDependencies;
     private int vulnerabilityCount;
-    private int blockerIssuesCount;
-    private int criticalIssuesCount;
-    private int majorIssuesCount;
-    private int minorIssuesCount;
-    private int infoIssuesCount;
+    private int highIssuesCount;
+    private int mediumIssuesCount;
+    private int lowIssuesCount;
 
     public DependencyCheckMetric(@NonNull InputComponent inputComponent) {
         this.inputcomponent = inputComponent;
         this.totalDependencies = 0;
         this.vulnerableDependencies = 0;
         this.vulnerabilityCount = 0;
-        this.blockerIssuesCount = 0;
-        this.criticalIssuesCount = 0;
-        this.majorIssuesCount = 0;
-        this.minorIssuesCount = 0;
-        this.infoIssuesCount = 0;
+        this.highIssuesCount = 0;
+        this.mediumIssuesCount = 0;
+        this.lowIssuesCount = 0;
     }
 
     /* (non-Javadoc)
@@ -60,27 +56,20 @@ public class DependencyCheckMetric {
     public String toString() {
         return "DependencyCheckMetric [inputcomponent=" + inputcomponent + ", totalDependencies=" + totalDependencies
                 + ", vulnerableDependencies=" + vulnerableDependencies + ", vulnerabilityCount=" + vulnerabilityCount
-                + ", blockerIssuesCount=" + blockerIssuesCount + ", criticalIssuesCount=" + criticalIssuesCount
-                + ", majorIssuesCount=" + majorIssuesCount + ", minorIssuesCount=" + minorIssuesCount
-                + ", infoIssuesCount=" + infoIssuesCount + "]";
+                + ", highIssuesCount=" + highIssuesCount + ", mediumIssuesCount=" + mediumIssuesCount
+                + ", lowIssuesCount=" + lowIssuesCount + "]";
     }
 
     public void incrementCount(Severity severity) {
         switch (severity) {
-            case BLOCKER:
-                this.blockerIssuesCount++;
+            case HIGH:
+                this.highIssuesCount++;
                 break;
-            case CRITICAL:
-                this.criticalIssuesCount++;
+            case MEDIUM:
+                this.mediumIssuesCount++;
                 break;
-            case MAJOR:
-                this.majorIssuesCount++;
-                break;
-            case MINOR:
-                this.minorIssuesCount++;
-                break;
-            case INFO:
-                this.infoIssuesCount++;
+            case LOW:
+                this.lowIssuesCount++;
                 break;
             default:
                 LOGGER.debug("Unknown severity {}", severity);
@@ -102,16 +91,17 @@ public class DependencyCheckMetric {
 
     public void saveMeasures(SensorContext context) {
         LOGGER.debug("Save measures on {}", inputcomponent);
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS).on(inputcomponent).withValue(blockerIssuesCount).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.HIGH_SEVERITY_VULNS).on(inputcomponent).withValue(criticalIssuesCount).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS).on(inputcomponent).withValue(majorIssuesCount).save();
-        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.LOW_SEVERITY_VULNS).on(inputcomponent).withValue(minorIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.HIGH_SEVERITY_VULNS).on(inputcomponent).withValue(highIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS).on(inputcomponent).withValue(
+            mediumIssuesCount).save();
+        context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.LOW_SEVERITY_VULNS).on(inputcomponent).withValue(
+            lowIssuesCount).save();
         context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.TOTAL_DEPENDENCIES).on(inputcomponent).withValue(totalDependencies).save();
         context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_DEPENDENCIES).on(inputcomponent).withValue(vulnerableDependencies).save();
         context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.TOTAL_VULNERABILITIES).on(inputcomponent).withValue(vulnerabilityCount).save();
 
         context.<Integer>newMeasure().forMetric(DependencyCheckMetrics.INHERITED_RISK_SCORE).on(inputcomponent)
-            .withValue(DependencyCheckMetrics.inheritedRiskScore(blockerIssuesCount, criticalIssuesCount, majorIssuesCount, minorIssuesCount)).save();
+            .withValue(DependencyCheckMetrics.inheritedRiskScore(highIssuesCount, mediumIssuesCount, lowIssuesCount)).save();
         context.<Double>newMeasure().forMetric(DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO).on(inputcomponent)
             .withValue(DependencyCheckMetrics.vulnerableComponentRatio(vulnerabilityCount, vulnerableDependencies)).save();
     }

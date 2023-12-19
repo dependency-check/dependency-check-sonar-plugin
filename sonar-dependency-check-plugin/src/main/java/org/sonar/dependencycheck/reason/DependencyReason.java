@@ -24,10 +24,11 @@ import java.util.List;
 
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
+import org.sonar.api.issue.impact.Severity;
+import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
@@ -108,7 +109,7 @@ public abstract class DependencyReason {
         sonarIssue
             .at(location)
             .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
-            .overrideSeverity(severity)
+            .overrideImpact(SoftwareQuality.SECURITY, severity)
             .save();
         metrics.incrementCount(severity);
     }
@@ -129,7 +130,7 @@ public abstract class DependencyReason {
         sonarIssue
             .at(location)
             .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
-            .overrideSeverity(severity)
+            .overrideImpact(SoftwareQuality.SECURITY, severity)
             .save();
         metrics.incrementCount(severity);
     }

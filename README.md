@@ -1,4 +1,4 @@
-# Dependency-Check Plugin for SonarQube 9.x and 10.x
+# Dependency-Check Plugin for SonarQube 10.2 or higher
 
 ![Build Status](https://github.com/dependency-check/dependency-check-sonar-plugin/workflows/build/badge.svg?branch=master)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e9cebd3112ec4252804bba68a5b44071)](https://www.codacy.com/gh/dependency-check/dependency-check-sonar-plugin/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dependency-check/dependency-check-sonar-plugin&amp;utm_campaign=Badge_Grade)
@@ -8,7 +8,7 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=dependency-check_dependency-check-sonar-plugin&metric=coverage)](https://sonarcloud.io/dashboard?id=dependency-check_dependency-check-sonar-plugin)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=dependency-check_dependency-check-sonar-plugin&metric=security_rating)](https://sonarcloud.io/dashboard?id=dependency-check_dependency-check-sonar-plugin)
 
-Integrates [Dependency-Check][] reports into SonarQube v9.9 or higher.
+Integrates [Dependency-Check][] reports into SonarQube v10.2 or higher.
 
 The project will try to backport all code from master branch to last supported LTS. Please see the [SonarQube 6.x][] or [SonarQube 7.x][] branch for old supported version.
 
@@ -35,8 +35,8 @@ Additionally, the following two metrics are defined:
 
 ### Inherited Risk Score (IRS)
 
-```java
- (critical * 7) + (high * 5) + (medium * 3) + (low * 1)
+```
+ (high * 5) + (medium * 3) + (low * 1)
 ```
 
 The IRS is simply a weighted measurement of the vulnerabilities inherited by the application through the use of vulnerable components. It does not measure the applications actual risk due to those components. The higher the score the more risk the application inherits.
@@ -98,10 +98,10 @@ This plugin tries to add SonarQube issues to your project configuration files (e
 To configure the severity of the created issues you can optionally specify the minimum score for each severity with the following parameter. Specify a score of `-1` to completely disable a severity.
 
 ```ini
-sonar.dependencyCheck.severity.blocker=9.0
-sonar.dependencyCheck.severity.critical=7.0
-sonar.dependencyCheck.severity.major=4.0
-sonar.dependencyCheck.severity.minor=0.0
+sonar.dependencyCheck.severity.critical=9.0
+sonar.dependencyCheck.severity.high=7.0
+sonar.dependencyCheck.severity.medium=4.0
+sonar.dependencyCheck.severity.low=0.0
 ```
 
 In large projects you have many dependencies with (hopefully) no vulnerabilities. The following configuration summarize all vulnerabilities of one dependency into one issue.

@@ -145,7 +145,7 @@ class DependencyCheckSensorTest {
 
         when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)))).thenReturn(sampleJsonReport);
         sensor.execute(context);
-        assertEquals(9, context.measures("projectKey").size());
+        assertEquals(8, context.measures("projectKey").size());
 
     }
 
