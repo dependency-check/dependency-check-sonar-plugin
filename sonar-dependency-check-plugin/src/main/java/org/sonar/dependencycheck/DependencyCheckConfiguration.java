@@ -49,6 +49,7 @@ public class DependencyCheckConfiguration {
                         .defaultValue(DependencyCheckConstants.HTML_REPORT_PATH_DEFAULT)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_HIGH)
+                        .deprecatedKey("sonar.dependencyCheck.severity.critical")
                         .onQualifiers(Qualifiers.PROJECT)
                         .subCategory(DependencyCheckConstants.SUB_CATEGORY_SEVERITIES)
                         .name("High")
@@ -58,6 +59,7 @@ public class DependencyCheckConfiguration {
                         .index(1)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_MEDIUM)
+                        .deprecatedKey("sonar.dependencyCheck.severity.major")
                         .onQualifiers(Qualifiers.PROJECT)
                         .subCategory(DependencyCheckConstants.SUB_CATEGORY_SEVERITIES)
                         .name("Medium")
@@ -67,6 +69,7 @@ public class DependencyCheckConfiguration {
                         .index(2)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_LOW)
+                        .deprecatedKey("sonar.dependencyCheck.severity.minor")
                         .onQualifiers(Qualifiers.PROJECT)
                         .subCategory(DependencyCheckConstants.SUB_CATEGORY_SEVERITIES)
                         .name("Low")
