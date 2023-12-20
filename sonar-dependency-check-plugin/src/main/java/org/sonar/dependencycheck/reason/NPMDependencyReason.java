@@ -26,10 +26,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.parser.PackageLockParserHelper;
 import org.sonar.dependencycheck.parser.ReportParserException;
@@ -47,7 +47,7 @@ public class NPMDependencyReason extends DependencyReason {
     private PackageLockModel packageLockModel;
     private final Map<Dependency, TextRangeConfidence> dependencyMap;
 
-    private static final Logger LOGGER = Loggers.get(NPMDependencyReason.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NPMDependencyReason.class);
 
     public NPMDependencyReason(InputFile packageLock) {
         super(packageLock, Language.JAVASCRIPT);

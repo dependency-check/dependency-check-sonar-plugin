@@ -19,17 +19,17 @@
  */
 package org.sonar.dependencycheck.base;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.issue.impact.Severity;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class DependencyCheckMetric {
 
-    private static final Logger LOGGER = Loggers.get(DependencyCheckMetric.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DependencyCheckMetric.class);
     private final InputComponent inputcomponent;
 
     private int totalDependencies;
