@@ -35,7 +35,7 @@ Additionally, the following two metrics are defined:
 
 ### Inherited Risk Score (IRS)
 
-```
+```java
  (high * 5) + (medium * 3) + (low * 1)
 ```
 
@@ -66,8 +66,9 @@ Ready to use binaries are available from [GitHub][].
 Please use the newest version. Please keep in mind that this plugin only supports the latest SonarQube LTS version, and the latest non SonarQube LTS version.
 
 | Plugin Version | SonarQube version           |
-| -------------- | --------------------------- |
-| 4.0.0 and up   | SonarQube 9.9 LTS and up    |
+|----------------|-----------------------------|
+| 5.0.0 and up   | SonarQube 10.2 and up       |
+| 4.0.0 and up   | SonarQube 9.9 LTS - 10.2    |
 | 3.0.0 - 3.1.0  | SonarQube 8.9 LTS - 9.9 LTS |
 | 2.0.6 - 2.0.8  | SonarQube 7.9 LTS - 8.9 LTS |
 | 1.2.x - 2.0.5  | SonarQube 7.6 - 7.9 LTS     |
@@ -98,7 +99,6 @@ This plugin tries to add SonarQube issues to your project configuration files (e
 To configure the severity of the created issues you can optionally specify the minimum score for each severity with the following parameter. Specify a score of `-1` to completely disable a severity.
 
 ```ini
-sonar.dependencyCheck.severity.critical=9.0
 sonar.dependencyCheck.severity.high=7.0
 sonar.dependencyCheck.severity.medium=4.0
 sonar.dependencyCheck.severity.low=0.0
