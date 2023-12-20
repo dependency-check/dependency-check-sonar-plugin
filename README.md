@@ -68,7 +68,7 @@ Please use the newest version. Please keep in mind that this plugin only support
 | Plugin Version | SonarQube version           |
 |----------------|-----------------------------|
 | 5.0.0 and up   | SonarQube 10.2 and up       |
-| 4.0.0 and up   | SonarQube 9.9 LTS - 10.2    |
+| 4.0.0 - 4.0.1  | SonarQube 9.9 LTS - 10.2    |
 | 3.0.0 - 3.1.0  | SonarQube 8.9 LTS - 9.9 LTS |
 | 2.0.6 - 2.0.8  | SonarQube 7.9 LTS - 8.9 LTS |
 | 1.2.x - 2.0.5  | SonarQube 7.6 - 7.9 LTS     |
