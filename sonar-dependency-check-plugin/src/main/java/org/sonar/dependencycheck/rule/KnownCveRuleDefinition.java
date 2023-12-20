@@ -21,9 +21,9 @@ package org.sonar.dependencycheck.rule;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rule.RuleStatus;
-import org.sonar.api.rule.Severity;
-import org.sonar.api.rules.RuleType;
+import org.sonar.api.issue.impact.Severity;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
@@ -40,16 +40,13 @@ public class KnownCveRuleDefinition implements RulesDefinition {
 
         NewRule rule = repo.createRule(DependencyCheckConstants.RULE_KEY);
         fillOWASPRule(rule);
-        NewRule ruleWithSecurityHotspot = repo.createRule(DependencyCheckConstants.RULE_KEY_WITH_SECURITY_HOTSPOT);
-        fillOWASPRule(ruleWithSecurityHotspot);
-        ruleWithSecurityHotspot.setType(RuleType.SECURITY_HOTSPOT);
         repo.done();
     }
 
     private void fillOWASPRule(NewRule rule) {
         rule.addTags("cwe-937", "cwe", "cve", "owasp-a9", "security", "vulnerability");
         rule.setName("Using Components with Known Vulnerabilities");
-        rule.setSeverity(Severity.MAJOR);
+        rule.addDefaultImpact(SoftwareQuality.SECURITY, Severity.MEDIUM);
         rule.setStatus(RuleStatus.READY);
         rule.addOwaspTop10(OwaspTop10Version.Y2017, OwaspTop10.A9);
         rule.addOwaspTop10(OwaspTop10Version.Y2021, OwaspTop10.A6);

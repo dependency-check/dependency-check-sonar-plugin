@@ -24,10 +24,11 @@ import java.util.List;
 
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
+import org.sonar.api.issue.impact.Severity;
+import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
@@ -90,10 +91,11 @@ public abstract class DependencyReason {
     public abstract TextRangeConfidence getBestTextRange(Dependency dependency);
 
     public void addIssue(SensorContext context, Dependency dependency) {
-        dependency.sortVulnerabilityBycvssScore(context.config());
+        dependency.sortVulnerabilityBycvssScore();
         List<Vulnerability> vulnerabilities = dependency.getVulnerabilities();
         Vulnerability highestVulnerability = vulnerabilities.get(0);
-        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(highestVulnerability.getCvssScore(context.config()), context.config());
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(highestVulnerability.getCvssScore(),
+            context.config());
 
         TextRangeConfidence textRange = getBestTextRange(dependency);
         InputComponent inputComponent = getInputComponent();
@@ -108,13 +110,13 @@ public abstract class DependencyReason {
         sonarIssue
             .at(location)
             .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
-            .overrideSeverity(severity)
+            .overrideImpact(SoftwareQuality.SECURITY, severity)
             .save();
         metrics.incrementCount(severity);
     }
 
     public void addIssue(SensorContext context, Dependency dependency, Vulnerability vulnerability) {
-        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(context.config()), context.config());
+        Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(), context.config());
 
         TextRangeConfidence textRange = getBestTextRange(dependency);
         InputComponent inputComponent = getInputComponent();
@@ -129,7 +131,7 @@ public abstract class DependencyReason {
         sonarIssue
             .at(location)
             .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
-            .overrideSeverity(severity)
+            .overrideImpact(SoftwareQuality.SECURITY, severity)
             .save();
         metrics.incrementCount(severity);
     }

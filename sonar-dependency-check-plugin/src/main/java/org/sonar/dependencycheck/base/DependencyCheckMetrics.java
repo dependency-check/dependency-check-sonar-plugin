@@ -37,7 +37,6 @@ public final class DependencyCheckMetrics implements Metrics {
     private static final String TOTAL_DEPENDENCIES_KEY = "total_dependencies";
     private static final String VULNERABLE_DEPENDENCIES_KEY = "vulnerable_dependencies";
     private static final String TOTAL_VULNERABILITIES_KEY = "total_vulnerabilities";
-    private static final String CRITICAL_SEVERITY_VULNS_KEY = "critical_severity_vulns";
     private static final String HIGH_SEVERITY_VULNS_KEY = "high_severity_vulns";
     private static final String MEDIUM_SEVERITY_VULNS_KEY = "medium_severity_vulns";
     private static final String LOW_SEVERITY_VULNS_KEY = "low_severity_vulns";
@@ -58,15 +57,6 @@ public final class DependencyCheckMetrics implements Metrics {
             .setQualitative(Boolean.TRUE)
             .setDomain(DependencyCheckMetrics.DOMAIN)
             .setBestValue(0.0)
-            .create();
-
-    public static final Metric<Integer> CRITICAL_SEVERITY_VULNS = new Metric.Builder(CRITICAL_SEVERITY_VULNS_KEY, "Critical Severity Vulnerabilities", Metric.ValueType.INT)
-            .setDescription("Critical Severity Vulnerabilities")
-            .setDirection(Metric.DIRECTION_WORST)
-            .setQualitative(Boolean.FALSE)
-            .setDomain(DependencyCheckMetrics.DOMAIN)
-            .setBestValue(0.0)
-            .setHidden(false)
             .create();
 
     public static final Metric<Integer> HIGH_SEVERITY_VULNS = new Metric.Builder(HIGH_SEVERITY_VULNS_KEY, "High Severity Vulnerabilities", Metric.ValueType.INT)
@@ -138,8 +128,8 @@ public final class DependencyCheckMetrics implements Metrics {
         return ratio;
     }
 
-    public static int inheritedRiskScore(int blocker, int high, int medium, int low) {
-        return (blocker * 7) + (high * 5) + (medium * 3) + (low);
+    public static int inheritedRiskScore(int high, int medium, int low) {
+        return (high * 5) + (medium * 3) + (low);
     }
 
 
@@ -148,7 +138,6 @@ public final class DependencyCheckMetrics implements Metrics {
         return Arrays.asList(
                 DependencyCheckMetrics.INHERITED_RISK_SCORE,
                 DependencyCheckMetrics.VULNERABLE_COMPONENT_RATIO,
-                DependencyCheckMetrics.CRITICAL_SEVERITY_VULNS,
                 DependencyCheckMetrics.HIGH_SEVERITY_VULNS,
                 DependencyCheckMetrics.MEDIUM_SEVERITY_VULNS,
                 DependencyCheckMetrics.LOW_SEVERITY_VULNS,
