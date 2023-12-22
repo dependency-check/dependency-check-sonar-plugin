@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.utils.log.Logger;
@@ -36,15 +37,17 @@ import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
 import org.sonar.dependencycheck.parser.element.IncludedBy;
+import org.sonar.dependencycheck.parser.element.Vulnerability;
 import org.sonar.dependencycheck.reason.maven.MavenDependency;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 public class GradleDependencyReason extends DependencyReason {
 
     private final InputFile buildGradle;
     private String content;
-    private final Map<Dependency, TextRangeConfidence> dependencyMap;
+    private final Map<Pair<Dependency, Vulnerability>, TextRangeConfidence> dependencyMap;
 
     private static final Logger LOGGER = Loggers.get(GradleDependencyReason.class);
 
@@ -62,45 +65,45 @@ public class GradleDependencyReason extends DependencyReason {
 
     @Override
     @NonNull
-    public TextRangeConfidence getBestTextRange(@NonNull Dependency dependency) {
+    public TextRangeConfidence getBestTextRange(@NonNull Dependency dependency, @Nullable Vulnerability vulnerability) {
         if (dependencyMap.containsKey(dependency)) {
             return dependencyMap.get(dependency);
         } else {
             Optional<MavenDependency> mavenDependency = DependencyCheckUtils.getMavenDependency(dependency);
             if (mavenDependency.isPresent()) {
-                fillArtifactMatch(dependency, mavenDependency.get());
+                fillArtifactMatch(dependency, vulnerability, mavenDependency.get());
             } else {
                 LOGGER.debug("No artifactId found for Dependency {}", dependency.getFileName());
             }
             Optional<Collection<IncludedBy>> includedBys = dependency.getIncludedBy();
             if (includedBys.isPresent()) {
-                workOnIncludedBy(dependency, includedBys.get());
+                workOnIncludedBy(dependency, vulnerability, includedBys.get());
             }
-            dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFirstLine(k, buildGradle));
+            dependencyMap.computeIfAbsent(Pair.of(dependency, vulnerability), k -> addDependencyToFirstLine(k, buildGradle));
         }
-        return dependencyMap.get(dependency);
+        return dependencyMap.get(Pair.of(dependency, vulnerability));
     }
 
-    private void workOnIncludedBy(@NonNull Dependency dependency, Collection<IncludedBy> includedBys) {
+    private void workOnIncludedBy(@NonNull Dependency dependency, @Nullable Vulnerability vulnerability, Collection<IncludedBy> includedBys) {
         for (IncludedBy includedBy : includedBys) {
             String reference = includedBy.getReference();
             if (StringUtils.isNotBlank(reference)) {
                 Optional<SoftwareDependency> softwareDependency = DependencyCheckUtils.convertToSoftwareDependency(reference);
                 if (softwareDependency.isPresent() && DependencyCheckUtils.isMavenDependency(softwareDependency.get())) {
-                    fillArtifactMatch(dependency, (MavenDependency) softwareDependency.get());
+                    fillArtifactMatch(dependency, vulnerability, (MavenDependency) softwareDependency.get());
                 }
             }
         }
     }
 
-    private void putDependencyMap(@NonNull Dependency dependency, TextRangeConfidence newTextRange) {
+    private void putDependencyMap(@NonNull Dependency dependency, @Nullable Vulnerability vulnerability, TextRangeConfidence newTextRange) {
         if (dependencyMap.containsKey(dependency)) {
             TextRangeConfidence oldTextRange = dependencyMap.get(dependency);
             if (oldTextRange.getConfidence().compareTo(newTextRange.getConfidence()) > 0) {
-                dependencyMap.put(dependency, newTextRange);
+                dependencyMap.put(Pair.of(dependency, vulnerability), newTextRange);
             }
         } else {
-            dependencyMap.put(dependency, newTextRange);
+            dependencyMap.put(Pair.of(dependency, vulnerability), newTextRange);
         }
     }
 
@@ -111,7 +114,7 @@ public class GradleDependencyReason extends DependencyReason {
      * @param mavenDependency Identifier for gradle
      * @return TextRange if found in gradle, else null
      */
-    private void fillArtifactMatch(@NonNull Dependency dependency, MavenDependency mavenDependency) {
+    private void fillArtifactMatch(@NonNull Dependency dependency, @Nullable Vulnerability vulnerability, MavenDependency mavenDependency) {
         try (final Scanner scanner = new Scanner(content)) {
             int linenumber = 0;
             while (scanner.hasNextLine()) {
@@ -123,18 +126,17 @@ public class GradleDependencyReason extends DependencyReason {
                     if (depVersion.isPresent() &&
                         lineFromFile.contains(depVersion.get())) {
                         LOGGER.debug("Found a artifactId, groupId and version match in {}", buildGradle);
-                        putDependencyMap(dependency, new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.HIGHEST));
+                        putDependencyMap(dependency, vulnerability, new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.HIGHEST));
+                        return;
                     }
                     LOGGER.debug("Found a artifactId and groupId match in {} on line {}", buildGradle, linenumber);
-                    putDependencyMap(dependency, new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.HIGH));
-                }
-                if (lineFromFile.contains(mavenDependency.getArtifactId())) {
+                    putDependencyMap(dependency, vulnerability, new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.HIGH));
+                } else if (lineFromFile.contains(mavenDependency.getArtifactId())) {
                     LOGGER.debug("Found a artifactId match in {} for {}", buildGradle, mavenDependency.getArtifactId());
-                    putDependencyMap(dependency, new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.MEDIUM));
-                }
-                if (lineFromFile.contains(mavenDependency.getGroupId())) {
+                    putDependencyMap(dependency, vulnerability, new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.MEDIUM));
+                } else if (lineFromFile.contains(mavenDependency.getGroupId())) {
                     LOGGER.debug("Found a groupId match in {} for {}", buildGradle, mavenDependency.getGroupId());
-                    putDependencyMap(dependency, new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.MEDIUM));
+                    putDependencyMap(dependency, vulnerability, new TextRangeConfidence(buildGradle.selectLine(linenumber), Confidence.MEDIUM));
                 }
             }
         }

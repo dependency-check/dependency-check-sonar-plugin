@@ -76,16 +76,16 @@ class MavenDependencyReasonTest extends DependencyReasonTestHelper {
         Collection<Identifier> packageidentifiers1 = new ArrayList<>();
         packageidentifiers1.add(identifier1);
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
-        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
+        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency, null);
         assertTrue(maven.isReasonable());
         assertNotNull(textRangeConfidence);
         assertEquals(46, textRangeConfidence.getTextRange().start().line());
         assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
         assertEquals(50, textRangeConfidence.getTextRange().end().line());
-        assertEquals(21, textRangeConfidence.getTextRange().end().lineOffset());
+        assertEquals(1, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.HIGHEST, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
-        assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
+        assertEquals(maven.getBestTextRange(dependency, null), maven.getBestTextRange(dependency, null));
     }
 
     @Test
@@ -98,16 +98,16 @@ class MavenDependencyReasonTest extends DependencyReasonTestHelper {
         IncludedBy includedBy = new IncludedBy();
         includedBy.put(IncludedBy.REFERENCE_KEYWORD, "pkg:maven/com.sun.mail/javax.mail@1.4.4");
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(), Collections.emptyList(), packageidentifiers1, Collections.emptyList(), Arrays.asList(includedBy));
-        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
+        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency, null);
         assertTrue(maven.isReasonable());
         assertNotNull(textRangeConfidence);
         assertEquals(51, textRangeConfidence.getTextRange().start().line());
         assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
         assertEquals(55, textRangeConfidence.getTextRange().end().line());
-        assertEquals(21, textRangeConfidence.getTextRange().end().lineOffset());
+        assertEquals(1, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.HIGHEST, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
-        assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
+        assertEquals(maven.getBestTextRange(dependency, null), maven.getBestTextRange(dependency, null));
     }
 
     @Test
@@ -118,16 +118,16 @@ class MavenDependencyReasonTest extends DependencyReasonTestHelper {
         Collection<Identifier> packageidentifiers1 = new ArrayList<>();
         packageidentifiers1.add(identifier1);
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
-        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
+        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency, null);
         assertTrue(maven.isReasonable());
         assertNotNull(textRangeConfidence);
         assertEquals(46, textRangeConfidence.getTextRange().start().line());
         assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
         assertEquals(50, textRangeConfidence.getTextRange().end().line());
-        assertEquals(21, textRangeConfidence.getTextRange().end().lineOffset());
+        assertEquals(1, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.MEDIUM, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
-        assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
+        assertEquals(maven.getBestTextRange(dependency, null), maven.getBestTextRange(dependency, null));
     }
 
     @Test
@@ -138,16 +138,16 @@ class MavenDependencyReasonTest extends DependencyReasonTestHelper {
         Collection<Identifier> packageidentifiers1 = new ArrayList<>();
         packageidentifiers1.add(identifier1);
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
-        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
+        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency, null);
         assertTrue(maven.isReasonable());
         assertNotNull(textRangeConfidence);
         assertEquals(46, textRangeConfidence.getTextRange().start().line());
         assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
         assertEquals(50, textRangeConfidence.getTextRange().end().line());
-        assertEquals(21, textRangeConfidence.getTextRange().end().lineOffset());
+        assertEquals(1, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.MEDIUM, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
-        assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
+        assertEquals(maven.getBestTextRange(dependency, null), maven.getBestTextRange(dependency, null));
     }
 
     @Test
@@ -158,16 +158,16 @@ class MavenDependencyReasonTest extends DependencyReasonTestHelper {
         Collection<Identifier> packageidentifiers1 = new ArrayList<>();
         packageidentifiers1.add(identifier1);
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
-        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
+        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency, null);
         assertTrue(maven.isReasonable());
         assertNotNull(textRangeConfidence);
         assertEquals(18, textRangeConfidence.getTextRange().start().line());
         assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
         assertEquals(21, textRangeConfidence.getTextRange().end().line());
-        assertEquals(13, textRangeConfidence.getTextRange().end().lineOffset());
+        assertEquals(1, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.MEDIUM, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
-        assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
+        assertEquals(maven.getBestTextRange(dependency, null), maven.getBestTextRange(dependency, null));
 
     }
 
@@ -179,12 +179,12 @@ class MavenDependencyReasonTest extends DependencyReasonTestHelper {
         Collection<Identifier> packageidentifiers1 = new ArrayList<>();
         packageidentifiers1.add(identifier1);
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), packageidentifiers1, Collections.emptyList(), null);
-        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
+        TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency, null);
         // Check for default location, first line in file with low confidence
         assertNotNull(textRangeConfidence);
         assertEquals(LINE_NOT_FOUND, textRangeConfidence.getTextRange().start().line());
         assertEquals(Confidence.LOW, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
-        assertEquals(maven.getBestTextRange(dependency), maven.getBestTextRange(dependency));
+        assertEquals(maven.getBestTextRange(dependency, null), maven.getBestTextRange(dependency, null));
     }
 }

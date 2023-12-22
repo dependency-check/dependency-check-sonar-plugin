@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.utils.log.Logger;
@@ -35,17 +36,19 @@ import org.sonar.dependencycheck.parser.PackageLockParserHelper;
 import org.sonar.dependencycheck.parser.ReportParserException;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
+import org.sonar.dependencycheck.parser.element.Vulnerability;
 import org.sonar.dependencycheck.reason.npm.NPMDependency;
 import org.sonar.dependencycheck.reason.npm.NPMDependencyLocation;
 import org.sonar.dependencycheck.reason.npm.PackageLockModel;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 
 public class NPMDependencyReason extends DependencyReason {
 
     private final InputFile packageLock;
     private PackageLockModel packageLockModel;
-    private final Map<Dependency, TextRangeConfidence> dependencyMap;
+    private final Map<Pair<Dependency, Vulnerability>, TextRangeConfidence> dependencyMap;
 
     private static final Logger LOGGER = Loggers.get(NPMDependencyReason.class);
 
@@ -75,24 +78,24 @@ public class NPMDependencyReason extends DependencyReason {
 
     @NonNull
     @Override
-    public TextRangeConfidence getBestTextRange(Dependency dependency) {
+	public TextRangeConfidence getBestTextRange(Dependency dependency, @Nullable Vulnerability vulnerability) {
         if (!dependencyMap.containsKey(dependency)) {
             Optional<NPMDependency> npmDependency = DependencyCheckUtils.getNPMDependency(dependency);
             if (npmDependency.isPresent()) {
-                fillArtifactMatch(dependency, npmDependency.get());
+                fillArtifactMatch(dependency, vulnerability, npmDependency.get());
             } else {
                 LOGGER.debug("No Identifier with type npm/javascript found for Dependency {}", dependency.getFileName());
             }
-            dependencyMap.computeIfAbsent(dependency, k -> addDependencyToFirstLine(k, packageLock));
+            dependencyMap.computeIfAbsent(Pair.of(dependency, vulnerability), k -> addDependencyToFirstLine(k, packageLock));
         }
-        return dependencyMap.get(dependency);
+        return dependencyMap.get(Pair.of(dependency, vulnerability));
     }
 
-    private void fillArtifactMatch(@NonNull Dependency dependency, NPMDependency npmDependency) {
+    private void fillArtifactMatch(@NonNull Dependency dependency, @NonNull Vulnerability vulnerability, NPMDependency npmDependency) {
         // Try to find in <dependency>
         for (NPMDependencyLocation npmDependencyLocation : packageLockModel.getDependencies()) {
             checkNPMDependency(npmDependency, npmDependencyLocation)
-                    .ifPresent(textrange -> dependencyMap.put(dependency, textrange));
+                    .ifPresent(textrange -> dependencyMap.put(Pair.of(dependency, vulnerability), textrange));
         }
     }
 

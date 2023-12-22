@@ -178,7 +178,7 @@ public final class DependencyCheckUtils {
 
     public static Optional<DependencyReason> getBestDependencyReason(@NonNull Dependency dependency, @NonNull Collection<DependencyReason> dependencyReasons) {
 
-        Comparator<DependencyReason> comparatorTextRange = Comparator.comparing(r -> r.getBestTextRange(dependency));
+        Comparator<DependencyReason> comparatorTextRange = Comparator.comparing(r -> r.getBestTextRange(dependency, null));
         // Shorter Files-Names indicates to be a root configuration file
         Comparator<DependencyReason> comparatorFileLength = Comparator.comparingInt(r -> r.getInputComponent().toString().length());
 

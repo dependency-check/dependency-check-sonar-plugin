@@ -22,6 +22,7 @@ package org.sonar.dependencycheck.reason;
 
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -77,8 +78,9 @@ public abstract class DependencyReason {
         return language;
     }
 
-    protected static TextRangeConfidence addDependencyToFirstLine(Dependency dependency, InputFile inputFile) {
-        LOGGER.debug("We haven't found a TextRange for {} in {}. We link to first line with {} confidence", dependency.getFileName(), inputFile, Confidence.LOW);
+    protected static TextRangeConfidence addDependencyToFirstLine(Pair<Dependency, Vulnerability> pair, InputFile inputFile) {
+    	Dependency dependency = pair.getKey();
+    	LOGGER.debug("We haven't found a TextRange for {} in {}. We link to first line with {} confidence", dependency.getFileName(), inputFile, Confidence.LOW);
         return new TextRangeConfidence(inputFile.selectLine(1), Confidence.LOW);
     }
     /**
@@ -88,7 +90,7 @@ public abstract class DependencyReason {
      * @return TextRange
      */
     @NonNull
-    public abstract TextRangeConfidence getBestTextRange(Dependency dependency);
+    public abstract TextRangeConfidence getBestTextRange(Dependency dependency, Vulnerability vulnerability);
 
     public void addIssue(SensorContext context, Dependency dependency) {
         dependency.sortVulnerabilityBycvssScore();
@@ -97,7 +99,7 @@ public abstract class DependencyReason {
         Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(highestVulnerability.getCvssScore(),
             context.config());
 
-        TextRangeConfidence textRange = getBestTextRange(dependency);
+        TextRangeConfidence textRange = getBestTextRange(dependency, null);
         InputComponent inputComponent = getInputComponent();
 
         NewIssue sonarIssue = context.newIssue();
@@ -118,7 +120,7 @@ public abstract class DependencyReason {
     public void addIssue(SensorContext context, Dependency dependency, Vulnerability vulnerability) {
         Severity severity = DependencyCheckUtils.cvssToSonarQubeSeverity(vulnerability.getCvssScore(), context.config());
 
-        TextRangeConfidence textRange = getBestTextRange(dependency);
+        TextRangeConfidence textRange = getBestTextRange(dependency, vulnerability);
         InputComponent inputComponent = getInputComponent();
 
         NewIssue sonarIssue = context.newIssue();

@@ -74,7 +74,7 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
-        TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency);
+        TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency, null);
         assertTrue(npm.isReasonable());
         assertNotNull(textRangeConfidence);
         assertEquals(335, textRangeConfidence.getTextRange().start().line());
@@ -83,7 +83,7 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         assertEquals(6, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.HIGHEST, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
-        assertEquals(npm.getBestTextRange(dependency), npm.getBestTextRange(dependency));
+        assertEquals(npm.getBestTextRange(dependency, null), npm.getBestTextRange(dependency, null));
     }
 
     @Test
@@ -94,7 +94,7 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
-        TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency);
+        TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency, null);
         assertTrue(npm.isReasonable());
         assertNotNull(textRangeConfidence);
         assertEquals(7, textRangeConfidence.getTextRange().start().line());
@@ -103,7 +103,7 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         assertEquals(6, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.HIGHEST, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
-        assertEquals(npm.getBestTextRange(dependency), npm.getBestTextRange(dependency));
+        assertEquals(npm.getBestTextRange(dependency, null), npm.getBestTextRange(dependency, null));
     }
 
     @Test
@@ -114,7 +114,7 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
-        TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency);
+        TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency, null);
         assertTrue(npm.isReasonable());
         assertNotNull(textRangeConfidence);
         assertEquals(7, textRangeConfidence.getTextRange().start().line());
@@ -123,7 +123,7 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         assertEquals(6, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.HIGH, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
-        assertEquals(npm.getBestTextRange(dependency), npm.getBestTextRange(dependency));
+        assertEquals(npm.getBestTextRange(dependency, null), npm.getBestTextRange(dependency, null));
     }
 
     @Test
@@ -134,7 +134,7 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
-        TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency);
+        TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency, null);
         assertTrue(npm.isReasonable());
         assertNotNull(textRangeConfidence);
         assertEquals(7, textRangeConfidence.getTextRange().start().line());
@@ -143,7 +143,7 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         assertEquals(6, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.HIGH, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
-        assertEquals(npm.getBestTextRange(dependency), npm.getBestTextRange(dependency));
+        assertEquals(npm.getBestTextRange(dependency, null), npm.getBestTextRange(dependency, null));
     }
 
     @Test
@@ -154,13 +154,13 @@ class NPMDependencyReasonTest extends DependencyReasonTestHelper {
         Collection<Identifier> identifiersCollected = new ArrayList<>();
         identifiersCollected.add(identifier);
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(),Collections.emptyList(), identifiersCollected, Collections.emptyList(), null);
-        TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency);
+        TextRangeConfidence textRangeConfidence = npm.getBestTextRange(dependency, null);
         assertTrue(npm.isReasonable());
         assertNotNull(textRangeConfidence);
         assertEquals(LINE_NOT_FOUND, textRangeConfidence.getTextRange().start().line());
         assertEquals(Confidence.LOW, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
-        assertEquals(npm.getBestTextRange(dependency), npm.getBestTextRange(dependency));
+        assertEquals(npm.getBestTextRange(dependency, null), npm.getBestTextRange(dependency, null));
     }
 
 }
