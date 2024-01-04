@@ -38,7 +38,7 @@ class KnownCveRuleDefinitionTest {
     private KnownCveRuleDefinition rule = new KnownCveRuleDefinition();
 
     @Test
-    void define() throws Exception {
+    void define() {
         final RulesDefinition.Context context = mock(RulesDefinition.Context.class);
         final RulesDefinition.NewRepository repo = mock(RulesDefinition.NewRepository.class);
         final RulesDefinition.NewRule rule = mock(RulesDefinition.NewRule.class, RETURNS_SMART_NULLS);
@@ -54,6 +54,7 @@ class KnownCveRuleDefinitionTest {
 
         inOrder.verify(context).createRepository("OWASP","neutral");
         inOrder.verify(repo).createRule(DependencyCheckConstants.RULE_KEY);
+        inOrder.verify(repo).createRule(DependencyCheckConstants.RULE_KEY_WITH_SECURITY_HOTSPOT);
 
         inOrder.verify(repo).done();
         inOrder.verifyNoMoreInteractions();

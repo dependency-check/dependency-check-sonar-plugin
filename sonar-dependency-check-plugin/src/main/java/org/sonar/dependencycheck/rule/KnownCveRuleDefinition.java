@@ -40,6 +40,8 @@ public class KnownCveRuleDefinition implements RulesDefinition {
 
         NewRule rule = repo.createRule(DependencyCheckConstants.RULE_KEY);
         fillOWASPRule(rule);
+        NewRule ruleWithSecurityHotspot = repo.createRule(DependencyCheckConstants.RULE_KEY_WITH_SECURITY_HOTSPOT);
+        fillOWASPRule(ruleWithSecurityHotspot);
         repo.done();
     }
 
