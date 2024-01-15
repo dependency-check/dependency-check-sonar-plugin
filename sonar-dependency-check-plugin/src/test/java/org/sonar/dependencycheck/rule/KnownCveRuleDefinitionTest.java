@@ -54,7 +54,6 @@ class KnownCveRuleDefinitionTest {
 
         inOrder.verify(context).createRepository("OWASP","neutral");
         inOrder.verify(repo).createRule(DependencyCheckConstants.RULE_KEY);
-        inOrder.verify(repo).createRule(DependencyCheckConstants.RULE_KEY_WITH_SECURITY_HOTSPOT);
 
         inOrder.verify(repo).done();
         inOrder.verifyNoMoreInteractions();
