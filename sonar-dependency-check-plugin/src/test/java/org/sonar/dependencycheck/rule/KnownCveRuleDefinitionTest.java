@@ -38,7 +38,7 @@ class KnownCveRuleDefinitionTest {
     private KnownCveRuleDefinition rule = new KnownCveRuleDefinition();
 
     @Test
-    void define() throws Exception {
+    void define() {
         final RulesDefinition.Context context = mock(RulesDefinition.Context.class);
         final RulesDefinition.NewRepository repo = mock(RulesDefinition.NewRepository.class);
         final RulesDefinition.NewRule rule = mock(RulesDefinition.NewRule.class, RETURNS_SMART_NULLS);
