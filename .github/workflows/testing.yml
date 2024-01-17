@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ '11' , '17' ]
+        java: [ '17' , '21' ]
     name: Java ${{ matrix.Java }} testing
     steps:
       - name: Checkout
@@ -28,7 +28,7 @@ jobs:
         run: mvn -B clean verify
       - name: SonarCloud
         run: mvn -B sonar:sonar
-        if: ${{ matrix.java == '11' && env.SONAR_TOKEN != null}}
+        if: ${{ matrix.java == '17' && env.SONAR_TOKEN != null}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
