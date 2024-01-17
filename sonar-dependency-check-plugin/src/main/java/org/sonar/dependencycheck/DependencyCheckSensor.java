@@ -25,15 +25,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.notifications.AnalysisWarnings;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.api.scanner.sensor.ProjectSensor;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
-import org.sonar.api.utils.log.Profiler;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.parser.JsonReportParserHelper;
@@ -48,7 +47,7 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 
 public class DependencyCheckSensor implements ProjectSensor {
 
-    private static final Logger LOGGER = Loggers.get(DependencyCheckSensor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DependencyCheckSensor.class);
     private static final String SENSOR_NAME = "Dependency-Check";
 
     private final FileSystem fileSystem;
@@ -123,11 +122,10 @@ public class DependencyCheckSensor implements ProjectSensor {
 
     @Override
     public void execute(SensorContext sensorContext) {
-        Profiler profiler = Profiler.create(LOGGER);
-        profiler.startInfo("Process Dependency-Check report");
         if (DependencyCheckUtils.skipPlugin(sensorContext.config())) {
             LOGGER.info("Dependency-Check skipped");
         } else {
+            LOGGER.info("Dependency-Check - Start");
             Optional<Analysis> analysis = parseAnalysis(sensorContext);
             if (analysis.isPresent()) {
                 DependencyReasonSearcher dependencyReasonSearcher = new DependencyReasonSearcher(sensorContext);
@@ -137,7 +135,8 @@ public class DependencyCheckSensor implements ProjectSensor {
                 }
             }
             uploadHTMLReport(sensorContext);
+            LOGGER.info("Dependency-Check - End");
         }
-        profiler.stopInfo();
+
     }
 }

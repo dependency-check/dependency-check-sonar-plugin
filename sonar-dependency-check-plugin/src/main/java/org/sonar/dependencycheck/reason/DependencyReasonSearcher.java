@@ -24,6 +24,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
@@ -31,8 +33,6 @@ import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.issue.impact.Severity;
 import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 import org.sonar.dependencycheck.base.DependencyCheckMetric;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
@@ -44,7 +44,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class DependencyReasonSearcher {
 
-    private static final Logger LOGGER = Loggers.get(DependencyReasonSearcher.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DependencyReasonSearcher.class);
     private final DependencyCheckMetric projectMetric;
 
     private final Collection<DependencyReason> dependencyReasons;
@@ -103,7 +103,7 @@ public class DependencyReasonSearcher {
         LOGGER.debug("Get the best DependencyReason out of {} for {}", dependencyReasons.size(), dependency.getFileName());
         // Prefer root configuration file
         Optional<DependencyReason> dependencyReasonWinner = DependencyCheckUtils.getBestDependencyReason(dependency, dependencyReasons);
-        dependencyReasonWinner.ifPresent(dependencyReason -> LOGGER.debug("DependencyReasonWinner: " + dependencyReason.getInputComponent()));
+        dependencyReasonWinner.ifPresent(dependencyReason -> LOGGER.debug("DependencyReasonWinner: {}", dependencyReason.getInputComponent()));
         return dependencyReasonWinner;
     }
 
@@ -115,12 +115,12 @@ public class DependencyReasonSearcher {
         if (dependencyReasons.isEmpty()) {
             LOGGER.info("No project configuration file, e.g. pom.xml, *.gradle, *.gradle.kts, package-lock.json found, therefore it isn't possible to correctly link dependencies with files.");
             linkIssues(analysis.getDependencies(), context);
-            LOGGER.debug("Saving Metrics to project {}", projectMetric.toString());
+            LOGGER.debug("Saving Metrics to project {}", projectMetric);
             projectMetric.saveMeasures(context);
         } else {
             linkIssues(analysis.getDependencies(), context);
             for (DependencyReason reason : dependencyReasons) {
-                LOGGER.debug("Saving Metrics to reason file {} ", reason.getMetrics().toString());
+                LOGGER.debug("Saving Metrics to reason file {} ", reason.getMetrics());
                 reason.getMetrics().saveMeasures(context);
             }
         }

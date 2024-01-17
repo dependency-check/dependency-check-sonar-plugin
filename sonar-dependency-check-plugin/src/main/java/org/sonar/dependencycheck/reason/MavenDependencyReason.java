@@ -27,10 +27,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.parser.PomParserHelper;
 import org.sonar.dependencycheck.parser.ReportParserException;
@@ -49,7 +49,7 @@ public class MavenDependencyReason extends DependencyReason {
     private final Map<Dependency, TextRangeConfidence> dependencyMap;
     private MavenPomModel pomModel;
 
-    private static final Logger LOGGER = Loggers.get(MavenDependencyReason.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MavenDependencyReason.class);
 
     public MavenDependencyReason(@NonNull InputFile pom) {
         super(pom, Language.JAVA);

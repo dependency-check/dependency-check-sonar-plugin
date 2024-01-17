@@ -25,14 +25,14 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
 public abstract class ReportFile {
-    private static final Logger LOGGER = Loggers.get(ReportFile.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportFile.class);
 
     protected final ReportFormat reportFormat;
     protected final String property;

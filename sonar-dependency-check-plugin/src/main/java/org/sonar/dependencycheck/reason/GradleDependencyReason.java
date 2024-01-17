@@ -28,10 +28,10 @@ import java.util.Optional;
 import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.parser.element.Confidence;
 import org.sonar.dependencycheck.parser.element.Dependency;
@@ -46,7 +46,7 @@ public class GradleDependencyReason extends DependencyReason {
     private String content;
     private final Map<Dependency, TextRangeConfidence> dependencyMap;
 
-    private static final Logger LOGGER = Loggers.get(GradleDependencyReason.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GradleDependencyReason.class);
 
     public GradleDependencyReason(@NonNull InputFile buildGradle) {
         super(buildGradle, Language.JAVA);

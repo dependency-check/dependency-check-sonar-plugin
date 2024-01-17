@@ -22,6 +22,8 @@ package org.sonar.dependencycheck.reason;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -30,8 +32,6 @@ import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.issue.impact.Severity;
 import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 import org.sonar.dependencycheck.base.DependencyCheckMetric;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
@@ -43,7 +43,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 public abstract class DependencyReason {
 
-    private static final Logger LOGGER = Loggers.get(DependencyReason.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DependencyReason.class);
 
     private final DependencyCheckMetric metrics;
     private final Language language;
