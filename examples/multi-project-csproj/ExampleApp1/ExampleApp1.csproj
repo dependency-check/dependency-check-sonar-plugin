@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="jQuery.UI.Combined" Version="1.8.9" />
+    <PackageReference Include="jQuery.UI.Combined" Version="1.13.2" />
   </ItemGroup>
 
 </Project>
