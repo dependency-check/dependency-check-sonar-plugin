@@ -95,16 +95,25 @@ export default class DependencyCheckReportApp extends React.PureComponent {
   }
 
   render() {
-    if (this.state.loading) {
-      return (
-        <div className="page page-limited">
-          Loading...
-        </div>
-      );
-    }
+        // IFrame for warnings, new tab when report available.
+    if(!this.state.data.includes("Dependency-Check")){
+      // IFrame
+      return (<div className="page dependency-check-report-container" >
+                <iframe sandbox="allow-scripts allow-same-origin" height={this.state.height} srcDoc={this.state.data} style={{border: "none"}} />
+              </div>);
+    } else {
+      // Open in new tab (avoid endless 'loading...' and present the URL by using an Event Listener)
+      const newWindow = window.open('#', "_blank");
+      if (newWindow) {
+        newWindow.addEventListener('load', () => {
+          newWindow.document.open();
+          newWindow.document.write(this.state.data);
+          newWindow.document.close();
+          newWindow.stop();
+        }, true);
+      }
 
-    return (<div className="page dependency-check-report-container" >
-              <iframe classsandbox="allow-scripts allow-same-origin" height={this.state.height} srcDoc={this.state.data} style={{border: "none"}} />
-            </div>);
+      return (<center><h1 style={{padding: "250px 0 0 0"}}>Dependency-Check report opened in adjacent tab.</h1></center>);
+    }
   }
 }
