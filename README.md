@@ -1,6 +1,6 @@
 # Dependency-Check Plugin for SonarQube 10.2 or higher
 
-![Build Status](https://github.com/dependency-check/dependency-check-sonar-plugin/workflows/build/badge.svg?branch=master)
+![Build Status](https://github.com/dependency-check/dependency-check-sonar-plugin/actions/workflows/testing.yml/badge.svg?branch=master)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e9cebd3112ec4252804bba68a5b44071)](https://www.codacy.com/gh/dependency-check/dependency-check-sonar-plugin/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dependency-check/dependency-check-sonar-plugin&amp;utm_campaign=Badge_Grade)
 [![Download](https://img.shields.io/github/v/release/dependency-check/dependency-check-sonar-plugin)](https://github.com/dependency-check/dependency-check-sonar-plugin/releases/latest)
 ![Downloads](https://img.shields.io/github/downloads/dependency-check/dependency-check-sonar-plugin/total)
