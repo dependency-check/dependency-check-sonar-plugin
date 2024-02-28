@@ -4,7 +4,7 @@
   "version": "7.0.0",
   "devDependencies": {
     "@babel/core": "^7.23.9",
-    "autoprefixer": "^10.4.2",
+    "autoprefixer": "^10.4.17",
     "babel-loader": "^8.3.0",
     "babel-preset-react-app": "^10.0.1",
     "css-loader": "^6.5.1",
