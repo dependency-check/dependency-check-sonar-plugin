@@ -28,7 +28,7 @@ dependencyCheck {
 
 sonarqube {
     properties {
-        property("sonar.dependencyCheck.reportPath", "build/reports/dependency-check-report.xml")
+        property("sonar.dependencyCheck.jsonReportPath", "build/reports/dependency-check-report.json")
         property("sonar.dependencyCheck.htmlReportPath", "build/reports/dependency-check-report.html")
     }
 }
