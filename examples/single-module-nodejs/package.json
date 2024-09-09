@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "braces": "2.3.0",
+    "braces": "3.0.3",
     "lodash": "4.17.10",
     "open": "0.0.5",
     "jquery": "2.2.0",
