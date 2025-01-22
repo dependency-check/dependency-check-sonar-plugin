@@ -21,7 +21,7 @@
     "webpack": "^5.97.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.2",
-    "webpack-merge": "^5.10.0"
+    "webpack-merge": "^6.0.1"
   },
   "scripts": {
     "build": "NODE_ENV=production BABEL_ENV=production webpack --config conf/webpack.prod.js",
