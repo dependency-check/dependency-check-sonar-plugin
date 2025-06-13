@@ -1,0 +1,286 @@
+{
+  "reportSchema": "1.1",
+  "scanInfo": {
+    "engineVersion": "12.1.1",
+    "dataSource": [
+      {
+        "name": "NVD API Last Checked",
+        "timestamp": "2025-01-01T00:00:00Z"
+      },
+      {
+        "name": "NVD API Last Modified",
+        "timestamp": "2025-01-01T00:00:00Z"
+      },
+      {
+        "name": "NVD Cache Last Checked",
+        "timestamp": "2025-01-01T00:00:00Z"
+      },
+      {
+        "name": "NVD Cache Last Modified",
+        "timestamp": "2025-01-01T00:00:00Z"
+      }
+    ]
+  },
+  "projectInfo": {
+    "name": "my-test-project",
+    "reportDate": "2025-05-01T00:00:00.000000000Z",
+    "credits": {
+      "NVD": "This product uses the NVD API but is not endorsed or certified by the NVD. This report contains data retrieved from the National Vulnerability Database: https://nvd.nist.gov",
+      "CISA": "This report may contain data retrieved from the CISA Known Exploited Vulnerability Catalog: https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+      "NPM": "This report may contain data retrieved from the Github Advisory Database (via NPM Audit API): https://github.com/advisories/",
+      "RETIREJS": "This report may contain data retrieved from the RetireJS community: https://retirejs.github.io/retire.js/",
+      "OSSINDEX": "This report may contain data retrieved from the Sonatype OSS Index: https://ossindex.sonatype.org"
+    }
+  },
+  "dependencies": [
+    {
+      "isVirtual": false,
+      "fileName": "org.glassfish.hk2.osgi-resource-locator-1.0.3.jar",
+      "filePath": "/work/target/quarkus-app/lib/main/org.glassfish.hk2.osgi-resource-locator-1.0.3.jar",
+      "md5": "e7e82b82118c5387ae45f7bf3892909b",
+      "sha1": "de3b21279df7e755e38275137539be5e2c80dd58",
+      "sha256": "aab5d7849f7cfcda2cc7c541ba1bd365151d42276f151c825387245dfde3dd74",
+      "description": "Used by various API providers that rely on META-INF/services mechanism to locate providers.",
+      "license": "http://www.eclipse.org/legal/epl-2.0, https://www.gnu.org/software/classpath/license.html",
+      "evidenceCollected": {
+        "vendorEvidence": [
+          {
+            "type": "vendor",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "org.glassfish.hk2.osgi-resource-locator"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "glassfish"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "glassfish"
+          },
+          {
+            "type": "vendor",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "hk2"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "hk2"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "osgiresourcelocator"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "Manifest",
+            "name": "bundle-activationpolicy",
+            "value": "lazy"
+          },
+          {
+            "type": "vendor",
+            "confidence": "LOW",
+            "source": "Manifest",
+            "name": "bundle-docurl",
+            "value": "https://www.eclipse.org"
+          },
+          {
+            "type": "vendor",
+            "confidence": "MEDIUM",
+            "source": "Manifest",
+            "name": "bundle-symbolicname",
+            "value": "org.glassfish.hk2.osgi-resource-locator"
+          }
+        ],
+        "productEvidence": [
+          {
+            "type": "product",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "name",
+            "value": "org.glassfish.hk2.osgi-resource-locator"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "glassfish"
+          },
+          {
+            "type": "product",
+            "confidence": "HIGHEST",
+            "source": "jar",
+            "name": "package name",
+            "value": "hk2"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "hk2"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "jar",
+            "name": "package name",
+            "value": "osgiresourcelocator"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "Manifest",
+            "name": "bundle-activationpolicy",
+            "value": "lazy"
+          },
+          {
+            "type": "product",
+            "confidence": "LOW",
+            "source": "Manifest",
+            "name": "bundle-docurl",
+            "value": "https://www.eclipse.org"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "Manifest",
+            "name": "Bundle-Name",
+            "value": "OSGi resource locator"
+          },
+          {
+            "type": "product",
+            "confidence": "MEDIUM",
+            "source": "Manifest",
+            "name": "bundle-symbolicname",
+            "value": "org.glassfish.hk2.osgi-resource-locator"
+          }
+        ],
+        "versionEvidence": [
+          {
+            "type": "version",
+            "confidence": "MEDIUM",
+            "source": "file",
+            "name": "name",
+            "value": "org.glassfish.hk2.osgi-resource-locator"
+          },
+          {
+            "type": "version",
+            "confidence": "HIGH",
+            "source": "file",
+            "name": "version",
+            "value": "1.0.3"
+          },
+          {
+            "type": "version",
+            "confidence": "HIGH",
+            "source": "Manifest",
+            "name": "Bundle-Version",
+            "value": "1.0.3"
+          }
+        ]
+      },
+      "vulnerabilityIds": [
+        {
+          "id": "cpe:2.3:a:eclipse:glassfish:1.0.3:*:*:*:*:*:*:*",
+          "confidence": "LOW"
+        }
+      ],
+      "vulnerabilities": [
+        {
+          "source": "NVD",
+          "name": "CVE-2024-9329",
+          "severity": "MEDIUM",
+          "cvssv3": {
+            "baseScore": 6.1,
+            "attackVector": "NETWORK",
+            "attackComplexity": "LOW",
+            "privilegesRequired": "NONE",
+            "userInteraction": "REQUIRED",
+            "scope": "CHANGED",
+            "confidentialityImpact": "LOW",
+            "integrityImpact": "LOW",
+            "availabilityImpact": "NONE",
+            "baseSeverity": "MEDIUM",
+            "exploitabilityScore": "2.8",
+            "impactScore": "2.7",
+            "version": "3.1"
+          },
+          "cvssv4": {
+            "vectorString": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:N/V:X/RE:X/U:X",
+            "source": "emo@eclipse.org",
+            "type": "Secondary",
+            "version": "4.0",
+            "attackVector": "NETWORK",
+            "attackComplexity": "LOW",
+            "attackRequirements": "NONE",
+            "privilegesRequired": "NONE",
+            "userInteraction": "NONE",
+            "exploitMaturity": "NOT_DEFINED",
+            "modifiedAttackVector": "NOT_DEFINED",
+            "modifiedAttackComplexity": "NOT_DEFINED",
+            "modifiedAttackRequirements": "NOT_DEFINED",
+            "modifiedPrivilegesRequired": "NOT_DEFINED",
+            "modifiedUserInteraction": "NOT_DEFINED",
+            "safety": "NOT_DEFINED",
+            "automatable": "NOT_DEFINED",
+            "recovery": "NOT_DEFINED",
+            "valueDensity": "NOT_DEFINED",
+            "vulnerabilityResponseEffort": "NOT_DEFINED",
+            "providerUrgency": "NOT_DEFINED",
+            "baseScore": 6.9,
+            "baseSeverity": "MEDIUM"
+          },
+          "cwes": [
+            "CWE-601",
+            "CWE-233"
+          ],
+          "description": "In Eclipse Glassfish versions before 7.0.17, The Host HTTP parameter could cause the web application to redirect to the specified URL, when the requested endpoint is '/management/domain'. By modifying the URL value to a malicious site, an attacker may successfully launch a phishing scam and steal user credentials.",
+          "notes": "",
+          "references": [
+            {
+              "source": "emo@eclipse.org",
+              "url": "https://github.com/eclipse-ee4j/glassfish/pull/25106",
+              "name": "EXPLOIT,PATCH"
+            },
+            {
+              "source": "emo@eclipse.org",
+              "url": "https://gitlab.eclipse.org/security/vulnerability-reports/-/issues/232",
+              "name": "EXPLOIT,VENDOR_ADVISORY"
+            },
+            {
+              "source": "af854a3a-2127-422b-91ae-364da2661108",
+              "url": "https://www.gruppotim.it/it/footer/red-team.html"
+            }
+          ],
+          "vulnerableSoftware": [
+            {
+              "software": {
+                "id": "cpe:2.3:a:eclipse:glassfish:*:*:*:*:*:*:*:*",
+                "vulnerabilityIdMatched": "true",
+                "versionEndExcluding": "7.0.17"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

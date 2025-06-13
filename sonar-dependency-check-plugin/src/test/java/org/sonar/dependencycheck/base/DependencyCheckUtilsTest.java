@@ -245,7 +245,7 @@ class DependencyCheckUtilsTest {
         Collection<Identifier> packageidentifiers1 = new ArrayList<>();
         packageidentifiers1.add(identifier1);
         CvssV2 cvssV2 = new CvssV2(5.0f, "HIGH");
-        Vulnerability vulnerability1 = new Vulnerability("Test name", "NVD", "MyDescription", null, cvssV2, null, null);
+        Vulnerability vulnerability1 = new Vulnerability("Test name", "NVD", "MyDescription", null, cvssV2, null, null, null);
         List<Vulnerability> vulnerabilities1 = new ArrayList<>();
         vulnerabilities1.add(vulnerability1);
         Dependency dependency = new Dependency(null, null, null, null, Collections.emptyMap(), vulnerabilities1, packageidentifiers1, Collections.emptyList(), null);

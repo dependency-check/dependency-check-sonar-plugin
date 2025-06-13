@@ -181,4 +181,37 @@ abstract class ReportParserTest {
         dependency = iterator.next();
         assertEquals("xml-apis-1.0.b2.jar", dependency.getFileName());
     }
+
+    @Test
+    void parseReportWithCvssV4() throws Exception {
+        Analysis analysis = parseReport("reportWithCvssV4");
+
+        assertEquals("12.1.1", analysis.getScanInfo().getEngineVersion());
+        assertEquals("my-test-project", analysis.getProjectInfo().get().getName());
+        assertEquals("2025-05-01T00:00:00.000000000Z", analysis.getProjectInfo().get().getReportDate());
+
+        Collection<Dependency> dependencies = analysis.getDependencies();
+        assertEquals(1, dependencies.size());
+
+        Dependency dependency = dependencies.stream().findFirst().get();
+
+        assertNotNull(dependency.getVulnerabilities());
+        assertEquals(1, dependency.getVulnerabilities().size());
+        Vulnerability vulnerability = dependency.getVulnerabilities().get(0);
+
+        assertNotNull(vulnerability);
+
+        assertEquals("CVE-2024-9329", vulnerability.getName());
+        assertEquals("NVD", vulnerability.getSource());
+        assertEquals(6.9f, vulnerability.getCvssScore());
+        assertEquals("MEDIUM", vulnerability.getSeverity());
+
+        assertTrue(vulnerability.getCvssV2().isEmpty());
+        assertTrue(vulnerability.getCvssV3().isPresent());
+        assertTrue(vulnerability.getCvssV4().isPresent());
+        assertEquals(6.9f, vulnerability.getCvssV4().get().getScore());
+        assertEquals(6.1f, vulnerability.getCvssV3().get().getScore());
+        assertEquals("MEDIUM", vulnerability.getCvssV4().get().getSeverity());
+        assertEquals("MEDIUM", vulnerability.getCvssV3().get().getSeverity());
+    }
 }
