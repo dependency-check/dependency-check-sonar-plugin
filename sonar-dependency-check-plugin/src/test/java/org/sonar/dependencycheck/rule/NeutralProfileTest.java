@@ -19,6 +19,7 @@
  */
 package org.sonar.dependencycheck.rule;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
@@ -37,11 +38,12 @@ class NeutralProfileTest {
                 .profile(DependencyCheckConstants.LANGUAGE_KEY, "Neutral");
         assertEquals("neutral", profile.language());
         assertEquals("Neutral", profile.name());
-        assertEquals(1, profile.rules().size());
-
-        BuiltInActiveRule rule = profile.rules().get(0);
-        assertEquals(DependencyCheckConstants.REPOSITORY_KEY, rule.repoKey());
-        assertEquals(DependencyCheckConstants.RULE_KEY, rule.ruleKey());
+        assertEquals(2, profile.rules().size());
+        for (BuiltInActiveRule rule : profile.rules()) {
+            assertEquals(DependencyCheckConstants.REPOSITORY_KEY, rule.repoKey());
+            assertTrue(rule.ruleKey().equals(DependencyCheckConstants.RULE_KEY_WITH_SECURITY_HOTSPOT)
+                || rule.ruleKey().equals(DependencyCheckConstants.RULE_KEY));
+        }
     }
 
 }
