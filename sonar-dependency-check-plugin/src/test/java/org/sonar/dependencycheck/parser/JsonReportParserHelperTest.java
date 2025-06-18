@@ -72,4 +72,5 @@ class JsonReportParserHelperTest extends ReportParserTest {
         ReportParserException exception = assertThrows(ReportParserException.class, () -> JsonReportParserHelper.parse(inputStream), "No IOException thrown");
         assertEquals("IO Problem with JSON-Report", exception.getMessage());
     }
+
 }
