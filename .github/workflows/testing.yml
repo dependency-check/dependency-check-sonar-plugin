@@ -25,7 +25,7 @@ jobs:
           java-version: ${{ matrix.java }}
           distribution: 'adopt'
       - name: Testing with Maven
-        run: mvn -B clean verify
+        run: mvn -B clean verify -Pcoverage
       - name: SonarCloud
         run: mvn -B sonar:sonar
         if: ${{ matrix.java == '17' && env.SONAR_TOKEN != null}}
