@@ -48,22 +48,22 @@ public class MavenParentDeserializer extends StdDeserializer<MavenDependencyLoca
 
     @Override
     public MavenDependencyLocation deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-        int startLineNr = jsonParser.getCurrentLocation().getLineNr();
+        int startLineNr = jsonParser.currentLocation().getLineNr();
         String groupId = "";
         String artifactId = "";
         String version = "";
         while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
-            if (StringUtils.equalsIgnoreCase("groupId", jsonParser.getCurrentName())) {
+            if (StringUtils.equalsIgnoreCase("groupId", jsonParser.currentName())) {
                 groupId = jsonParser.getValueAsString();
             }
-            if (StringUtils.equalsIgnoreCase("artifactId", jsonParser.getCurrentName())) {
+            if (StringUtils.equalsIgnoreCase("artifactId", jsonParser.currentName())) {
                 artifactId = jsonParser.getValueAsString();
             }
-            if (StringUtils.equalsIgnoreCase("version", jsonParser.getCurrentName())) {
+            if (StringUtils.equalsIgnoreCase("version", jsonParser.currentName())) {
                 version = jsonParser.getValueAsString();
             }
         }
-        int endLineNr = jsonParser.getCurrentLocation().getLineNr();
+        int endLineNr = jsonParser.currentLocation().getLineNr();
         return new MavenDependencyLocation(groupId, artifactId, version, startLineNr, endLineNr);
     }
 }

@@ -52,24 +52,24 @@ public class MavenDependencyDeserializer extends StdDeserializer<List<MavenDepen
     public List<MavenDependencyLocation> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         List<MavenDependencyLocation> mavenDependencies = new LinkedList<>();
         while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
-            if (StringUtils.equalsIgnoreCase("dependency", jsonParser.getCurrentName())) {
+            if (StringUtils.equalsIgnoreCase("dependency", jsonParser.currentName())) {
                 // We found a dependency
                 String groupId = "";
                 String artifactId = "";
                 String version = "";
-                int startLineNr = jsonParser.getCurrentLocation().getLineNr();
+                int startLineNr = jsonParser.currentLocation().getLineNr();
                 while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
-                    if (StringUtils.equalsIgnoreCase("artifactId", jsonParser.getCurrentName())) {
+                    if (StringUtils.equalsIgnoreCase("artifactId", jsonParser.currentName())) {
                         artifactId = jsonParser.getValueAsString();
                     }
-                    if (StringUtils.equalsIgnoreCase("groupId", jsonParser.getCurrentName())) {
+                    if (StringUtils.equalsIgnoreCase("groupId", jsonParser.currentName())) {
                         groupId = jsonParser.getValueAsString();
                     }
-                    if (StringUtils.equalsIgnoreCase("version", jsonParser.getCurrentName())) {
+                    if (StringUtils.equalsIgnoreCase("version", jsonParser.currentName())) {
                         version = jsonParser.getValueAsString();
                     }
                 }
-                int endLineNr = jsonParser.getCurrentLocation().getLineNr();
+                int endLineNr = jsonParser.currentLocation().getLineNr();
                 mavenDependencies.add(new MavenDependencyLocation(groupId, artifactId, version, startLineNr, endLineNr));
             }
         }

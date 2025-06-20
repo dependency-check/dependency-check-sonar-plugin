@@ -52,10 +52,10 @@ public class PackageLockDependencyDeserializer extends StdDeserializer<List<NPMD
         List<NPMDependencyLocation> npmDependencies = new LinkedList<>();
         while (!JsonToken.END_OBJECT.equals(jsonParser.nextToken())) {
             if (JsonToken.START_OBJECT.equals(jsonParser.currentToken())) {
-                String name = jsonParser.getCurrentName();
-                int startLineNr = jsonParser.getCurrentLocation().getLineNr();
+                String name = jsonParser.currentName();
+                int startLineNr = jsonParser.currentLocation().getLineNr();
                 String version = scanWholeDependencyForVersion(jsonParser);
-                int endLineNr = jsonParser.getCurrentLocation().getLineNr();
+                int endLineNr = jsonParser.currentLocation().getLineNr();
                 npmDependencies.add(new NPMDependencyLocation(name, version, startLineNr, endLineNr));
             }
         }
@@ -67,7 +67,7 @@ public class PackageLockDependencyDeserializer extends StdDeserializer<List<NPMD
         int depth = 0;
         while (!JsonToken.END_OBJECT.equals(jsonParser.nextToken()) || depth > 0) {
             // Check for version only at first level
-            if (StringUtils.equalsIgnoreCase("version", jsonParser.getCurrentName()) && depth == 0) {
+            if (StringUtils.equalsIgnoreCase("version", jsonParser.currentName()) && depth == 0) {
                 version = jsonParser.getValueAsString();
             }
             if (JsonToken.END_OBJECT.equals(jsonParser.getCurrentToken())) {
