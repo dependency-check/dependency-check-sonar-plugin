@@ -31,7 +31,7 @@ public class DependencyCheckReportPage implements PageDefinition {
         context.addPage(
             Page.builder("dependencycheck/report_page")
                 .setScope(Scope.COMPONENT)
-                .setComponentQualifiers(Page.Qualifier.PROJECT, Page.Qualifier.MODULE)
+                .setComponentQualifiers(Page.Qualifier.PROJECT)
                 .setName("Dependency-Check")
                 .setAdmin(false).build());
     }

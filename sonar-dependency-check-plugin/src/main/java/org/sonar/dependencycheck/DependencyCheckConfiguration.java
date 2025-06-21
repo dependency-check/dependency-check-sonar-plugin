@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.sonar.api.PropertyType;
 import org.sonar.api.config.PropertyDefinition;
-import org.sonar.api.resources.Qualifiers;
+import org.sonar.api.config.PropertyDefinition.ConfigScope;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
 public class DependencyCheckConfiguration {
@@ -35,14 +35,14 @@ public class DependencyCheckConfiguration {
     public static List<PropertyDefinition> getPropertyDefinitions() {
         return Arrays.asList(
                 PropertyDefinition.builder(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY)
-                        .onQualifiers(Qualifiers.PROJECT)
+                        .onConfigScopes(ConfigScope.PROJECT)
                         .subCategory(DependencyCheckConstants.SUB_CATEGORY_PATHS)
                         .name("Dependency-Check JSON report path")
                         .description("path to the 'dependency-check-report.json' file")
                         .defaultValue(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY)
-                        .onQualifiers(Qualifiers.PROJECT)
+                        .onConfigScopes(ConfigScope.PROJECT)
                         .subCategory(DependencyCheckConstants.SUB_CATEGORY_PATHS)
                         .name("Dependency-Check HTML report path")
                         .description("path to the 'dependency-check-report.html' file")
@@ -50,7 +50,7 @@ public class DependencyCheckConfiguration {
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_HIGH)
                         .deprecatedKey("sonar.dependencyCheck.severity.critical")
-                        .onQualifiers(Qualifiers.PROJECT)
+                        .onConfigScopes(ConfigScope.PROJECT)
                         .subCategory(DependencyCheckConstants.SUB_CATEGORY_SEVERITIES)
                         .name("High")
                         .description("Minimum score for high issues or -1 to deactivate high issues.")
@@ -60,7 +60,7 @@ public class DependencyCheckConfiguration {
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_MEDIUM)
                         .deprecatedKey("sonar.dependencyCheck.severity.major")
-                        .onQualifiers(Qualifiers.PROJECT)
+                        .onConfigScopes(ConfigScope.PROJECT)
                         .subCategory(DependencyCheckConstants.SUB_CATEGORY_SEVERITIES)
                         .name("Medium")
                         .description("Minimum score for medium issues or -1 to deactivate medium issues.")
@@ -70,7 +70,7 @@ public class DependencyCheckConfiguration {
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_LOW)
                         .deprecatedKey("sonar.dependencyCheck.severity.minor")
-                        .onQualifiers(Qualifiers.PROJECT)
+                        .onConfigScopes(ConfigScope.PROJECT)
                         .subCategory(DependencyCheckConstants.SUB_CATEGORY_SEVERITIES)
                         .name("Low")
                         .description("Minimum score for low issues or -1 to deactivate low issues.")
@@ -79,7 +79,7 @@ public class DependencyCheckConfiguration {
                         .index(3)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.SUMMARIZE_PROPERTY)
-                        .onQualifiers(Qualifiers.PROJECT)
+                        .onConfigScopes(ConfigScope.PROJECT)
                         .subCategory(DependencyCheckConstants.SUB_CATEGORY_GENERAL)
                         .name("Summarize")
                         .description("When enabled we summarize all vulnerabilities per dependency.")
@@ -87,7 +87,7 @@ public class DependencyCheckConfiguration {
                         .type(PropertyType.BOOLEAN)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.SKIP_PROPERTY)
-                        .onQualifiers(Qualifiers.PROJECT)
+                        .onConfigScopes(ConfigScope.PROJECT)
                         .subCategory(DependencyCheckConstants.SUB_CATEGORY_GENERAL)
                         .name("Skip")
                         .description("When enabled we skip this plugin.")
@@ -95,7 +95,7 @@ public class DependencyCheckConfiguration {
                         .type(PropertyType.BOOLEAN)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.SECURITY_HOTSPOT)
-                        .onQualifiers(Qualifiers.PROJECT)
+                        .onConfigScopes(ConfigScope.PROJECT)
                         .subCategory(DependencyCheckConstants.SUB_CATEGORY_GENERAL)
                         .name("Security-Hotspot")
                         .description("When enabled all SonarQube issues are flagged as Security-Hotspot.")
@@ -103,7 +103,7 @@ public class DependencyCheckConfiguration {
                         .type(PropertyType.BOOLEAN)
                         .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.USE_FILEPATH)
-                        .onQualifiers(Qualifiers.PROJECT)
+                        .onConfigScopes(ConfigScope.PROJECT)
                         .subCategory(DependencyCheckConstants.SUB_CATEGORY_GENERAL)
                         .name("Use Filepath")
                         .description("When enabled Filepath is used instead of Filename.")
