@@ -24,6 +24,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import org.sonar.api.issue.impact.Severity;
 import org.sonar.api.issue.impact.SoftwareQuality;
 import org.sonar.api.rule.RuleStatus;
+import org.sonar.api.rules.RuleType;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
 
@@ -40,7 +41,9 @@ public class KnownCveRuleDefinition implements RulesDefinition {
 
         NewRule rule = repo.createRule(DependencyCheckConstants.RULE_KEY);
         fillOWASPRule(rule);
-        rule.addDeprecatedRuleKey(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckConstants.RULE_KEY_WITH_SECURITY_HOTSPOT);
+        NewRule ruleWithSecurityHotspot = repo.createRule(DependencyCheckConstants.RULE_KEY_WITH_SECURITY_HOTSPOT);
+        fillOWASPRule(ruleWithSecurityHotspot);
+        ruleWithSecurityHotspot.setType(RuleType.SECURITY_HOTSPOT);
         repo.done();
     }
 
