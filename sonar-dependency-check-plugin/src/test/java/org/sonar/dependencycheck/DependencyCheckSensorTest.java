@@ -57,7 +57,7 @@ class DependencyCheckSensorTest {
     private File sampleJsonExceptionReport;
 
     @BeforeEach
-    public void init() throws URISyntaxException {
+    void init() throws URISyntaxException {
         FileSystem fileSystem = mock(FileSystem.class, RETURNS_DEEP_STUBS);
         this.pathResolver = mock(PathResolver.class);
         this.sensor = new DependencyCheckSensor(fileSystem, this.pathResolver, null);

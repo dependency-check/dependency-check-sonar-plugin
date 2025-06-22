@@ -31,6 +31,7 @@
         <!-- Test versions -->
         <junit.jupiter.version>5.13.1</junit.jupiter.version>
         <mockito.version>5.18.0</mockito.version>
+        <log4j.version>2.25.0</log4j.version>
     </properties>
 
     <dependencies>
@@ -91,6 +92,12 @@
             <groupId>org.sonarsource.sonarqube</groupId>
             <artifactId>sonar-plugin-api-impl</artifactId>
             <version>${sonar.api.impl.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
