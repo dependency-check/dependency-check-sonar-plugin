@@ -41,13 +41,6 @@ public class DependencyCheckConfiguration {
                         .description("path to the 'dependency-check-report.json' file")
                         .defaultValue(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)
                         .build(),
-                PropertyDefinition.builder(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY)
-                        .onConfigScopes(ConfigScope.PROJECT)
-                        .subCategory(DependencyCheckConstants.SUB_CATEGORY_PATHS)
-                        .name("Dependency-Check HTML report path")
-                        .description("path to the 'dependency-check-report.html' file")
-                        .defaultValue(DependencyCheckConstants.HTML_REPORT_PATH_DEFAULT)
-                        .build(),
                 PropertyDefinition.builder(DependencyCheckConstants.SEVERITY_HIGH)
                         .deprecatedKey("sonar.dependencyCheck.severity.critical")
                         .onConfigScopes(ConfigScope.PROJECT)

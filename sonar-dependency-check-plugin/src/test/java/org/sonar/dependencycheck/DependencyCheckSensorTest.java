@@ -47,7 +47,6 @@ import org.sonar.api.config.Configuration;
 import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.dependencycheck.base.DependencyCheckConstants;
-import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 
 class DependencyCheckSensorTest {
 
@@ -55,7 +54,6 @@ class DependencyCheckSensorTest {
     private DependencyCheckSensor sensor;
 
     private File sampleJsonReport;
-    private File sampleHtmlReport;
     private File sampleJsonExceptionReport;
 
     @BeforeEach
@@ -68,10 +66,6 @@ class DependencyCheckSensorTest {
         final URL sampleJsonResourceURI = getClass().getClassLoader().getResource("reportMultiModuleMavenExample/dependency-check-report.json");
         assertNotNull(sampleJsonResourceURI);
         this.sampleJsonReport = Paths.get(sampleJsonResourceURI.toURI()).toFile();
-
-        final URL sampleHtmlResourceURI = getClass().getClassLoader().getResource("reportMultiModuleMavenExample/dependency-check-report.html");
-        assertNotNull(sampleHtmlResourceURI);
-        this.sampleHtmlReport = Paths.get(sampleHtmlResourceURI.toURI()).toFile();
 
         final URL sampleExceptionResourceURI = getClass().getClassLoader().getResource("reportWithExceptions/dependency-check-report.json");
         assertNotNull(sampleExceptionResourceURI);
@@ -161,21 +155,6 @@ class DependencyCheckSensorTest {
         when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.JSON_REPORT_PATH_DEFAULT)))).thenReturn(sampleJsonReport);
         sensor.execute(context);
         assertNotNull(context.measures("projectKey"));
-    }
-
-    @Test
-    void shouldPersistHtmlReport() {
-        final SensorContextTester context = SensorContextTester.create(new File(""));
-        // Plugin Configuration
-        MapSettings settings = new MapSettings();
-        settings.setProperty(DependencyCheckConstants.JSON_REPORT_PATH_PROPERTY, "dependency-check-report.json");
-        Configuration config = settings.asConfig();
-        context.setSettings(settings);
-
-        when(pathResolver.relativeFile(Mockito.any(File.class), Mockito.eq(config.get(DependencyCheckConstants.HTML_REPORT_PATH_PROPERTY).orElse(DependencyCheckConstants.HTML_REPORT_PATH_DEFAULT)))).thenReturn(sampleHtmlReport);
-        sensor.execute(context);
-        assertNotNull(context.measure("projectKey", DependencyCheckMetrics.REPORT).value());
-
     }
 
     @Test

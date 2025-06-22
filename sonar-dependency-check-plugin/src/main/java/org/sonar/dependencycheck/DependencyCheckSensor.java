@@ -33,14 +33,12 @@ import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.notifications.AnalysisWarnings;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.api.scanner.sensor.ProjectSensor;
-import org.sonar.dependencycheck.base.DependencyCheckMetrics;
 import org.sonar.dependencycheck.base.DependencyCheckUtils;
 import org.sonar.dependencycheck.parser.JsonReportParserHelper;
 import org.sonar.dependencycheck.parser.ReportParserException;
 import org.sonar.dependencycheck.parser.element.Analysis;
 import org.sonar.dependencycheck.parser.element.AnalysisException;
 import org.sonar.dependencycheck.reason.DependencyReasonSearcher;
-import org.sonar.dependencycheck.report.HtmlReportFile;
 import org.sonar.dependencycheck.report.JsonReportFile;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -75,21 +73,6 @@ public class DependencyCheckSensor implements ProjectSensor {
             LOGGER.warn("JSON-Analysis aborted due to: IO Errors", e);
         }
         return Optional.empty();
-    }
-
-    private void uploadHTMLReport(SensorContext context) {
-        try {
-            HtmlReportFile htmlReportFile = HtmlReportFile.getHtmlReport(context.config(), fileSystem, pathResolver);
-            String htmlReport = htmlReportFile.getReportContent();
-            if (htmlReport != null) {
-                LOGGER.info("Upload Dependency-Check HTML-Report");
-                context.<String>newMeasure().forMetric(DependencyCheckMetrics.REPORT).on(context.project())
-                        .withValue(htmlReport).save();
-            }
-        } catch (FileNotFoundException e) {
-            LOGGER.info(e.getMessage());
-            LOGGER.debug(e.getMessage(), e);
-        }
     }
 
     private void addWarnings(Analysis analysis) {
@@ -134,7 +117,6 @@ public class DependencyCheckSensor implements ProjectSensor {
                     addWarnings(analysis.get());
                 }
             }
-            uploadHTMLReport(sensorContext);
             LOGGER.info("Dependency-Check - End");
         }
 
