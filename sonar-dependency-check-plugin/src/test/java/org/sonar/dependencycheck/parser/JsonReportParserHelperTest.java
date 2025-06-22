@@ -31,12 +31,16 @@ import java.time.Duration;
 import java.time.Instant;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.dependencycheck.parser.element.Analysis;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 class JsonReportParserHelperTest extends ReportParserTest {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportParserTest.class);
 
     @Override
     public Analysis parseReport(String dir) throws Exception {
@@ -45,7 +49,7 @@ class JsonReportParserHelperTest extends ReportParserTest {
         Analysis analysis = JsonReportParserHelper.parse(inputStream);
         assertNotNull(analysis);
         Instant endTime = Instant.now();
-        System.out.println("Duration JSON-Report-Parser: " + Duration.between(startTime, endTime));
+        LOGGER.info("Duration JSON-Report-Parser: {}", Duration.between(startTime, endTime));
         return analysis;
     }
 

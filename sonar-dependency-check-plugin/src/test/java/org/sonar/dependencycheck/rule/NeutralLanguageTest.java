@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
  */
 class NeutralLanguageTest {
     @Test
-    void getFileSuffixes() throws Exception {
+    void getFileSuffixes() {
         assertEquals(0, new NeutralLanguage().getFileSuffixes().length);
     }
 
