@@ -22,7 +22,6 @@ package org.sonar.dependencycheck.base;
 public final class DependencyCheckConstants {
 
     public static final String JSON_REPORT_PATH_PROPERTY = "sonar.dependencyCheck.jsonReportPath";
-    public static final String HTML_REPORT_PATH_PROPERTY = "sonar.dependencyCheck.htmlReportPath";
     public static final String SEVERITY_HIGH = "sonar.dependencyCheck.severity.high";
     public static final String SEVERITY_MEDIUM = "sonar.dependencyCheck.severity.medium";
     public static final String SEVERITY_LOW = "sonar.dependencyCheck.severity.low";
@@ -41,7 +40,6 @@ public final class DependencyCheckConstants {
     public static final Float CVSS_LOW_SCORE = 0.1f;
 
     public static final String JSON_REPORT_PATH_DEFAULT = "${WORKSPACE}/dependency-check-report.json";
-    public static final String HTML_REPORT_PATH_DEFAULT = "${WORKSPACE}/dependency-check-report.html";
     public static final Boolean SUMMARIZE_PROPERTY_DEFAULT = Boolean.FALSE;
     public static final Boolean SKIP_PROPERTY_DEFAULT = Boolean.FALSE;
     public static final Boolean SECURITY_HOTSPOT_DEFAULT = Boolean.FALSE;
