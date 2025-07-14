@@ -31,7 +31,7 @@
         <!-- Test versions -->
         <junit.jupiter.version>5.13.2</junit.jupiter.version>
         <mockito.version>5.18.0</mockito.version>
-        <log4j.version>2.25.0</log4j.version>
+        <log4j.version>2.25.1</log4j.version>
     </properties>
 
     <dependencies>
