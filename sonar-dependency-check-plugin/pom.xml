@@ -25,7 +25,7 @@
         <sonar.pluginClass>org.sonar.dependencycheck.DependencyCheckPlugin</sonar.pluginClass>
         <sonar.pluginName>Dependency-Check</sonar.pluginName>
         <sonar.pluginKey>dependencycheck</sonar.pluginKey>
-        <jackson.version>2.19.1</jackson.version>
+        <jackson.version>2.19.2</jackson.version>
         <spotbugs.version>4.9.3</spotbugs.version>
         <commons.lang3.version>3.17.0</commons.lang3.version>
         <!-- Test versions -->
