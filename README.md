@@ -1,4 +1,4 @@
-# Dependency-Check Plugin for SonarQube 10.2 or higher
+# Dependency-Check Plugin for SonarQube Server 2025.2 or higher
 
 ![Build Status](https://github.com/dependency-check/dependency-check-sonar-plugin/actions/workflows/testing.yml/badge.svg?branch=master)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e9cebd3112ec4252804bba68a5b44071)](https://www.codacy.com/gh/dependency-check/dependency-check-sonar-plugin/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dependency-check/dependency-check-sonar-plugin&amp;utm_campaign=Badge_Grade)
@@ -8,9 +8,7 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=dependency-check_dependency-check-sonar-plugin&metric=coverage)](https://sonarcloud.io/dashboard?id=dependency-check_dependency-check-sonar-plugin)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=dependency-check_dependency-check-sonar-plugin&metric=security_rating)](https://sonarcloud.io/dashboard?id=dependency-check_dependency-check-sonar-plugin)
 
-Integrates [Dependency-Check][] reports into SonarQube v10.2 or higher.
-
-The project will try to backport all code from master branch to last supported LTS. Please see the [SonarQube 6.x][] or [SonarQube 7.x][] branch for old supported version.
+Integrates [Dependency-Check][] reports into SonarQube Server 2025.2 or higher.
 
 ## About Dependency-Check
 
@@ -67,7 +65,8 @@ Please use the newest version. Please keep in mind that this plugin only support
 
 | Plugin Version | SonarQube version           |
 |----------------|-----------------------------|
-| 5.0.0 and up   | SonarQube 10.2 and up       |
+| 6.0.0 and up   | SonarQube 2025.x and up     |
+| 5.0.0          | SonarQube 10.2 - 10.8       |
 | 4.0.0 - 4.0.1  | SonarQube 9.9 LTS - 10.2    |
 | 3.0.0 - 3.1.0  | SonarQube 8.9 LTS - 9.9 LTS |
 | 2.0.6 - 2.0.8  | SonarQube 7.9 LTS - 8.9 LTS |
@@ -154,7 +153,4 @@ Permission to modify and redistribute is granted under the terms of the [LGPLv3]
 [lgplv3]: http://www.gnu.org/licenses/lgpl.txt
 [github]: https://github.com/dependency-check/dependency-check-sonar-plugin/releases
 [dependency-check]: https://www.owasp.org/index.php/OWASP_Dependency_Check
-[sonarqube 6.x]: https://github.com/dependency-check/dependency-check-sonar-plugin/tree/SonarQube_6.x
-[sonarqube 7.x]: https://github.com/dependency-check/dependency-check-sonar-plugin/tree/SonarQube_7.x
-[sonar-custom-plugin-example]: https://github.com/SonarSource/sonar-custom-plugin-example
-[security-hotspot]: https://docs.sonarqube.org/latest/user-guide/security-hotspots/
+[security-hotspot]: https://docs.sonarsource.com/sonarqube-server/latest/user-guide/security-hotspots/
