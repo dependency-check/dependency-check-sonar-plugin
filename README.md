@@ -1,4 +1,4 @@
-# Dependency-Check Plugin for SonarQube Server 2025.2 or higher
+# Dependency-Check Plugin for SonarQube Server 2025.x and up
 
 ![Build Status](https://github.com/dependency-check/dependency-check-sonar-plugin/actions/workflows/testing.yml/badge.svg?branch=master)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e9cebd3112ec4252804bba68a5b44071)](https://www.codacy.com/gh/dependency-check/dependency-check-sonar-plugin/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dependency-check/dependency-check-sonar-plugin&amp;utm_campaign=Badge_Grade)
@@ -8,7 +8,7 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=dependency-check_dependency-check-sonar-plugin&metric=coverage)](https://sonarcloud.io/dashboard?id=dependency-check_dependency-check-sonar-plugin)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=dependency-check_dependency-check-sonar-plugin&metric=security_rating)](https://sonarcloud.io/dashboard?id=dependency-check_dependency-check-sonar-plugin)
 
-Integrates [Dependency-Check][] reports into SonarQube Server 2025.2 or higher.
+Integrates [Dependency-Check][] reports into SonarQube Server 2025.x and up.
 
 ## About Dependency-Check
 
