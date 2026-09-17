@@ -49,12 +49,6 @@ This is simply a measurement of the number of vulnerabilities to the vulnerable 
 
 > $ mvn clean package
 
-### Working with NodeJS
-
--   Start SonarQube Server
--   Run `npm start` inside `sonar-dependency-check-plugin`
-    -   Adjust `DEFAULT_PORT`, `PROXY_URL`, `PROXY_CONTEXT_PATH` for your environment
-
 ## Distribution
 
 Ready to use binaries are available from [GitHub][].
@@ -88,10 +82,7 @@ A typical SonarQube configuration will have the following parameter. This exampl
 
 ```ini
 sonar.dependencyCheck.jsonReportPath=${WORKSPACE}/dependency-check-report.json
-sonar.dependencyCheck.htmlReportPath=${WORKSPACE}/dependency-check-report.html
 ```
-
-In this example, all supported reports (JSON and HTML) are specified. Only the JSON report is required, however, if the HTML report is also available, it greatly enhances the usability of the SonarQube plugin by incorporating the actual Dependency-Check HTML report in the SonarQube project.
 
 This plugin tries to add SonarQube issues to your project configuration files (e.g. pom.xml, \*.gradle, package-json.lock). Please make sure, that these files are part of `sonar.sources`.
 
