@@ -54,25 +54,25 @@ class JsonReportParserHelperTest extends ReportParserTest {
     }
 
     @Test
-    void parseReportJsonParseException() {
+    void parseReportJsonParseException() throws Exception {
         InputStream inputStream = mock(InputStream.class);
-        doThrow(JsonParseException.class).when(inputStream);
+        doThrow(JsonParseException.class).when(inputStream).close();
         ReportParserException exception = assertThrows(ReportParserException.class, () -> JsonReportParserHelper.parse(inputStream), "No JsonParseException thrown");
         assertEquals("Could not parse JSON-Report", exception.getMessage());
     }
 
     @Test
-    void parseReportJsonMappingException() {
+    void parseReportJsonMappingException() throws Exception {
         InputStream inputStream = mock(InputStream.class);
-        doThrow(JsonMappingException.class).when(inputStream);
+        doThrow(JsonMappingException.class).when(inputStream).close();
         ReportParserException exception = assertThrows(ReportParserException.class, () -> JsonReportParserHelper.parse(inputStream), "No JsonMappingException thrown");
         assertEquals("Problem with JSON-Report-Mapping", exception.getMessage());
     }
 
     @Test
-    void parseReportJsonIOException() {
+    void parseReportJsonIOException() throws Exception {
         InputStream inputStream = mock(InputStream.class);
-        doThrow(IOException.class).when(inputStream);
+        doThrow(IOException.class).when(inputStream).close();
         ReportParserException exception = assertThrows(ReportParserException.class, () -> JsonReportParserHelper.parse(inputStream), "No IOException thrown");
         assertEquals("IO Problem with JSON-Report", exception.getMessage());
     }

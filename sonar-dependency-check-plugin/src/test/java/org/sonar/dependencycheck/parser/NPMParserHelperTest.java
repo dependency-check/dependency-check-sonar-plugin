@@ -65,25 +65,25 @@ class NPMParserHelperTest {
     }
 
     @Test
-    void parseReportJsonParseException() {
+    void parseReportJsonParseException() throws Exception {
         InputStream inputStream = mock(InputStream.class);
-        doThrow(JsonParseException.class).when(inputStream);
+        doThrow(JsonParseException.class).when(inputStream).close();
         ReportParserException exception = assertThrows(ReportParserException.class, () -> PackageLockParserHelper.parse(inputStream), "No JsonParseException thrown");
         assertEquals("Could not parse package-lock.json", exception.getMessage());
     }
 
     @Test
-    void parseReportJsonMappingException() {
+    void parseReportJsonMappingException() throws Exception {
         InputStream inputStream = mock(InputStream.class);
-        doThrow(JsonMappingException.class).when(inputStream);
+        doThrow(JsonMappingException.class).when(inputStream).close();
         ReportParserException exception = assertThrows(ReportParserException.class, () -> PackageLockParserHelper.parse(inputStream), "No JsonMappingException thrown");
         assertEquals("Problem with package-lock.json-Mapping", exception.getMessage());
     }
 
     @Test
-    void parseReportJsonIOException() {
+    void parseReportJsonIOException() throws Exception {
         InputStream inputStream = mock(InputStream.class);
-        doThrow(IOException.class).when(inputStream);
+        doThrow(IOException.class).when(inputStream).close();
         ReportParserException exception = assertThrows(ReportParserException.class, () -> PackageLockParserHelper.parse(inputStream), "No IOException thrown");
         assertEquals("IO Problem in package-lock.json parser", exception.getMessage());
     }
