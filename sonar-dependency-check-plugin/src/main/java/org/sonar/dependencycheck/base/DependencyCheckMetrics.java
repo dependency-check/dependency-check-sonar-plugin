@@ -41,8 +41,6 @@ public final class DependencyCheckMetrics implements Metrics {
     private static final String MEDIUM_SEVERITY_VULNS_KEY = "medium_severity_vulns";
     private static final String LOW_SEVERITY_VULNS_KEY = "low_severity_vulns";
 
-    private static final String REPORT_KEY = "report";
-
     public static final Metric<Integer> INHERITED_RISK_SCORE = new Metric.Builder(DependencyCheckMetrics.INHERITED_RISK_SCORE_KEY, "Inherited Risk Score", Metric.ValueType.INT)
             .setDescription("Inherited Risk Score")
             .setDirection(Metric.DIRECTION_WORST)
@@ -112,14 +110,6 @@ public final class DependencyCheckMetrics implements Metrics {
             .setHidden(false)
             .create();
 
-    public static final Metric<String> REPORT = new Metric.Builder(REPORT_KEY, "Dependency-Check Report", Metric.ValueType.DATA)
-            .setDescription("Report HTML")
-            .setQualitative(Boolean.FALSE)
-            .setDomain(DependencyCheckMetrics.DOMAIN)
-            .setHidden(false)
-            .setDeleteHistoricalData(true)
-            .create();
-
     public static double vulnerableComponentRatio(int vulnerabilities, int vulnerableComponents) {
         double ratio = 0.0;
         if(vulnerableComponents > 0) {
@@ -143,8 +133,7 @@ public final class DependencyCheckMetrics implements Metrics {
                 DependencyCheckMetrics.LOW_SEVERITY_VULNS,
                 DependencyCheckMetrics.TOTAL_DEPENDENCIES,
                 DependencyCheckMetrics.VULNERABLE_DEPENDENCIES,
-                DependencyCheckMetrics.TOTAL_VULNERABILITIES,
-                DependencyCheckMetrics.REPORT
+                DependencyCheckMetrics.TOTAL_VULNERABILITIES
         );
     }
 }

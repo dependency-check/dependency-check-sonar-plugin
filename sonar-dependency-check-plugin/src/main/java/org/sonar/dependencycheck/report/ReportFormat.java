@@ -22,6 +22,5 @@ package org.sonar.dependencycheck.report;
 public enum ReportFormat {
     @Deprecated
     XML,
-    HTML,
     JSON
 }

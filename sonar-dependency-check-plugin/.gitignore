@@ -1,4 +1,2 @@
-node_modules
-.DS_Store
 target/
-node/
+.DS_Store

@@ -119,9 +119,9 @@ class DependencyReasonSearcherTest {
         assertEquals(1, searcher.getDependencyReasons().size());
 
         // check for org.springframework - spring dependency
-        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 56 && i.primaryLocation().textRange().end().line() == 60));
+        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 55 && i.primaryLocation().textRange().end().line() == 59));
         // check for struts - struts dependency
-        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 46 && i.primaryLocation().textRange().end().line() == 50));
+        assertTrue(context.allIssues().stream().anyMatch(i -> i.primaryLocation().textRange().start().line() == 45 && i.primaryLocation().textRange().end().line() == 49));
     }
 
     @Test

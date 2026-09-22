@@ -78,9 +78,9 @@ class MavenDependencyReasonTest extends DependencyReasonTestHelper {
         TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
         assertTrue(maven.isReasonable());
         assertNotNull(textRangeConfidence);
-        assertEquals(46, textRangeConfidence.getTextRange().start().line());
+        assertEquals(45, textRangeConfidence.getTextRange().start().line());
         assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
-        assertEquals(50, textRangeConfidence.getTextRange().end().line());
+        assertEquals(49, textRangeConfidence.getTextRange().end().line());
         assertEquals(21, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.HIGHEST, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
@@ -100,9 +100,9 @@ class MavenDependencyReasonTest extends DependencyReasonTestHelper {
         TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
         assertTrue(maven.isReasonable());
         assertNotNull(textRangeConfidence);
-        assertEquals(51, textRangeConfidence.getTextRange().start().line());
+        assertEquals(50, textRangeConfidence.getTextRange().start().line());
         assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
-        assertEquals(55, textRangeConfidence.getTextRange().end().line());
+        assertEquals(54, textRangeConfidence.getTextRange().end().line());
         assertEquals(21, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.HIGHEST, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
@@ -120,9 +120,9 @@ class MavenDependencyReasonTest extends DependencyReasonTestHelper {
         TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
         assertTrue(maven.isReasonable());
         assertNotNull(textRangeConfidence);
-        assertEquals(46, textRangeConfidence.getTextRange().start().line());
+        assertEquals(45, textRangeConfidence.getTextRange().start().line());
         assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
-        assertEquals(50, textRangeConfidence.getTextRange().end().line());
+        assertEquals(49, textRangeConfidence.getTextRange().end().line());
         assertEquals(21, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.MEDIUM, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap
@@ -140,9 +140,9 @@ class MavenDependencyReasonTest extends DependencyReasonTestHelper {
         TextRangeConfidence textRangeConfidence = maven.getBestTextRange(dependency);
         assertTrue(maven.isReasonable());
         assertNotNull(textRangeConfidence);
-        assertEquals(46, textRangeConfidence.getTextRange().start().line());
+        assertEquals(45, textRangeConfidence.getTextRange().start().line());
         assertEquals(0, textRangeConfidence.getTextRange().start().lineOffset());
-        assertEquals(50, textRangeConfidence.getTextRange().end().line());
+        assertEquals(49, textRangeConfidence.getTextRange().end().line());
         assertEquals(21, textRangeConfidence.getTextRange().end().lineOffset());
         assertEquals(Confidence.MEDIUM, textRangeConfidence.getConfidence());
         // verify that same dependency points to the same TextRange, use of HashMap

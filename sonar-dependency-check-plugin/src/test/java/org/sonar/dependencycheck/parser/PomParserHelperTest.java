@@ -41,10 +41,10 @@ class PomParserHelperTest {
         MavenPomModel pomModel = PomParserHelper.parse(pom);
         assertNotNull(pomModel);
         // check some dependencies
-        checkMavenDependency(pomModel, "struts", "struts", "1.2.8", 46, 50);
-        checkMavenDependency(pomModel, "com.sun.mail", "javax.mail", "1.4.4", 51, 55);
-        checkMavenDependency(pomModel, "org.springframework", "spring", "2.0.8", 56, 60);
-        checkMavenDependency(pomModel, "commons-io", "commons-io", "2.4", 61, 65);
+        checkMavenDependency(pomModel, "struts", "struts", "1.2.8", 45, 49);
+        checkMavenDependency(pomModel, "com.sun.mail", "javax.mail", "1.4.4", 50, 54);
+        checkMavenDependency(pomModel, "org.springframework", "spring", "2.0.8", 55, 59);
+        checkMavenDependency(pomModel, "commons-io", "commons-io", "2.4", 60, 64);
         // check parent
         checkMavenParent(pomModel, "dummy-parent", "dummy-parent-artifact", "1.0", 18, 21);
     }
