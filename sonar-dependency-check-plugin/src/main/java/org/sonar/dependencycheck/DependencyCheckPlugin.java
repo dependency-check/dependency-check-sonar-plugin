@@ -24,9 +24,11 @@ import java.util.Arrays;
 import org.sonar.api.Plugin;
 import org.sonar.dependencycheck.base.DependencyCheckMeasureComputer;
 import org.sonar.dependencycheck.base.DependencyCheckMetrics;
+import org.sonar.dependencycheck.page.DependencyCheckReportPage;
 import org.sonar.dependencycheck.rule.KnownCveRuleDefinition;
 import org.sonar.dependencycheck.rule.NeutralLanguage;
 import org.sonar.dependencycheck.rule.NeutralProfile;
+import org.sonar.dependencycheck.ws.DependencyCheckReportWebService;
 
 public final class DependencyCheckPlugin implements Plugin {
 
@@ -38,7 +40,9 @@ public final class DependencyCheckPlugin implements Plugin {
                 DependencyCheckMeasureComputer.class,
                 NeutralProfile.class,
                 NeutralLanguage.class,
-                KnownCveRuleDefinition.class));
+                KnownCveRuleDefinition.class,
+                DependencyCheckReportPage.class,
+                DependencyCheckReportWebService.class));
         context.addExtensions(DependencyCheckConfiguration.getPropertyDefinitions());
     }
 }
