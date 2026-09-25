@@ -41,6 +41,8 @@ public final class DependencyCheckMetrics implements Metrics {
     private static final String MEDIUM_SEVERITY_VULNS_KEY = "medium_severity_vulns";
     private static final String LOW_SEVERITY_VULNS_KEY = "low_severity_vulns";
 
+    private static final String REPORT_LOCATION_KEY = "report_location";
+
     public static final Metric<Integer> INHERITED_RISK_SCORE = new Metric.Builder(DependencyCheckMetrics.INHERITED_RISK_SCORE_KEY, "Inherited Risk Score", Metric.ValueType.INT)
             .setDescription("Inherited Risk Score")
             .setDirection(Metric.DIRECTION_WORST)
@@ -110,6 +112,20 @@ public final class DependencyCheckMetrics implements Metrics {
             .setHidden(false)
             .create();
 
+    /**
+     * Key the HTML report was published under, see
+     * {@link org.sonar.dependencycheck.report.store.ReportStore}. Only the key is kept in
+     * SonarQube - earlier versions stored the whole report here, which put megabytes of HTML into
+     * the database on every analysis.
+     */
+    public static final Metric<String> REPORT_LOCATION = new Metric.Builder(REPORT_LOCATION_KEY, "Dependency-Check Report Location", Metric.ValueType.DATA)
+            .setDescription("Storage key of the published Dependency-Check HTML report")
+            .setQualitative(Boolean.FALSE)
+            .setDomain(DependencyCheckMetrics.DOMAIN)
+            .setHidden(false)
+            .setDeleteHistoricalData(true)
+            .create();
+
     public static double vulnerableComponentRatio(int vulnerabilities, int vulnerableComponents) {
         double ratio = 0.0;
         if(vulnerableComponents > 0) {
@@ -133,7 +149,8 @@ public final class DependencyCheckMetrics implements Metrics {
                 DependencyCheckMetrics.LOW_SEVERITY_VULNS,
                 DependencyCheckMetrics.TOTAL_DEPENDENCIES,
                 DependencyCheckMetrics.VULNERABLE_DEPENDENCIES,
-                DependencyCheckMetrics.TOTAL_VULNERABILITIES
+                DependencyCheckMetrics.TOTAL_VULNERABILITIES,
+                DependencyCheckMetrics.REPORT_LOCATION
         );
     }
 }

@@ -17,11 +17,32 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.dependencycheck.report;
+package org.sonar.dependencycheck.report.store;
 
-public enum ReportFormat {
-    @Deprecated
-    XML,
-    JSON,
-    HTML
+import java.util.Optional;
+
+public enum ReportStoreType {
+
+    NONE("none"),
+    FILESYSTEM("filesystem"),
+    S3("s3");
+
+    private final String key;
+
+    ReportStoreType(String key) {
+        this.key = key;
+    }
+
+    public String key() {
+        return key;
+    }
+
+    public static Optional<ReportStoreType> fromKey(String key) {
+        for (ReportStoreType type : values()) {
+            if (type.key.equalsIgnoreCase(key)) {
+                return Optional.of(type);
+            }
+        }
+        return Optional.empty();
+    }
 }

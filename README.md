@@ -84,6 +84,8 @@ A typical SonarQube configuration will have the following parameter. This exampl
 sonar.dependencyCheck.jsonReportPath=${WORKSPACE}/dependency-check-report.json
 ```
 
+Only the JSON report is required. The HTML report is optional; the Dependency-Check page of the project links to it once a report store has been configured, see [HTML report](#html-report).
+
 This plugin tries to add SonarQube issues to your project configuration files (e.g. pom.xml, \*.gradle, package-json.lock). Please make sure, that these files are part of `sonar.sources`.
 
 To configure the severity of the created issues you can optionally specify the minimum score for each severity with the following parameter. Specify a score of `-1` to completely disable a severity.
@@ -120,6 +122,116 @@ If you want to have the complete jar file path instead of the name, use the foll
 ```ini
 sonar.dependencyCheck.useFilePath=true
 sonar.dependencyCheck.useFilePath=false (default)
+```
+
+## HTML report
+
+The Dependency-Check page of a project links to the HTML report that Dependency-Check generated;
+opening the link shows the report in a new browser tab. It opens in a new tab, rather than inline
+on the page, because SonarQube sends a content security policy that does not allow embedding it.
+The scanner sends the report to SonarQube, which writes it into the store you configured. Only
+the location is kept in the SonarQube database - earlier versions kept the whole report there and
+put megabytes of HTML into it on every analysis, which is why the page was removed in version
+6.0.0. The report link asks SonarQube for the report and SonarQube reads it back from the store,
+so the store never has to be reachable from a browser, and store credentials stay on the
+SonarQube server instead of on your CI runners.
+
+The store is configured once for the whole SonarQube instance, in **Administration > Configuration >
+Dependency-Check > HTML Report**, since only the SonarQube server reads and writes it. Without a
+store nothing is published and the page stays empty.
+
+Each analysis replaces the report of that project and branch. A user sees a report exactly when they
+are allowed to see the project it belongs to, SonarQube decides that, not the store.
+
+Publishing a report is gated on the same browse permission, not on Execute Analysis, because that is
+what the SonarQube endpoint the plugin can reach actually enforces. In practice, anyone who can browse
+a project can publish a report for it, replacing whatever is shown there. Treat the store as holding
+project-visible content, not as a trusted, analysis-only channel.
+
+There is one case in which that permission check cannot run: a component SonarQube does not know
+yet. The scanner sends the report before the Compute Engine has created the component, so the
+first analysis of a new project, a new branch or a new pull request finds nothing to authorize
+against - and refusing there would mean a pull request that is analysed once and then merged never
+gets a report at all. Such an upload is therefore accepted from **any authenticated caller**,
+whatever project key it names. The key is still derived by the server from that component, so the
+report can only land under it and never overwrite an existing project's report; and if the
+component never materialises, the report is reclaimed as an orphan by the `cleanup` action
+described below. On an instance where anyone can obtain a token, this is a way to put a file of up
+to 100 MB into the store under a project key that does not exist.
+
+Upgrading from a version before 6.0.0 leaves the measures of the removed `report` metric behind
+in the database. They are no longer read by anything; removing them is a manual cleanup.
+
+Reports are not removed by deleting the branch, pull request or project they belong to - the
+plugin API has no hook for that. Instead, each analysis of a project prunes that project's own
+store entries for branches and pull requests SonarQube no longer knows about, so a removed branch
+or pull request is cleaned up at the next analysis of the same project. A removed project is
+different: nothing analyses it again to trigger that cleanup, so an administrator reconciles the
+whole store with `POST api/dependencycheck/cleanup`. It defaults to a dry run, which answers with
+the keys it would delete under `wouldDelete` without touching anything; pass `dryRun=false` to
+actually delete, and the keys that really were removed come back under `deleted`. The action
+requires global administration rights.
+
+The cleanup deletes nothing it is not sure about:
+
+- Only keys the plugin itself writes are considered - three segments, the fixed report file name,
+  and a scope that is `default` or carries the branch or pull request prefix. Any other file in
+  the store directory is skipped, never deleted.
+- A project counts as removed only when the administration-scoped `api/projects/search` answers
+  with a `components` array that does not list it. A failed, unparsable or paged answer from that
+  search or from the branch and pull request listings skips the project entirely.
+- The `default` scope, written by an analysis of the main branch that names neither a branch nor a
+  pull request, is always live and is never pruned.
+- Each project is reconciled on its own, so a failure on one does not abort the run: it is
+  reported under `failedProjects`, individual reports that could not be deleted under `failed`,
+  and the summary is returned in every case.
+
+### Storing the reports in a directory
+
+For a directory that the SonarQube server can read and write, for example a local disk or a volume
+mounted into the SonarQube server:
+
+```ini
+sonar.dependencyCheck.htmlReport.store=filesystem
+sonar.dependencyCheck.htmlReport.filesystem.path=/var/sonarqube/dependency-check-reports
+```
+
+On a clustered SonarQube the directory has to be a volume that **every** server node can read and
+write, an NFS or a shared block volume for example. A node local disk fails silently: the node that
+received the upload has the report, every other node answers 404 for it, so the page works or not
+depending on which node served the request.
+
+### Storing the reports in S3
+
+```ini
+sonar.dependencyCheck.htmlReport.store=s3
+sonar.dependencyCheck.htmlReport.s3.bucket=my-reports
+sonar.dependencyCheck.htmlReport.s3.region=eu-central-1
+sonar.dependencyCheck.htmlReport.s3.prefix=dependency-check (default)
+```
+
+Credentials are taken from the properties `sonar.dependencyCheck.htmlReport.s3.accessKeyId`,
+`sonar.dependencyCheck.htmlReport.s3.secretAccessKey.secured` and, for temporary credentials,
+`sonar.dependencyCheck.htmlReport.s3.sessionToken.secured`. These are read only by the SonarQube
+server, never by the scanner. Leave them empty to use the default AWS credential chain of the
+SonarQube server, for example an IAM role attached to it.
+
+The two credential properties end in `.secured` so that SonarQube never hands them out to a
+scanner.
+
+The SonarQube server needs `s3:PutObject` and `s3:GetObject` on the prefix, plus `s3:ListBucket` on
+the bucket and `s3:DeleteObject` on the prefix - the reconciliation lists the stored reports and
+deletes the ones whose project, branch or pull request is gone. The scanner does not need any S3
+permissions, it only sends the report to SonarQube.
+
+For S3 compatible servers such as MinIO or Ceph, point the plugin at their endpoint and address the
+bucket as a path:
+
+```ini
+sonar.dependencyCheck.htmlReport.store=s3
+sonar.dependencyCheck.htmlReport.s3.endpoint=https://minio.example.com:9000
+sonar.dependencyCheck.htmlReport.s3.pathStyleAccess=true
+sonar.dependencyCheck.htmlReport.s3.bucket=my-reports
 ```
 
 ## Ecosystem

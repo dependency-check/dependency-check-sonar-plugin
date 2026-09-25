@@ -22,7 +22,6 @@ package org.sonar.dependencycheck.report;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import org.slf4j.Logger;
@@ -65,16 +64,5 @@ public abstract class ReportFile {
             }
         }
         return report;
-    }
-
-    @CheckForNull
-    public String getReportContent() {
-        String reportContent = null;
-        try {
-            reportContent = new String(Files.readAllBytes(report.toPath()), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            LOGGER.warn("Could not read {}-Report", reportFormat, e);
-        }
-        return reportContent;
     }
 }

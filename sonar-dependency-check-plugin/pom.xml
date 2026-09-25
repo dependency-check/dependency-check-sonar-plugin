@@ -28,6 +28,7 @@
         <jackson.version>2.22.3</jackson.version>
         <spotbugs.version>4.10.4</spotbugs.version>
         <commons.lang3.version>3.20.0</commons.lang3.version>
+        <awssdk.version>2.29.52</awssdk.version>
         <!-- Test versions -->
         <junit.jupiter.version>6.1.3</junit.jupiter.version>
         <mockito.version>5.23.0</mockito.version>
@@ -61,6 +62,26 @@
             <artifactId>spotbugs-annotations</artifactId>
             <version>${spotbugs.version}</version>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+            <version>${awssdk.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>software.amazon.awssdk</groupId>
+                    <artifactId>apache-client</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>software.amazon.awssdk</groupId>
+                    <artifactId>netty-nio-client</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>url-connection-client</artifactId>
+            <version>${awssdk.version}</version>
         </dependency>
 
         <!-- unit tests -->
