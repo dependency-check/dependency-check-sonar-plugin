@@ -119,6 +119,25 @@ class DependencyCheckUtilsTest {
         assertEquals(expectedSeverity, DependencyCheckUtils.cvssToSonarQubeSeverity(cvssSeverity, high, medium));
     }
 
+    public static Stream<Object[]> standardSeverities() {
+        return Stream.of(new Object[][]{
+                {Float.valueOf("10.0"), org.sonar.api.batch.rule.Severity.BLOCKER},
+                {Float.valueOf("9.0"),  org.sonar.api.batch.rule.Severity.BLOCKER},
+                {Float.valueOf("8.9"),  org.sonar.api.batch.rule.Severity.CRITICAL},
+                {Float.valueOf("7.0"),  org.sonar.api.batch.rule.Severity.CRITICAL},
+                {Float.valueOf("6.9"),  org.sonar.api.batch.rule.Severity.MAJOR},
+                {Float.valueOf("4.0"),  org.sonar.api.batch.rule.Severity.MAJOR},
+                {Float.valueOf("3.9"),  org.sonar.api.batch.rule.Severity.MINOR},
+                {Float.valueOf("0.0"),  org.sonar.api.batch.rule.Severity.MINOR},
+        });
+    }
+
+    @ParameterizedTest(name = "{index} => cvssScore={0}, expectedSeverity={1}")
+    @MethodSource("standardSeverities")
+    void testCvssToStandardSeverity(Float cvssScore, org.sonar.api.batch.rule.Severity expectedSeverity) {
+        assertEquals(expectedSeverity, DependencyCheckUtils.cvssToStandardSeverity(cvssScore));
+    }
+
     public static Stream<Object[]> severitiesToScore() {
         return Stream.of(new Object[][]{
                 // defaults

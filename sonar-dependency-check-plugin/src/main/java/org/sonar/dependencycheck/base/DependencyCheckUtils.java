@@ -64,6 +64,22 @@ public final class DependencyCheckUtils {
         return DependencyCheckUtils.cvssToSonarQubeSeverity(cvssScore, severityHigh, severityMedium);
     }
 
+    /**
+     * Severity used by SonarQube in "Standard Experience" mode.
+     * CVSS &gt;= 9 : BLOCKER, &gt;= 7 : CRITICAL, &gt;= 4 : MAJOR, otherwise MINOR
+     */
+    public static org.sonar.api.batch.rule.Severity cvssToStandardSeverity(Float cvssScore) {
+        if (cvssScore >= DependencyCheckConstants.STANDARD_BLOCKER_SCORE) {
+            return org.sonar.api.batch.rule.Severity.BLOCKER;
+        } else if (cvssScore >= DependencyCheckConstants.STANDARD_CRITICAL_SCORE) {
+            return org.sonar.api.batch.rule.Severity.CRITICAL;
+        } else if (cvssScore >= DependencyCheckConstants.STANDARD_MAJOR_SCORE) {
+            return org.sonar.api.batch.rule.Severity.MAJOR;
+        } else {
+            return org.sonar.api.batch.rule.Severity.MINOR;
+        }
+    }
+
     public static String getRuleKey(Configuration config) {
         return config.getBoolean(DependencyCheckConstants.SECURITY_HOTSPOT)
                 .orElse(DependencyCheckConstants.SECURITY_HOTSPOT_DEFAULT)

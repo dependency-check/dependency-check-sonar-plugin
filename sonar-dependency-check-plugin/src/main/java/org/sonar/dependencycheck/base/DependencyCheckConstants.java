@@ -39,6 +39,11 @@ public final class DependencyCheckConstants {
     public static final Float CVSS_MEDIUM_SCORE = 4.0f;
     public static final Float CVSS_LOW_SCORE = 0.1f;
 
+    // CVSS thresholds for the legacy severity (SonarQube "Standard Experience" mode)
+    public static final Float STANDARD_BLOCKER_SCORE = 9.0f;
+    public static final Float STANDARD_CRITICAL_SCORE = 7.0f;
+    public static final Float STANDARD_MAJOR_SCORE = 4.0f;
+
     public static final String JSON_REPORT_PATH_DEFAULT = "${WORKSPACE}/dependency-check-report.json";
     public static final Boolean SUMMARIZE_PROPERTY_DEFAULT = Boolean.FALSE;
     public static final Boolean SKIP_PROPERTY_DEFAULT = Boolean.FALSE;

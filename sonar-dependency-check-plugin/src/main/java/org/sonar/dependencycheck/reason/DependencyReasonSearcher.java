@@ -185,6 +185,7 @@ public class DependencyReasonSearcher {
             .at(location)
             .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
             .overrideImpact(SoftwareQuality.SECURITY, severity)
+            .overrideSeverity(DependencyCheckUtils.cvssToStandardSeverity(vulnerability.getCvssScore()))
             .save();
         projectMetric.incrementCount(severity);
     }
@@ -205,6 +206,7 @@ public class DependencyReasonSearcher {
             .at(location)
             .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
             .overrideImpact(SoftwareQuality.SECURITY, severity)
+            .overrideSeverity(DependencyCheckUtils.cvssToStandardSeverity(highestVulnerability.getCvssScore()))
             .save();
         projectMetric.incrementCount(severity);
     }

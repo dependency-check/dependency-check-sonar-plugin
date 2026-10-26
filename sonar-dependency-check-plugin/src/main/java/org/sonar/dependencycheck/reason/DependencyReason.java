@@ -110,6 +110,7 @@ public abstract class DependencyReason {
             .at(location)
             .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
             .overrideImpact(SoftwareQuality.SECURITY, severity)
+            .overrideSeverity(DependencyCheckUtils.cvssToStandardSeverity(highestVulnerability.getCvssScore()))
             .save();
         metrics.incrementCount(severity);
     }
@@ -131,6 +132,7 @@ public abstract class DependencyReason {
             .at(location)
             .forRule(RuleKey.of(DependencyCheckConstants.REPOSITORY_KEY, DependencyCheckUtils.getRuleKey(context.config())))
             .overrideImpact(SoftwareQuality.SECURITY, severity)
+            .overrideSeverity(DependencyCheckUtils.cvssToStandardSeverity(vulnerability.getCvssScore()))
             .save();
         metrics.incrementCount(severity);
     }
